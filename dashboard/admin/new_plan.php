@@ -114,7 +114,7 @@ page_protect();
                <td height="35">SPORTS PLAN DESCRIPTION</td>
                <td height="35"><input type="text" name="desc" id="planDesc" placeholder="Enter sports description" size="40"></td>
              </tr>
-             <tr>
+             <!-- <tr>
                <td height="35">SPORTS PLAN VALIDITY</td>
                <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter validity in months" size="40"></td>
              </tr>
@@ -123,6 +123,7 @@ page_protect();
                <td height="35">SPORTS PLAN AMOUNT:</td>
                <td height="35"><input type="text" name="amount" id="planAmnt" placeholder="Enter sports plan amount" size="40"></td>
              </tr>
+			 -->
              
             
              <tr>
