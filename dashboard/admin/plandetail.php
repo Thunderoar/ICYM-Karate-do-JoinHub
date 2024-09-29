@@ -1,7 +1,7 @@
 <?php
 require '../../include/db_conn.php';
-$pid=$_GET['q'];
-$query="select * from plan where pid='".$pid."'";
+$planid=$_GET['q'];
+$query="select * from plan where planid='".$planid."'";
 $res=mysqli_query($con,$query);
 if($res){
 	$row=mysqli_fetch_array($res,MYSQLI_ASSOC);
