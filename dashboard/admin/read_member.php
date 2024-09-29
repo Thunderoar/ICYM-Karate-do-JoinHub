@@ -160,15 +160,15 @@ page_protect();
 				<tbody>
 					<?php
 						
-						$query1  = "select * from enrolls_to WHERE uid='$memid'";
+						$query1  = "select * from enrolls_to WHERE userid='$memid'";
 						//echo $query;
 						$result = mysqli_query($con, $query1);
 						$sno    = 1;
 
 						if (mysqli_affected_rows($con) != 0) {
 						    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-						      $pid=$row['pid'];
-						      $query2="select * from plan where pid='$pid'";
+						      $pid=$row['planid'];
+						      $query2="select * from plan where planid='$pid'";
 						      $result2=mysqli_query($con,$query2);
 						      if($result2){
 						      	$row1=mysqli_fetch_array($result2,MYSQLI_ASSOC);
@@ -190,7 +190,7 @@ page_protect();
 						        $sno++;
 						    }
 						        
-						        echo '<td><a href="gen_invoice.php?id='.$row['uid'].'&pid='.$row['pid'].'&etid='.$row['et_id'].'"><input type="button" class="a1-btn a1-blue" value="Memo" ></a></td></tr>';
+						        echo '<td><a href="gen_invoice.php?id='.$row['userid'].'&pid='.$row['planid'].'&etid='.$row['et_id'].'"><input type="button" class="a1-btn a1-blue" value="Memo" ></a></td></tr>';
 						        $memid = 0;
 						    }
 						    
