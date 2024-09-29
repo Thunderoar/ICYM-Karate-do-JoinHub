@@ -107,23 +107,25 @@ page_protect();
 				<input type="text" name="planid" id="planID" readonly value="<?php echo getRandomWord(); ?>"></td>
          	   </tr>
              <tr>
-               <td height="35">SPORTS PLAN NAME:</td>
-               <td height="35"><input name="planname" id="planName" type="text" placeholder="Enter sports name" size="40"></td>
+               <td height="35">PLAN NAME:</td>
+               <td height="35"><input name="planname" id="planName" type="text" placeholder="Enter plan name" size="40"></td>
              </tr>
              <tr>
-               <td height="35">SPORTS PLAN DESCRIPTION</td>
-               <td height="35"><input type="text" name="desc" id="planDesc" placeholder="Enter sports description" size="40"></td>
+               <td height="35">PLAN DESCRIPTION</td>
+               <td height="35"><input type="text" name="desc" id="planDesc" placeholder="Enter plan description" size="40"></td>
              </tr>
-             <!-- <tr>
+
+             <tr>
                <td height="35">SPORTS PLAN VALIDITY</td>
                <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter validity in months" size="40"></td>
              </tr>
+
              
              <tr>
                <td height="35">SPORTS PLAN AMOUNT:</td>
-               <td height="35"><input type="text" name="amount" id="planAmnt" placeholder="Enter sports plan amount" size="40"></td>
+               <td height="35"><input type="text" name="amount" id="planAmnt" placeholder="Enter plan amount" size="40"></td>
              </tr>
-			 -->
+
              
             
              <tr>
