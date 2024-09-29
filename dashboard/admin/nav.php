@@ -12,7 +12,7 @@
 			<li class="active">
 				<a href="view_mem.php"><span>Edit Members</span></a></li>
 
-			<li><a href="table_view.php"><span>View Memeber</span></a></li>
+			<li><a href="table_view.php"><span>View Members</span></a></li>
 		</ul>
 	</li>
 
