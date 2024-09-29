@@ -92,10 +92,10 @@ if (isset($_POST['name'])) {
 			<hr/>
 			<?php
 	    
-				    $query  = "SELECT * FROM users u 
-				    		   INNER JOIN address a ON u.userid=a.id
-				    		   INNER JOIN  health_status h ON u.userid=h.uid
-				    		   WHERE userid='$memid'";
+				    $query  = "SELECT * FROM users u
+				    		   INNER JOIN address a ON u.userid = a.userid
+				    		   INNER JOIN health_status h ON u.userid = h.userid
+				    		   WHERE u.userid = '$memid'";
 				    //echo $query;
 				    $result = mysqli_query($con, $query);
 				    $sno    = 1;
