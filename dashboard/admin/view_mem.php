@@ -120,7 +120,7 @@ page_protect();
 							if (mysqli_affected_rows($con) != 0) {
 							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 							        $uid   = $row['userid'];
-							        $query1  = "select * from enrolls_to WHERE uid='$uid' AND renewal='yes'";
+							        $query1  = "select * from enrolls_to WHERE userid='$uid' AND renewal='yes'";
 							        $result1 = mysqli_query($con, $query1);
 							        if (mysqli_affected_rows($con) == 1) {
 							            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
