@@ -2,12 +2,16 @@
 require '../../include/db_conn.php';
 page_protect();
 $etid=$_GET['etid'];
-$pid=$_GET['pid'];
+$pid=$_GET['plaid'];
 $uid=$_GET['id'];
 
 
 
-					$sql = "Select * from users u INNER JOIN enrolls_to e ON u.userid=e.uid INNER JOIN plan p where p.pid=e.pid and userid='".$uid."' and e.et_id='".$etid."'";
+					$sql = "SELECT * FROM users u
+					INNER JOIN enrolls_to e ON u.userid = e.userid
+					INNER JOIN plan p ON p.planid = e.planid
+					WHERE u.userid = '".$uid."'
+					AND e.et_id = '".$etid."'";
 					$res=mysqli_query($con, $sql);
 					 if($res){
 						      	$row=mysqli_fetch_array($res,MYSQLI_ASSOC);
