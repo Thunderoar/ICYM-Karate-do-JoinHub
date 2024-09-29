@@ -51,45 +51,45 @@ page_protect();
     	</div>
 
     		<div class="main-content">
-		
+
 				<div class="row">
-					
+
 					<!-- Profile Info and Notifications -->
-					<div class="col-md-6 col-sm-8 clearfix">	
-							
+					<div class="col-md-6 col-sm-8 clearfix">
+
 					</div>
-					
-					
+
+
 					<!-- Raw Links -->
 					<div class="col-md-6 col-sm-4 clearfix hidden-xs">
-						
+
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
-							</li>					
-						
+							<li>Welcome <?php echo $_SESSION['full_name']; ?>
+							</li>
+
 							<li>
 								<a href="logout.php">
 									Log Out <i class="entypo-logout right"></i>
 								</a>
 							</li>
 						</ul>
-						
+
 					</div>
-					
+
 				</div>
 
 			<h2>SPORTS CLUB </h2>
 
 			<hr>
 
-			<div class="col-sm-3"><a href="revenue_month.php">			
+			<div class="col-sm-3"><a href="revenue_month.php">
 				<div class="tile-stats tile-red">
 					<div class="icon"><i class="entypo-users"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Paid Income This Month</h2><br>	
+						<h2>Paid Income This Month</h2><br>
 						<?php
-							date_default_timezone_set("Asia/Calcutta"); 
+							date_default_timezone_set("Asia/Kuala_Lumpur");
 							$date  = date('Y-m');
 							$query = "select * from enrolls_to WHERE  paid_date LIKE '$date%'";
 
@@ -98,7 +98,7 @@ page_protect();
 							$revenue = 0;
 							if (mysqli_affected_rows($con) != 0) {
 							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							    	$query1="select * from plan where pid='".$row['pid']."'";
+							    	$query1="select * from plan where planid='".$row['planid']."'";
 							    	$result1=mysqli_query($con,$query1);
 							    	if($result1){
 							    		$value=mysqli_fetch_row($result1);
@@ -111,13 +111,13 @@ page_protect();
 						</div>
 				</div></a>
 			</div>
-			
 
-			<div class="col-sm-3"><a href="table_view.php">			
+
+			<div class="col-sm-3"><a href="table_view.php">
 				<div class="tile-stats tile-green">
 					<div class="icon"><i class="entypo-chart-bar"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Total <br>Members</h2><br>	
+						<h2>Total <br>Members</h2><br>
 							<?php
 							$query = "select COUNT(*) from users";
 
@@ -132,15 +132,15 @@ page_protect();
 							?>
 						</div>
 				</div></a>
-			</div>	
-				
-			<div class="col-sm-3"><a href="over_members_month.php">			
+			</div>
+
+			<div class="col-sm-3"><a href="over_members_month.php">
 				<div class="tile-stats tile-aqua">
 					<div class="icon"><i class="entypo-mail"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Joined This Month</h2><br>	
+						<h2>Joined This Month</h2><br>
 							<?php
-							date_default_timezone_set("Asia/Calcutta"); 
+							date_default_timezone_set("Asia/Kuala_Lumpur");
 							$date  = date('Y-m');
 							$query = "select COUNT(*) from users WHERE joining_date LIKE '$date%'";
 
@@ -155,14 +155,14 @@ page_protect();
 							$i = 1;
 							?>
 						</div>
-				</div></a>			
+				</div></a>
 			</div>
 
-			<div class="col-sm-3"><a href="view_plan.php">			
+			<div class="col-sm-3"><a href="view_plan.php">
 				<div class="tile-stats tile-blue">
 					<div class="icon"><i class="entypo-rss"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Total Plan Available</h2><br>	
+						<h2>Total Plan Available</h2><br>
 							<?php
 							$query = "select COUNT(*) from plan where active='yes'";
 
@@ -179,11 +179,11 @@ page_protect();
 						</div>
 				</div></a>
 			</div>
-			
+
 <marquee direction="right"><img src="fball.gif" width="88" height="70" alt="Tutorials " border="0"></marquee>
 
-			
-   
+
+
     	<?php include('footer.php'); ?>
 </div>
 
