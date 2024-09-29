@@ -5,11 +5,11 @@ page_protect();
 	$planid =$_POST['planid'];
     $name = $_POST['planname'];
     $desc = $_POST['desc'];
-    $planval = $_POST['planval'];
+    //$planval = $_POST['planval'];
     $amount = $_POST['amount'];
     
    //Inserting data into plan table
-    $query="insert into plan(pid,planName,description,validity,amount,active) values('$planid','$name','$desc','$planval','$amount','yes')";
+    $query="insert into plan(pid,planName,description,amount,active) values('$planid','$name','$desc','$amount','yes')";
    
    
 
