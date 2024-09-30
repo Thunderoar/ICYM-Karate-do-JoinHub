@@ -2,7 +2,7 @@
 require '../../include/db_conn.php';
 page_protect();
 $etid=$_GET['etid'];
-$pid=$_GET['plaid'];
+$pid=$_GET['pid'];
 $uid=$_GET['id'];
 
 
