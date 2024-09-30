@@ -14,6 +14,7 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
      <style>
     	.page-container .sidebar-menu #main-menu li#overviewhassubopen > a {
     	background-color: #2b303a;
@@ -131,7 +132,7 @@ page_protect();
 
 </form>
 
-<table id="memmonth"border=2 style="font-size:15px;">
+<table class="table table-bordered datatable"id="memmonth"border=2 style="font-size:15px;">
 	
 </table>
 
