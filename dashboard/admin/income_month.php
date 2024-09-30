@@ -6,9 +6,9 @@ $year=$_GET['yy'];
 $query="select DISTINCT u.userid,u.username,u.gender,u.mobile,
 u.email,u.joining_date,a.state,a.city,
 e.paid_date,e.expire,p.planName,p.amount,p.validity from users u 
-INNER JOIN address a on u.userid=a.id 
-INNER JOIN enrolls_to e on u.userid=e.uid
-INNER JOIN plan p on p.pid=e.pid
+INNER JOIN address a on u.userid=a.userid
+INNER JOIN enrolls_to e on u.userid=e.userid
+INNER JOIN plan p on p.planid=e.planid
 where e.paid_date  like '".$year."-".$month."___'";
   
 
@@ -59,7 +59,7 @@ if (mysqli_affected_rows($con) != 0) {
 
                 echo "<td>" . $row['amount'] . "</td>";
 
-                echo "<td>" . $row['validity'] . " Month</td>";
+                echo "<td>" . $row['validity'] . "</td>";
                 
                 $totalamount=$totalamount+$row['amount'];
                 $sno++;
@@ -69,7 +69,7 @@ if (mysqli_affected_rows($con) != 0) {
 
  	$monthName = date("F", mktime(0, 0, 0, $month, 10));
 
-    echo "<tr><td colspan=11 align='center'><h3>Total Income on ".$monthName." is ₹".$totalamount."</h3></td></tr>";
+    echo "<tr><td colspan=11 align='center'><h3>Total Income on ".$monthName." is RM".$totalamount."</h3></td></tr>";
 
 }
 else{
