@@ -21,7 +21,7 @@ if(isset($_POST['submit'])){
 	$remarks=$_POST['remarks'];
 	$userid=$_POST['usrid'];
 
-	$query="update health_status set calorie='".$calorie."', height='".$height."',weight='".$weight."',fat='".$fat."',remarks='".$remarks."' where uid='".$userid."'";
+	$query="update health_status set calorie='".$calorie."', height='".$height."',weight='".$weight."',fat='".$fat."',remarks='".$remarks."' where userid='".$userid."'";
 
 	if(mysqli_query($con,$query)){
 		echo "<head><script>alert('Health Status Added ');</script></head></html>";
@@ -44,7 +44,7 @@ else{
 	$ujoin=$_POST['ujoin'];
 	$ugender=$_POST['ugender'];
 	
-	$sql="select * from health_status where uid='".$uid."'";
+	$sql="select * from health_status where userid='".$uid."'";
 	$result=mysqli_query($con,$sql);
 	if($result){
 		$row=mysqli_fetch_array($result,MYSQLI_ASSOC);
