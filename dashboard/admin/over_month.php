@@ -7,9 +7,9 @@ $flag=$_GET['flag'];
 $query="";
 
 if($flag==0)
-	$query="select * from users u INNER JOIN address a on u.userid=a.id where u.joining_date like '".$year."-".$month."___'";
+	$query="select * from users u INNER JOIN address a on u.userid=a.addressid where u.joining_date like '".$year."-".$month."___'";
 else if($flag==1)
-	$query="select * from users u INNER JOIN address a on u.userid=a.id where u.joining_date like '".$year."______'";
+	$query="select * from users u INNER JOIN address a on u.userid=a.addressid where u.joining_date like '".$year."______'";
   
 
 $res=mysqli_query($con,$query);
