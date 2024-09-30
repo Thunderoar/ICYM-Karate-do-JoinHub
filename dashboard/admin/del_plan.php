@@ -4,7 +4,7 @@ page_protect();
 
 $msgid = $_POST['name'];
 
-if ($msgid === 'MRBDPX') {
+if ($msgid === 'BJEFSY') {
     echo "<html><head><script>alert('You cannot delete a core plan');</script></head></html>";
     echo "<meta http-equiv='refresh' content='0; url=view_plan.php'>";
 } elseif (strlen($msgid) > 0) {

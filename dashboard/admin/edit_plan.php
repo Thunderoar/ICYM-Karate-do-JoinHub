@@ -85,7 +85,7 @@ page_protect();
 		<hr />
 		<?php
 		$id=$_GET['id'];
-		$sql="Select * from plan t Where t.pid=$id";
+		$sql="Select * from plan t Where t.planid=$id";
 		$res=mysqli_query($con, $sql);
 		
 					 if($res){
@@ -107,7 +107,7 @@ page_protect();
            	 <tr>
            	   <td height="35">SPORTS PLAN ID:</td>
            	   <td height="35">
-				<input type="text" name="planid" id="planID" readonly value='<?php echo $row['pid'] ?>'></td>
+				<input type="text" name="planid" id="planID" readonly value='<?php echo $row['planid'] ?>'></td>
 				
 				
          	   </tr>

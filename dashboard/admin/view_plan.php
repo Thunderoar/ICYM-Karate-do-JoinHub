@@ -119,7 +119,7 @@ page_protect();
 					        
 					        
 					        echo "<tr><td>" . $sno . "</td>";
-					        echo "<td>" . $row['pid'] . "</td>";
+					        echo "<td>" . $row['planid'] . "</td>";
 					        echo "<td>" . $row['planName'] . "</td>";
 					        echo "<td width='380'>" . $row['description'] . "</td>";
 					        echo "<td>" . $row['validity'] . "</td>";

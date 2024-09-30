@@ -25,7 +25,7 @@
   <body>
   
     
-  
+  <!-- hello -->
   <div style="background-color:ffffff;" class="site-wrap">
 
 
@@ -115,28 +115,28 @@ require('header.html');
 
         <div class="owl-4-slider owl-carousel">
           <div class="item player">
-            <a href="#"><img src="images/player_4.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Jakub Bates</h3>
               <p>#10 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/player_1.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Joshua Figueroa</h3>
               <p>#7 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/player_5.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Russell Vance</h3>
               <p>#1 / Goal Keeper</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/player_3.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Carson Hodgson</h3>
               <p>#3 / Forward</p>
@@ -144,28 +144,28 @@ require('header.html');
           </div>
 
           <div class="item player">
-            <a href="#"><img src="images/player_4.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Yanis Velasquez</h3>
               <p>#4 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/player_1.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Joshua Figueroa</h3>
               <p>#8 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/player_2.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Russell Vance</h3>
               <p>#6 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/player_3.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
             <div class="p-4">
               <h3>Carson Hodgson</h3>
               <p>#9 / Forward</p>

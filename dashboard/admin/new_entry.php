@@ -98,7 +98,7 @@ page_protect();
            <td height="35"><table width="100%" border="0" align="center">
            	 <tr>
            	   <td height="35">MEMBERSHIP ID:</td>
-           	   <td height="35"><input type="text" id="boxx" name="m_id" value="<?php echo time(); ?>" required/></td>
+           	   <td height="35"><input type="text" id="boxx" name="m_id" value="<?php echo time(); ?>" readonly required/></td>
          	   </tr>
 			   
 			   <tr>
