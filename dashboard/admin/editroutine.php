@@ -16,6 +16,7 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
 	<style>
 	#boxxe
 	{
