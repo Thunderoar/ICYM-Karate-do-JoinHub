@@ -15,7 +15,10 @@ page_protect();
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-<link href="a1style.css" rel="stylesheet" type="text/css">     
+	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script>
     <style>
     	.page-container .sidebar-menu #main-menu li#hassubopen > a {
     	background-color: #2b303a;
@@ -109,7 +112,7 @@ page_protect();
 
 
 		
-		<table border=1>
+		<table class="table table-bordered datatable" border=1>
 			<thead>
 				<tr>
 					<th>Membership ID</th>
@@ -144,7 +147,7 @@ page_protect();
 
 				<h3>Payment history of : - <?php echo $name;?></h3>
 
-		<table border=1>
+		<table class="table table-bordered datatable" border=1>
 			<thead>
 				<tr>
 					<th>Sl.No</th>
