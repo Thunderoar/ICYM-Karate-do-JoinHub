@@ -100,7 +100,7 @@ page_protect();
          	   </tr>
 			    <tr>
            	   <td height="35">plan id:</td>
-           	   <td height="35"><input name="pidd"  size="30" required/></td>
+           	   <td height="35"><input name="pidd"  size="30" value="BJEFSY" required/></td>
          	   </tr>
 			   
 			   <tr>
