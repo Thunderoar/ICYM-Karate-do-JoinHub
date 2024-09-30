@@ -109,7 +109,7 @@ page_protect();
 			   
 			   <tr>
                <td height="35">LOGIN KEY:</td>
-               <td height="35"><input type="text" id="boxx" name="login_key"  class="form-control"  data-rule-required="true" placeholder="Your secert key"></td>
+               <td height="35"><input type="text" id="boxx" name="login_key"  class="form-control"  data-rule-required="true" placeholder="Your secret key"></td>
              </tr>
 			 <tr>
            	   <td height="35">PASSWORD:</td>
