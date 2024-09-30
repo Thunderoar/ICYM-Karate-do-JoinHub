@@ -14,6 +14,8 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link href="a1style.css" type="text/css" rel="stylesheet">
+    <script src="../../js/moment.min.js"></script>
+	<script src="../../js/jquery-3.4.1.min.js"></script>
     <style>
     	.page-container .sidebar-menu #main-menu li#regis > a {
     	background-color: #2b303a;
@@ -132,7 +134,7 @@ page_protect();
              </tr>
             <tr>
                <td height="35">DATE OF BIRTH:</td>
-               <td height="35"><input type="date" name="dob" id="boxx" required/ size="30"></td>
+               <td height="35"><input type="date" data-date="" data-date-format="DD MMMM YYYY" value="2015-08-09"></td>
              </tr>
 			 <tr>
                <td height="35">PHONE NO:</td>
