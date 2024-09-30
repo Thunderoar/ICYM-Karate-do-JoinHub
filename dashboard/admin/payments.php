@@ -16,9 +16,9 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link href="a1style.css" type="text/css" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script>
     <style>
     	.page-container .sidebar-menu #main-menu li#paymnt > a {
     	background-color: #2b303a;
@@ -116,8 +116,8 @@ page_protect();
 					if (mysqli_affected_rows($con) != 0) {
 					    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 
-					        $uid   = $row['uid'];
-					        $planid=$row['pid'];
+					        $uid   = $row['userid'];
+					        $planid=$row['planid'];
 					        $query1  = "select * from users WHERE userid='$uid'";
 					        $result1 = mysqli_query($con, $query1);
 					        if (mysqli_affected_rows($con) == 1) {
