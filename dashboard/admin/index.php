@@ -106,7 +106,7 @@ page_protect();
 							    	}
 							    }
 							}
-							echo "₹".$revenue;
+							echo "RM".$revenue;
 							?>
 						</div>
 				</div></a>
