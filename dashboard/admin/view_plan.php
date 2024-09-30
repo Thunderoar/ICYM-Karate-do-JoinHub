@@ -127,7 +127,7 @@ page_protect();
 					        
 					        $sno++;
 					        
-					        echo '<td><a href=edit_plan.php?id="'.$row['planid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" style="width:100%" value="Edit Plan" ></a><form action="del_plan.php" method="post" onSubmit="return ConfirmDelete();"><input type="hidden" name="name" value="' . $msgid .'"/><input type="submit" id="button1" value="Delete Plan" class="a1-btn a1-orange"/></form></td></tr>';
+					        echo '<td><a href=edit_plan.php?id="'.$row['planid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" style="width:86%" value="Edit Plan" ></a><form action="del_plan.php" method="post" onSubmit="return ConfirmDelete();"><input type="hidden" name="name" value="' . $msgid .'"/><input type="submit" id="button1" value="Delete Plan" class="a1-btn a1-orange"/></form></td></tr>';
 					        
 							$msgid = 0;
 					    }

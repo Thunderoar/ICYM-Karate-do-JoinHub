@@ -96,12 +96,13 @@ if (isset($_POST['name'])) {
 
 			<?php
 	    
-				    $query  = "SELECT * FROM users u 
-				    		   INNER JOIN address a ON u.userid=a.id
-				    		   INNER JOIN  health_status h ON u.userid=h.uid
-				    		   INNER JOIN enrolls_to e on u.userid=e.uid
-				    		   INNER JOIN plan p on e.pid=p.pid
-				    		   WHERE userid='$memid' and e.renewal='yes'";
+				    $query  = "SELECT * FROM users u
+				    		   INNER JOIN address a ON u.userid = a.userid
+				    		   INNER JOIN health_status h ON u.userid = h.userid
+				    		   INNER JOIN enrolls_to e ON u.userid = e.userid
+				    		   INNER JOIN plan p ON e.planid = p.planid
+				    		   WHERE u.userid = '$memid' AND e.renewal = 'yes'";
+
 				    //echo $query;
 				    $result = mysqli_query($con, $query);
 				    $sno    = 1;

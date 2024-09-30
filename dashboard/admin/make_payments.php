@@ -12,7 +12,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
         while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
             
             $name = $row1['username'];
-            $query2="select * from plan where pid='$planid'";
+            $query2="select * from plan where planid='$planid'";
 
             $result2=mysqli_query($con,$query2);
             if($result2){
@@ -147,7 +147,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 							    
 							    if (mysqli_affected_rows($con) != 0) {
 							        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							            echo "<option value=" . $row['pid'] . ">" . $row['planName'] . "</option>";
+							            echo "<option value=" . $row['planid'] . ">" . $row['planName'] . "</option>";
 							            
 							        }
 							    }
