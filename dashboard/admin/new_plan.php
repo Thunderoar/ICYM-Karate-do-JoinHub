@@ -116,13 +116,13 @@ page_protect();
              </tr>
 
              <tr>
-               <td height="35">SPORTS PLAN VALIDITY</td>
-               <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter validity in months" size="40"></td>
+               <td height="35">PLAN VALIDITY</td>
+               <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter period of validity" size="40"></td>
              </tr>
 
              
              <tr>
-               <td height="35">SPORTS PLAN AMOUNT:</td>
+               <td height="35">PLAN AMOUNT:</td>
                <td height="35"><input type="text" name="amount" id="planAmnt" placeholder="Enter plan amount" size="40"></td>
              </tr>
 
