@@ -46,25 +46,24 @@ require('header.html');
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <div class="hero-wrap" style="background-image: url('images/hero_1.jpg');" data-stellar-background-ratio="0.5">
+          <div class="hero-wrap" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
             <div class="hero-contents">
               <h2>Team after Training</h2>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui distinctio aliquid dolor odio ullam odit cum veniam fuga aperiam aut.</p>
-              <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="site-section">
+    <!--<div class="site-section">
       <div class="container">
         <div class="col-lg-8 ml-auto">
           <div class="row">
             <div class="col-md-6 col-lg-6 mb-5 mb-lg-0">
               <div class="custom-media d-flex">
                 <div class="img-wrap mr-3">
-                  <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                  <a href="#"><img src="images/image_1.jpg" alt="Image" class="img-fluid"></a>
                 </div>
                 <div>
                   <span class="caption">Latest News</span>
@@ -76,7 +75,7 @@ require('header.html');
             <div class="col-md-6 col-lg-6 mb-5 mb-lg-0">
               <div class="custom-media d-flex">
                 <div class="img-wrap mr-3">
-                  <a href="#"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
+                  <a href="#"><img src="images/image_2.jpg" alt="Image" class="img-fluid"></a>
                 </div>
                 <div>
                   <span class="caption">Team</span>
@@ -88,7 +87,7 @@ require('header.html');
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <div class="container">
       <div class="row">
@@ -187,29 +186,29 @@ require('header.html');
 
         <div class="row">
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_1.jpg" data-fancybox="gal"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_8.jpg" data-fancybox="gal"><img src="images/image_8.jpg" alt="Image" class="img-fluid"></a>
           </div>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_2.jpg" data-fancybox="gal"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_2.jpg" data-fancybox="gal"><img src="images/image_2.jpg" alt="Image" class="img-fluid"></a>
           </div>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_3.jpg" data-fancybox="gal"><img src="images/img_3.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_3.jpg" data-fancybox="gal"><img src="images/image_3.jpg" alt="Image" class="img-fluid"></a>
           </div>
 
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_4.jpg" data-fancybox="gal"><img src="images/img_4.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_6.jpg" data-fancybox="gal"><img src="images/image_6.jpg" alt="Image" class="img-fluid"></a>
           </div>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_5.jpg" data-fancybox="gal"><img src="images/img_5.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_12.jpg" data-fancybox="gal"><img src="images/image_12.jpg" alt="Image" class="img-fluid"></a>
           </div>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_1.jpg" data-fancybox="gal"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_11.jpg" data-fancybox="gal"><img src="images/image_11.jpg" alt="Image" class="img-fluid"></a>
           </div>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_2.jpg" data-fancybox="gal"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/event_2.jpg" data-fancybox="gal"><img src="images/event_2.jpg" alt="Image" class="img-fluid"></a>
           </div>
           <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <a href="images/img_3.jpg" data-fancybox="gal"><img src="images/img_3.jpg" alt="Image" class="img-fluid"></a>
+            <a href="images/image_10.jpg" data-fancybox="gal"><img src="images/image_10.jpg" alt="Image" class="img-fluid"></a>
           </div>
         </div>
       </div>
@@ -229,12 +228,11 @@ require('header.html');
           <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">24 February, 2024</span>
+                <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
               </div>
             </div>
           </div>
@@ -242,12 +240,11 @@ require('header.html');
           <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Line for the upcoming match</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">2 September, 2023</span>
+                <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
               </div>
             </div>
           </div>
@@ -255,12 +252,11 @@ require('header.html');
           <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">23 September, 2023</span>
+                <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
               </div>
             </div>
           </div>
@@ -268,12 +264,11 @@ require('header.html');
           <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">20 September, 2023</span>
+                <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
               </div>
             </div>
           </div>
@@ -282,7 +277,6 @@ require('header.html');
 
         <div class="row justify-content-center">
           <div class="col-lg-4 text-center">
-            <a href="#" class="btn btn-primary py-3 px-4">View All Events</a>
           </div>
         </div>
       </div>
