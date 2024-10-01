@@ -33,7 +33,7 @@ page_protect();
 			<!-- logo -->
 			<div class="logo">
 				<a href="main.php">
-					<img src="logo1.png" alt="" width="192" height="80" />
+					<img src="logo.jpeg" alt="" width="192" height="80" />
 				</a>
 			</div>
 			
@@ -180,7 +180,7 @@ page_protect();
 				</div></a>
 			</div>
 
-<marquee direction="right"><img src="fball.gif" width="88" height="70" alt="Tutorials " border="0"></marquee>
+<!--marquee direction="right"><img src="fball.gif" width="88" height="70" alt="Tutorials " border="0"></marquee-->
 
 
 
