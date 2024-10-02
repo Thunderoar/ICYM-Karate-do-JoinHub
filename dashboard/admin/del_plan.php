@@ -8,7 +8,7 @@ if ($msgid === 'BJEFSY') {
     echo "<html><head><script>alert('You cannot delete a core plan');</script></head></html>";
     echo "<meta http-equiv='refresh' content='0; url=view_plan.php'>";
 } elseif (strlen($msgid) > 0) {
-    mysqli_query($con, "update plan set active ='no' WHERE pid='$msgid'");
+    mysqli_query($con, "update plan set active ='no' WHERE planid='$msgid'");
     echo "<html><head><script>alert('Plan Deleted');</script></head></html>";
     echo "<meta http-equiv='refresh' content='0; url=view_plan.php'>";
 } else {

@@ -6,17 +6,19 @@ page_protect();
     $name = $_POST['planname'];
     $desc = $_POST['desc'];
     //$planval = $_POST['planval'];
+    $planType = $_POST['plantype'];
     $amount = $_POST['amount'];
+
     
    //Inserting data into plan table
-    $query="insert into plan(pid,planName,description,amount,active) values('$planid','$name','$desc','$amount','yes')";
+    $query="insert into plan(planid,planName,description,planType,amount,active) values('$planid','$name','$desc','$planType','$amount','yes')";
    
    
 
 	 if(mysqli_query($con,$query)==1){
         
         echo "<head><script>alert('PLAN Added ');</script></head></html>";
-        echo "<meta http-equiv='refresh' content='0; url=new_plan.php'>";
+        echo "<meta http-equiv='refresh' content='0; url=view_plan.php'>";
        
       }
 
