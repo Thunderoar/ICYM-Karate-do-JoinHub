@@ -25,7 +25,9 @@ align-items: center;
 </style>
 <!-- hello -->
 <body>
-    <center><h2 style="color:#7CFC00;font-size:15px"><BR><BR><BR>WELCOME TO <BR>ICYM Karate-Do Join-Hub! <BR><BR><BR></h2></center>
+<?php
+require('element/login-header.html');
+?>
 <body class="page-body login-page login-form-fall">
     
     	<div id="container">

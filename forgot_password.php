@@ -23,7 +23,7 @@
 				<div class="login-content">
 					
 					<a href="#" class="logo">
-						<img src="./images/logo.png" alt="" />
+						<img src="images/logok.png" alt="" />
 					</a>
 			
 				</div>

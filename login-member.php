@@ -25,7 +25,11 @@ align-items: center;
 </style>
 <!-- hello -->
 <body>
-    <center><h2 style="color:#7CFC00;font-size:15px"><BR><BR><BR>WELCOME TO <BR>ICYM Karate-Do Join-Hub! <BR><BR><BR></h2></center>
+
+<?php
+require('element/login-header.html');
+?>
+
 <body class="page-body login-page login-form-fall">
     
     	<div id="container">
@@ -34,7 +38,7 @@ align-items: center;
 	<div>
 		
 		<div class="login-content">
-		<h1 style="color:#ffffff" >Member Login</h1>
+		<h1 style="color:#ffffff" >Login to ICYM Karate-Do Join-Hub!</h1>
 			<!--
 			<a href="#" class="logo">
 				<img src="logo1.png" alt="" />
@@ -92,8 +96,11 @@ align-items: center;
 				<div>
 					<a style="color:#ffffff" 	href="register-member.php" class="link">Not yet a member?</a>
 				</div>
-				<div style="margin-top:5px">
-					<a style="color:#ffffff" 	href="login.php" class="link">Admin? Go here</a>
+				<div style="margin-top:20px">
+					<a style="color:#ffffff" 	href="login-admin.php" class="link">Admin? Go here</a>
+				</div>
+				<div>
+					<a style="color:#ffffff" 	href="login-coach.php" class="link">Coach? Go here</a>
 				</div>
 		</div>
 		
