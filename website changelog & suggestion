@@ -33,6 +33,37 @@ dashboard/admin/index.php = change timezone to 'Kuala_Lumpur'
 view_plan.php = change 'pid' to 'planid'
 dashboard/admin/index.php = change 'pid' to 'planid'
 
+over_month.php = change 'id' to 'addressid'
+payments.php = change 'pid' and 'uid' to 'planid' 'userid'
+make_payments.php = change 'pid' to 'planid'
+plandetail.php = remove 'Month' and change Rupee to RM
+view_mem.php = use local js css files
+add local js files = moment.min.js , jquery-3.4.1.min.js
+new_entry.php = use local js files
+payments.php = use local js css files
+read_member.php = use local js css files
+read_member.php = stylize table
+gen_invoice.php = fix 'plaid' to 'planid'
+new_health_status.php = fix 'uid' to 'userid'
+health_status_entry.php = fix "uid' to 'userid
+new_plan.php = remove 'sports'
+revenue_month.php = stylize table
+income_month.php = change Rupees to RM
+income_month.php = remove Month
+editroutine.php = stylize table
+change_pwd.php = fix 'secert' typo to 'secret'
+index.php = change Rupees to RM
+over_members_month.php = use local css js files
+
+
+addroutine.php = defaulted plan id to 'core' plan of 'BJEFSY'
+nav.php = change to 'Planning' 'New Plan' 'Edit Plan'
+
+
+
+
+
+
 
 
 extra info
@@ -50,6 +81,7 @@ how do people create 'core' plan?
 
 
 how do they assign and deassign?
+in payment page, once paid, the 'add payment' button is no longer there.
 
 
 GAMBAR KARATE
