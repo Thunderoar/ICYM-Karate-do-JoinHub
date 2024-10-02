@@ -33,7 +33,7 @@ page_protect();
 			<!-- logo -->
 			<div class="logo">
 				<a href="main.php">
-					<img src="logo.jpeg" alt="" width="192" height="80" />
+					<img src="../../images/logok.png" alt="" width="192" height="80" />
 				</a>
 			</div>
 			
@@ -65,8 +65,9 @@ page_protect();
 
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?>
-							</li>
+					<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 
 							<li>
 								<a href="logout.php">

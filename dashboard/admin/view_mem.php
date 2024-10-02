@@ -42,11 +42,9 @@ page_protect();
 			<header class="logo-env">
 			
 			<!-- logo -->
-			<div class="logo">
-				<a href="main.php">
-					<img src="logo.jpeg" alt="" width="192" height="80" />
-				</a>
-			</div>
+			<?php
+			 require('../../element/loggedin-logo.html');
+			?>
 			
 					<!-- logo collapse icon -->
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
