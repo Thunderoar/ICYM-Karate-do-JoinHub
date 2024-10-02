@@ -16,6 +16,9 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script>
 	<style>
     	.page-container .sidebar-menu #main-menu li#routinehassubopen > a {
     	background-color: #2b303a;
