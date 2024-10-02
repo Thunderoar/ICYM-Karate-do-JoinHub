@@ -11,7 +11,7 @@ if(isset($_SESSION["user_data"]))
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sports Club | Login</title>
+	<title>ICYM Karate-Do Join-Hub | Login</title>
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 </head>
@@ -25,22 +25,24 @@ align-items: center;
 </style>
 <!-- hello -->
 <body>
-    <center><h2 style="color:#7CFC00;font-size:30px"><BR><BR><BR>WELCOME TO <BR>SPORTS CLUB Management System <BR><BR><BR></h2></center>
+    <center><h2 style="color:#7CFC00;font-size:15px"><BR><BR><BR>WELCOME TO <BR>ICYM Karate-Do Join-Hub! <BR><BR><BR></h2></center>
 <body class="page-body login-page login-form-fall">
     
     	<div id="container">
 			<div class="login-container">
 	
-	<div class="login-header login-caret">
+	<div>
 		
 		<div class="login-content">
 			
+			<!--
 			<a href="#" class="logo">
 				<img src="logo1.png" alt="" />
 			</a>
+
 			
 			<p class="description">Dear user, log in to access the admin area!</p>
-			
+			-->
 			<!-- progress bar indicator -->
 			<div class="login-progressbar-indicator">
 				<h3>43%</h3>
@@ -85,9 +87,12 @@ align-items: center;
 				</div>
 			</form>
 		
-				<div class="login-bottom-links">
-					<a href="forgot_password.php" class="link">Forgot your password?</a>
-				</div>			
+				<div>
+					<a style="color:#ffffff" href="forgot_password.php" class="link">Forgot your password?</a>
+				</div>
+				<div>
+					<a style="color:#ffffff" 	href="register-member.php" class="link">Member? Go here</a>
+				</div>
 		</div>
 		
 	</div>
