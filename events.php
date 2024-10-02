@@ -59,126 +59,55 @@ require('header.html');
        
 
         <div class="row mb-5">
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">24 February, 2024</span>
+                <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
               </div>
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Line for the upcoming match</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">2 September, 2023</span>
+                <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
               </div>
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">23 September, 2023</span>
+                <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
               </div>
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
             <div class="custom-media d-block">
               <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
+                <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
+                <span class="caption">20 September, 2023</span>
+                <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
               </div>
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Line for the upcoming match</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-5">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">May 19, 2020</span>
-                <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="col-lg-7">
-            <div class="custom-pagination">
-              <a href="#">1</a>
-              <span>2</span>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-            </div>
-          </div>
-        </div>
-
-        
+        </div>        
       </div>
     </div>
 
