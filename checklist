@@ -1,7 +1,7 @@
 enablement of separate:
 member and admin are done, just coach are left
 ----------------------------
-
+LOGIN:
 in login page:
 put a sidebar instead, for:
 
@@ -10,6 +10,7 @@ put a sidebar instead, for:
 3) Member login
 
 ----------------------------
+REGISTRATION:
 whats for member registration?
 only basics stuff first like:
 
@@ -24,6 +25,22 @@ other they can complete later when logged in.
 
 
 ----------------------------
-
+Mobile Support:
 also if theres time, put mobile support, useful for online demonstration
 
+
+----------------------------
+in Planning Section, 
+
+we will have labels, this is useful for:
+labelling an event as:
+
+1) regular event
+2) tournament
+3) collaboration
+
+----------------------------
+in Routine Section, 
+
+
+Allow choosing Plan Type instead of having to manually input Plan ID
