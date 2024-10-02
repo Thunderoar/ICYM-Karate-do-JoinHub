@@ -45,7 +45,7 @@ require('header.html');
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <div class="hero-wrap text-center" style="background-image: url('images/hero_2.jpg');" data-stellar-background-ratio="0.5">
+          <div class="hero-wrap text-center" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
             <div class="hero-contents">
               <h2>About Us</h2>
               <p><a href="index.html">Home</a> <span class="mx-2">/</span> <strong>About Us</strong></p>
