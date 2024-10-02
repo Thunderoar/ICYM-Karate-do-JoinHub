@@ -1,0 +1,27 @@
+enablement of separate:
+
+member and admin are done, just coach are left
+
+in login page:
+put a sidebar instead, for:
+
+1) Admin login
+2) Coach login
+3) Member login
+
+
+whats for member registration?
+
+only basics stuff first like:
+
+1) username
+2) password
+3) gender
+4) dob
+
+
+...email verification? idk
+
+
+other they can complete later when logged in.
+
