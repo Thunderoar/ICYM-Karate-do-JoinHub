@@ -33,7 +33,7 @@ else{
 
 $user_id_auth = mysqli_real_escape_string($con, $user_id_auth);
 $pass_key     = mysqli_real_escape_string($con, $pass_key);
-$sql          = "SELECT * FROM admin WHERE username='$user_id_auth' and pass_key='$pass_key'";
+$sql          = "SELECT * FROM login WHERE username='$user_id_auth' and pass_key='$pass_key'";
 $result       = mysqli_query($con, $sql);
 $count        = mysqli_num_rows($result);
 if ($count == 1) {
@@ -42,19 +42,19 @@ if ($count == 1) {
     // store session data
     $_SESSION['user_data']  = $user_id_auth;
     $_SESSION['logged']     = "start";
-    // $_SESSION['auth_level'] = $row['level'];
+    $_SESSION['authority'] = $row['authority'];
     $_SESSION['full_name']  = $user_id_auth;
     $_SESSION['username']=$row['Full_name'];
-    // $auth_l_x               = $_SESSION['auth_level'];
-    // if ($auth_l_x == 5) {
+    $auth_l_x               = $_SESSION['authority'];
+    if ($auth_l_x == "admin") {
         header("location: ./dashboard/admin/");
     // } else if ($auth_l_x == 4) {
     //     header("location: ../dashboard/cashier/");
-    // } else if ($auth_l_x == 3) {
-    //     header("location: ../dashboard/member/");        
-    // } else {
+     } else if ($auth_l_x == "member") {
+         header("location: ./dashboard/member/");        
+     } else {
     //     header("location: ../login/");
-    // }
+     }
 } else {
     include 'index.php';
     echo "<html><head><script>alert('Username OR Password is Invalid');</script></head></html>";
