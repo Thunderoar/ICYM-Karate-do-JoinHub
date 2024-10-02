@@ -93,8 +93,12 @@ require('element/login-header.html');
 				<div>
 					<a style="color:#ffffff" href="forgot_password.php" class="link">Forgot your password?</a>
 				</div>
+				<div style="margin-top:20px">
+					<a style="color:#ffffff" 	href="login-admin.php" class="link">Admin? Go here</a>
+				</div>
 				<div>
-					<a style="color:#ffffff" 	href="register-member.php" class="link">Member? Go here</a>
+				<div>
+					<a style="color:#ffffff" 	href="login-member.php" class="link">Member? Go here</a>
 				</div>
 		</div>
 		
