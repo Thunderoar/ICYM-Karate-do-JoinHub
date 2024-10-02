@@ -97,6 +97,7 @@ page_protect();
 					<th>Sports Plan ID</th>
 					<th>Sports Plan name</th>
 					<th>Sports Plan Details</th>
+					<th>Plan Type</th>
 					<th>Duration</th>
 					<th>Rate</th>
 					<th>Action</th>
@@ -120,12 +121,13 @@ page_protect();
 					        echo "<td>" . $row['planid'] . "</td>";
 					        echo "<td>" . $row['planName'] . "</td>";
 					        echo "<td width='380'>" . $row['description'] . "</td>";
+							echo "<td>" . $row['planType'] . "</td>";
 					        echo "<td>" . $row['validity'] . "</td>";
 					        echo "<td>RM" . $row['amount'] . "</td>";
 					        
 					        $sno++;
 					        
-					        echo '<td><a href=edit_plan.php?id="'.$row['planid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" style="width:86%" value="Edit Plan" ></a><form action="del_plan.php" method="post" onSubmit="return ConfirmDelete();"><input type="hidden" name="name" value="' . $msgid .'"/><input type="submit" id="button1" value="Delete Plan" class="a1-btn a1-orange"/></form></td></tr>';
+					        echo '<td><a href=edit_plan.php?id="'.$row['planid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" style="width:100%" value="Edit Plan" ></a><form action="del_plan.php" method="post" onSubmit="return ConfirmDelete();"><input type="hidden" name="name" value="' . $msgid .'"/><input type="submit" id="button1" value="Delete Plan" class="a1-btn a1-orange"/></form></td></tr>';
 					        
 							$msgid = 0;
 					    }

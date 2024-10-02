@@ -91,6 +91,16 @@ page_protect();
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
+		   <tr>
+               <td height="35">Type of Plan:</td>
+               <td height="35"><select name="plantype" id="plantype" required>
+
+					<option value="">--Please Select--</option>
+					<option value="Event">Event</option>
+					<option value="Tournament">Tournament</option>
+					<option value="Collaboration">Collaboration</option>
+				</select></td>
+             </tr>  
            	 <tr>
            	   <td height="35">PLAN ID:</td>
            	   <td height="35"><?php
@@ -105,26 +115,23 @@ page_protect();
 				<input type="text" name="planid" id="planID" readonly value="<?php echo getRandomWord(); ?>"></td>
          	   </tr>
              <tr>
-               <td height="35">PLAN NAME:</td>
+               <td height="35">Plan Name:</td>
                <td height="35"><input name="planname" id="planName" type="text" placeholder="Enter plan name" size="40"></td>
              </tr>
              <tr>
-               <td height="35">PLAN DESCRIPTION</td>
+               <td height="35">Plan Description</td>
                <td height="35"><input type="text" name="desc" id="planDesc" placeholder="Enter plan description" size="40"></td>
              </tr>
 
              <tr>
-               <td height="35">PLAN VALIDITY</td>
+               <td height="35">Plan Validity</td>
                <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter period of validity" size="40"></td>
              </tr>
 
-             
              <tr>
-               <td height="35">PLAN AMOUNT:</td>
+               <td height="35">Plan Fee:</td>
                <td height="35"><input type="text" name="amount" id="planAmnt" placeholder="Enter plan amount" size="40"></td>
-             </tr>
-
-             
+             </tr>     
             
              <tr>
              <tr>
