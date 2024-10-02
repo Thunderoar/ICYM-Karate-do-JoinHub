@@ -7,7 +7,7 @@ page_protect();
 <head> 
 
     
-    <title>SPORTS CLUB  | Dashboard </title>
+    <title>ICYM Karate-Do Hub  | Dashboard </title>
 
     <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
@@ -78,7 +78,7 @@ page_protect();
 
 				</div>
 
-			<h2>SPORTS CLUB </h2>
+			<h2>ICYM Karate-Do Hub</h2>
 
 			<hr>
 
