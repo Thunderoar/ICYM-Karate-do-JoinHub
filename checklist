@@ -1,6 +1,6 @@
 enablement of separate:
-
 member and admin are done, just coach are left
+----------------------------
 
 in login page:
 put a sidebar instead, for:
@@ -9,9 +9,8 @@ put a sidebar instead, for:
 2) Coach login
 3) Member login
 
-
+----------------------------
 whats for member registration?
-
 only basics stuff first like:
 
 1) username
@@ -19,9 +18,12 @@ only basics stuff first like:
 3) gender
 4) dob
 
-
 ...email verification? idk
 
-
 other they can complete later when logged in.
+
+
+----------------------------
+
+also if theres time, put mobile support, useful for online demonstration
 
