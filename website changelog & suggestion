@@ -60,6 +60,10 @@ addroutine.php = defaulted plan id to 'core' plan of 'BJEFSY'
 nav.php = change to 'Planning' 'New Plan' 'Edit Plan'
 
 
+login.php = change to WELCOME TO ICYM Karate-Do Join-Hub!
+login.php = "remove" logo for simplicity for now
+
+
 
 
 
