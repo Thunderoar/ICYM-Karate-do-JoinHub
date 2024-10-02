@@ -1,5 +1,7 @@
 enablement of separate:
 member and admin are done, just coach are left
+
+What are the differentiator of ID's between these people
 ----------------------------
 LOGIN:
 in login page:
@@ -24,6 +26,11 @@ only basics stuff first like:
 other they can complete later when logged in.
 
 
+
+ALSO ON ADMIN SIDE:
+on registration page,
+allow for choosing different authority,
+makes it easier to register member or staff.
 ----------------------------
 Mobile Support:
 also if theres time, put mobile support, useful for online demonstration
@@ -49,3 +56,19 @@ Allow choosing Plan Type instead of having to manually input Plan ID
 THEMING:
 
 lets set up required function first, then we can theme
+
+
+for sidebar, consider these:
+https://www.w3schools.com/w3css/w3css_sidebar.asp
+
+for dropdown menu, consider these:
+
+----------------------------
+INPUT VALIDATION:
+
+check for input validation on form after done for sanity check
+
+
+----------------------------
+DATABASE:
+Allow storing images for purposes of Plan and showing on homepages
