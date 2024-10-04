@@ -10,7 +10,7 @@ page_protect();
    $pamt=$_POST['amount'];
    
     
-    $query1="update plan set planName='".$pname."',description='".$pdesc."',validity='".$pval."',amount='".$pamt."' where pid='".$id."'";
+    $query1="update plan set planName='".$pname."',description='".$pdesc."',validity='".$pval."',amount='".$pamt."' where planid='".$id."'";
 
    if(mysqli_query($con,$query1)){
      
