@@ -21,8 +21,14 @@
 
     <link rel="stylesheet" href="css/homepagestyle.css">
     <style>
+	a {
+		color: #a9c9fc!important}
 	a:hover {
 		color: white!important;}
+	p {
+		text-indent: 20px;}
+	p:hover {
+		color: #00358a!important}
 	</style>
   </head>
   
@@ -33,7 +39,7 @@
 
         <div class="col-6 col-lg-2 site-logo">
             <img src="images/logok.png" alt="" height="50" />
-          <a style="font-size:15px;" href="index.php">ICYM Karate-Do</a>
+          <a style="font-size:15px; color:black!important;" href="index.php">ICYM Karate-Do</a>
         </div>
         <div class="col-6 col-lg-10 text-right menu">
           <nav class="site-navigation text-right text-md-right">
@@ -44,16 +50,16 @@
                 <li class="has-children">
                   <a href="players.php">Coach</a>
                   <ul class="dropdown arrow-top">
-                    <li><a href="#">Jakub Bates</a></li>
-                    <li><a href="#">Russell Vance</a></li>
-                    <li><a href="#">Carson Hodgson</a></li>
+                    <li><p>Jakub Bates</p></li>
+                    <li><p>Russell Vance</p></li>
+                    <li><p>Carson Hodgson</p></li>
                     <li class="has-children">
-                      <a href="#">Sub Menu</a>
+                      <p href="#">Sub Menu  ></p>
                       <ul class="dropdown">
-                        <li><a href="#">Joshua Fugueroa</a></li>
-                        <li><a href="#">Jakub Bates</a></li>
-                        <li><a href="#">Russell Vance</a></li>
-                        <li><a href="#">Carson Hodgson</a></li>
+                        <li><p>Joshua Fugueroa</p></li>
+                        <li><p>Jakub Bates</p></li>
+                        <li><p>Russell Vance</p></li>
+                        <li><p>Carson Hodgson</p></li>
                       </ul>
                     </li>
                   </ul>
