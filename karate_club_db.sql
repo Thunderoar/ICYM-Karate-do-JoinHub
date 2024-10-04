@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 02, 2024 at 09:37 AM
+-- Generation Time: Oct 04, 2024 at 02:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -123,6 +123,26 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `images`
+--
+
+CREATE TABLE `images` (
+  `imageid` int(11) NOT NULL,
+  `planid` varchar(8) NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `images`
+--
+
+INSERT INTO `images` (`imageid`, `planid`, `image_path`, `uploaded_at`) VALUES
+(14, 'QHITBV', 'uploads/cb29fd18a62485da33431fb6500f0439.jpg', '2024-10-04 12:32:24');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `login`
 --
 
@@ -175,12 +195,8 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
-('BJEFSY', 'Karate Activities', 'This includes all karate activity plan', 'Core', 'Lifetime', 20, 'yes'),
-('IBJAGF', 'Fighting!', 'fight', 'Event', 'Lifetime', 0, 'no'),
-('LNSZPE', 'Fighting!', 'fight', 'Collaboration', 'Lifetime', 0, 'no'),
-('MELZXV', 'Fighting!', 'fight', 'Collaboration', 'Lifetime', 0, 'no'),
-('SDKTPH', 'Important Event', 'WOW!', 'Event', 'Lifetime', 0, 'yes'),
-('XZKYQE', 'Fighting!', 'fight', '', 'Lifetime', 0, 'no');
+('QHITBV', 'kucing', 'kucing', 'Event', 'Lifetime', 1, 'yes'),
+('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', 20, 'yes');
 
 -- --------------------------------------------------------
 
@@ -234,10 +250,26 @@ INSERT INTO `users` (`userid`, `username`, `gender`, `mobile`, `email`, `dob`, `
 --
 
 --
+-- Indexes for table `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`imageid`);
+
+--
 -- Indexes for table `plan`
 --
 ALTER TABLE `plan`
   ADD PRIMARY KEY (`planid`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `images`
+--
+ALTER TABLE `images`
+  MODIFY `imageid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
