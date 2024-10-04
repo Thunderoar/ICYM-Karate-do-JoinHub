@@ -105,27 +105,27 @@ page_protect();
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
            	 <tr>
-           	   <td height="35">SPORTS PLAN ID:</td>
+           	   <td height="35">Plan ID:</td>
            	   <td height="35">
 				<input type="text" name="planid" id="planID" readonly value='<?php echo $row['planid'] ?>'></td>
 				
 				
          	   </tr>
              <tr>
-               <td height="35">SPORTS PLAN NAME:</td>
+               <td height="35">Plan Name:</td>
                <td height="35"><input name="planname" id="planName" type="text" value='<?php echo $row['planName'] ?>'  size="40"></td>
              </tr>
              <tr>
-               <td height="35">SPORTS PLAN DESCRIPTION</td>
+               <td height="35">Plan Description</td>
                <td height="35"><input type="text" name="desc" id="planDesc"  value='<?php echo $row['description'] ?>' size="40"></td>
              </tr>
              <tr>
-               <td height="35">SPORTS PLAN VALIDITY</td>
+               <td height="35">Plan Validity</td>
                <td height="35"><input type="number" name="planval" id="planVal" value='<?php echo $row['validity'] ?>' size="40"></td>
              </tr>
              
              <tr>
-               <td height="35">SPORTS PLAN AMOUNT:</td>
+               <td height="35">Plan Amount:</td>
                <td height="35"><input type="text" name="amount" id="planAmnt" value='<?php echo $row['amount'] ?>'  size="40"></td>
              </tr>
              
