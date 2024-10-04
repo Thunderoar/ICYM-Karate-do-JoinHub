@@ -1,3 +1,7 @@
+<?php
+require 'include/db_conn.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -46,7 +50,20 @@ require('header.html');
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <div class="hero-wrap" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
+      <?php
+        // Fetch images from the database
+          $sql = "SELECT image_path FROM images";
+          $result = $con->query($sql);
+
+          if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+          echo '<div class="hero-wrap" style="background-image: url(dashboard/admin/' . htmlspecialchars($row['image_path']) . '");" data-stellar-background-ratio="0.5">';
+          }
+        } else {
+        echo "No images found, Please create a New Plan with Images.";
+        }
+      ?>
+          <!-- temporary turn-off 'images/karate_main.jpg' -->
             <div class="hero-contents">
               <h2>Team after Training</h2>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui distinctio aliquid dolor odio ullam odit cum veniam fuga aperiam aut.</p>
