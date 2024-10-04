@@ -87,7 +87,7 @@ page_protect();
 		<div class="a1-container a1-dark-gray a1-center">
         	<h6>NEW PLAN DETAILS</h6>
         </div>
-       <form id="form1" name="form1" method="post" class="a1-container" action="submit_plan_new.php">
+       <form id="form1" name="form1" method="post" class="a1-container" action="submit_plan_new.php" enctype="multipart/form-data">
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
@@ -96,11 +96,21 @@ page_protect();
                <td height="35"><select name="plantype" id="plantype" required>
 
 					<option value="">--Please Select--</option>
+					<option value="Core">Core</option>
 					<option value="Event">Event</option>
 					<option value="Tournament">Tournament</option>
 					<option value="Collaboration">Collaboration</option>
 				</select></td>
              </tr>  
+
+			 <!DOCTYPE html>
+
+			 <tr>
+			 <td height="35">Event Image: </td>
+				<td height="35">
+				<input type="file" name="image" accept="image/*">
+			</tr>
+
            	 <tr>
            	   <td height="35">PLAN ID:</td>
            	   <td height="35"><?php
