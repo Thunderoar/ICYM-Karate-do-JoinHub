@@ -231,7 +231,7 @@ require('header.html');
                 <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">24 February, 2024</span>
+                <span class="caption" style="color:#242cb5">24 February, 2024</span>
                 <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
               </div>
             </div>
@@ -243,7 +243,7 @@ require('header.html');
                 <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">2 September, 2023</span>
+                <span class="caption" style="color:#242cb5">2 September, 2023</span>
                 <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
               </div>
             </div>
@@ -255,7 +255,7 @@ require('header.html');
                 <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">23 September, 2023</span>
+                <span class="caption" style="color:#242cb5">23 September, 2023</span>
                 <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
               </div>
             </div>
@@ -267,7 +267,7 @@ require('header.html');
                 <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
               </div>
               <div>
-                <span class="caption">20 September, 2023</span>
+                <span class="caption" style="color:#242cb5">20 September, 2023</span>
                 <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
               </div>
             </div>
