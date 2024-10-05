@@ -45,7 +45,7 @@
 				      			<input  type="text" placeholder="Username" class="form-control" name="user_id_auth" id="textfield" data-rule-minlength="6" data-rule-required="true">
 				      		</div>
 			            <div class="form-group">
-			              <input type="password" class="form-control" placeholder="Password">
+			              <input type="password" name="pass_key" id="pwfield" class="form-control" data-rule-required="true" data-rule-minlength="6" placeholder="Password">
 			            </div>
 			            <div class="form-group">
 			            	<button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
