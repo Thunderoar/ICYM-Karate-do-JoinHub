@@ -1,6 +1,4 @@
-<?php
-require 'include/db_conn.php';
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
