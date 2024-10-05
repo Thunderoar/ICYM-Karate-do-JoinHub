@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 04, 2024 at 02:37 PM
+-- Generation Time: Oct 05, 2024 at 01:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,11 @@ CREATE TABLE `address` (
 INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zipcode`) VALUES
 ('426746007', '1727621388', 'abc', 'abc', 'abc', ''),
 ('395689128', '1727621728', 'Kampung Lago Peti Surat 240', 'SABAH', 'SABAH - BEAUFORT/DL MAMPAKUR', ''),
-('126880847', '1727665527', 'johanstreet', 'johanstate', 'johancity', '');
+('126880847', '1727665527', 'johanstreet', 'johanstate', 'johancity', ''),
+('862324644', '1728121956', 'test', 'abc', 'abc', ''),
+('657042166', '1728128062', 'Kampung Lago Peti Surat 240', 'SABAH', 'SABAH - BEAUFORT/DL MAMPAKUR', '89808'),
+('353767690', '1728128066', 'abc', 'abc', 'abc', '12345'),
+('236971276', '1728128257', 'Kampung Lago Peti Surat 240', 'SABAH', 'SABAH - BEAUFORT/DL MAMPAKUR', '89808');
 
 -- --------------------------------------------------------
 
@@ -52,6 +56,8 @@ INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zi
 --
 
 CREATE TABLE `admin` (
+  `adminid` varchar(20) NOT NULL,
+  `imageid` varchar(20) NOT NULL,
   `username` varchar(20) NOT NULL,
   `pass_key` varchar(20) NOT NULL,
   `securekey` varchar(20) NOT NULL,
@@ -62,8 +68,8 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`username`, `pass_key`, `securekey`, `Full_name`) VALUES
-('admin1', 'admin1', 'admin1', 'Sports Club Manager');
+INSERT INTO `admin` (`adminid`, `imageid`, `username`, `pass_key`, `securekey`, `Full_name`) VALUES
+('', '', 'admin1', 'admin1', 'admin1', 'Sports Club Manager');
 
 -- --------------------------------------------------------
 
@@ -92,7 +98,11 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `r
 ('2024-09-29 22:49:50', 'BJEFSY', '1727621388', '2024-09-29', '1970-01-01', 'yes'),
 ('2024-09-29 22:53:44', 'BJEFSY', '1727621622', '2024-09-29', '1970-01-01', 'yes'),
 ('2024-09-29 22:55:31', 'BJEFSY', '1727621728', '2024-09-29', '1970-01-01', 'yes'),
-('2024-09-30 11:06:25', 'BJEFSY', '1727665527', '2024-09-30', '1970-01-01', 'yes');
+('2024-09-30 11:06:25', 'BJEFSY', '1727665527', '2024-09-30', '1970-01-01', 'yes'),
+('2024-10-05 17:53:07', 'XTWIOL', '1728121956', '2024-10-05', '1970-01-01', 'yes'),
+('2024-10-05 19:34:24', 'EOLWXI', '1728128062', '2024-10-05', '1970-01-01', 'yes'),
+('2024-10-05 19:36:12', 'QIVSYC', '1728128066', '2024-10-05', '1970-01-01', 'yes'),
+('2024-10-05 19:37:55', 'XTWIOL', '1728128257', '2024-10-05', '1970-01-01', 'yes');
 
 -- --------------------------------------------------------
 
@@ -118,7 +128,11 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('689152795', '', '', '', '', '', '1727621388'),
 ('947924960', '', '', '', '', '', '1727621622'),
 ('327687540', '', '', '', '', '', '1727621728'),
-('255603186', '', '', '', '', 'WOW!', '1727665527');
+('255603186', '', '', '', '', 'WOW!', '1727665527'),
+('394971300', '', '', '', '', '', '1728121956'),
+('423999936', '', '', '', '', '', '1728128062'),
+('235753157', '', '', '', '', '', '1728128066'),
+('400390580', '', '', '', '', '', '1728128257');
 
 -- --------------------------------------------------------
 
@@ -127,8 +141,10 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 --
 
 CREATE TABLE `images` (
-  `imageid` int(11) NOT NULL,
-  `planid` varchar(8) NOT NULL,
+  `imageid` varchar(200) NOT NULL,
+  `adminid` varchar(20) NOT NULL DEFAULT '0',
+  `userid` varchar(20) NOT NULL DEFAULT '0',
+  `planid` varchar(8) NOT NULL DEFAULT '0',
   `image_path` varchar(255) NOT NULL,
   `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -137,8 +153,8 @@ CREATE TABLE `images` (
 -- Dumping data for table `images`
 --
 
-INSERT INTO `images` (`imageid`, `planid`, `image_path`, `uploaded_at`) VALUES
-(14, 'QHITBV', 'uploads/cb29fd18a62485da33431fb6500f0439.jpg', '2024-10-04 12:32:24');
+INSERT INTO `images` (`imageid`, `adminid`, `userid`, `planid`, `image_path`, `uploaded_at`) VALUES
+('17', '', '', 'QIVSYC', 'uploads/ijerph-17-09481-g001.jpg', '2024-10-04 13:04:07');
 
 -- --------------------------------------------------------
 
@@ -147,6 +163,9 @@ INSERT INTO `images` (`imageid`, `planid`, `image_path`, `uploaded_at`) VALUES
 --
 
 CREATE TABLE `login` (
+  `loginid` varchar(20) NOT NULL,
+  `adminid` varchar(20) NOT NULL,
+  `userid` varchar(20) NOT NULL,
   `username` varchar(20) NOT NULL,
   `pass_key` varchar(20) NOT NULL,
   `securekey` varchar(20) NOT NULL,
@@ -157,9 +176,10 @@ CREATE TABLE `login` (
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`username`, `pass_key`, `securekey`, `authority`) VALUES
-('test', 'test', 'test', 'member'),
-('admintest', 'admintest', 'admintest', 'admin');
+INSERT INTO `login` (`loginid`, `adminid`, `userid`, `username`, `pass_key`, `securekey`, `authority`) VALUES
+('', '', '', 'test', 'test', 'test', 'member'),
+('', '', '', 'admintest', 'admintest', 'admintest', 'admin'),
+('123', '123', '123', '123', '123', '123', 'admin');
 
 -- --------------------------------------------------------
 
@@ -195,7 +215,8 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
-('QHITBV', 'kucing', 'kucing', 'Event', 'Lifetime', 1, 'yes'),
+('EOLWXI', 'graf', 'graf', 'Event', '', 1, 'yes'),
+('QIVSYC', 'kucing', 'kucing', 'Event', 'Lifetime', 1, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', 20, 'yes');
 
 -- --------------------------------------------------------
@@ -224,7 +245,9 @@ CREATE TABLE `sports_timetable` (
 
 CREATE TABLE `users` (
   `userid` varchar(20) NOT NULL,
+  `imageid` varchar(200) NOT NULL,
   `username` varchar(40) NOT NULL,
+  `fullName` varchar(100) NOT NULL,
   `gender` varchar(8) NOT NULL,
   `mobile` varchar(20) NOT NULL,
   `email` varchar(200) NOT NULL,
@@ -236,18 +259,28 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userid`, `username`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
-('1727617730', 'abc', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727618092', 'abc', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727618166', 'abc', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727618190', 'abc', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727621287', 'abc', 'Male', '0132017340', 'fa@gmail.com', '2020-10-10', '2024-02-01'),
-('1727621728', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '2004-12-28', '2024-09-10'),
-('1727665527', 'johan', 'Male', '019', 'johan@gmail.com', '2020-09-07', '2024-09-08');
+INSERT INTO `users` (`userid`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
+('1727617730', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
+('1727618092', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
+('1727618166', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
+('1727618190', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
+('1727621287', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-10-10', '2024-02-01'),
+('1727621728', '0', 'Muhammad Farhan bin Samil', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '2004-12-28', '2024-09-10'),
+('1727665527', '0', 'johan', '', 'Male', '019', 'johan@gmail.com', '2020-09-07', '2024-09-08'),
+('1728121956', '0', 'test', 'test', 'Male', '012323232', 'fa@gmail.com', '', '2024-09-20'),
+('1728128062', 'UUID()', 'Muhammad Farhan bin Samil', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '', '2024-01-20'),
+('1728128066', 'UUID()', 'abc', 'abc', 'Male', '012323232', 'farhansamilme2@gmail.com', '', '2024-01-20'),
+('1728128257', 'UUID()', 'Muhammad Farhan bin Samil', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '', '2022-02-20');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`adminid`);
 
 --
 -- Indexes for table `images`
@@ -262,14 +295,10 @@ ALTER TABLE `plan`
   ADD PRIMARY KEY (`planid`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indexes for table `users`
 --
-
---
--- AUTO_INCREMENT for table `images`
---
-ALTER TABLE `images`
-  MODIFY `imageid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userid`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
