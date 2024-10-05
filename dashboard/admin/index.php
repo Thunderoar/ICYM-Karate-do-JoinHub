@@ -96,14 +96,17 @@ page_protect();
 							$result  = mysqli_query($con, $query);
 							$revenue = 0;
 							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							    	$query1="select * from plan where planid='".$row['planid']."'";
-							    	$result1=mysqli_query($con,$query1);
-							    	if($result1){
-							    		$value=mysqli_fetch_row($result1);
-							        $revenue = $value[4] + $revenue;
-							    	}
-							    }
+								while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+									$query1 = "SELECT * FROM plan WHERE planid='" . $row['planid'] . "'";
+									$result1 = mysqli_query($con, $query1);
+									
+									if ($result1) {
+										$value = mysqli_fetch_row($result1);
+										
+										// Ensure both $value[4] and $revenue are numeric before addition
+										$revenue = floatval($value[4]) + floatval($revenue);
+									}
+								}
 							}
 							echo "RM".$revenue;
 							?>
