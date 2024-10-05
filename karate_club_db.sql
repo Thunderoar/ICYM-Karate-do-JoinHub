@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2024 at 01:46 PM
+-- Generation Time: Oct 05, 2024 at 01:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,13 +41,10 @@ CREATE TABLE `address` (
 --
 
 INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zipcode`) VALUES
-('426746007', '1727621388', 'abc', 'abc', 'abc', ''),
-('395689128', '1727621728', 'Kampung Lago Peti Surat 240', 'SABAH', 'SABAH - BEAUFORT/DL MAMPAKUR', ''),
 ('126880847', '1727665527', 'johanstreet', 'johanstate', 'johancity', ''),
-('862324644', '1728121956', 'test', 'abc', 'abc', ''),
-('657042166', '1728128062', 'Kampung Lago Peti Surat 240', 'SABAH', 'SABAH - BEAUFORT/DL MAMPAKUR', '89808'),
 ('353767690', '1728128066', 'abc', 'abc', 'abc', '12345'),
-('236971276', '1728128257', 'Kampung Lago Peti Surat 240', 'SABAH', 'SABAH - BEAUFORT/DL MAMPAKUR', '89808');
+('426746007', '1727621388', 'abc', 'abc', 'abc', ''),
+('862324644', '1728121956', 'test', 'abc', 'abc', '');
 
 -- --------------------------------------------------------
 
@@ -260,21 +257,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userid`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
-('1727617730', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727618092', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727618166', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727618190', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-02-19', '2024-05-20'),
-('1727621287', '0', 'abc', '', 'Male', '0132017340', 'fa@gmail.com', '2020-10-10', '2024-02-01'),
-('1727621728', '0', 'Muhammad Farhan bin Samil', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '2004-12-28', '2024-09-10'),
 ('1727665527', '0', 'johan', '', 'Male', '019', 'johan@gmail.com', '2020-09-07', '2024-09-08'),
-('1728121956', '0', 'test', 'test', 'Male', '012323232', 'fa@gmail.com', '', '2024-09-20'),
-('1728128062', 'UUID()', 'Muhammad Farhan bin Samil', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '', '2024-01-20'),
-('1728128066', 'UUID()', 'abc', 'abc', 'Male', '012323232', 'farhansamilme2@gmail.com', '', '2024-01-20'),
-('1728128257', 'UUID()', 'Muhammad Farhan bin Samil', 'Muhammad Farhan bin Samil', 'Male', '0196340894', 'farhansamilme@gmail.com', '', '2022-02-20');
+('1728121956', '0', 'test', 'test', 'Male', '012323232', 'fa@gmail.com', '', '2024-09-20');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`addressid`);
 
 --
 -- Indexes for table `admin`
