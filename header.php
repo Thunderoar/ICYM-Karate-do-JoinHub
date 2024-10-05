@@ -39,7 +39,7 @@
 
         <div class="col-6 col-lg-2 site-logo">
             <img src="images/logok.png" alt="" height="50" />
-          <a style="font-size:15px; color:black!important;" href="index.php">ICYM Karate-Do</a>
+          <a style="font-size:15px; color: #a9c9fc!important;" href="index.php">ICYM Karate-Do</a>
         </div>
         <div class="col-6 col-lg-10 text-right menu">
           <nav class="site-navigation text-right text-md-right">

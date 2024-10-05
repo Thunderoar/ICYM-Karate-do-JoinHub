@@ -40,9 +40,9 @@
 			      <div class="col-md mb-md-0 mb-5">
 				      <div class="modal-body p-0">
 				      	<h3 class="mb-4">Sign In</h3>
-				      	<form action="#" class="signin-form">
+				      	<form action="secure_login.php" class="signin-form" method='post' id="bb">
 				      		<div class="form-group">
-				      			<input type="text" class="form-control" placeholder="Username">
+				      			<input  type="text" placeholder="Username" class="form-control" name="user_id_auth" id="textfield" data-rule-minlength="6" data-rule-required="true">
 				      		</div>
 			            <div class="form-group">
 			              <input type="password" class="form-control" placeholder="Password">
@@ -70,6 +70,7 @@
 			          </div>
 				      </div>
 				    </div>
+					<!-- 
 				    <div class="col-md-1 divider"></div>
 				    <div class="col-md">
 				      <div class="modal-body p-0">
@@ -98,7 +99,7 @@
 			          </form>
 				      </div>
 				    </div>
-				  </div>
+				  </div> -->
 		    </div>
 		  </div>
 		</div>
