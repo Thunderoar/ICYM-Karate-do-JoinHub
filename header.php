@@ -1,3 +1,24 @@
+<?php
+require 'include/db_conn.php';
+
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
+  // If the user is NOT logged in, you can display a message or show a login form
+  //echo "<p>You are not logged in. Please log in to access this page.</p>";
+  // Optionally include the login form here, or any content for non-logged-in users
+} else {
+  // If the user IS logged in, run page_protect to ensure the page is protected
+  page_protect();    
+  // Now you can show content intended for logged-in users
+  //echo "<p>Welcome to the protected content area!</p>";
+  // Continue with the rest of your code for logged-in users
+}
+?>
 <!DOCTYPE html>
 <html lang="en">  
   <head>
@@ -67,10 +88,35 @@
                 <li><a href="events.php">Events</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="contact.php">Contact</a></li>
-                <li><button type="button" class="btn btn-primary py-3 px-4" data-toggle="modal" data-target="#exampleModalCenter">
-							  Login
-							</button>
-            </li>
+                <?php
+
+
+// Assuming $_SESSION['loggedin'] is set to true when the user is logged in, and
+// $_SESSION['username'] and $_SESSION['profile_pic'] contain user data from MySQL
+
+if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
+    // The user is logged in, show profile picture and username
+    //$profile_pic = $_SESSION['profile_pic']; // URL or path to profile picture
+    echo "
+    <li>
+        <div class='user-info'>
+          <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
+              <img src='$profile_pic' alt='Profile Picture' class='profile-pic' />
+          <span class='username'>$username</span>
+        </button>
+
+        </div>
+    </li>";
+} else {
+    // The user is not logged in, show the login button
+    echo "
+    <li>
+        <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
+            Login
+        </button>
+    </li>";
+}
+?>
               </ul>
 
               <a href="#" class="site-menu-toggle js-menu-toggle text-black d-inline-block d-lg-none"><span class="icon-menu h3"></span></a>
