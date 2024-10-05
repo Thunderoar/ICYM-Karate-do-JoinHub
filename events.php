@@ -38,7 +38,7 @@
     </div> <!-- .site-mobile-menu -->
 	
 <?php
-require('header.html');
+require('header.php');
 ?>
     
     <div class="container">
@@ -131,3 +131,6 @@ require('footer.html');
     
   </body>
 </html>
+<?php
+require 'important_include.php';
+?>   
