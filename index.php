@@ -43,9 +43,10 @@ require 'include/db_conn.php';
     </div> <!-- .site-mobile-menu -->
 
 <?php
-require('header.html');
+require('header.php');
 ?>
-    
+
+
     
     <div class="container">
       <div class="row">
@@ -303,7 +304,6 @@ require('header.html');
 <?php
 require('footer.html');
 ?>
-    
 
   </div>
 
@@ -321,3 +321,6 @@ require('footer.html');
     
   </body>
 </html>
+<?php
+require 'important_include.php';
+?>   
