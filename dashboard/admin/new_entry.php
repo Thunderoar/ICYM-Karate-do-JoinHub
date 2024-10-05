@@ -92,7 +92,7 @@ page_protect();
 		<div class="a1-container a1-dark-gray a1-center">
         	<h6>NEW ENTRY</h6>
         </div>
-       <form id="form1" name="form1" method="post" class="a1-container" action="new_submit.php">
+       <form id="form1" name="form1" method="post" class="a1-container" action="new_submit.php" enctype="multipart/form-data">
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
@@ -101,6 +101,12 @@ page_protect();
            	   <td height="35"><input type="text" id="boxx" name="m_id" value="<?php echo time(); ?>" readonly required/></td>
          	   </tr>
 			   
+			<tr>
+			 <td height="35">Profile Picture: </td>
+				<td height="35">
+				<input type="file" name="image" accept="image/*">
+			</tr>
+
 			   <tr>
                <td height="35">NAME:</td>
                <td height="35"><input name="u_name" id="boxx"  required/></td>
