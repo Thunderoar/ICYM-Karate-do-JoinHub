@@ -209,22 +209,36 @@ if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
   $profile_pic = $_SESSION['profile_pic']; // Path or URL to profile picture
   $username = $_SESSION['username']; // Username from the session
 
-  // Display the user info (profile picture and username)
+  // Determine whether the user is an admin or member based on their role
+  $dashboard_link = '';
+  $logout_link = '';
+
+  if ($_SESSION['authority'] == 'admin') {
+      // If the user is an admin, use the admin dashboard and logout links
+      $dashboard_link = 'dashboard/admin/';
+      $logout_link = 'dashboard/admin/logout.php';
+  } elseif ($_SESSION['authority'] == 'member') {
+      // If the user is a member, use the member dashboard and logout links
+      $dashboard_link = 'dashboard/member/';
+      $logout_link = 'dashboard/member/logout.php';
+  }
+
+  // Display the user info (profile picture, username, and appropriate links)
   echo "
   <li class='nav-item'>
       <div class='user-info d-flex align-items-center'>
           <button class='btn btn-primary btn-sm px-2 py-1 d-flex align-items-center' id='dropdownButton'>
-              <img src='dashboard/admin/$profile_pic' alt='' class='img-fluid' style='height: 40px; width: 40px; border-radius: 50%; object-fit: cover;'/>
+              <img src='$dashboard_link$profile_pic' alt='' class='img-fluid' style='height: 40px; width: 40px; border-radius: 50%; object-fit: cover;'/>
               <span class='username ml-2'>$username</span>
           </button>
 
           <!-- Custom Dropdown -->
           <ul class='dropdown__items' id='dropdownItems'>
-              <li><a class='not' href='dashboard/admin/'>Dashboard</a></li> <!-- Logout Link -->
+              <li><a class='not' href='$dashboard_link'>Dashboard</a></li> <!-- Dynamic Dashboard Link -->
               <li>😺 Option 2</li>
               <li>😽 Option 3</li>
               <li>😎 Option 4</li>
-              <li><a class='not' href='dashboard/admin/logout.php'>Log Out</a></li> <!-- Logout Link -->
+              <li><a class='not' href='$logout_link'>Log Out</a></li> <!-- Dynamic Logout Link -->
           </ul>
       </div>
   </li>
@@ -244,7 +258,7 @@ if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
       </button>
   </li>";
 }
-                        ?>
+?>
                     </ul>
 
                     <a href="#" class="site-menu-toggle js-menu-toggle text-black d-inline-block d-lg-none"><span class="icon-menu h3"></span></a>
