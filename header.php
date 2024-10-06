@@ -8,20 +8,15 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
-  // If the user is NOT logged in, you can display a message or show a login form
-  //echo "<p>You are not logged in. Please log in to access this page.</p>";
-  // Optionally include the login form here, or any content for non-logged-in users
+  // If the user is NOT logged in
 } else {
   // If the user IS logged in, run page_protect to ensure the page is protected
-  page_protect();    
-  // Now you can show content intended for logged-in users
-  //echo "<p>Welcome to the protected content area!</p>";
-  // Continue with the rest of your code for logged-in users
+  page_protect();
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">  
-  <head>
+<html lang="en">
+<head>
     <title>ICYM Karate-Do &mdash; Colorlib Website Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,130 +31,178 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-    
-  
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/homepagestyle.css">
-    <style>
-	a {
-		color: #a9c9fc!important}
-	a:hover {
-		color: white!important;}
-	p {
-		text-indent: 20px;}
-	p:hover {
-		color: #00358a!important}
 
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
+        a:not(.not) {
+            color: #a9c9fc!important;
+        }
+        a:not(.not):hover {
+            color: white!important;
+        }
+        p {
+            text-indent: 20px;
+        }
+        p:hover {
+            color: #00358a!important;
+        }
         .site-section {
-            background-color: #f8f9fa; /* Light gray background */
-            padding: 40px; /* Add padding around the section */
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            background-color: #f8f9fa; 
+            padding: 40px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
         }
-
         .section-title {
-            font-size: 2.5rem; /* Larger title */
-            font-weight: bold; /* Bold text */
-            color: #343a40; /* Dark color for the title */
-            margin-bottom: 20px; /* Space below the title */
-            text-align: center; /* Center the title */
+            font-size: 2.5rem; 
+            font-weight: bold; 
+            color: #343a40; 
+            margin-bottom: 20px; 
+            text-align: center; 
         }
-
-        /* Add hover effect to images */
         img:not(.logo) {
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transform */
-            border-radius: 10px; /* Round image corners */
-            width: 100%; /* Make images responsive */
-            height: auto; /* Maintain aspect ratio */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            border-radius: 10px; 
+            width: 100%; 
+            height: auto; 
         }
-
         img:not(.logo):hover {
-            transform: scale(1.05); /* Slightly enlarge the image on hover */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+            transform: scale(1.05); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
         }
-
-
         .menu {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margin */
+            list-style-type: none; 
+            padding: 0; 
+            margin: 0; 
+        }
+        .menu li {
+            display: inline-block; 
+            margin-right: 20px; 
+        }
+        .menu a {
+            text-decoration: none; 
+            padding: 10px 15px; 
+            color: #343a40; 
+            transition: transform 0.3s ease !important; 
+        }
+        .menu a:hover {
+            transform: scale(1.1) !important; 
+        }
+        .dropdown {
+            position: relative; 
+            width: 230px; 
+            filter: url(#goo);
+        }
+        .dropdown__face,
+        .dropdown__items {
+            background-color: #fff; 
+            padding: 20px; 
+            border-radius: 25px; 
+        }
+        .dropdown__face {
+            display: block; 
+            position: relative; 
+            cursor: pointer; 
+        }
+        .dropdown__items {
+    margin: 0;
+    position: absolute;
+    right: 0;
+    top: 100%; /* Ensure the dropdown is below the button */
+    list-style: none;
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    visibility: hidden;
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
+    background-color: #fff; /* Set background color */
+    border-radius: 5px; /* Optional: round the corners */
 }
 
-.menu li {
-    display: inline-block; /* Display list items inline */
-    margin-right: 20px; /* Space between menu items */
+.dropdown__items.visible {
+    visibility: visible;
+    opacity: 1;
+    z-index: 1;
 }
 
-.menu a {
-    text-decoration: none; /* Remove underline from links */
-    padding: 10px 15px; /* Add padding around links */
-    color: #343a40; /* Text color */
-    transition: transform 0.3s ease !important; /* Smooth transition for transform */
+/* Dropdown item styles */
+.dropdown__items li {
+    padding: 10px 15px; /* Add some padding around items */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
-/* Enlarging effect on hover */
-.menu a:hover {
-    transform: scale(1.1) !important; /* Slightly enlarge the item on hover */
+.dropdown__items li:hover {
+    background-color: #f0f0f0; /* Optional: highlight on hover */
 }
 
-/* Dropdown styles (optional) */
-.dropdown {
-    display: none; /* Initially hide dropdowns */
-    position: absolute; /* Position dropdowns absolutely */
-    background-color: #fff; /* Dropdown background color */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for dropdown */
-}
-
-.has-children:hover .dropdown {
-    display: block; /* Show dropdown on hover */
-}
-
+        .dropdown__arrow {
+            border-bottom: 2px solid #000; 
+            border-right: 2px solid #000; 
+            position: absolute; 
+            top: 50%; 
+            right: 30px; 
+            width: 10px; 
+            height: 10px; 
+            transform: rotate(45deg) translateY(-50%); 
+            transform-origin: right; 
+        }
+        body {
+            background-image: linear-gradient(140deg, #e2e2e2, #cdcdcd); 
+            display: grid; 
+            place-items: center; 
+            font-family: "Lato", Arial, sans-serif; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        * {
+            box-sizing: border-box; 
+        }
+        svg {
+            display: none; 
+        }
     </style>
-	</style>
-  </head>
-  
-  <body>
-      <div>
+</head>
 
-      <div style="background-color:#00003c" class="row no-gutters site-navbar align-items-center py-3" >
+<body>
+    <div>
+        <div style="background-color:#00003c" class="row no-gutters site-navbar align-items-center py-3">
+            <div class="col-6 col-lg-2 site-logo">
+                <img src="images/logok.png" alt="" height="50" class="logo" />
+                <a style="font-size:15px; color: #a9c9fc!important;" href="index.php">ICYM Karate-Do</a>
+            </div>
+            <div class="col-6 col-lg-10 text-right menu">
+                <nav class="site-navigation text-right text-md-right">
+                    <ul class="site-menu js-clone-nav d-none d-lg-block">
+                        <li><a href="index.php">Home</a></li>
+                        <li><a href="gallery.php">Gallery</a></li>
+                        <li class="has-children">
+                            <a href="players.php">Coach</a>
+                            <ul class="dropdown arrow-top">
+                                <li><p>Jakub Bates</p></li>
+                                <li><p>Russell Vance</p></li>
+                                <li><p>Carson Hodgson</p></li>
+                                <li class="has-children">
+                                    <p href="#">Sub Menu  ></p>
+                                    <ul class="dropdown">
+                                        <li><p>Joshua Fugueroa</p></li>
+                                        <li><p>Jakub Bates</p></li>
+                                        <li><p>Russell Vance</p></li>
+                                        <li><p>Carson Hodgson</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="about.php">About</a></li>
+                        <li><a href="contact.php">Contact</a></li>
 
-        <div class="col-6 col-lg-2 site-logo">
-          <img src="images/logok.png" alt="" height="50" class="logo" />
-          <a style="font-size:15px; color: #a9c9fc!important;" href="index.php">ICYM Karate-Do</a>
-        </div>
-        <div class="col-6 col-lg-10 text-right menu">
-          <nav class="site-navigation text-right text-md-right">
-
-              <ul class="site-menu js-clone-nav d-none d-lg-block">
-              <li><a href="index.php">Home</a></li>
-    <li><a href="gallery.php">Gallery</a></li>
-    <li class="has-children">
-        <a href="players.php">Coach</a>
-        <ul class="dropdown arrow-top">
-            <li><p>Jakub Bates</p></li>
-            <li><p>Russell Vance</p></li>
-            <li><p>Carson Hodgson</p></li>
-            <li class="has-children">
-                <p href="#">Sub Menu  ></p>
-                <ul class="dropdown">
-                    <li><p>Joshua Fugueroa</p></li>
-                    <li><p>Jakub Bates</p></li>
-                    <li><p>Russell Vance</p></li>
-                    <li><p>Carson Hodgson</p></li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    <li><a href="events.php">Events</a></li>
-    <li><a href="about.php">About</a></li>
-    <li><a href="contact.php">Contact</a></li>
-
-
-<?php
-
+                        <?php
 // Check if the user is logged in and session data is set
 if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
   // Get profile picture and username from session
@@ -168,34 +211,58 @@ if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
 
   // Display the user info (profile picture and username)
   echo "
-  <li>
-      <div class='user-info'>
-        <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
-            <img src='dashboard/admin/$profile_pic' alt='' height='50' width='50' style='border-radius: 50%;'/>
-            <span class='username'>$username</span>
-        </button>
+  <li class='nav-item'>
+      <div class='user-info d-flex align-items-center'>
+          <button class='btn btn-primary btn-sm px-2 py-1 d-flex align-items-center' id='dropdownButton'>
+              <img src='dashboard/admin/$profile_pic' alt='' class='img-fluid' style='height: 40px; width: 40px; border-radius: 50%; object-fit: cover;'/>
+              <span class='username ml-2'>$username</span>
+          </button>
+
+          <!-- Custom Dropdown -->
+          <ul class='dropdown__items' id='dropdownItems'>
+              <li><a class='not' href='dashboard/admin/'>Dashboard</a></li> <!-- Logout Link -->
+              <li>😺 Option 2</li>
+              <li>😽 Option 3</li>
+              <li>😎 Option 4</li>
+              <li><a class='not' href='dashboard/admin/logout.php'>Log Out</a></li> <!-- Logout Link -->
+          </ul>
       </div>
-  </li>";
+  </li>
+  <svg>
+      <filter id='goo'>
+          <feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur'/>
+          <feColorMatrix in='blur' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7' result='goo'/>
+          <feBlend in='SourceGraphic' in2='goo'/>
+      </filter>
+  </svg>";
 } else {
   // The user is not logged in, show the login button
   echo "
-  <li>
-      <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
+  <li class='nav-item'>
+      <button type='button' class='btn btn-primary btn-sm px-4 py-3' data-toggle='modal' data-target='#exampleModalCenter'>
           Login
       </button>
   </li>";
 }
-?>
-              </ul>
+                        ?>
+                    </ul>
 
-              <a href="#" class="site-menu-toggle js-menu-toggle text-black d-inline-block d-lg-none"><span class="icon-menu h3"></span></a>
-            </nav>
+                    <a href="#" class="site-menu-toggle js-menu-toggle text-black d-inline-block d-lg-none"><span class="icon-menu h3"></span></a>
+                </nav>
+            </div>
         </div>
-      </div>
-
     </div>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // JavaScript to toggle the dropdown visibility
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownItems = document.getElementById('dropdownItems');
 
-	</body>
-	</html>
-  
+        dropdownButton.addEventListener('click', function() {
+            dropdownItems.classList.toggle('visible');
+        });
+    });
+</script>
+</body>
+</html>
