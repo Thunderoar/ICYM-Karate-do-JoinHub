@@ -15,6 +15,17 @@
               4) planid (foreign key)
               5) image_path
               6) uploaded_at
+              7) imagename?
 
 3) entity: address
    attribute: 1)
+
+4) entity: plan
+   attribute: 1) planid
+              2) planName
+              3) short_description
+              4) long_description
+              5) planType
+              6) validity
+              7) amount
+              8) active
