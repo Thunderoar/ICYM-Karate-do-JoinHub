@@ -54,20 +54,25 @@
 			            	<div class="form-check w-50">
 				            	<label class="custom-control fill-checkbox">
 												<input type="checkbox" class="fill-control-input">
-												<span class="fill-control-indicator"></span>
-												<span class="fill-control-description">Remember Me</span>
+												<span style="color: #0e0e0f!important" class="fill-control-indicator"></span>
+												<span style="color: #0e0e0f!important" class="fill-control-description">Remember Me</span>
 											</label>
 										</div>
 										<div class="w-50 text-md-right">
-											<a href="#" style="color: #fff">Forgot Password</a>
+											<a href="#" style="color: #0e0e0f!important">Forgot Password</a>
+										</div>
+										<div class="w-50 text-md-right">
+											<a href="login-admin.php" style="color: #0e0e0f!important">I am an Admin/Coach</a>
 										</div>
 			            </div>
 			          </form>
-			          <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
+					  <!-- nope!
+			          <p style="color: #0e0e0f!important" class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
 			          <div class="social d-flex text-center">
 			          	<a href="#" class="px-2 py-3 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Facebook</a>
 			          	<a href="#" class="px-2 py-3 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Twitter</a>
 			          </div>
+						-->
 				      </div>
 				    </div>
 					<!-- 

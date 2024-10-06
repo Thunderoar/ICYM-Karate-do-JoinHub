@@ -50,7 +50,7 @@
 								<div class="input-group-addon">
 									<i class="entypo-key"></i>
 								</div>
-								<input type="text" name="login_key"  class="form-control" placeholder="Your secert key" data-rule-required="true" data-rule-minlength="6">
+								<input type="text" name="login_key"  class="form-control" placeholder="Your secret key" data-rule-required="true" data-rule-minlength="6">
 							</div>				
 						</div>
 

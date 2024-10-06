@@ -24,34 +24,49 @@ if ($pass_key == "" &&  $user_id_auth == "") {
     $user_id_auth = mysqli_real_escape_string($con, $user_id_auth);
     $pass_key     = mysqli_real_escape_string($con, $pass_key);
 
-    // Join the login, admin, and images tables to get relevant information
-    $sql = "
-        SELECT l.*, a.adminid, a.username, i.image_path 
-        FROM login l
-        JOIN admin a ON l.adminid = a.adminid
-        LEFT JOIN images i ON i.adminid = a.adminid
-        WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key'
-    ";
+    // Check if this is an admin login page (using a flag or different form input)
+    $is_admin_login = isset($_POST['is_admin_login']) && $_POST['is_admin_login'] == 1;
+
+    if ($is_admin_login) {
+        // Admin login query
+        $sql = "
+            SELECT a.adminid, a.username, 'admin' as authority, i.image_path
+            FROM admin a
+            LEFT JOIN images i ON i.adminid = a.adminid
+            WHERE a.username = '$user_id_auth' AND a.pass_key = '$pass_key'
+        ";
+    } else {
+        // User login query
+        $sql = "
+            SELECT u.userid, u.username, 'member' as authority, i.image_path
+            FROM users u
+            LEFT JOIN images i ON i.userid = u.userid
+            WHERE u.username = '$user_id_auth' AND u.pass_key = '$pass_key'
+        ";
+    }
 
     $result = mysqli_query($con, $sql);
     $count  = mysqli_num_rows($result);
 
     if ($count == 1) {
-        // Fetch the user's data along with their admin and image information
+        // Fetch the user's or admin's data
         $row = mysqli_fetch_assoc($result);
 
         session_start();
         // Store session data
-        $_SESSION['adminid']        = $row['adminid'];
+        if ($is_admin_login) {
+            $_SESSION['adminid'] = $row['adminid'];
+        } else {
+            $_SESSION['userid'] = $row['userid'];
+        }
         $_SESSION['user_data']      = $user_id_auth;
         $_SESSION['logged']         = "start";
         $_SESSION['authority']      = $row['authority'];
-        $_SESSION['full_name']      = $row['admin_name'];
         $_SESSION['username']       = $row['username'];
         $_SESSION['profile_pic']    = $row['image_path'];  // Store image URL from the images table
         $auth_l_x                   = $_SESSION['authority'];
 
-        // Redirect based on the user's authority level
+        // Redirect based on the user's or admin's authority level
         if ($auth_l_x == "admin") {
             header("location: ./dashboard/admin/");
         } elseif ($auth_l_x == "member") {

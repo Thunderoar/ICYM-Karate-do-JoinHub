@@ -22,6 +22,24 @@ background-image: url("blaze_back_new.png");
 width: 1366px;
 align-items: center;
 }
+
+.home-button {
+    position: fixed; /* Fixed positioning */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: 20px; /* Distance from the right of the viewport */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
+    padding: 20px 25px; /* Padding around the button */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 16px; /* Font size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.home-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
 </style>
 <!-- hello -->
 <body>
@@ -97,9 +115,6 @@ require('element/login-header.html');
 					<a style="color:#ffffff" 	href="login-admin.php" class="link">Admin? Go here</a>
 				</div>
 				<div>
-				<div>
-					<a style="color:#ffffff" 	href="login-member.php" class="link">Member? Go here</a>
-				</div>
 		</div>
 		
 	</div>
@@ -108,5 +123,6 @@ require('element/login-header.html');
 
 		</div>
 
+<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="index.php">Go to Homepage</a>		
 </body>
 </html>
