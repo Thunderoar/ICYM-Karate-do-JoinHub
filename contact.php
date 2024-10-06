@@ -47,7 +47,7 @@ require('header.php');
           <div class="hero-wrap text-center" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
             <div class="hero-contents">
               <h2>Get In Touch</h2>
-              <p><a href="index.html">Home</a> <span class="mx-2">/</span> <strong>Contact</strong></p>
+              <p><a href="index.php">Home</a> <span class="mx-2">/</span> <strong>Contact</strong></p>
             </div>
           </div>
         </div>

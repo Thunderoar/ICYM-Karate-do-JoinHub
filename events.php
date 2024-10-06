@@ -46,8 +46,8 @@ require('header.php');
         <div class="col-lg-12">
           <div class="hero-wrap text-center" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
             <div class="hero-contents">
-              <h2>Events</h2>
-              <p><a href="index.html">Home</a> <span class="mx-2">/</span> <strong>Events</strong></p>
+            <h2>Events</h2>
+            <p><a href="index.php">Home</a> <span class="mx-2">/</span> <strong>Events</strong></p>
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ require('header.php');
     </div>
 
     <div class="site-section">
-      <div class="container">
+      <div class="container site-section pb-0">
        
 
         <div class="row mb-5">
