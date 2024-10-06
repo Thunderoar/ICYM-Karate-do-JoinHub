@@ -117,8 +117,8 @@ require('header.php');
 
     <div class="site-section">
       <div class="container">
-        <div class="row">
-          <div class="col-6">
+        <div class="row align-items-center mb-4">
+          <div class="col-12 text-center">
             <h2 class="section-title">Our Coach</h2>
           </div>
           <div class="col-6 text-right">
@@ -130,28 +130,28 @@ require('header.php');
 
         <div class="owl-4-slider owl-carousel">
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Jakub Bates</h3>
               <p>#10 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Joshua Figueroa</h3>
               <p>#7 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Russell Vance</h3>
               <p>#1 / Goal Keeper</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Carson Hodgson</h3>
               <p>#3 / Forward</p>
@@ -159,28 +159,28 @@ require('header.php');
           </div>
 
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Yanis Velasquez</h3>
               <p>#4 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Joshua Figueroa</h3>
               <p>#8 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Russell Vance</h3>
               <p>#6 / Forward</p>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid"></a>
+            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
               <h3>Carson Hodgson</h3>
               <p>#9 / Forward</p>
@@ -197,70 +197,69 @@ require('header.php');
     require('element/gallery.php');
     ?>
 
-    <div class="site-section">
-      <div class="container">
-        <div class="row align-items-center mb-2">
-          <div class="col-6">
-            <h2 class="section-title">Events</h2>
-          </div>
+<div class="site-section">
+        <div class="container">
+            <div class="row align-items-center mb-2">
+                <div class="col-6">
+                    <h2 class="section-title">Events</h2>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
+                    <div class="custom-media d-block">
+                        <div class="img-wrap mb-3">
+                            <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
+                        </div>
+                        <div>
+                            <span class="caption">24 February, 2024</span>
+                            <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
+                    <div class="custom-media d-block">
+                        <div class="img-wrap mb-3">
+                            <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
+                        </div>
+                        <div>
+                            <span class="caption">2 September, 2023</span>
+                            <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
+                    <div class="custom-media d-block">
+                        <div class="img-wrap mb-3">
+                            <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
+                        </div>
+                        <div>
+                            <span class="caption">23 September, 2023</span>
+                            <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
+                    <div class="custom-media d-block">
+                        <div class="img-wrap mb-3">
+                            <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
+                        </div>
+                        <div>
+                            <span class="caption">20 September, 2023</span>
+                            <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-4 text-center">
+                </div>
+            </div>
         </div>
-
-        <div class="row mb-5">
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption" style="color:#242cb5">24 February, 2024</span>
-                <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption" style="color:#242cb5">2 September, 2023</span>
-                <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption" style="color:#242cb5">23 September, 2023</span>
-                <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption" style="color:#242cb5">20 September, 2023</span>
-                <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="col-lg-4 text-center">
-          </div>
-        </div>
-      </div>
     </div>
 
     

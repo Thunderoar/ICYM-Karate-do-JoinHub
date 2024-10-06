@@ -50,6 +50,74 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
 		text-indent: 20px;}
 	p:hover {
 		color: #00358a!important}
+
+
+    <style>
+        .site-section {
+            background-color: #f8f9fa; /* Light gray background */
+            padding: 40px; /* Add padding around the section */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        .section-title {
+            font-size: 2.5rem; /* Larger title */
+            font-weight: bold; /* Bold text */
+            color: #343a40; /* Dark color for the title */
+            margin-bottom: 20px; /* Space below the title */
+            text-align: center; /* Center the title */
+        }
+
+        /* Add hover effect to images */
+        img:not(.logo) {
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transform */
+            border-radius: 10px; /* Round image corners */
+            width: 100%; /* Make images responsive */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        img:not(.logo):hover {
+            transform: scale(1.05); /* Slightly enlarge the image on hover */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+        }
+
+
+        .menu {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.menu li {
+    display: inline-block; /* Display list items inline */
+    margin-right: 20px; /* Space between menu items */
+}
+
+.menu a {
+    text-decoration: none; /* Remove underline from links */
+    padding: 10px 15px; /* Add padding around links */
+    color: #343a40; /* Text color */
+    transition: transform 0.3s ease !important; /* Smooth transition for transform */
+}
+
+/* Enlarging effect on hover */
+.menu a:hover {
+    transform: scale(1.1) !important; /* Slightly enlarge the item on hover */
+}
+
+/* Dropdown styles (optional) */
+.dropdown {
+    display: none; /* Initially hide dropdowns */
+    position: absolute; /* Position dropdowns absolutely */
+    background-color: #fff; /* Dropdown background color */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for dropdown */
+}
+
+.has-children:hover .dropdown {
+    display: block; /* Show dropdown on hover */
+}
+
+    </style>
 	</style>
   </head>
   
@@ -59,35 +127,35 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
       <div style="background-color:#293a8e" class="row no-gutters site-navbar align-items-center py-3" >
 
         <div class="col-6 col-lg-2 site-logo">
-            <img src="images/logok.png" alt="" height="50" />
+          <img src="images/logok.png" alt="" height="50" class="logo" />
           <a style="font-size:15px; color: #a9c9fc!important;" href="index.php">ICYM Karate-Do</a>
         </div>
         <div class="col-6 col-lg-10 text-right menu">
           <nav class="site-navigation text-right text-md-right">
 
               <ul class="site-menu js-clone-nav d-none d-lg-block">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="gallery.php">Gallery</a></li>
-                <li class="has-children">
-                  <a href="players.php">Coach</a>
-                  <ul class="dropdown arrow-top">
+              <li><a href="index.php">Home</a></li>
+    <li><a href="gallery.php">Gallery</a></li>
+    <li class="has-children">
+        <a href="players.php">Coach</a>
+        <ul class="dropdown arrow-top">
+            <li><p>Jakub Bates</p></li>
+            <li><p>Russell Vance</p></li>
+            <li><p>Carson Hodgson</p></li>
+            <li class="has-children">
+                <p href="#">Sub Menu  ></p>
+                <ul class="dropdown">
+                    <li><p>Joshua Fugueroa</p></li>
                     <li><p>Jakub Bates</p></li>
                     <li><p>Russell Vance</p></li>
                     <li><p>Carson Hodgson</p></li>
-                    <li class="has-children">
-                      <p href="#">Sub Menu  ></p>
-                      <ul class="dropdown">
-                        <li><p>Joshua Fugueroa</p></li>
-                        <li><p>Jakub Bates</p></li>
-                        <li><p>Russell Vance</p></li>
-                        <li><p>Carson Hodgson</p></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="events.php">Events</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="contact.php">Contact</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><a href="events.php">Events</a></li>
+    <li><a href="about.php">About</a></li>
+    <li><a href="contact.php">Contact</a></li>
                 <?php
 
 
