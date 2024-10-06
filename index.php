@@ -28,7 +28,7 @@
   
     
   <!-- hello -->
-  <div style="background-color:ffffff;" class="site-wrap">
+  <div>
 
 
     <div class="site-mobile-menu">
@@ -46,7 +46,7 @@ require('header.php');
 
 
     
-    <div class="container">
+    <div>
       <div class="row">
         <div class="col-lg-12">
       <?php

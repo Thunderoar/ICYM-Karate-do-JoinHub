@@ -122,9 +122,9 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
   </head>
   
   <body>
-      <div class="container">
+      <div>
 
-      <div style="background-color:#293a8e" class="row no-gutters site-navbar align-items-center py-3" >
+      <div style="background-color:#00003c" class="row no-gutters site-navbar align-items-center py-3" >
 
         <div class="col-6 col-lg-2 site-logo">
           <img src="images/logok.png" alt="" height="50" class="logo" />
@@ -156,8 +156,9 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
     <li><a href="events.php">Events</a></li>
     <li><a href="about.php">About</a></li>
     <li><a href="contact.php">Contact</a></li>
-                <?php
 
+
+<?php
 
 // Check if the user is logged in and session data is set
 if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
