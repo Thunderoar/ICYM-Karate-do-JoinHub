@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 06, 2024 at 11:32 AM
+-- Generation Time: Oct 06, 2024 at 05:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,7 +67,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`adminid`, `username`, `pass_key`, `securekey`, `Full_name`) VALUES
-('1234', 'admintest', 'admintest', 'admintest', 'admintest');
+('admintest', 'admintest', 'admintest', 'admintest', 'admintest');
 
 -- --------------------------------------------------------
 
@@ -158,7 +158,7 @@ CREATE TABLE `images` (
 INSERT INTO `images` (`imageid`, `adminid`, `userid`, `planid`, `image_path`, `uploaded_at`) VALUES
 ('3100ac59-839d-11ef-8354-3ca067e52da9', '0', '1728189648', '0', 'uploads/user_profile/ijerph-17-09481-g001.jpg', '2024-10-06 04:41:02'),
 ('9566be7b-83a5-11ef-8354-3ca067e52da9', 'admintest', '0', '0', 'uploads/a9d7ddf79f8967ef8ed2cccd10112606.jpg', '2024-10-06 05:41:07'),
-('9746d457-83a6-11ef-8354-3ca067e52da9', '1234', '0', '0', 'uploads/d27ebb6de481e23dafccc64d636e01bf.jpg', '2024-10-06 05:48:19'),
+('9746d457-83a6-11ef-8354-3ca067e52da9', '1234', '0', '0', 'uploads/a9d7ddf79f8967ef8ed2cccd10112606.jpg', '2024-10-06 05:48:19'),
 ('cab09151-839c-11ef-8354-3ca067e52da9', '0', '0', 'NJHMPR', 'uploads/cb29fd18a62485da33431fb6500f0439.jpg', '2024-10-06 04:38:11');
 
 -- --------------------------------------------------------
@@ -184,7 +184,7 @@ CREATE TABLE `login` (
 INSERT INTO `login` (`loginid`, `adminid`, `userid`, `username`, `pass_key`, `securekey`, `authority`) VALUES
 ('123', '123', '123', '123', '123', '123', 'admin'),
 ('12345', '1234', '', 'admintest', 'admintest', 'admintest', 'admin'),
-('wah', '', '', 'test', 'test', 'test', 'member');
+('test', 'test', 'test', 'test', 'test', 'test', 'member');
 
 -- --------------------------------------------------------
 
@@ -250,6 +250,7 @@ CREATE TABLE `sports_timetable` (
 
 CREATE TABLE `users` (
   `userid` varchar(20) NOT NULL,
+  `pass_key` varchar(100) NOT NULL,
   `imageid` varchar(200) NOT NULL,
   `username` varchar(40) NOT NULL,
   `fullName` varchar(100) NOT NULL,
@@ -264,11 +265,11 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userid`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
-('1727665527', '0', 'johan', '', 'Male', '019', 'johan@gmail.com', '2020-09-07', '2024-09-08'),
-('1728121956', '0', 'test', 'test', 'Male', '012323232', 'fa@gmail.com', '', '2024-09-20'),
-('1728189607', 'UUID()', 'johan', 'johan', 'Male', '1', 'johan@gmail.com', '', '2024-10-20'),
-('1728189648', 'UUID()', 'johan', 'johan', 'Male', '1', 'johan@gmail.com', '', '2024-10-20');
+INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
+('1727665527', '', '0', 'johan', '', 'Male', '019', 'johan@gmail.com', '2020-09-07', '2024-09-08'),
+('1728121956', '', '0', 'test', 'test', 'Male', '012323232', 'fa@gmail.com', '', '2024-09-20'),
+('1728189648', '', 'UUID()', 'johan', 'johan', 'Male', '1', 'johan@gmail.com', '', '2024-10-20'),
+('test', 'test', 'UUID()', 'test', 'test', 'Male', '1', 'johan@gmail.com', '', '2024-10-20');
 
 --
 -- Indexes for dumped tables
