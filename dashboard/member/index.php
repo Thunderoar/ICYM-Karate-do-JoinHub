@@ -98,14 +98,17 @@ page_protect();
 							$result  = mysqli_query($con, $query);
 							$revenue = 0;
 							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							    	$query1="select * from plan where planid='".$row['planid']."'";
-							    	$result1=mysqli_query($con,$query1);
-							    	if($result1){
-							    		$value=mysqli_fetch_row($result1);
-							        $revenue = $value[4] + $revenue;
-							    	}
-							    }
+								while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+									$query1 = "SELECT * FROM plan WHERE planid='" . $row['planid'] . "'";
+									$result1 = mysqli_query($con, $query1);
+									
+									if ($result1) {
+										$value = mysqli_fetch_row($result1);
+										
+										// Ensure both $value[4] and $revenue are numeric before addition
+										$revenue = floatval($value[4]) + floatval($revenue);
+									}
+								}
 							}
 							echo "RM".$revenue;
 							?>
@@ -118,7 +121,7 @@ page_protect();
 				<div class="tile-stats tile-green">
 					<div class="icon"><i class="entypo-chart-bar"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Total <br>Members</h2><br>
+						<h2>N/A<br></h2><br>
 							<?php
 							$query = "select COUNT(*) from users";
 
@@ -139,7 +142,7 @@ page_protect();
 				<div class="tile-stats tile-aqua">
 					<div class="icon"><i class="entypo-mail"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Joined This Month</h2><br>
+						<h2>N/A</h2><br>
 							<?php
 							date_default_timezone_set("Asia/Kuala_Lumpur");
 							$date  = date('Y-m');
@@ -163,7 +166,7 @@ page_protect();
 				<div class="tile-stats tile-blue">
 					<div class="icon"><i class="entypo-rss"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Total Plan Available</h2><br>
+						<h2>Joined Activity?</h2><br>
 							<?php
 							$query = "select COUNT(*) from plan where active='yes'";
 
