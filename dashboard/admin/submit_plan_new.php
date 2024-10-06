@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             chmod($target_file, 0777);
             
             // Insert the image path into the database
-            $sql = "INSERT INTO images (imageid, planid, image_path) VALUES (UUID(),'$planid', '$target_file')";
+            $sql = "INSERT INTO images (imageid, planid, image_path) VALUES (UUID(), '$planid', '$target_file')";
             mysqli_query($con, $sql);
         } else {
             echo "Sorry, there was an error uploading your file.";

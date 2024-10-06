@@ -91,30 +91,30 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
                 <?php
 
 
-// Assuming $_SESSION['loggedin'] is set to true when the user is logged in, and
-// $_SESSION['username'] and $_SESSION['profile_pic'] contain user data from MySQL
-
+// Check if the user is logged in and session data is set
 if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
-    // The user is logged in, show profile picture and username
-    //$profile_pic = $_SESSION['profile_pic']; // URL or path to profile picture
-    echo "
-    <li>
-        <div class='user-info'>
-          <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
-              <img src='$profile_pic' alt='Profile Picture' class='profile-pic' />
-          <span class='username'>$username</span>
-        </button>
+  // Get profile picture and username from session
+  $profile_pic = $_SESSION['profile_pic']; // Path or URL to profile picture
+  $username = $_SESSION['username']; // Username from the session
 
-        </div>
-    </li>";
-} else {
-    // The user is not logged in, show the login button
-    echo "
-    <li>
+  // Display the user info (profile picture and username)
+  echo "
+  <li>
+      <div class='user-info'>
         <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
-            Login
+            <img src='dashboard/admin/$profile_pic' alt='' height='50' width='50' style='border-radius: 50%;'/>
+            <span class='username'>$username</span>
         </button>
-    </li>";
+      </div>
+  </li>";
+} else {
+  // The user is not logged in, show the login button
+  echo "
+  <li>
+      <button type='button' class='btn btn-primary py-3 px-4' data-toggle='modal' data-target='#exampleModalCenter'>
+          Login
+      </button>
+  </li>";
 }
 ?>
               </ul>
