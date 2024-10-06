@@ -25,7 +25,7 @@
   
     
   
-  <div class="site-wrap">
+  <div>
 
 
     <div class="site-mobile-menu">
@@ -41,7 +41,7 @@
 require('header.php');
 ?>
     
-    <div class="container">
+    <div>
       <div class="row">
         <div class="col-lg-12">
           <div class="hero-wrap text-center" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
