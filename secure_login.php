@@ -77,7 +77,13 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         }
     } else {
         echo "<html><head><script>alert('Username OR Password is Invalid');</script></head></html>";
-        echo "<meta http-equiv='refresh' content='0; url=index.php'>";
+        
+        // Redirect based on whether it was an admin or user login
+        if ($is_admin_login) {
+            echo "<meta http-equiv='refresh' content='0; url=login-admin.php'>";  // Redirect to admin login page
+        } else {
+            echo "<meta http-equiv='refresh' content='0; url=index.php'>";  // Redirect to the user login page (homepage)
+        }
     }
 }
 ?>

@@ -59,7 +59,7 @@
 											</label>
 										</div>
 										<div class="w-50 text-md-right">
-											<a href="#" style="color: #0e0e0f!important">Forgot Password</a>
+											<a href="forgot_password.php" style="color: #0e0e0f!important">Forgot Password</a>
 										</div>
 										<div class="w-50 text-md-right">
 											<a href="login-admin.php" style="color: #0e0e0f!important">I am an Admin/Coach</a>
