@@ -1,0 +1,20 @@
+1) entity:timetable
+   attribute:1) timetableid (primary key)
+             2) timetablename
+             3) day1
+             4) day2
+             5) day3
+             6) day4
+             7) day6
+             8) planid
+
+2) entity: images
+   attribute: 1) imageid (primary key)
+              2) adminid (foreign key)
+              3) userid (foreign key)
+              4) planid (foreign key)
+              5) image_path
+              6) uploaded_at
+
+3) entity: address
+   attribute: 1)
