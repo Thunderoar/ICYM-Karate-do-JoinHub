@@ -147,14 +147,6 @@ page_protect();
 							        }
 							    }
 							}
-                    $res = mysqli_query($con,"CALL `countGender`();") or die("query fail:" .mysqli_error($con));
-                    echo"<table ><tr><th>gender</th><th>count</th></tr>";
-                    while($row = mysqli_fetch_array($res)){
-                        echo"<td>". $row['gender']. "</td>";
-                         echo"<td>". $row['COUNT(*)']. "</td>";
-                        echo"<br/>";
-                        echo"</table>";     
-                    }
                     
                     
                    // $stmt = $con->prepare($sql);

@@ -94,7 +94,7 @@ page_protect();
 			<thead>
 				<tr>
 					<th>S.No</th>
-					<th>Sports Plan ID</th>
+					<!-- <th>Sports Plan ID</th> -->
 					<th>Sports Plan name</th>
 					<th>Sports Plan Details</th>
 					<th>Duration</th>
@@ -103,36 +103,47 @@ page_protect();
 				</tr>
 			</thead>		
 				<tbody>
-					<?php
+				<?php
+$query  = "SELECT * FROM plan WHERE active='yes' ORDER BY amount DESC"; // Fetch active plans sorted by amount
+$result = mysqli_query($con, $query);
+$sno = 1; // Serial number for the table rows
 
+// Check if the query returned any results
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) { // Use mysqli_fetch_assoc for clarity
+        $msgid = $row['planid'];
 
-					$query  = "select * from plan where active='yes' ORDER BY amount DESC";
-					//echo $query;
-					$result = mysqli_query($con, $query);
-					$sno    = 1;
+        // Start the table row
+        echo "<tr>";
+        echo "<td>" . $sno . "</td>"; // Serial number
+        //echo "<td>" . htmlspecialchars($row['planid']) . "</td>"; // Use htmlspecialchars to avoid XSS
+        echo "<td>" . htmlspecialchars($row['planName']) . "</td>"; // Same here for plan name
+        echo "<td width='380'>" . htmlspecialchars($row['description']) . "</td>"; // Description
+        echo "<td>" . htmlspecialchars($row['validity']) . "</td>"; // Validity
+        echo "<td>RM" . htmlspecialchars($row['amount']) . "</td>"; // Amount
 
-					if (mysqli_affected_rows($con) != 0) {
-					    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-					        $msgid = $row['planid'];
-					        
-					        
-					        echo "<tr><td>" . $sno . "</td>";
-					        echo "<td>" . $row['planid'] . "</td>";
-					        echo "<td>" . $row['planName'] . "</td>";
-					        echo "<td width='380'>" . $row['description'] . "</td>";
-					        echo "<td>" . $row['validity'] . "</td>";
-					        echo "<td>RM" . $row['amount'] . "</td>";
-					        
-					        $sno++;
-					        
-					        echo '<td><a href=edit_plan.php?id="'.$row['planid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" style="width:86%" value="Edit Plan" ></a><form action="del_plan.php" method="post" onSubmit="return ConfirmDelete();"><input type="hidden" name="name" value="' . $msgid .'"/><input type="submit" id="button1" value="Delete Plan" class="a1-btn a1-orange"/></form></td></tr>';
-					        
-							$msgid = 0;
-					    }
-					    
-					}
+        // Increment the serial number for the next row
+        $sno++;
 
-					?>																
+        // Check if the plan ID is the core plan
+        if ($msgid !== 'XTWIOL') { // If it's not the core plan
+            echo '<td>
+                    <a href="#?id=' . $msgid . '">
+                        <input type="button" class="a1-btn a1-green" style="width:100%" value="Join Event">
+                    </a>
+                  </td>'; // Edit and Delete buttons
+        } else {
+            echo "<td></td>"; // Empty cell for core plans
+        }
+
+        // End the table row
+        echo "</tr>";
+    }
+} else {
+    // Optionally handle the case where no plans are found
+    echo "<tr><td colspan='6'>No active plans available.</td></tr>";
+}
+?>												
 				</tbody>
 		</table>
 

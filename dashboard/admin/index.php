@@ -120,8 +120,8 @@ page_protect();
 									if ($result1) {
 										$value = mysqli_fetch_row($result1);
 										
-										// Ensure both $value[4] and $revenue are numeric before addition
-										$revenue = floatval($value[4]) + floatval($revenue);
+										// Ensure both $value[6] and $revenue are numeric before addition
+										$revenue = floatval($value[7]) + floatval($revenue);
 									}
 								}
 							}
@@ -202,10 +202,10 @@ page_protect();
 <!--marquee direction="right"><img src="fball.gif" width="88" height="70" alt="Tutorials " border="0"></marquee-->
 
 
-
+<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#303641" href="../../">Go to Homepage</a>
     	<?php include('footer.php'); ?>
 </div>
 
-<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#303641" href="../../">Go to Homepage</a>
+
     </body>
 </html>

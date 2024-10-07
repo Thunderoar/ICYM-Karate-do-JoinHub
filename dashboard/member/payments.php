@@ -83,64 +83,87 @@ page_protect();
 					
 				</div>
 
-		<h2>Payments</h2>
+				<table class="table table-bordered">
+				<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Sl.No</th>
+            <th>Membership Expiry</th>
+            <!-- <th>Name</th> -->
+            <!-- <th>Member ID</th> -->
+            <!-- <th>Phone</th> -->
+            <!-- <th>E-Mail</th> -->
+            <!-- <th>Gender</th> -->
+            <th>Plan Name</th>
+            <th>Amount</th>
+			<th>Plan Type</th>
+			<th>Validity</th>
+			<th>Action</th>
+        </tr>
+    </thead>
 
-		<hr />
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Sl.No</th>
-					<th>Membership Expiry</th>
-					<th>Name</th>
-					<th>Member ID</th>
-					<th>Phone</th>
-					<th>E-Mail</th>
-					<th>Gender</th>
-					<th>Action</th>
-				</tr>
-			</thead>
+    <tbody>
 
-				<tbody>
+	<?php
+// Ensure session is started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-				<?php
+if (isset($_SESSION['userid'])) {
+    $logged_in_userid = $_SESSION['userid']; // Fetch the logged-in user's ID
 
+    // Query to fetch only the logged-in user's plan details
+    $query = "
+        SELECT e.*, u.username, u.userid, u.mobile, u.email, u.gender, p.planName, p.amount, p.planType, p.validity 
+        FROM enrolls_to e 
+        JOIN users u ON e.userid = u.userid
+        JOIN plan p ON e.planid = p.planid
+        WHERE e.userid = '$logged_in_userid' AND e.renewal='yes'
+        ORDER BY e.expire
+    ";
 
-					$query  = "select * from enrolls_to where renewal='yes' ORDER BY expire";
-					//echo $query;
-					$result = mysqli_query($con, $query);
-					$sno    = 1;
+    $result = mysqli_query($con, $query);
+    $sno = 1;
 
-					if (mysqli_affected_rows($con) != 0) {
-					    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+    if (mysqli_affected_rows($con) != 0) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+            $uid = $row['userid'];
+            $planid = $row['planid'];
 
-					        $uid   = $row['userid'];
-					        $planid=$row['planid'];
-					        $query1  = "select * from users WHERE userid='$uid'";
-					        $result1 = mysqli_query($con, $query1);
-					        if (mysqli_affected_rows($con) == 1) {
-					            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-					                
-					                 echo "<tr><td>".$sno."</td>";
-					                echo "<td>" . $row['expire'] . "</td>";
-					                echo "<td>" . $row1['username'] . "</td>";
-					                echo "<td>" . $row1['userid'] . "</td>";
-					                echo "<td>" . $row1['mobile'] . "</td>";
-					                echo "<td>" . $row1['email'] . "</td>";
-					                echo "<td>" . $row1['gender'] . "</td>";
-					                
-					                $sno++;
-					                
-					                echo "<td><form action='make_payments.php' method='post'><input type='hidden' name='userID' value='" . $uid . "'/>
-					                <input type='hidden' name='planID' value='" . $planid . "'/><input type='submit' class='a1-btn a1-blue' value='Add Payment ' class='btn btn-info'/></form></td></tr>";
-									
-					                $uid = 0;
-					            }
-					        }
-					    }
-					}
+            // Display the logged-in user's plan and personal details
+            echo "<tr>";
+            echo "<td>" . $sno . "</td>";
+            echo "<td>" . $row['expire'] . "</td>";
+            //echo "<td>" . $row['username'] . "</td>";
+            //echo "<td>" . $row['userid'] . "</td>";
+            //echo "<td>" . $row['mobile'] . "</td>";
+            //echo "<td>" . $row['email'] . "</td>";
+            //echo "<td>" . $row['gender'] . "</td>";
+            echo "<td>" . $row['planName'] . "</td>"; // Plan Name from the plan table
+            echo "<td>" . $row['amount'] . "</td>"; // Amount from the plan table
+            echo "<td>" . $row['planType'] . "</td>"; // Plan Type
+            echo "<td>" . $row['validity'] . "</td>"; // Plan Validity
+            $sno++;
 
-					?>									
+            echo "<td>
+                    <form action='make_payments.php' method='post'>
+                        <input type='hidden' name='userID' value='" . $uid . "'/>
+                        <input type='hidden' name='planID' value='" . $planid . "'/>
+                        <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
+                    </form>
+                  </td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='12'>No records found for the logged-in user.</td></tr>";
+    }
+} else {
+    echo "<tr><td colspan='12'>Please log in to view your membership details.</td></tr>";
+}
+?>
+
+				
 				</tbody>
 
 		</table>

@@ -1,11 +1,16 @@
 <?php
 include './include/db_conn.php';
 
+// Assuming the session is already started during login
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $user_id_auth = ltrim($_POST['user_id_auth']);
-$user_id_auth = rtrim($user_id_auth);
+$user_id_auth = rtrim($_POST['user_id_auth']);
 
 $pass_key = ltrim($_POST['pass_key']);
-$pass_key = rtrim($pass_key);
+$pass_key = rtrim($_POST['pass_key']);
 
 $user_id_auth = stripslashes($user_id_auth);
 $pass_key     = stripslashes($pass_key);
@@ -36,11 +41,13 @@ if ($pass_key == "" &&  $user_id_auth == "") {
             WHERE a.username = '$user_id_auth' AND a.pass_key = '$pass_key'
         ";
     } else {
-        // User login query
+        // Member (user) login query with join to enrolls_to and plan tables
         $sql = "
-            SELECT u.userid, u.username, 'member' as authority, i.image_path
+            SELECT u.userid, u.username, 'member' as authority, i.image_path, e.planid, p.planName, p.description, p.planType, p.validity, p.amount
             FROM users u
             LEFT JOIN images i ON i.userid = u.userid
+            LEFT JOIN enrolls_to e ON e.userid = u.userid
+            LEFT JOIN plan p ON p.planid = e.planid
             WHERE u.username = '$user_id_auth' AND u.pass_key = '$pass_key'
         ";
     }
@@ -52,24 +59,28 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         // Fetch the user's or admin's data
         $row = mysqli_fetch_assoc($result);
 
+        // Store session data based on whether it's an admin or user login
         session_start();
-        // Store session data
         if ($is_admin_login) {
             $_SESSION['adminid'] = $row['adminid'];
         } else {
-            $_SESSION['userid'] = $row['userid'];
+            $_SESSION['userid']   = $row['userid'];   // Store logged-in user's ID
+            $_SESSION['planid']   = $row['planid'];   // Store the user's planid from enrolls_to
+            $_SESSION['planName'] = $row['planName']; // Store the plan's name
+            $_SESSION['amount']   = $row['amount'];   // Store the plan's amount
+            $_SESSION['planType'] = $row['planType']; // Store the plan's type
+            $_SESSION['validity'] = $row['validity']; // Store the plan's validity
         }
-        $_SESSION['user_data']      = $user_id_auth;
+        $_SESSION['user_data']      = $row['username'];  // Store username in session
         $_SESSION['logged']         = "start";
-        $_SESSION['authority']      = $row['authority'];
-        $_SESSION['username']       = $row['username'];
+        $_SESSION['authority']      = $row['authority']; // 'admin' or 'member'
+        $_SESSION['username']       = $row['username'];  // Username from the session
         $_SESSION['profile_pic']    = $row['image_path'];  // Store image URL from the images table
-        $auth_l_x                   = $_SESSION['authority'];
 
         // Redirect based on the user's or admin's authority level
-        if ($auth_l_x == "admin") {
+        if ($_SESSION['authority'] == "admin") {
             header("location: ./dashboard/admin/");
-        } elseif ($auth_l_x == "member") {
+        } elseif ($_SESSION['authority'] == "member") {
             header("location: ./dashboard/member/");
         } else {
             echo "<html><head><script>alert('Invalid Authority');</script></head></html>";

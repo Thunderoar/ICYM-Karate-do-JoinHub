@@ -6,10 +6,10 @@ page_protect();
  $plan=$_POST['plan'];
 
 //updating renewal from yes to no from enrolls_to table
-$query="update enrolls_to set renewal='no' where uid='$memID'";
+$query="update enrolls_to set renewal='no' where userid='$memID'";
     if(mysqli_query($con,$query)==1){
       //inserting new payment data into enrolls_to table
-      $query1="select * from plan where pid='$plan'";
+      $query1="select * from plan where planid='$plan'";
       $result=mysqli_query($con,$query1);
 
         if($result){
@@ -19,7 +19,7 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
           $cdate=date("Y-m-d"); //current date
           $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
           //inserting into enrolls_to table of corresponding userid
-          $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal) values('$plan','$memID','$cdate','$expiredate','yes')";
+          $query2="insert into enrolls_to(planid,userid,paid_date,expire,renewal) values('$plan','$memID','$cdate','$expiredate','yes')";
           if(mysqli_query($con,$query2)==1){
 
                echo "<head><script>alert('Payment Successfully update ');</script></head></html>";

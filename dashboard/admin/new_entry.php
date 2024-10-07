@@ -24,7 +24,8 @@ page_protect();
        #boxx
 	{
 		width:220px;
-	}</style>
+	}
+	</style>
 
 </head>
       <body class="page-body  page-fade" onload="collapseSidebar()">
@@ -110,6 +111,10 @@ page_protect();
 			   <tr>
                <td height="35">NAME:</td>
                <td height="35"><input name="u_name" id="boxx"  required/></td>
+             </tr>
+			 <tr>
+               <td height="35">User Password:</td>
+               <td height="35"><input name="pass_key" id="boxx"  required/></td>
              </tr>
              <tr>
                <td height="35">STREET NAME:</td>

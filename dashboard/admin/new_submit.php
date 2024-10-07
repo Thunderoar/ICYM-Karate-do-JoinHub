@@ -17,10 +17,11 @@ $phn = $_POST['mobile'];
 $email = $_POST['email'];
 $jdate = $_POST['jdate'];
 $plan = $_POST['plan'];
+$pass_key = $_POST['pass_key'];
 
 // Insert into users table
-$query = "INSERT INTO users(username, fullName, gender, mobile, email, dob, joining_date, imageid, userid) 
-          VALUES ('$uname', '$uname', '$gender', '$phn', '$email', '$dob', '$jdate', 'UUID()', '$memID')";
+$query = "INSERT INTO users(username, fullName, gender, mobile, email, dob, joining_date, imageid, userid, pass_key) 
+          VALUES ('$uname', '$uname', '$gender', '$phn', '$email', '$dob', '$jdate', 'UUID()', '$memID', '$pass_key')";
 if (mysqli_query($con, $query)) {
     
     // Retrieve information about the selected plan
@@ -49,66 +50,94 @@ if (mysqli_query($con, $query)) {
                 // Insert into address table
                 $query5 = "INSERT INTO address(addressid, userid, streetName, state, city, zipcode) 
                            VALUES ('$addressID', '$memID', '$stname', '$state', '$city', '$zipCODE')";
-                if (mysqli_query($con, $query5)) {
 
-                    // Handling image upload
-                    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
-                        $target_dir = "uploads/user_profile/";
-                        if (!is_dir($target_dir)) {
-                            mkdir($target_dir, 0777, true);
-                        }
+                // Insert into login table
+                $query6 = "INSERT INTO login(loginid, userid, username, pass_key, securekey, authority) 
+                VALUES (UUID(), '$memID', '$uname', '$pass_key', UUID(), 'member')";
+                if (mysqli_query($con, $query6)) {
 
-                        $target_file = $target_dir . basename($_FILES["image"]["name"]);
-                        $uploadOk = 1;
-                        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+// Handling image upload
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $target_dir = "uploads/user_profile/";
+    
+    // Create the target directory if it doesn't exist
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
 
-                        // Check if the file is an actual image
-                        $check = getimagesize($_FILES["image"]["tmp_name"]);
-                        if ($check === false) {
-                            echo "File is not an image.";
-                            $uploadOk = 0;
-                        }
+    $uploadOk = 1; // Variable to track upload status
+    $target_file = ""; // Initialize the target file variable
 
-                        // Check if file already exists
-                        if (file_exists($target_file)) {
-                            echo "Sorry, file already exists.";
-                            $uploadOk = 0;
-                        }
+    // Check if the image file is uploaded
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $target_file = $target_dir . basename($_FILES["image"]["name"]);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-                        // Check file size
-                        if ($_FILES["image"]["size"] > 5000000) {
-                            echo "Sorry, your file is too large.";
-                            $uploadOk = 0;
-                        }
+        // Check if the file is an actual image
+        $check = getimagesize($_FILES["image"]["tmp_name"]);
+        if ($check === false) {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
 
-                        // Allow only certain file formats
-                        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
-                            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                            $uploadOk = 0;
-                        }
+        // Check if file already exists
+        if (file_exists($target_file)) {
+            echo "Sorry, file already exists.";
+            $uploadOk = 0;
+        }
 
-                        // Check if upload is ok
-                        if ($uploadOk == 1) {
-                            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                // Change file permissions
-                                chmod($target_file, 0777);
+        // Check file size
+        if ($_FILES["image"]["size"] > 5000000) {
+            echo "Sorry, your file is too large.";
+            $uploadOk = 0;
+        }
 
-                                // Insert the image path into the database
-                                $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', '$target_file')";
-                                if (mysqli_query($con, $sql)) {
-                                    echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
-                                } else {
-                                    echo "Error inserting image data into database.";
-                                }
-                            } else {
-                                echo "Sorry, there was an error uploading your file.";
-                            }
-                        } else {
-                            echo "Sorry, your file was not uploaded.";
-                        }
-                    } else {
-                        echo "No file uploaded.";
-                    }
+        // Allow only certain file formats
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+    } else {
+        echo "No file uploaded. Proceeding without an image.";
+        $uploadOk = 1; // Allow process to continue without image
+    }
+
+    // Check if upload is ok
+    if ($uploadOk == 1) {
+        // Only attempt to move the file if it exists
+        if (!empty($target_file)) {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                // Change file permissions
+                chmod($target_file, 0777);
+
+                // Insert the image path into the database
+                $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', '$target_file')";
+                if (mysqli_query($con, $sql)) {
+                    echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
+                } else {
+                    echo "Error inserting image data into database.";
+                }
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        } else {
+            // Handle the case when no file was uploaded
+            // You may want to insert a default image path or handle as needed
+            echo "No image uploaded, but proceeding with the rest of the process.";
+            // Optional: Insert a default image path or simply skip the image insert
+            $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', NULL)";
+            if (mysqli_query($con, $sql)) {
+                echo "Record inserted without an image.";
+            } else {
+                echo "Error inserting data into database.";
+            }
+        }
+    } else {
+        echo "Sorry, your file was not uploaded.";
+    }
+} else {
+    echo "No file uploaded.";
+}
 
                     // Success message
                     echo "<head><script>alert('Member Added');</script></head></html>";
