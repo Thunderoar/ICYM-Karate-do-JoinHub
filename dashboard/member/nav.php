@@ -11,11 +11,9 @@
             </ul>
         </li>
         <li id="routinehassubopen">
-            <a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Sports Routine</span></a>
+            <a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Timetable</span></a>
             <ul id="routineExpand">
-                <li class="active"><a href="addroutine.php"><span>Add Sports Routine</span></a></li>
-                <li><a href="editroutine.php"><span>Edit Sports Routine</span></a></li>
-                <li><a href="viewroutine.php"><span>View Sports Routine</span></a></li>
+                <li><a href="viewroutine.php"><span>View Timetable</span></a></li>
             </ul>
         </li>
         <li id="adminprofile"><a href="more-userprofile.php"><i class="entypo-folder"></i><span>Profile</span></a></li>
