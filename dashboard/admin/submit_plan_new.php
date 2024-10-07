@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Allow certain file formats
-    if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+    if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif', 'mp4'])) {
         echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
         $uploadOk = 0;
     }
