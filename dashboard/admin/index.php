@@ -104,29 +104,38 @@ page_protect();
 					<div class="icon"><i class="entypo-users"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
 						<h2>Paid Income This Month</h2><br>
-						<?php
-							date_default_timezone_set("Asia/Kuala_Lumpur");
-							$date  = date('Y-m');
-							$query = "select * from enrolls_to WHERE  paid_date LIKE '$date%'";
+<?php
+    // Set timezone and get current year and month in 'Y-m' format
+    date_default_timezone_set("Asia/Kuala_Lumpur");
+    $date  = date('Y-m');
 
-							//echo $query;
-							$result  = mysqli_query($con, $query);
-							$revenue = 0;
-							if (mysqli_affected_rows($con) != 0) {
-								while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-									$query1 = "SELECT * FROM plan WHERE planid='" . $row['planid'] . "'";
-									$result1 = mysqli_query($con, $query1);
-									
-									if ($result1) {
-										$value = mysqli_fetch_row($result1);
-										
-										// Ensure both $value[6] and $revenue are numeric before addition
-										$revenue = floatval($value[7]) + floatval($revenue);
-									}
-								}
-							}
-							echo "RM".$revenue;
-							?>
+    // Query to fetch all enrollments for the current month
+    $query = "SELECT * FROM enrolls_to WHERE paid_date LIKE '$date%'";
+
+    // Execute the query
+    $result  = mysqli_query($con, $query);
+    $revenue = 0;  // Initialize the revenue sum
+
+    // Check if there are rows in the result
+    if (mysqli_num_rows($result) != 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            // Get the plan details using planid from enrolls_to
+            $query1 = "SELECT amount FROM plan WHERE planid='" . $row['planid'] . "'";
+            $result1 = mysqli_query($con, $query1);
+            
+            if ($result1) {
+                // Fetch the row for the selected plan
+                $plan = mysqli_fetch_assoc($result1);
+
+                // Add the amount to the total revenue, ensuring it is numeric
+                $revenue += floatval($plan['amount']);
+            }
+        }
+    }
+
+    // Display the total revenue for the current month
+    echo "RM" . number_format($revenue, 2); // Format the number to 2 decimal places
+?>
 						</div>
 				</div></a>
 			</div>
@@ -158,21 +167,20 @@ page_protect();
 					<div class="icon"><i class="entypo-mail"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
 						<h2>Joined This Month</h2><br>
-							<?php
-							date_default_timezone_set("Asia/Kuala_Lumpur");
-							$date  = date('Y-m');
-							$query = "select COUNT(*) from users WHERE joining_date LIKE '$date%'";
+<?php
+date_default_timezone_set("Asia/Kuala_Lumpur");
+$date = date('Y-m'); // Get current year and month
+$query = "SELECT COUNT(*) as total FROM users WHERE joining_date LIKE '$date%'"; // Count the users joined this month
 
-							//echo $query;
-							$result = mysqli_query($con, $query);
-							$i      = 1;
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        echo $row['COUNT(*)'];
-							    }
-							}
-							$i = 1;
-							?>
+$result = mysqli_query($con, $query); // Execute query
+
+if ($result) { // Check if the query was successful
+    $row = mysqli_fetch_assoc($result); // Fetch the result
+    echo $row['total']; // Display the count
+} else {
+    echo "Error: " . mysqli_error($con); // Display any error
+}
+?>
 						</div>
 				</div></a>
 			</div>

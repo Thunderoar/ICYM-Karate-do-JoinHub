@@ -38,8 +38,8 @@ if (mysqli_query($con, $query)) {
         $expiredate = date("Y-m-d", $d); // Expiration date
 
         // Insert into enrolls_to table
-        $query2 = "INSERT INTO enrolls_to(planid, userid, paid_date, expire, renewal) 
-                   VALUES ('$plan', '$memID', '$cdate', '$expiredate', 'yes')";
+        $query2 = "INSERT INTO enrolls_to(planid, userid, paid_date, expire, hasPaid) 
+                   VALUES ('$plan', '$memID', '$cdate', '$expiredate', 'no')";
         if (mysqli_query($con, $query2)) {
             
             // Insert into health_status table

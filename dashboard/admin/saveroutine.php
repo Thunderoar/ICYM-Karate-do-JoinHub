@@ -13,7 +13,7 @@
 		$pid=$_POST["pidd"];
 		
 		
-		$sql="insert into sports_timetable(tname,day1,day2,day3,day4,day5,day6,pid) values('$rname','$day1','$day2','$day3','$day4','$day5','$day6','$pid')";
+		$sql="insert into sports_timetable(tid, tname,day1,day2,day3,day4,day5,day6,pid) values(UUID(),'$rname','$day1','$day2','$day3','$day4','$day5','$day6','$pid')";
 	
 		$result=mysqli_query($con,$sql);
 		if($result){	

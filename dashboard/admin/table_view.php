@@ -109,59 +109,47 @@ page_protect();
 			</thead>
 				<tbody>
 
-						<?php
-							$query  = "select * from users ORDER BY joining_date";
-							//echo $query;
-							$result = mysqli_query($con, $query);
-							$sno    = 1;
+				<?php
+$query  = "SELECT * FROM users ORDER BY joining_date";
+$result = mysqli_query($con, $query);
+$sno    = 1;
 
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        $uid   = $row['userid'];
-							        $query1  = "select * from enrolls_to WHERE userid='$uid' AND renewal='yes'";
-							        $result1 = mysqli_query($con, $query1);
-							        if (mysqli_affected_rows($con) == 1) {
-							            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-							                
-							                echo "<tr><td>".$sno."</td>";
+if ($result && mysqli_num_rows($result) > 0) { // Check if the query was successful and has rows
+    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $uid = $row['userid'];
 
-							                echo "<td>" . $row1['expire'] . "</td>";
-							                
-							                echo "<td>" . $row['userid'] . "</td>";
+        // Fetch enrollment details for the current user
+        $query1 = "SELECT * FROM enrolls_to WHERE userid='$uid'";
+        $result1 = mysqli_query($con, $query1);
 
-							                echo "<td>" . $row['username'] . "</td>";
+        if ($result1 && mysqli_num_rows($result1) > 0) { // Check if the query was successful and has rows
+            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
+                echo "<tr><td>" . $sno . "</td>";
+                echo "<td>" . $row1['expire'] . "</td>";
+                echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['joining_date']) . "</td>";
 
-							                echo "<td>" . $row['mobile'] . "</td>";
+                // Increment the serial number
+                $sno++;
 
-							                echo "<td>" . $row['email'] . "</td>";
-
-							                echo "<td>" . $row['gender'] . "</td>";
-
-							                echo "<td>" . $row['joining_date'] ."</td>";
-							                
-							                $sno++;
-							       
-							                echo "<td><form action='viewall_detail.php' method='post'><input type='hidden' name='name' value='" . $uid . "'/><input type='submit' class='a1-btn a1-blue' id='button1' value='View All ' class='btn btn-info'/></form></td></tr>";
-							                $msgid = 0;
-							            }
-							        }
-							    }
-							}
-                    $res = mysqli_query($con,"CALL `countGender`();") or die("query fail:" .mysqli_error($con));
-                    echo"<table ><tr><th>gender</th><th>count</th></tr>";
-                    while($row = mysqli_fetch_array($res)){
-                        echo"<td>". $row['gender']. "</td>";
-                         echo"<td>". $row['COUNT(*)']. "</td>";
-                        echo"<br/>";
-                        echo"</table>";     
-                    }
-                    
-                    
-                   // $stmt = $con->prepare($sql);
-                    //$stmt->execute();
-                    //$gend = $stmt->fetch_assoc(PDO::FETCH_ASSOC);
-                    //print_r($gend); exit;
-						?>									
+                // Create a form to view all details
+                echo "<td>
+                        <form action='viewall_detail.php' method='post'>
+                            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+                            <input type='submit' class='a1-btn a1-blue' value='View All'/>
+                        </form>
+                      </td></tr>";
+            }
+        }
+    }
+} else {
+    echo "<tr><td colspan='9'>No records found</td></tr>"; // Display message if no users found
+}
+?>
 					</tbody>
 				</table>
 

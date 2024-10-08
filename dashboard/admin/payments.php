@@ -83,64 +83,75 @@ page_protect();
 					
 				</div>
 
-		<h2>Payments</h2>
+				<h2>Payments</h2>
+<hr />
 
-		<hr />
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Sl.No</th>
-					<th>Membership Expiry</th>
-					<th>Name</th>
-					<th>Member ID</th>
-					<th>Phone</th>
-					<th>E-Mail</th>
-					<th>Gender</th>
-					<th>Action</th>
-				</tr>
-			</thead>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Sl.No</th>
+			<th>Member ID</th>
+            <!-- <th>Membership Expiry</th> -->
+            <th>Name</th>
+            <th>Phone</th>
+            <th>E-Mail</th>
+            <!-- <th>Gender</th> -->
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
 
-				<tbody>
+	<?php
+$query  = "SELECT * FROM enrolls_to ORDER BY expire";
+$result = mysqli_query($con, $query);
+$sno    = 1;
 
-				<?php
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $uid = $row['userid'];
+        $planid = $row['planid'];
+        $hasPaid = $row['hasPaid']; // Check if the user has already paid
 
+        // Debugging: Output the hasPaid value
+        echo "<!-- Debug: User ID: $uid, hasPaid: $hasPaid -->"; 
 
-					$query  = "select * from enrolls_to where renewal='yes' ORDER BY expire";
-					//echo $query;
-					$result = mysqli_query($con, $query);
-					$sno    = 1;
+        // Fetch user details from the users table
+        $query1 = "SELECT * FROM users WHERE userid='$uid'";
+        $result1 = mysqli_query($con, $query1);
+        
+        if (mysqli_num_rows($result1) == 1) {
+            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
+                echo "<tr>";
+                echo "<td>" . $sno . "</td>";
+                //echo "<td>" . $row['expire'] . "</td>";
+				echo "<td>" . htmlspecialchars($row1['userid']) . "</td>";
+                echo "<td>" . htmlspecialchars($row1['username']) . "</td>"; // Added htmlspecialchars for security
+                echo "<td>" . htmlspecialchars($row1['mobile']) . "</td>";
+                echo "<td>" . htmlspecialchars($row1['email']) . "</td>";
+                //echo "<td>" . htmlspecialchars($row1['gender']) . "</td>";
 
-					if (mysqli_affected_rows($con) != 0) {
-					    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                $sno++;
 
-					        $uid   = $row['userid'];
-					        $planid=$row['planid'];
-					        $query1  = "select * from users WHERE userid='$uid'";
-					        $result1 = mysqli_query($con, $query1);
-					        if (mysqli_affected_rows($con) == 1) {
-					            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-					                
-					                 echo "<tr><td>".$sno."</td>";
-					                echo "<td>" . $row['expire'] . "</td>";
-					                echo "<td>" . $row1['username'] . "</td>";
-					                echo "<td>" . $row1['userid'] . "</td>";
-					                echo "<td>" . $row1['mobile'] . "</td>";
-					                echo "<td>" . $row1['email'] . "</td>";
-					                echo "<td>" . $row1['gender'] . "</td>";
-					                
-					                $sno++;
-					                
-					                echo "<td><form action='make_payments.php' method='post'><input type='hidden' name='userID' value='" . $uid . "'/>
-					                <input type='hidden' name='planID' value='" . $planid . "'/><input type='submit' class='a1-btn a1-blue' value='Add Payment ' class='btn btn-info'/></form></td></tr>";
-									
-					                $uid = 0;
-					            }
-					        }
-					    }
-					}
-
-					?>									
+                // Only show "Add Payment" button if user has not paid
+                if ($hasPaid === 'no') { // Use strict comparison
+                    echo "<td>
+                            <form action='make_payments.php' method='post'>
+                                <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
+                                <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
+                                <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
+                            </form>
+                          </td>";
+                } else {
+                    echo "<td>No Action Needed</td>"; // Indicate no action is needed
+                }
+                echo "</tr>"; // Close the table row
+            }
+        }
+    }
+} else {
+    echo "<tr><td colspan='8'>No records found</td></tr>";
+}
+?>
 				</tbody>
 
 		</table>

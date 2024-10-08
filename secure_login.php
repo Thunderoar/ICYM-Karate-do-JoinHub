@@ -2,9 +2,9 @@
 include './include/db_conn.php';
 
 // Assuming the session is already started during login
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+//if (session_status() == PHP_SESSION_NONE) {
+//    session_start();
+//}
 
 $user_id_auth = ltrim($_POST['user_id_auth']);
 $user_id_auth = rtrim($_POST['user_id_auth']);
