@@ -84,8 +84,9 @@ if(isset($_POST['submit'])){
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
-							</li>						
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 						
 							<li>
 								<a href="logout.php">

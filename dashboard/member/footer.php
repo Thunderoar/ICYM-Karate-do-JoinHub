@@ -1,1 +1,1 @@
-<footer class="main"><strong>SPORTS CLUB </strong></footer>
+<!-- <footer class="main"><strong>SPORTS CLUB </strong></footer> -->

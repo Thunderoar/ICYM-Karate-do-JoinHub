@@ -11,7 +11,9 @@ page_protect();
 <head>
 
     <title>BLAZE FIT | View Routine</title>
-    <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
@@ -69,7 +71,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>						
 						
 							<li>
@@ -86,7 +90,7 @@ page_protect();
 		
 
 		
-			<h2>Routines</h2>
+			<h2>Timetable</h2>
 
 		<hr />
 		
@@ -94,8 +98,8 @@ page_protect();
 			
 				<tr>
 					<th>Sl.No</th>
-					<th>Routine Name</th>
-					<th>Routine Details</th>
+					<th>Timetable Name</th>
+					<th>Timetable Details</th>
 				</tr>
 		
 				<tbody>

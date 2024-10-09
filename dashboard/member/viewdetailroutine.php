@@ -8,12 +8,17 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Detail Routine</title>
-    <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
+    <title>ICYM Karate-Do | Detail Timetable</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script>
 	<style>
     	.page-container .sidebar-menu #main-menu li#routinehassubopen > a {
     	background-color: #2b303a;
@@ -48,11 +53,9 @@ page_protect();
 			<header class="logo-env">
 			
 			<!-- logo -->
-			<div class="logo">
-				<a href="main.php">
-					<img src="logo1.png" alt="" width="192" height="80" />
-				</a>
-			</div>
+			<?php
+			 require('../../element/loggedin-logo.html');
+			?>
 			
 					<!-- logo collapse icon -->
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
@@ -82,8 +85,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
-							</li>						
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>				
 						
 							<li>
 								<a href="logout.php">
@@ -98,21 +102,32 @@ page_protect();
 				<h2>Routine Detail</h2>
 				<hr/>
 
-		<?php
-		$id=$_GET['id'];
-		$sql="Select * from sports_timetable t Where t.tid=$id";
-		$res=mysqli_query($con, $sql);
-					 if($res){
-						      	$row=mysqli_fetch_array($res,MYSQLI_ASSOC);
-				
-						      }
-						
-		?>
+				<?php
+$id = $_GET['id'];
+
+
+// Prepare the SQL query
+$sql = "SELECT * FROM sports_timetable t WHERE t.tid = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("i", $id); // "i" denotes integer type
+
+// Execute the query
+$stmt->execute();
+$res = $stmt->get_result();
+
+if ($res) {
+    $row = $res->fetch_array(MYSQLI_ASSOC);
+    // Continue with the rest of your code
+} else {
+    // Handle error
+    echo "Error: " . $stmt->error;
+}
+?>
 
 		<div id=print>
 		<table width="619" height="673" border="1" align="center">
   <tr>
-    <td height="87" colspan="2">Routine Name:<?php echo $row['tname'] ?> &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;<span align="right"> <img src="logo1.png" width="121" height="114"  alt=""/></span></td>
+    <td height="87" colspan="2">Timetable Name:<?php echo $row['tname'] ?> &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;<span align="right"> <!-- <img src="" alt="." width="121" height="114"  alt=""/>--></span></td>
     </tr>
   <tr>
     <td width="186" height="103">Day 1:</td>
@@ -140,7 +155,7 @@ page_protect();
   </tr>
         </table></div>
 
-			<!-- <input type="button" class="a1-btn a1-blue" value="PRINT ROUTINE" onclick="myFunction()"> -->
+			<!-- <input type="button" class="a1-btn a1-blue" value="PRINT TIMETABLE" onclick="myFunction()"> -->
 		
 		
 		

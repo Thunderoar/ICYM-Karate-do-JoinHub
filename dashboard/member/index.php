@@ -104,7 +104,7 @@ page_protect();
 				<div class="tile-stats tile-red">
 					<div class="icon"><i class="entypo-users"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Paid Income This Month</h2><br>
+						<h2>You have paid</h2><br>
 						<?php
 							date_default_timezone_set("Asia/Kuala_Lumpur");
 							$date  = date('Y-m');
@@ -137,7 +137,7 @@ page_protect();
 				<div class="tile-stats tile-green">
 					<div class="icon"><i class="entypo-chart-bar"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>N/A<br></h2><br>
+						<h2>Healthy!<br></h2><br>
 							<?php
 							$query = "select COUNT(*) from users";
 
@@ -158,7 +158,7 @@ page_protect();
 				<div class="tile-stats tile-aqua">
 					<div class="icon"><i class="entypo-mail"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>N/A</h2><br>
+						<h2>Today's activity</h2><br>
 							<?php
 							date_default_timezone_set("Asia/Kuala_Lumpur");
 							$date  = date('Y-m');
@@ -182,7 +182,7 @@ page_protect();
 				<div class="tile-stats tile-blue">
 					<div class="icon"><i class="entypo-rss"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Joined Activity?</h2><br>
+						<h2>Joined Activity</h2><br>
 							<?php
 							$query = "select COUNT(*) from plan where active='yes'";
 
