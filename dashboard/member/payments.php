@@ -1,9 +1,14 @@
 ﻿<?php
 require '../../include/db_conn.php';
-page_protect(); // Ensure the user is authenticated
+page_protect();
 
-// Get the logged-in user's userid from the session
-$currentUserId = $_SESSION['userid']; // Assuming userid is stored in session
+if (!isset($_SESSION['userid'])) {
+    // Redirect to login page or display an error if the user is not logged in
+    header("Location: login.php");
+    exit();
+}
+
+$current_user_id = $_SESSION['userid'];
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +56,9 @@ $currentUserId = $_SESSION['userid']; // Assuming userid is stored in session
                 <!-- Raw Links -->
                 <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                     <ul class="list-inline links-list pull-right">
-                        <li>Welcome <?php echo $_SESSION['full_name']; ?></li>								
+					<?php
+						require('../../element/loggedin-welcome.html');
+					?>							
                         <li>
                             <a href="logout.php">Log Out <i class="entypo-logout right"></i></a>
                         </li>
@@ -66,7 +73,7 @@ $currentUserId = $_SESSION['userid']; // Assuming userid is stored in session
                 <thead>
                     <tr>
                         <th>Sl.No</th>
-                        <th>Membership Expiry</th>
+                        <!-- <th>Membership Expiry</th> -->
                         <th>Name</th>
                         <th>Member ID</th>
                         <th>Phone</th>
@@ -78,7 +85,7 @@ $currentUserId = $_SESSION['userid']; // Assuming userid is stored in session
                 <tbody>
                 <?php
 // Update query to show only the current user's enrollments
-$query  = "SELECT * FROM enrolls_to ORDER BY expire";
+$query  = "SELECT * FROM enrolls_to WHERE userid = '$current_user_id' ORDER BY expire";
 $result = mysqli_query($con, $query);
 $sno    = 1;
 
@@ -96,7 +103,7 @@ if (mysqli_num_rows($result) > 0) {
         if (mysqli_num_rows($result1) == 1) {
             while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
                 echo "<tr><td>" . $sno . "</td>";
-                echo "<td>" . $row['expire'] . "</td>";
+                //echo "<td>" . $row['expire'] . "</td>";
                 echo "<td>" . $row1['username'] . "</td>";
                 echo "<td>" . $row1['userid'] . "</td>";
                 echo "<td>" . $row1['mobile'] . "</td>";
@@ -105,20 +112,18 @@ if (mysqli_num_rows($result) > 0) {
 
                 $sno++;
 
-// Only show "Add Payment" button if user has not paid
-if ($hasPaid === 'no') { // Use strict comparison
-    echo "<td>
-            <form action='make_payments.php' method='post'>
-                <input type='hidden' name='userID' value='" . $uid . "'/>
-                <input type='hidden' name='planID' value='" . $planid . "'/>
-                <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
-            </form>
-          </td>";
-} else {
-    echo "<td>No Action Needed</td>"; // Indicate no action is needed
-}
-
-                $uid = 0;
+                // Only show "Add Payment" button if user has not paid
+                if ($hasPaid === 'no') { // Use strict comparison
+                    echo "<td>
+                            <form action='make_payments.php' method='post'>
+                                <input type='hidden' name='userID' value='" . $uid . "'/>
+                                <input type='hidden' name='planID' value='" . $planid . "'/>
+                                <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
+                            </form>
+                          </td>";
+                } else {
+                    echo "<td>No Action Needed</td>"; // Indicate no action is needed
+                }
             }
         }
     }

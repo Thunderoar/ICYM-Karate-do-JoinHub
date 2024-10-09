@@ -16,6 +16,7 @@ page_protect();
     <link href="a1style.css" type="text/css" rel="stylesheet">
     <script src="../../js/moment.min.js"></script>
 	<script src="../../js/jquery-3.4.1.min.js"></script>
+	<link rel="stylesheet" href="../../css/insidedashboard.css">
     <style>
     	.page-container .sidebar-menu #main-menu li#regis > a {
     	background-color: #2b303a;
@@ -69,7 +70,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>
 						
 							<li>

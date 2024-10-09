@@ -19,6 +19,7 @@ page_protect();
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
 	<script src="../../js/jquery.min.js"></script>
 	<script src="../../js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../css/insidedashboard.css">
     <style>
     	.page-container .sidebar-menu #main-menu li#paymnt > a {
     	background-color: #2b303a;
@@ -69,7 +70,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+                        <?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>								
 						
 							<li>
@@ -90,66 +93,58 @@ page_protect();
     <thead>
         <tr>
             <th>Sl.No</th>
-			<th>Member ID</th>
-            <!-- <th>Membership Expiry</th> -->
+            <th>Member ID</th>
             <th>Name</th>
             <th>Phone</th>
             <th>E-Mail</th>
-            <!-- <th>Gender</th> -->
+            <th>Plan Name</th> <!-- New column for Plan Name -->
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
 
-	<?php
-$query  = "SELECT * FROM enrolls_to ORDER BY expire";
+<?php
+$query = "SELECT e.*, u.username, u.mobile, u.email, p.planName 
+          FROM enrolls_to e
+          JOIN users u ON e.userid = u.userid
+          JOIN plan p ON e.planid = p.planid
+          ORDER BY e.expire";
 $result = mysqli_query($con, $query);
-$sno    = 1;
+$sno = 1;
 
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $uid = $row['userid'];
         $planid = $row['planid'];
-        $hasPaid = $row['hasPaid']; // Check if the user has already paid
+        $planName = $row['planName'];
+        $hasPaid = $row['hasPaid'];
 
-        // Debugging: Output the hasPaid value
-        echo "<!-- Debug: User ID: $uid, hasPaid: $hasPaid -->"; 
+        echo "<tr>";
+        echo "<td>" . $sno . "</td>";
+        echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+        echo "<td>" . htmlspecialchars($planName) . "</td>"; // Display the plan name
 
-        // Fetch user details from the users table
-        $query1 = "SELECT * FROM users WHERE userid='$uid'";
-        $result1 = mysqli_query($con, $query1);
-        
-        if (mysqli_num_rows($result1) == 1) {
-            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-                echo "<tr>";
-                echo "<td>" . $sno . "</td>";
-                //echo "<td>" . $row['expire'] . "</td>";
-				echo "<td>" . htmlspecialchars($row1['userid']) . "</td>";
-                echo "<td>" . htmlspecialchars($row1['username']) . "</td>"; // Added htmlspecialchars for security
-                echo "<td>" . htmlspecialchars($row1['mobile']) . "</td>";
-                echo "<td>" . htmlspecialchars($row1['email']) . "</td>";
-                //echo "<td>" . htmlspecialchars($row1['gender']) . "</td>";
+        $sno++;
 
-                $sno++;
-
-                // Only show "Add Payment" button if user has not paid
-                if ($hasPaid === 'no') { // Use strict comparison
-                    echo "<td>
-                            <form action='make_payments.php' method='post'>
-                                <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
-                                <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
-                                <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
-                            </form>
-                          </td>";
-                } else {
-                    echo "<td>No Action Needed</td>"; // Indicate no action is needed
-                }
-                echo "</tr>"; // Close the table row
-            }
+        // Only show "Add Payment" button if user has not paid
+        if ($hasPaid === 'no') {
+            echo "<td>
+                    <form action='make_payments.php' method='post'>
+                        <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
+                        <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
+                        <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
+                    </form>
+                  </td>";
+        } else {
+            echo "<td>No Action Needed</td>"; // Indicate no action is needed
         }
+        echo "</tr>";
     }
 } else {
-    echo "<tr><td colspan='8'>No records found</td></tr>";
+    echo "<tr><td colspan='7'>No records found</td></tr>";
 }
 ?>
 				</tbody>

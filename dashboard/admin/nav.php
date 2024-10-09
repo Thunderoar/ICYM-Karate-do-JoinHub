@@ -44,19 +44,19 @@
 
 		</ul>
 
-	<li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Sports Routine</span></a>
+	<li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Timetable</span></a>
 
 		<ul id="routineExpand">
 			<li class="active">
-				<a href="addroutine.php"><span>Add Sports Routine</span></a>
+				<a href="addroutine.php"><span>Add to Timetable</span></a>
 			</li>
 
 			<li>
-				<a href="editroutine.php"><span>Edit Sports Routine</span></a>
+				<a href="editroutine.php"><span>Edit Timetable</span></a>
 			</li>
 
 			<li>
-				<a href="viewroutine.php"><span>View Sports Routine</span></a>
+				<a href="viewroutine.php"><span>View Timetable</span></a>
 			</li>
 
 		</ul>

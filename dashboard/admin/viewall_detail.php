@@ -47,7 +47,9 @@ if (isset($_POST['name'])) {
             <div class="col-md-6 col-sm-8 clearfix"></div>
             <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                 <ul class="list-inline links-list pull-right">
-                    <li>Welcome <?php echo $_SESSION['full_name']; ?></li>                            
+                <?php
+						require('../../element/loggedin-welcome.html');
+					?>                      
                     <li>
                         <a href="logout.php">
                             Log Out <i class="entypo-logout right"></i>
@@ -61,12 +63,12 @@ if (isset($_POST['name'])) {
         <hr />
 
         <?php
-            $query = "SELECT * FROM users u
-                      INNER JOIN address a ON u.userid = a.userid
-                      INNER JOIN health_status h ON u.userid = h.userid
-                      INNER JOIN enrolls_to e ON u.userid = e.userid
-                      INNER JOIN plan p ON e.planid = p.planid
-                      WHERE u.userid = ?";
+$query = "SELECT * FROM users u
+LEFT JOIN address a ON u.userid = a.userid
+LEFT JOIN health_status h ON u.userid = h.userid
+LEFT JOIN enrolls_to e ON u.userid = e.userid
+LEFT JOIN plan p ON e.planid = p.planid
+WHERE u.userid = ?";
 
             if ($stmt = mysqli_prepare($con, $query)) {
                 mysqli_stmt_bind_param($stmt, "s", $memid);

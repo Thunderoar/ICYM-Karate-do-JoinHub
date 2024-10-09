@@ -134,27 +134,10 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
                <td height="35">CURRENT PLAN</td>
                <td height="35"><input type="text" name="prevPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
              </tr>
-             <tr>
-               <td height="35">SELECT NEW PLAN:</td>
-               <td height="35"><select name="plan" id="boxx" required onchange="myplandetail(this.value)">
-							<option value="">-- Please select --</option>
-							<?php
-    
-							    $query = "select * from plan where active='yes'";
-							    
-							    //echo $query;
-							    $result = mysqli_query($con, $query);
-							    
-							    if (mysqli_affected_rows($con) != 0) {
-							        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							            echo "<option value=" . $row['planid'] . ">" . $row['planName'] . "</option>";
-							            
-							        }
-							    }
-							    
-							?>
-						</select></td></td>
-             </tr>
+			 <tr>
+        </select>
+    </td>
+</tr>
              
 		   
             

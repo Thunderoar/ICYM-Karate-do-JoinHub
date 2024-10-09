@@ -13,30 +13,13 @@ page_protect();
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-     <style>
-    	.page-container .sidebar-menu #main-menu li#dash > a {
-    	background-color: #2b303a;
-    	color: #ffffff;
-		}
-
-		.home-button {
-    position: fixed; /* Fixed positioning */
-    bottom: 20px; /* Distance from the bottom of the viewport */
-    right: 20px; /* Distance from the right of the viewport */
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white; /* Text color */
-    padding: 20px 25px; /* Padding around the button */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* No underline */
-    font-size: 16px; /* Font size */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
-    transition: background-color 0.3s; /* Transition effect */
-}
-
-.home-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-    </style>
+	<link rel="stylesheet" href="../../css/insidedashboard.css">
+	<style>
+		.page-container .sidebar-menu #main-menu li#dash > a {
+    background-color: #2b303a;
+    color: #ffffff;
+    }
+	</style>
 
 </head>
     <body class="page-body  page-fade" onload="collapseSidebar()">

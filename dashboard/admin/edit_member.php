@@ -77,7 +77,9 @@ if (isset($_POST['name'])) {
 						<ul class="list-inline links-list pull-right">
 
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>							
 						
 							<li>
@@ -91,45 +93,68 @@ if (isset($_POST['name'])) {
 			<h3>Edit Member Details</h3>
 			<hr/>
 			<?php
-	    
-				    $query  = "SELECT * FROM users u
-				    		   INNER JOIN address a ON u.userid = a.userid
-				    		   INNER JOIN health_status h ON u.userid = h.userid
-				    		   WHERE u.userid = '$memid'";
-				    //echo $query;
-				    $result = mysqli_query($con, $query);
-				    $sno    = 1;
-				    
-				    $name="";
-				    $gender="";
+// SQL query to retrieve user, address, health, enrolls, and plan data using LEFT JOIN
+$query = "SELECT u.username, u.gender, u.mobile, u.email, u.dob, u.joining_date, 
+                 a.streetName, a.state, a.city, a.zipcode, 
+                 h.calorie, h.height, h.weight, h.fat, h.remarks, 
+                 p.planName, p.description, p.planType, p.validity, p.amount, 
+                 e.paid_date, e.expire, e.hasPaid
+          FROM users u
+          LEFT JOIN address a ON u.userid = a.userid
+          LEFT JOIN health_status h ON u.userid = h.userid
+          LEFT JOIN enrolls_to e ON u.userid = e.userid
+          LEFT JOIN plan p ON e.planid = p.planid
+          WHERE u.userid = ?";
 
-				    if (mysqli_affected_rows($con) == 1) {
-				        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				    
-				            $name    = $row['username'];
-				            $gender =$row['gender'];
-				            $mobile = $row['mobile'];
-				            $email   = $row['email'];
-				            $dob	 = $row['dob'];         
-				            $jdate    = $row['joining_date'];
-				          	$streetname=$row['streetName'];
-				          	$state=$row['state'];
-				          	$city=$row['city'];  
-				          	$zipcode=$row['zipcode'];
-				            $calorie=$row['calorie'];
-				            $height=$row['height'];
-				            $weight=$row['weight'];
-				            $fat=$row['fat'];
-				            $remarks=$row['remarks'];				            
-				        }
-				    }
-				    else{
-				    	 echo "<html><head><script>alert('Change Unsuccessful');</script></head></html>";
-				    	 echo mysqli_error($con);
-				    }
+// Prepare the SQL statement
+if ($stmt = mysqli_prepare($con, $query)) {
+    // Bind the user ID to the query (the "s" indicates string type)
+    mysqli_stmt_bind_param($stmt, "s", $memid);
 
+    // Execute the query
+    mysqli_stmt_execute($stmt);
 
-				?>
+    // Get the result set from the executed statement
+    $result = mysqli_stmt_get_result($stmt);
+    
+    // Check if a row is returned
+    if (mysqli_num_rows($result) == 1) {
+        // Fetch the row as an associative array
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        
+        // Assign values using htmlspecialchars to sanitize
+        $name        = htmlspecialchars($row['username']);
+        $gender      = htmlspecialchars($row['gender']);
+        $mobile      = htmlspecialchars($row['mobile']);
+        $email       = htmlspecialchars($row['email']);
+        $dob         = htmlspecialchars($row['dob']);         
+        $jdate       = htmlspecialchars($row['joining_date']);
+        $streetname  = htmlspecialchars($row['streetName'] ?? 'N/A');  // Handle nulls with 'N/A'
+        $state       = htmlspecialchars($row['state'] ?? 'N/A');
+        $city        = htmlspecialchars($row['city'] ?? 'N/A');
+        $zipcode     = htmlspecialchars($row['zipcode'] ?? 'N/A');
+        $calorie     = htmlspecialchars($row['calorie'] ?? 'N/A');
+        $height      = htmlspecialchars($row['height'] ?? 'N/A');
+        $weight      = htmlspecialchars($row['weight'] ?? 'N/A');
+        $fat         = htmlspecialchars($row['fat'] ?? 'N/A');
+        $planname    = htmlspecialchars($row['planName'] ?? 'No Plan');
+        $pamount     = htmlspecialchars($row['amount'] ?? 'N/A');
+        $pvalidity   = htmlspecialchars($row['validity'] ?? 'N/A');
+        $pdescription= htmlspecialchars($row['description'] ?? 'N/A');
+        $paiddate    = htmlspecialchars($row['paid_date'] ?? 'N/A');
+        $expire      = htmlspecialchars($row['expire'] ?? 'N/A');
+        $remarks     = htmlspecialchars($row['remarks'] ?? 'No remarks');
+    } else {
+        echo "<script>alert('No records found for the selected user.');</script>";
+    }
+
+    // Close the statement
+    mysqli_stmt_close($stmt);
+} else {
+    // Error handling if the query fails
+    echo "<script>alert('Database query failed: " . mysqli_error($con) . "');</script>";
+}
+?>
 
 
 			

@@ -75,7 +75,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>								
 						
 							<li>
@@ -97,7 +99,7 @@ page_protect();
 			<thead>
 				<tr><h2>
 					<th>Sl.No</th>
-					<th>Membership Expiry</th>
+					<!--<th>Membership Expiry</th>-->
 					<th>Member ID</th>
 					<th>Name</th>
 					<th>Contact</th>
@@ -109,45 +111,58 @@ page_protect();
 			</thead>
 				<tbody>
 
-						<?php
-							$query  = "select * from users ORDER BY joining_date";
-							//echo $query;
-							$result = mysqli_query($con, $query);
-							$sno    = 1;
+				<?php
+$query  = "SELECT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, e.expire 
+           FROM users u
+           LEFT JOIN enrolls_to e ON u.userid = e.userid
+           ORDER BY u.joining_date";
 
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        $uid   = $row['userid'];
-							        $query1  = "select * from enrolls_to WHERE userid='$uid' AND renewal='yes'";
-							        $result1 = mysqli_query($con, $query1);
-							        if (mysqli_affected_rows($con) == 1) {
-							            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-							                
-							                echo "<tr><td>".$sno."</td>";
+// Execute the query
+$result = mysqli_query($con, $query);
+$sno    = 1;
 
-							                echo "<td>" . $row1['expire'] . "</td>";
-							                
-							                echo "<td>" . $row['userid'] . "</td>";
+// Check if any rows are returned
+if (mysqli_num_rows($result) != 0) {
+    // Fetch all users and their enrollment data
+    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $uid   = $row['userid'];
 
-							                echo "<td>" . $row['username'] . "</td>";
+        echo "<tr><td>".$sno."</td>";
 
-							                echo "<td>" . $row['mobile'] . "</td>";
-
-							                echo "<td>" . $row['email'] . "</td>";
-
-							                echo "<td>" . $row['gender'] . "</td>";
-
-							                echo "<td>" . $row['joining_date'] ."</td>";
-							                
-							                $sno++;
-							       
-							                echo "<td><form action='read_member.php' method='post'><input type='hidden' name='name' value='" . $uid . "'/><input type='submit' class='a1-btn a1-blue' id='button1' value='View History ' class='btn btn-info'/></form><form action='edit_member.php' method='post'><input type='hidden'  name='name' value='" . $uid . "'/><input type='submit' class='a1-btn a1-green' id='button1' value='Edit' class='btn btn-warning'/></form><form action='del_member.php' method='post' onsubmit='return ConfirmDelete()'><input type='hidden' name='name' value='" . $uid . "'/><input type='submit' value='Delete' width='20px' id='button1' class='a1-btn a1-orange'/></form></td></tr>";
-							                $msgid = 0;
-							            }
-							        }
-							    }
-							}
-						?>									
+        // Show expire date from enrolls_to or 'Not Enrolled' if NULL
+        //echo "<td>" . ($row['expire'] ?? 'Not Enrolled') . "</td>";
+        
+        // Display user information
+        echo "<td>" . $row['userid'] . "</td>";
+        echo "<td>" . $row['username'] . "</td>";
+        echo "<td>" . $row['mobile'] . "</td>";
+        echo "<td>" . $row['email'] . "</td>";
+        echo "<td>" . $row['gender'] . "</td>";
+        echo "<td>" . $row['joining_date'] ."</td>";
+        
+        $sno++;
+       
+        // Action buttons for View, Edit, and Delete
+		echo "<td>
+		<form action='read_member.php' method='post'>
+			<input type='hidden' name='name' value='" . $uid . "'/>
+			<input type='submit' class='a1-btn a1-blue' id='button1' value='View History' class='btn btn-info'/>
+		</form>
+		<form action='edit_member.php' method='post'>
+			<input type='hidden' name='name' value='" . $uid . "'/>
+			<input type='submit' class='a1-btn a1-green' id='button1' value='Edit' class='btn btn-warning'/>
+		</form>
+		<form action='del_member.php' method='post' onsubmit='return ConfirmDelete()'>
+			<input type='hidden' name='name' value='" . $uid . "'/>
+			<input type='submit' class='a1-btn a1-orange' id='button1' value='Delete' class='btn btn-danger'/>
+		</form>
+	  </td>
+	  </tr>";
+    }
+} else {
+    echo "<tr><td colspan='9'>No records found</td></tr>";
+}
+?>
 					</tbody>
 				</table>
 

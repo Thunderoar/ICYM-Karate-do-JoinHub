@@ -75,7 +75,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>								
 						
 							<li>
@@ -97,7 +99,7 @@ page_protect();
 			<thead>
 				<tr><h2>
 					<th>Sl.No</th>
-					<th>Membership Expiry</th>
+					<!-- <th>Membership Expiry</th> -->
 					<th>Member ID</th>
 					<th>Name</th>
 					<th>Contact</th>
@@ -125,7 +127,7 @@ if ($result && mysqli_num_rows($result) > 0) { // Check if the query was success
         if ($result1 && mysqli_num_rows($result1) > 0) { // Check if the query was successful and has rows
             while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
                 echo "<tr><td>" . $sno . "</td>";
-                echo "<td>" . $row1['expire'] . "</td>";
+                //echo "<td>" . $row1['expire'] . "</td>";
                 echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['username']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
