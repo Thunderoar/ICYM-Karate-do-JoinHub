@@ -14,7 +14,7 @@ $current_user_id = $_SESSION['userid'];
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>SPORTS CLUB | Payments</title>
+    <title>ICYM Karate-Do | Payments</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../../css/style.css" id="style-resource-5">

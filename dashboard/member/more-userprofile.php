@@ -28,7 +28,7 @@ if(isset($_POST['submit'])){
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Admin</title>
+    <title>ICYM Karate-Do | Profile</title>
     <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
