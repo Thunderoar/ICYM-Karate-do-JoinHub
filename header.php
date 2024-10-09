@@ -235,9 +235,7 @@ if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
           <!-- Custom Dropdown -->
           <ul class='dropdown__items' id='dropdownItems'>
               <li><a class='not' href='$dashboard_link'>Dashboard</a></li> <!-- Dynamic Dashboard Link -->
-              <li>😺 Option 2</li>
-              <li>😽 Option 3</li>
-              <li>😎 Option 4</li>
+
               <li><a class='not' href='$logout_link'>Log Out</a></li> <!-- Dynamic Logout Link -->
           </ul>
       </div>
