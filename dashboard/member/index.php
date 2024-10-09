@@ -100,7 +100,7 @@ page_protect();
 
 			<hr>
 
-			<div class="col-sm-3"><a href="revenue_month.php">
+			<div class="col-sm-3"><a href="payments.php">
 				<div class="tile-stats tile-red">
 					<div class="icon"><i class="entypo-users"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
@@ -133,7 +133,7 @@ page_protect();
 			</div>
 
 
-			<div class="col-sm-3"><a href="table_view.php">
+			<div class="col-sm-3"><a href="new_health_status.php">
 				<div class="tile-stats tile-green">
 					<div class="icon"><i class="entypo-chart-bar"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
@@ -154,7 +154,7 @@ page_protect();
 				</div></a>
 			</div>
 
-			<div class="col-sm-3"><a href="over_members_month.php">
+			<div class="col-sm-3"><a href="viewroutine.php">
 				<div class="tile-stats tile-aqua">
 					<div class="icon"><i class="entypo-mail"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
