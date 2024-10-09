@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 09, 2024 at 05:18 PM
+-- Generation Time: Oct 09, 2024 at 05:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -119,9 +119,9 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 
 CREATE TABLE `images` (
   `imageid` varchar(200) NOT NULL,
-  `adminid` varchar(20) NOT NULL DEFAULT '0',
-  `userid` varchar(20) NOT NULL DEFAULT '0',
-  `planid` varchar(8) NOT NULL DEFAULT '0',
+  `adminid` varchar(20) DEFAULT NULL,
+  `userid` varchar(20) DEFAULT NULL,
+  `planid` varchar(8) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT 'placeholder.jpg',
   `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -131,20 +131,8 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`imageid`, `adminid`, `userid`, `planid`, `image_path`, `uploaded_at`) VALUES
-('01131e80-8562-11ef-b414-3ca067e52da9', '0', '1728384120', '0', NULL, '2024-10-08 10:42:24'),
-('0cccfde9-848c-11ef-94ce-3ca067e52da9', '0', '1728292246', '0', 'uploads/user_profile/a9d7ddf79f8967ef8ed2cccd10112606.jpg', '2024-10-07 09:10:53'),
-('10da5ba0-8499-11ef-83d3-3ca067e52da9', '0', '1728297797', '0', NULL, '2024-10-07 10:44:01'),
-('1c5ba1ce-85d6-11ef-bb7d-e9097018277d', '0', '1728433989', '0', NULL, '2024-10-09 00:33:31'),
-('23aa5175-864e-11ef-a918-3ca067e52da9', '0', '1728485531', '0', NULL, '2024-10-09 14:52:43'),
-('3100ac59-839d-11ef-8354-3ca067e52da9', '0', '1728189648', '0', 'uploads/user_profile/ijerph-17-09481-g001.jpg', '2024-10-06 04:41:02'),
-('54f860aa-8651-11ef-a918-3ca067e52da9', '0', '1728486893', '0', NULL, '2024-10-09 15:15:34'),
-('797b4815-8560-11ef-b414-3ca067e52da9', '0', '1728383471', '0', NULL, '2024-10-08 10:31:27'),
-('833c3b18-8489-11ef-94ce-3ca067e52da9', '0', '1728291151', '0', 'uploads/user_profile/cb29fd18a62485da33431fb6500f0439.jpg', '2024-10-07 08:52:43'),
-('931bb42d-8490-11ef-94ce-3ca067e52da9', '0', '1728294194', '0', NULL, '2024-10-07 09:43:16'),
-('9566be7b-83a5-11ef-8354-3ca067e52da9', 'admintest', '0', '0', 'uploads/a9d7ddf79f8967ef8ed2cccd10112606.jpg', '2024-10-06 05:41:07'),
-('9746d457-83a6-11ef-8354-3ca067e52da9', '1234', '0', '0', 'uploads/a9d7ddf79f8967ef8ed2cccd10112606.jpg', '2024-10-06 05:48:19'),
-('dd2da44c-8562-11ef-b414-3ca067e52da9', '0', '1728384510', '0', NULL, '2024-10-08 10:48:33'),
-('f245b3cb-848a-11ef-94ce-3ca067e52da9', '0', '1728291773', '0', 'uploads/user_profile/output-onlinepngtools.png', '2024-10-07 09:02:59');
+('5cd08614-8654-11ef-a918-3ca067e52da9', NULL, NULL, 'DAOYCK', 'uploads/event_1.jpg', '2024-10-09 15:37:16'),
+('71053592-8654-11ef-a918-3ca067e52da9', NULL, NULL, 'RMKNLU', 'uploads/image_11.jpg', '2024-10-09 15:37:50');
 
 -- --------------------------------------------------------
 
@@ -212,7 +200,10 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
-('ENVCLG', 'practice', 'practice', 'Event', 'Lifetime', 20, 'yes'),
+('DAOYCK', 'karate', 'karate', 'Event', 'Lifetime', 1, 'yes'),
+('KIDMSZ', 'a', 'a', 'Event', 'Lifetime', 1, 'yes'),
+('RMKNLU', 'karate2', 'karate2', 'Event', 'Lifetime', 1, 'yes'),
+('XLNAKW', 'a', 'a', 'Event', 'Lifetime', 1, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '1', 20, 'yes');
 
 -- --------------------------------------------------------
