@@ -16,7 +16,8 @@ page_protect();
     <link href="a1style.css" type="text/css" rel="stylesheet">
     <script src="../../js/moment.min.js"></script>
 	<script src="../../js/jquery-3.4.1.min.js"></script>
-	<link rel="stylesheet" href="../../css/insidedashboard.css">
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
     <style>
     	.page-container .sidebar-menu #main-menu li#regis > a {
     	background-color: #2b303a;
@@ -161,14 +162,14 @@ page_protect();
                <td height="35"><input type="date" name="jdate" id="boxx" required size="30"></td>
              </tr>
              <tr>
-			<td height="35">YOUR HEALTH ID:</td>
-           	   <td height="35"><input type="text" id="boxx" name="h_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
+			<!-- <td height="35">YOUR HEALTH ID:</td> 
+           	   <td height="35"><input type="hidden" id="boxx" name="h_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
            	   </tr>
            	   <tr>
            	   <td height="35">YOUR ADDRESS ID:</td>
-           	   <td height="35"><input type="text" id="boxx" name="address_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
+           	   <td height="35"><input type="hidden" id="boxx" name="address_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
            	   </tr>
-			</tr>
+			</tr>-->
              <tr>
                <td height="35">SPORTS PLAN:</td>
                <td height="35"><select name="plan" id="boxx" required onchange="myplandetail(this.value)">

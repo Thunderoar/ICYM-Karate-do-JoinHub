@@ -94,10 +94,10 @@ page_protect();
 
 			<thead>
 				<tr>
-					<th>S.No</th>
+					<th>No</th>
 					<!-- <th>Sports Plan ID</th> -->
-					<th>Sports Plan name</th>
-					<th>Sports Plan Details</th>
+					<th>Plan name</th>
+					<th>Plan Details</th>
 					<th>Duration</th>
 					<th>Rate</th>
 					<th>Action</th>

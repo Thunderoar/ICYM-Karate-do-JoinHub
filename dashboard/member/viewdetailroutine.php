@@ -19,6 +19,8 @@ page_protect();
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
 	<script src="../../js/jquery.min.js"></script>
 	<script src="../../js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	<style>
     	.page-container .sidebar-menu #main-menu li#routinehassubopen > a {
     	background-color: #2b303a;

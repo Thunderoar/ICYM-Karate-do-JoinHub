@@ -90,16 +90,16 @@ page_protect();
 		
 
 		
-			<h2>Routines</h2>
+			<h2>Timetable</h2>
 
 		<hr />
 		
 		<table class="table table-bordered datatable" id="table-1" border=1>
 			
 				<tr>
-					<th>Sl.No</th>
-					<th>Routine Name</th>
-					<th>Routine Details</th>
+					<th>No</th>
+					<th>Timetable Name</th>
+					<th>Timetable Details</th>
 				</tr>
 		
 				<tbody>
