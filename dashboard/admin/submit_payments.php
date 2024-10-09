@@ -3,7 +3,7 @@ require '../../include/db_conn.php';
 page_protect();
 
 $memID = $_POST['m_id'];
-$plan = $_POST['curPlan'];
+$plan = $_POST['plan'];
 
 // Default expire date for all plans.
 // If you have specific expire dates based on plan types, adjust accordingly.

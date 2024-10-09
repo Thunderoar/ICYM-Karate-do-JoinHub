@@ -133,6 +133,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
              <tr>
                <td height="35">CURRENT PLAN</td>
                <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
+			   <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td></td>
              </tr>
 			 <tr>
         </select>
