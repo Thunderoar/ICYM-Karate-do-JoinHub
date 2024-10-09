@@ -44,7 +44,9 @@ page_protect();
             <div class="col-md-6 col-sm-8 clearfix"></div>
             <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                 <ul class="list-inline links-list pull-right">
-                    <li>Welcome <?php echo $_SESSION['full_name']; ?></li>
+                <?php
+						require('../../element/loggedin-welcome.html');
+					?>
                     <li>
                         <a href="logout.php">
                             Log Out <i class="entypo-logout right"></i>

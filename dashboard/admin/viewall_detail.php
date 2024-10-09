@@ -30,11 +30,10 @@ if (isset($_POST['name'])) {
 <div class="page-container sidebar-collapsed" id="navbarcollapse">    
     <div class="sidebar-menu">
         <header class="logo-env">
-            <div class="logo">
-                <a href="main.php">
-                    <img src="logo1.png" alt="" width="192" height="80" />
-                </a>
-            </div>
+			<!-- logo -->
+			<?php
+			 require('../../element/loggedin-logo.html');
+			?>
             <div class="sidebar-collapse" onclick="collapseSidebar()">
                 <a href="#" class="sidebar-collapse-icon with-animation">
                     <i class="entypo-menu"></i>
@@ -51,7 +50,7 @@ if (isset($_POST['name'])) {
                 <ul class="list-inline links-list pull-right">
                 <?php
 						require('../../element/loggedin-welcome.html');
-					?>                      
+					?>
                     <li>
                         <a href="logout.php">
                             Log Out <i class="entypo-logout right"></i>
