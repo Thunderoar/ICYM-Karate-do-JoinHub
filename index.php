@@ -51,7 +51,7 @@ require('header.php');
         <div class="col-lg-12">
       <?php
         // Fetch images from the database
-          $sql = "SELECT image_path FROM images";
+         $sql = "SELECT image_path FROM images WHERE planid IS NOT NULL"; // Selects all images associated with any planid
           $result = $con->query($sql);
 
           if ($result->num_rows > 0) {
