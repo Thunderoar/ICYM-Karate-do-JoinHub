@@ -145,7 +145,7 @@ page_protect();
 							$i      = 1;
 							if (mysqli_affected_rows($con) != 0) {
 							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        echo $row['COUNT(*)'];
+							        //echo $row['COUNT(*)'];
 							    }
 							}
 							$i = 1;

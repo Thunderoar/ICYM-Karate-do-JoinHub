@@ -99,7 +99,7 @@ page_protect();
 					</div>
 					
 				</div>
-				<h2>Routine Detail</h2>
+				<h2>Timetable Detail</h2>
 				<hr/>
 
 				<?php

@@ -102,7 +102,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 					
 				</div>
 
-		<h3>ICYM Karate-Do CLub</h3>
+		<h3>ICYM Karate-Do Club</h3>
 
 		<hr />
 
@@ -132,7 +132,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
              </tr>
              <tr>
                <td height="35">CURRENT PLAN</td>
-               <td height="35"><input type="text" name="prevPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
+               <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
              </tr>
 			 <tr>
         </select>

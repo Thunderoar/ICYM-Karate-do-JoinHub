@@ -8,7 +8,7 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB| Routine</title>
+    <title>ICYM Karate-Do Club | Timetable</title>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
@@ -84,7 +84,7 @@ page_protect();
 					
 				</div>
 
-		<h3>Create Routine</h3>
+		<h3>Add to Timetable</h3>
 
 		<hr />
 
@@ -93,14 +93,14 @@ page_protect();
 		 <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
         <div class="a1-card-8 a1-light-gray" style="width:500px; margin:0 auto;">
 		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>NEW ROUTINE</h6>
+        	<h6>Add new Activity to Timetable</h6>
         </div>
        <form id="form1" name="form1" method="post" class="a1-container" action="saveroutine.php">
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
            	 <tr>
-           	   <td height="35">ROUTINE NAME:</td>
+           	   <td height="35">Timetable Name:</td>
            	   <td height="35"><input name="rname"  size="30" required/></td>
          	   </tr>
 			    <tr>
@@ -143,7 +143,7 @@ page_protect();
              <tr>
              <tr>
                <td height="35">&nbsp;</td>
-               <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add Routine" >
+               <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add new Timetable" >
                  <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
              </tr>
            </table></td>

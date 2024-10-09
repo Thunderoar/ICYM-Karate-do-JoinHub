@@ -18,7 +18,7 @@
 		$result=mysqli_query($con,$sql);
 		if($result){	
 		
-			echo "<head><script>alert('Routine Added');</script></head></html>";
+			echo "<head><script>alert('Timetable Added');</script></head></html>";
 			echo "<meta http-equiv='refresh' content='0; url=addroutine.php'>";
 		}else{
 			echo "<head><script>alert('Routine Added Failed');</script></head></html>";
