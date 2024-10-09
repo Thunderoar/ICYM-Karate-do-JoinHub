@@ -7,7 +7,7 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB | Income per Month</title>
+    <title>ICYM Karate-Do | Income per Month</title>
     <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -43,7 +43,9 @@ page_protect();
 			    <div class="col-md-6 col-sm-8 clearfix"></div>
 			    <div class="col-md-6 col-sm-4 clearfix hidden-xs">
 				    <ul class="list-inline links-list pull-right">
-					    <li>Welcome <?php echo $_SESSION['full_name']; ?></li>
+					<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 					    <li><a href="logout.php">Log Out <i class="entypo-logout right"></i></a></li>
 				    </ul>
 			    </div>

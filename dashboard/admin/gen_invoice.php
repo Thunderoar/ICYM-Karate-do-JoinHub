@@ -25,13 +25,30 @@ $uid=$_GET['id'];
 <html>
 <head>
 <meta charset="utf-8">
-<title>SPORTS CLUB</title>
+<title>ICYM Karate-Do</title>
 <style>
 
 
  #space
 {
 line-height:0.5cm;
+}
+.home-button {
+    position: fixed; /* Fixed positioning */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: 20px; /* Distance from the right of the viewport */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
+    padding: 20px 25px; /* Padding around the button */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 16px; /* Font size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.home-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
 </style>
         <script>function myFunction()
@@ -61,8 +78,8 @@ line-height:0.5cm;
   <tr>
     <td width="222" height="198"><img src="logo1.png" width="114" height="115"  alt=""/></td>
     <td width="317"><p><strong>ICYM Karate-Do</strong></p>
-      <p>Sotai Chenijan,</p>
-      <p>Jorhat</p></td>
+      <p>Manager of ICYM Karate-Do,</p>
+      <p></p></td>
     <td height="198"><p>Serial No : <?php echo $row['et_id'] ?></p>
       <p>&nbsp;</p>
       <p>Date : <?php echo $row['paid_date']?></p></td>
@@ -70,7 +87,7 @@ line-height:0.5cm;
    
   <tr>
     <td height="118" colspan="3"><p>Received with thanks from : <?php echo $row['username']?></p>
-      <p>A sum of RM : <?php echo $row['amount']?></p>
+      <p>A sum of RM: <?php echo $row['amount']?></p>
       <p>On account of Membership plan: <?php echo $row['planName']?></p></td>
     </tr>
   
@@ -83,4 +100,5 @@ line-height:0.5cm;
 
 </div>
 </body>
+<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="view_mem.php">Return Back</a>		
 </html>

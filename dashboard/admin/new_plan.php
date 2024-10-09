@@ -7,7 +7,7 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | New Plan</title>
+    <title>ICYM Karate-Do  | New Plan</title>
   
 	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>

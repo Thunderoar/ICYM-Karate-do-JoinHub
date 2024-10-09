@@ -7,7 +7,7 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Member View</title>
+    <title>ICYM Karate-Do | Member View</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">

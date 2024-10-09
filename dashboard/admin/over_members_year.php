@@ -7,7 +7,7 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Member per Year</title>
+    <title>ICYM Karate-Do | Member per Year</title>
      <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -63,7 +63,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>							
 						
 							<li>
