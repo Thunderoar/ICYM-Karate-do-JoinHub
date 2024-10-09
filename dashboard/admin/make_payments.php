@@ -102,7 +102,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 					
 				</div>
 
-		<h3>BLAZE FIT SPORTS CLUB</h3>
+		<h3>ICYM Karate-Do CLub</h3>
 
 		<hr />
 

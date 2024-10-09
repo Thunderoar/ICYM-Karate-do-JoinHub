@@ -27,7 +27,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Make Payment</title>
+    <title>ICYM Karate-Do  | Make Payment</title>
      <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -53,11 +53,9 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 			<header class="logo-env">
 			
 			<!-- logo -->
-			<div class="logo">
-				<a href="main.php">
-					<img src="logo1.png" alt="" width="192" height="80" />
-				</a>
-			</div>
+			<?php
+			 require('../../element/loggedin-logo.html');
+			?>
 			
 					<!-- logo collapse icon -->
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
@@ -102,7 +100,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 					
 				</div>
 
-		<h3>BLAZE FIT SPORTS CLUB</h3>
+		<h3>ICYM Karate-Do Club</h3>
 
 		<hr />
 
