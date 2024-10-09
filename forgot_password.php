@@ -8,7 +8,7 @@
     <meta name="description" content="Neon Admin Panel" />
     <meta name="author" content="Laborator.co" />
     
-    <title>Sports Club | Login</title>
+    <title>ICYM Karate-Do Club | Login</title>
     <link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 
@@ -74,7 +74,7 @@
 						
 						<div class="form-group">
 							<button type="Submit" name="btnLogin" class="btn btn-primary">
-								Login In
+								Change Password
 								<i class="entypo-login"></i>
 							</button>
 							<a href="./index.php"><button  type="button" class="btn btn-primary">Cancel</button></a>
