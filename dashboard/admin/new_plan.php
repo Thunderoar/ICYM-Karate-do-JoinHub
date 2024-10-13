@@ -14,6 +14,8 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	<style>
     	.page-container .sidebar-menu #main-menu li#planhassubopen > a {
     	background-color: #2b303a;

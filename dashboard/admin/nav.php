@@ -7,14 +7,16 @@
 				
 	<li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Payments</span></a></li>
 
-	<li class="" id="hassubopen"><a href="#" onclick="memberExpand(1)"><i class="entypo-users"></i><span>Members</span></a>
-		<ul id="memExpand">
-			<li class="active">
-				<a href="view_mem.php"><span>Edit Members</span></a></li>
-
-			<li><a href="table_view.php"><span>View Members</span></a></li>
-		</ul>
-	</li>
+<li class="" id="hassubopen"><a href="#" onclick="memberExpand(1, 'memExpand')"><i class="entypo-users"></i><span>Members</span></a>
+    <ul id="memExpand" style="display: none;">
+        <li class="active">
+            <a href="view_mem.php"><span>Edit Members</span></a>
+        </li>
+        <li>
+            <a href="table_view.php"><span>View Members</span></a>
+        </li>
+    </ul>
+</li>
 
 	<li id="health_status"><a href="new_health_status.php"><i class="entypo-user-add"></i><span>Health Status</span></a> 	
 
