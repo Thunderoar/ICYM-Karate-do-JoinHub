@@ -1,13 +1,20 @@
 ﻿<?php
 require '../../include/db_conn.php';
-page_protect();
+
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
+  page_protect();
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-	<title>SPORTS CLUB | Health Status</title>
+	<title>ICYM Karate-Do | Health Status</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
@@ -18,6 +25,8 @@ page_protect();
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	 <style>
     	.page-container .sidebar-menu #main-menu li#health_status > a {
     	background-color: #2b303a;
@@ -76,7 +85,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>						
 						
 							<li>
@@ -90,79 +101,87 @@ page_protect();
 					
 				</div>
 
-		<h2>Health Status</h2>
+				<h2>Health Status</h2>
 
-		<hr />
+<hr />
 
-		<table class="table table-bordered datatable" id="table-1" border=1>
-			<thead>
-				<tr><h2>
-					<th>Sl.No</th>
-					<th>Member ID</th>
-					<th>Name</th>
-					<th>Contact</th>
-					<th>E-Mail</th>
-					<th>Gender</th>
-					<th>Date Of Birth</th>
-					<th>Joining Date</th>
-					<th>Action</th></h2>
-				</tr>
-			</thead>
-				<tbody>
+<table class="table table-bordered datatable" id="table-1" border=1>
+    <thead>
+        <tr>
+            <th>Sl.No</th>
+            <th>Member ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <!-- <th>E-Mail</th> -->
+            <th>Gender</th>
+            <th>Date Of Birth</th>
+            <th>Joining Date</th>
+            <th>Calories</th>
+            <th>Weight</th>
+            <th>Height</th>
+            <!-- <th>Fat</th> -->
+            <th>Remarks</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
 
-						<?php
-							$query  = "select * from users ORDER BY joining_date";
-							//echo $query;
-							$result = mysqli_query($con, $query);
-							$sno    = 1;
 
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        $uid   = $row['userid'];
-							        $uname;
-							        $udob;
-							        $ujoing;
-							        $ugender;
-							        $query1  = "select * from enrolls_to WHERE userid='$uid' AND renewal='yes'";
-							        $result1 = mysqli_query($con, $query1);
-							        if (mysqli_affected_rows($con) == 1) {
-							            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-							                
-							                echo "<tr><td>".$sno."</td>";
-							                
-							                echo "<td>" . $row['userid'] . "</td>";
+        if (isset($_SESSION['userid'])) {
+            $logged_in_userid = $_SESSION['userid']; // Fetch the logged-in user's ID
 
-							                echo "<td>" . $row['username'] . "</td>";
+            // Query to fetch user details and health status for the logged-in user
+            $query = "
+                SELECT u.userid, u.username, u.mobile, u.email, u.gender, u.dob, u.joining_date,
+                       hs.calorie, hs.weight, hs.height, hs.fat, hs.remarks
+                FROM users u
+                LEFT JOIN health_status hs ON u.userid = hs.userid
+                WHERE u.userid = '$logged_in_userid'
+            ";
+            $result = mysqli_query($con, $query);
+            $sno = 1;
 
-							                echo "<td>" . $row['mobile'] . "</td>";
+            if (mysqli_affected_rows($con) != 0) {
+                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                echo "<tr><td>" . $sno . "</td>";
+                echo "<td>" . $row['userid'] . "</td>";
+                echo "<td>" . $row['username'] . "</td>";
+                echo "<td>" . $row['mobile'] . "</td>";
+                //echo "<td>" . $row['email'] . "</td>";
+                echo "<td>" . $row['gender'] . "</td>";
+                echo "<td>" . $row['dob'] . "</td>";
+                echo "<td>" . $row['joining_date'] . "</td>";
 
-							                echo "<td>" . $row['email'] . "</td>";
+                // Display health status details if they exist
+                echo "<td>" . (isset($row['calorie']) ? $row['calorie'] : 'N/A') . "</td>";
+                echo "<td>" . (isset($row['weight']) ? $row['weight'] : 'N/A') . "</td>";
+                echo "<td>" . (isset($row['height']) ? $row['height'] : 'N/A') . "</td>";
+                //echo "<td>" . (isset($row['fat']) ? $row['fat'] : 'N/A') . "</td>";
+                echo "<td>" . (isset($row['remarks']) ? $row['remarks'] : 'N/A') . "</td>";
 
-							                echo "<td>" . $row['gender'] . "</td>";
+                // Increment serial number
+                $sno++;
 
-							                echo "<td>" . $row['dob'] . "</td>";
-
-							                echo "<td>" . $row['joining_date'] ."</td>";
-							                
-							                $uname=$row['username'];
-							       			$udob=$row['dob'];
-							        		$ujoing=$row['joining_date'];
-							        		$ugender=$row['gender'];
-
-							                $sno++;
-							       
-							                echo "<td><form action='health_status_entry.php' method='post'><input type='hidden' name='uid' value='" . $uid . "'/>
-							                <input type='hidden' name='uname' value='" . $uname . "'/>
-							                <input type='hidden' name='udob' value='" . $udob . "'/>
-											
-							                <input type='hidden' name='ujoin' value='" . $ujoing . "'/>
-							                <input type='hidden' name='ugender' value='" . $ugender . "'/><input type='submit' class='a1-btn a1-blue' id='button1' value='Health Status' class='btn btn-info'/></form></td></tr>";
-							                $msgid = 0;
-							            }
-							        }
-							    }
-							}
-						?>									
+                // Action form for health status entry
+                echo "<td>
+                        <form action='health_status_entry.php' method='post'>
+                            <input type='hidden' name='uid' value='" . $row['userid'] . "'/>
+                            <input type='hidden' name='uname' value='" . $row['username'] . "'/>
+                            <input type='hidden' name='udob' value='" . $row['dob'] . "'/>
+                            <input type='hidden' name='ujoin' value='" . $row['joining_date'] . "'/>
+                            <input type='hidden' name='ugender' value='" . $row['gender'] . "'/>
+                            <input type='submit' class='a1-btn a1-blue' value='Update Health Status'/>
+                        </form>
+                      </td>";
+                echo "</tr>";
+            } else {
+                echo "<tr><td colspan='14'>No health status information found for the logged-in user.</td></tr>";
+            }
+        } else {
+            echo "<tr><td colspan='14'>Please log in to view your health status.</td></tr>";
+        }
+        ?>			
 					</tbody>
 				</table>
 

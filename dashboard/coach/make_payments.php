@@ -27,7 +27,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Make Payment</title>
+    <title>ICYM Karate-Do  | Make Payment</title>
      <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -53,11 +53,9 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 			<header class="logo-env">
 			
 			<!-- logo -->
-			<div class="logo">
-				<a href="main.php">
-					<img src="logo1.png" alt="" width="192" height="80" />
-				</a>
-			</div>
+			<?php
+			 require('../../element/loggedin-logo.html');
+			?>
 			
 					<!-- logo collapse icon -->
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
@@ -102,7 +100,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 					
 				</div>
 
-		<h3>BLAZE FIT SPORTS CLUB</h3>
+		<h3>ICYM Karate-Do Club</h3>
 
 		<hr />
 
@@ -132,28 +130,8 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
              </tr>
              <tr>
                <td height="35">CURRENT PLAN</td>
-               <td height="35"><input type="text" name="prevPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
-             </tr>
-             <tr>
-               <td height="35">SELECT NEW PLAN:</td>
-               <td height="35"><select name="plan" id="boxx" required onchange="myplandetail(this.value)">
-							<option value="">-- Please select --</option>
-							<?php
-    
-							    $query = "select * from plan where active='yes'";
-							    
-							    //echo $query;
-							    $result = mysqli_query($con, $query);
-							    
-							    if (mysqli_affected_rows($con) != 0) {
-							        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							            echo "<option value=" . $row['planid'] . ">" . $row['planName'] . "</option>";
-							            
-							        }
-							    }
-							    
-							?>
-						</select></td></td>
+               <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
+			   <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td></td>
              </tr>
              
 		   

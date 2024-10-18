@@ -1,0 +1,30 @@
+ideanya adalah, bila member nk join, dia tk boleh register begitu shj.
+dia kena submit registration form dia dulu ke coach melalui registration page(tkda lagi)
+
+dn utk coach, akn ad satu page dimana
+
+i think the manager/admin does all the thing.
+
+i think its wise that they can control 
+
+dlm setiap plan/event/
+
+akn ad kelab member yg akn diassign ke event itu.
+dan coach boleh suggest player yg patut masuk atwpun tidak masuk.
+dn senarai suggestion ni akn muncul di muka baru bahagian 'Edit Plan'
+manager/admin perlu approve/tidak approve suggestion ni(ad butang X atw ✓ disebelah nama)
+
+
+bhgn plan/event:
+setiap event ad nama member terlibat tersenarai pd 'Edit Plan'
+login coach boleh suggest member mana patut masuk atw tidak(akn ad senarai member pd 'Edit Plan')
+login admin perlu approve/tidak approve suggestion ni(ad butang X atw ✓ disebelah nama)
+
+
+bhgn timetable:
+diorang boleh ubah timetable yg dorang in charge shj
+timetable yg lain tidak boleh
+
+
+the timetable assigned to them only, 
+they cant change others schedule

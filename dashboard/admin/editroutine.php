@@ -99,47 +99,65 @@ page_protect();
 		<table class="table table-bordered datatable" id="table-1" border=1>
 			
 				<tr>
-					<th>Sl.No</th>
+					<th>No</th>
 					<th>Timetable Name</th>
 					<th>Timetable Details</th>
 					<th>Delete Timetable</th>
+					<th>Approve Timetable</th>
 				</tr>
 		
 				<tbody>
 
-				<?php
+<?php
+$query = "SELECT * FROM sports_timetable";
+// Execute the query
+$result = mysqli_query($con, $query);
+$sno = 1;
 
+if (mysqli_num_rows($result) > 0) { // Use mysqli_num_rows to check for rows
+    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $hasApproved = $row['hasApproved'];
+        
+        echo "<tr><td>" . $sno . "</td>";
+        echo "<td>" . htmlspecialchars($row['tname']) . "</td>"; // Use htmlspecialchars to prevent XSS
+        $sno++;
 
-					$query  = "select * from sports_timetable";
-					//echo $query;
-					$result = mysqli_query($con, $query);
-					$sno    = 1;
+        // Edit Timetable Button
+        echo '<td><a href="editdetailroutine.php?id=' . htmlspecialchars($row['tid']) . '">
+              <input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable"></a></td>';
 
-					if (mysqli_affected_rows($con) != 0) 
-					{
-					    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
-						{
+        // Delete Timetable Button
+        echo "<td>
+                <form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'>
+                    <input type='hidden' name='name' value='" . htmlspecialchars($row['tid']) . "'/>
+                    <input type='submit' value='Delete' class='a1-btn a1-orange'/>
+                </form>
+              </td>";
 
-					       
-					           
-					                
-					                 echo "<tr><td>".$sno."</td>";
-					                echo "<td>" . $row['tname'] . "</td>";
-					           
-					                
-					                $sno++;
-					                
-					              echo '<td><a href="editdetailroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable" ></a></td>';
-								 // echo '<td><a href="deleteroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" value="Delete Routine" ></a></td></tr>';
-								 echo "<td><form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'><input type='hidden' name='name' value='" . $row['tid'] . "'/><input type='submit' value='Delete' width='20px' id='boxxe' class='a1-btn a1-orange'/></form></td></tr>";
-									
-					                $uid = 0;
-					            
-					        
-					    }
-					}
+        // Approval and Rejection Buttons
+        echo "<td>";
+        
+        if ($hasApproved === 'Not Yet') {
+            // Show Approve and Reject buttons
+            echo "<form action='approve_reject_routine.php' method='post'>
+                    <input type='hidden' name='tid' value='" . htmlspecialchars($row['tid']) . "' />
+                    <button type='submit' name='action' value='approve' class='a1-btn a1-green'>✔</button>
+                    <button type='submit' name='action' value='reject' class='a1-btn a1-red'>✘</button>
+                  </form>";
+        } elseif ($hasApproved === 'yes') {
+            echo "<span class='approved'>Approved</span>";
+        } else {
+            echo "<span class='rejected'>Rejected</span>";
+        }
 
-					?>									
+        echo "</td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='5'>No records found</td></tr>"; // Handle no records found
+}
+?>
+							
 				</tbody>
 
 		</table>

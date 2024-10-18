@@ -7,7 +7,10 @@
 				
 	<li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Payments</span></a></li>
 
-<li class="" id="hassubopen"><a href="#" onclick="memberExpand(1, 'memExpand')"><i class="entypo-users"></i><span>Members</span></a>
+<li class="" id="hassubopen">
+    <a href="#" onclick="memberExpand('memExpand'); event.preventDefault();">
+        <i class="entypo-users"></i><span>Members</span>
+    </a>
     <ul id="memExpand" style="display: none;">
         <li class="active">
             <a href="view_mem.php"><span>Edit Members</span></a>

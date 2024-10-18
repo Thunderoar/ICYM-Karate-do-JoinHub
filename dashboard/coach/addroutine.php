@@ -8,12 +8,19 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB| Routine</title>
-    <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
+    <title>ICYM Karate-Do Club | Timetable</title>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link href="a1style.css" rel="stylesheet" type="text/css">
+	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
     <style>
       .page-container .sidebar-menu #main-menu li#routinehassubopen > a {
       background-color: #2b303a;
@@ -63,7 +70,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>						
 						
 							<li>
@@ -77,7 +86,7 @@ page_protect();
 					
 				</div>
 
-		<h3>Create Routine</h3>
+		<h3>Add to Timetable</h3>
 
 		<hr />
 
@@ -86,14 +95,14 @@ page_protect();
 		 <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
         <div class="a1-card-8 a1-light-gray" style="width:500px; margin:0 auto;">
 		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>NEW ROUTINE</h6>
+        	<h6>Suggest New Activity to Timetable</h6>
         </div>
        <form id="form1" name="form1" method="post" class="a1-container" action="saveroutine.php">
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
            	 <tr>
-           	   <td height="35">ROUTINE NAME:</td>
+           	   <td height="35">Timetable Name:</td>
            	   <td height="35"><input name="rname"  size="30" required/></td>
          	   </tr>
 			    <tr>
@@ -132,11 +141,13 @@ page_protect();
                  <textarea name="day6" id="textarea" style="margin: 0px; width: 236px; height: 42px;resize:none;"></textarea></td></td>
              </tr>
 			 
-            
+            <td height="0"><input type="hidden" name="hasApproved"  size="0" value="Not Yet" required/></td>
+			<td height="0"><input type="hidden" name="staff"  size="0" value="<?php echo $_SESSION['username']; ?>" required/></td>
+			
              <tr>
              <tr>
                <td height="35">&nbsp;</td>
-               <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add Routine" >
+               <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Suggest new Timetable" >
                  <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
              </tr>
            </table></td>

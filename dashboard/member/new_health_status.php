@@ -1,6 +1,13 @@
 ﻿<?php
 require '../../include/db_conn.php';
-page_protect();
+
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
+  page_protect();
+
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +25,8 @@ page_protect();
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	 <style>
     	.page-container .sidebar-menu #main-menu li#health_status > a {
     	background-color: #2b303a;
@@ -117,8 +126,7 @@ page_protect();
     </thead>
     <tbody>
         <?php
-        // Start session to access logged in user info
-        session_start();
+
 
         if (isset($_SESSION['userid'])) {
             $logged_in_userid = $_SESSION['userid']; // Fetch the logged-in user's ID

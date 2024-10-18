@@ -14,6 +14,8 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	<style>
     	.page-container .sidebar-menu #main-menu li#routinehassubopen > a {
     	background-color: #2b303a;
@@ -82,8 +84,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
-							</li>						
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 						
 							<li>
 								<a href="logout.php">
@@ -98,16 +101,15 @@ page_protect();
 				<h2>Routine Detail</h2>
 				<hr/>
 
-		<?php
-		$id=$_GET['id'];
-		$sql="Select * from sports_timetable t Where t.tid=$id";
-		$res=mysqli_query($con, $sql);
-					 if($res){
-						      	$row=mysqli_fetch_array($res,MYSQLI_ASSOC);
-				
-						      }
-						
-		?>
+<?php
+$id = mysqli_real_escape_string($con, $_GET['id']); // Escape the ID for safety
+$sql = "SELECT * FROM sports_timetable t WHERE t.tid = '$id'";
+$res = mysqli_query($con, $sql);
+
+if ($res) {
+    $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+}
+?>
 
 		
 			<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">

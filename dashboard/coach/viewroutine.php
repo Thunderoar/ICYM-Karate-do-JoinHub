@@ -10,12 +10,19 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>BLAZE FIT | View Routine</title>
-    <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
+    <title>ICYM Karate-Do | View Routine</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	<style>
     	.page-container .sidebar-menu #main-menu li#routinehassubopen > a {
     	background-color: #2b303a;
@@ -66,7 +73,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>						
 						
 							<li>
@@ -83,16 +92,16 @@ page_protect();
 		
 
 		
-			<h2>Routines</h2>
+			<h2>Timetable</h2>
 
 		<hr />
 		
 		<table class="table table-bordered datatable" id="table-1" border=1>
 			
 				<tr>
-					<th>Sl.No</th>
-					<th>Routine Name</th>
-					<th>Routine Details</th>
+					<th>No</th>
+					<th>Timetable Name</th>
+					<th>Timetable Details</th>
 				</tr>
 		
 				<tbody>

@@ -97,32 +97,32 @@ page_protect();
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
            	 <tr>
-           	   <td height="35">MEMBERSHIP ID:</td>
+           	   <td height="35">Membership ID:</td>
            	   <td height="35"><input type="text" id="boxx" name="m_id" value="<?php echo time(); ?>" readonly required/></td>
          	   </tr>
 			   
 			   <tr>
-               <td height="35">NAME:</td>
+               <td height="35">Name:</td>
                <td height="35"><input name="u_name" id="boxx"  required/></td>
              </tr>
              <tr>
-               <td height="35">STREET NAME:</td>
+               <td height="35">Street Name:</td>
                <td height="35"><input  name="street_name" id="boxx"   required/></td>
              </tr>
              <tr>
-               <td height="35">CITY:</td>
+               <td height="35">City:</td>
                <td height="35"><input type="text" name="city" id="boxx" required/></td>
              </tr>
              <tr>
-               <td height="35">ZIPCODE:</td>
+               <td height="35">Zipcode:</td>
                <td height="35"><input type="number" name="zipcode" id="boxx" maxlength="5" required /></td>
              </tr>
             <tr>
-               <td height="35">STATE:</td>
+               <td height="35">State:</td>
                <td height="35"><input type="text" name="state" id="boxx" required/ size="30"></td>
              </tr>
             <tr>
-               <td height="35">GENDER:</td>
+               <td height="35">Gender:</td>
                <td height="35"><select name="gender" id="boxx" required>
 
 					<option value="">--Please Select--</option>
@@ -131,28 +131,28 @@ page_protect();
 				</select></td>
              </tr>
             <tr>
-               <td height="35">DATE OF BIRTH:</td>
+               <td height="35">Date of Birth:</td>
                <td height="35"><input type="date" data-date="" data-date-format="DD MMMM YYYY" value="2015-08-09"></td>
              </tr>
 			 <tr>
-               <td height="35">PHONE NO:</td>
+               <td height="35">Phone No:</td>
                <td height="35"><input type="number" name="mobile" id="boxx" maxlength="10" required/ size="30"></td>
              </tr>
 			  <tr>
-               <td height="35">EMAIL ID:</td>
+               <td height="35">Email ID:</td>
                <td height="35"><input type="email" name="email" id="boxx" required/ size="30"></td>
              </tr>
 			 <tr>
-               <td height="35">JOINING DATE:</td>
+               <td height="35">Joining Date:</td>
                <td height="35"><input type="date" name="jdate" id="boxx" required size="30"></td>
              </tr>
              <tr>
-			<td height="35">YOUR HEALTH ID:</td>
-           	   <td height="35"><input type="text" id="boxx" name="h_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
+			<td height="35">Your Health ID:</td>
+           	   <td height="35"><input type="hidden" id="boxx" name="h_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
            	   </tr>
            	   <tr>
-           	   <td height="35">YOUR ADDRESS ID:</td>
-           	   <td height="35"><input type="text" id="boxx" name="address_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
+           	   <td height="35">Your Address ID:</td>
+           	   <td height="35"><input type="hidden" id="boxx" name="address_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
            	   </tr>
 			</tr>
              <tr>

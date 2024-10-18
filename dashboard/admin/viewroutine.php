@@ -99,8 +99,10 @@ page_protect();
 		<table class="table table-bordered datatable" id="table-1" border=1>
 			
 				<tr>
-					<th>Sl.No</th>
+					<th>No.</th>
 					<th>Timetable Name</th>
+					<th>Timetable Approval</th>
+					<th>Coach In-Charge</th>
 					<th>Timetable Details</th>
 				</tr>
 		
@@ -122,8 +124,10 @@ page_protect();
 					       
 					           
 					                
-					                 echo "<tr><td>".$sno."</td>";
+					                echo "<tr><td>".$sno."</td>";
 					                echo "<td>" . $row['tname'] . "</td>";
+									echo "<td>" . $row['hasApproved'] . "</td>";
+									echo "<td>" . $row['staffid'] . "</td>";
 					           
 					                
 					                $sno++;

@@ -150,7 +150,7 @@ page_protect();
 		
 		
 		
-
+<!-- comment -->
 
 <?php include('footer.php'); ?>
     	</div>

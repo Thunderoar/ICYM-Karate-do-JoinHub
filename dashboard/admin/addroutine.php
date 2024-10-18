@@ -140,8 +140,32 @@ page_protect();
                <td height="35"><label for="textarea"></label>
                  <textarea name="day6" id="textarea" style="margin: 0px; width: 236px; height: 42px;resize:none;"></textarea></td></td>
              </tr>
-			 
-            
+<tr>
+    <td height="35">Choose Staff:</td>
+    <td height="35">
+        <select name="staff" id="boxx" required onchange="mystaffdetail(this.value)">
+            <option value="">--Please Select--</option>
+            <?php
+                // Query to select all staff
+                $query = "SELECT * FROM staff";
+                $result = mysqli_query($con, $query);
+                
+                // Check if there are any rows returned
+                if (mysqli_num_rows($result) > 0) {
+                    // Fetch each row
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        // Construct the option value, including staff name and other details
+                        echo "<option value='{$row['staffid']}' 
+                              data-username='{$row['username']}' 
+                              data-role='{$row['role']}'>"
+                              . htmlspecialchars($row['name']) . "</option>";
+                    }
+                }
+            ?>
+        </select>
+    </td>
+</tr>			 
+             <td height="0"><input type="hidden" name="hasApproved"  size="0" value="yes" required/></td>           
              <tr>
              <tr>
                <td height="35">&nbsp;</td>
@@ -164,6 +188,25 @@ page_protect();
 <?php include('footer.php'); ?>
     	</div>
 
+<script>
+function mystaffdetail(staffId) {
+    var selectBox = document.getElementById("boxx");
+    var selectedOption = selectBox.options[selectBox.selectedIndex];
+
+    // Check if a valid staff is selected
+    if (staffId) {
+        var username = selectedOption.getAttribute('data-username');
+        var role = selectedOption.getAttribute('data-role');
+
+        // Example of how to display the details
+        console.log("Staff ID: " + staffId);
+        console.log("Username: " + username);
+        console.log("Role: " + role);
+        
+        // You can add more code here to display the information on the page as needed
+    }
+}
+</script>
     </body>
 </html>
 

@@ -13,18 +13,42 @@ page_protect();
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
-    <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
-	<script src="../../js/jquery.min.js"></script>
-	<script src="../../js/bootstrap.min.js"></script>
+	
 
 	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
-	<style>
+<style>
+.list-inline > li:first-child {
+    padding-left: 0;
+}
+
+.list-inline > li {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
 
-    </style>
+ #space
+{
+line-height:0.5cm;
+}
+.home-button {
+    position: fixed; /* Fixed positioning */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: 20px; /* Distance from the right of the viewport */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
+    padding: 20px 25px; /* Padding around the button */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 16px; /* Font size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: background-color 0.3s; /* Transition effect */
+}
+</style>
 	<script>
 	function myFunction()
 	{
@@ -169,6 +193,7 @@ if ($res) {
     	</div>
 
     </body>
+	<a class="btn-sm px-4 py-3 d-flex home-button return" style="background-color:#2a2e32" href="viewroutine.php">Return to Timetable</a>		
 	<?php include('footer.php'); ?>
 </html>
 

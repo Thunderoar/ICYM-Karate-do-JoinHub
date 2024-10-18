@@ -27,8 +27,6 @@ $uid=$_GET['id'];
 <meta charset="utf-8">
 <title>ICYM Karate-Do</title>
 <style>
-
-
  #space
 {
 line-height:0.5cm;

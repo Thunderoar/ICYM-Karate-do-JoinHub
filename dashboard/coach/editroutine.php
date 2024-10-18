@@ -10,13 +10,15 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB | View Routine</title>
+    <title>ICYM Karate-Do | View Timetable</title>
     <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	<style>
 	#boxxe
 	{
@@ -71,7 +73,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>						
 						
 							<li>
@@ -88,7 +92,7 @@ page_protect();
 		
 
 		
-			<h2>Routines</h2>
+			<h2>Timetables</h2>
 
 		<hr />
 		
@@ -96,9 +100,9 @@ page_protect();
 			
 				<tr>
 					<th>Sl.No</th>
-					<th>Routine Name</th>
-					<th>Routine Details</th>
-					<th>Delete Routine</th>
+					<th>Timetable Name</th>
+					<th>Timetable Details</th>
+					<th>Delete Timetable</th>
 				</tr>
 		
 				<tbody>
@@ -125,7 +129,7 @@ page_protect();
 					                
 					                $sno++;
 					                
-					              echo '<td><a href="editdetailroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Routine" ></a></td>';
+					              echo '<td><a href="editdetailroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable" ></a></td>';
 								 // echo '<td><a href="deleteroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" value="Delete Routine" ></a></td></tr>';
 								 echo "<td><form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'><input type='hidden' name='name' value='" . $row['tid'] . "'/><input type='submit' value='Delete' width='20px' id='boxxe' class='a1-btn a1-orange'/></form></td></tr>";
 									

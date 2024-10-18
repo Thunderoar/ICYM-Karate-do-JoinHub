@@ -75,7 +75,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 							</li>								
 						
 							<li>
@@ -147,14 +149,6 @@ page_protect();
 							        }
 							    }
 							}
-                    $res = mysqli_query($con,"CALL `countGender`();") or die("query fail:" .mysqli_error($con));
-                    echo"<table ><tr><th>gender</th><th>count</th></tr>";
-                    while($row = mysqli_fetch_array($res)){
-                        echo"<td>". $row['gender']. "</td>";
-                         echo"<td>". $row['COUNT(*)']. "</td>";
-                        echo"<br/>";
-                        echo"</table>";     
-                    }
                     
                     
                    // $stmt = $con->prepare($sql);

@@ -28,12 +28,14 @@ if(isset($_POST['submit'])){
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB  | Admin</title>
+    <title>ICYM Karate-Do | Profile</title>
     <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
 	<style>
     	.page-container .sidebar-menu #main-menu li#adminprofile > a {
     	background-color: #2b303a;
@@ -84,8 +86,9 @@ if(isset($_POST['submit'])){
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
-							</li>						
+						<?php
+						require('../../element/loggedin-welcome.html');
+					?>
 						
 							<li>
 								<a href="logout.php">

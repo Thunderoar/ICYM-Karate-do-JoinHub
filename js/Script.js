@@ -50,30 +50,33 @@ var overviewcount = 0;
 var routinecount = 0;
 
 function memberExpand(passvalue) {
-    if (passvalue == 1) {
+    if (!elementMember) initializeMember(); // Ensure elements are initialized
+
+    // Toggle based on which section is clicked
+    if (passvalue === 'memExpand') {
         toggleExpand(elementMember, "memExpand", memcount);
         memcount = toggleOtherSections(memcount, 1);
-    } else if (passvalue == 2) {
+    } else if (passvalue === 2) {
         toggleExpand(elementPlan, "planExpand", plancount);
         plancount = toggleOtherSections(plancount, 2);
-    } else if (passvalue == 3) {
+    } else if (passvalue === 3) {
         toggleExpand(elementOverview, "overviewExpand", overviewcount);
         overviewcount = toggleOtherSections(overviewcount, 3);
-    } else if (passvalue == 4) {
+    } else if (passvalue === 4) {
         toggleExpand(elementRoutine, "routineExpand", routinecount);
         routinecount = toggleOtherSections(routinecount, 4);
     }
 }
 
+// Refined toggleExpand function to use 'display' instead of class replacement
 function toggleExpand(element, expandId, count) {
+    var expandElement = document.getElementById(expandId);
     if (count == 0) {
-        element.className = element.className.replace("has-sub", "has-sub opened");
-        var expandElement = document.getElementById(expandId);
-        expandElement.className = expandElement.className.replace("", "visible");
-    } else if (count == 1) {
-        element.className = element.className.replace("has-sub opened", "has-sub");
-        var expandElement = document.getElementById(expandId);
-        expandElement.className = expandElement.className.replace("visible", "");
+        element.classList.add("opened");
+        expandElement.style.display = "block";  // Show the submenu
+    } else {
+        element.classList.remove("opened");
+        expandElement.style.display = "none";  // Hide the submenu
     }
 }
 

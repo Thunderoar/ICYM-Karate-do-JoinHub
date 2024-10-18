@@ -29,8 +29,9 @@ if ($pass_key == "" &&  $user_id_auth == "") {
     $user_id_auth = mysqli_real_escape_string($con, $user_id_auth);
     $pass_key     = mysqli_real_escape_string($con, $pass_key);
 
-    // Check if this is an admin login page (using a flag or different form input)
+    // Check if this is an admin or coach login page (using a flag or different form input)
     $is_admin_login = isset($_POST['is_admin_login']) && $_POST['is_admin_login'] == 1;
+    $is_coach_login = isset($_POST['is_coach_login']) && $_POST['is_coach_login'] == 1;
 
     if ($is_admin_login) {
         // Admin login query
@@ -39,6 +40,14 @@ if ($pass_key == "" &&  $user_id_auth == "") {
             FROM admin a
             LEFT JOIN images i ON i.adminid = a.adminid
             WHERE a.username = '$user_id_auth' AND a.pass_key = '$pass_key'
+        ";
+    } elseif ($is_coach_login) {
+        // Coach login query with join to login table
+        $sql = "
+            SELECT l.loginid, l.authority, l.username, l.userid, l.adminid, l.staffid, i.image_path
+            FROM login l
+            LEFT JOIN images i ON l.staffid = i.staffid
+            WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key' AND l.authority = 'coach'
         ";
     } else {
         // Member (user) login query with join to enrolls_to and plan tables
@@ -59,10 +68,12 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         // Fetch the user's or admin's data
         $row = mysqli_fetch_assoc($result);
 
-        // Store session data based on whether it's an admin or user login
+        // Store session data based on whether it's an admin, member, or coach login
         session_start();
         if ($is_admin_login) {
             $_SESSION['adminid'] = $row['adminid'];
+        } elseif ($is_coach_login) {
+            $_SESSION['staffid'] = $row['staffid']; // Store coach's staff ID
         } else {
             $_SESSION['userid']   = $row['userid'];   // Store logged-in user's ID
             $_SESSION['planid']   = $row['planid'];   // Store the user's planid from enrolls_to
@@ -73,7 +84,7 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         }
         $_SESSION['user_data']      = $row['username'];  // Store username in session
         $_SESSION['logged']         = "start";
-        $_SESSION['authority']      = $row['authority']; // 'admin' or 'member'
+        $_SESSION['authority']      = $row['authority']; // 'admin', 'member', or 'coach'
         $_SESSION['username']       = $row['username'];  // Username from the session
         $_SESSION['profile_pic']    = $row['image_path'];  // Store image URL from the images table
 
@@ -82,6 +93,8 @@ if ($pass_key == "" &&  $user_id_auth == "") {
             header("location: ./dashboard/admin/");
         } elseif ($_SESSION['authority'] == "member") {
             header("location: ./dashboard/member/");
+        } elseif ($_SESSION['authority'] == "coach") {
+            header("location: ./dashboard/coach/");
         } else {
             echo "<html><head><script>alert('Invalid Authority');</script></head></html>";
             echo "<meta http-equiv='refresh' content='0; url=index.php'>";
@@ -89,12 +102,15 @@ if ($pass_key == "" &&  $user_id_auth == "") {
     } else {
         echo "<html><head><script>alert('Username OR Password is Invalid');</script></head></html>";
         
-        // Redirect based on whether it was an admin or user login
+        // Redirect based on whether it was an admin, coach, or user login
         if ($is_admin_login) {
             echo "<meta http-equiv='refresh' content='0; url=login-admin.php'>";  // Redirect to admin login page
+        } elseif ($is_coach_login) {
+            echo "<meta http-equiv='refresh' content='0; url=login-coach.php'>";  // Redirect to coach login page
         } else {
             echo "<meta http-equiv='refresh' content='0; url=index.php'>";  // Redirect to the user login page (homepage)
         }
     }
 }
 ?>
+<!-- comment -->

@@ -81,7 +81,9 @@ require('element/login-header.html');
 		
 		<div class="login-content">
 			
-			<form action="secure_login.php" method='post' id="bb">				
+			<form action="secure_login.php" method='post' id="bb">
+			<input type="hidden" name="is_admin_login" value="0">	
+			  <input type="hidden" name="is_coach_login" value="1">				
 				<div class="form-group">					
 					<div class="input-group">
 						<div class="input-group-addon">
@@ -126,3 +128,4 @@ require('element/login-header.html');
 <a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="index.php">Go to Homepage</a>		
 </body>
 </html>
+<!-- comment -->

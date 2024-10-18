@@ -11,9 +11,11 @@
 		$day5=$_POST["day5"];
 		$day6=$_POST["day6"];
 		$pid=$_POST["pidd"];
+		$hasApproved=$_POST["hasApproved"];
+		$staff=$_POST["staff"];
 		
 		
-		$sql="insert into sports_timetable(tname,day1,day2,day3,day4,day5,day6,pid) values('$rname','$day1','$day2','$day3','$day4','$day5','$day6','$pid')";
+		$sql="insert into sports_timetable(tid,staffid,tname,day1,day2,day3,day4,day5,day6,pid,hasApproved) values(UUID(),'$staff', '$rname','$day1','$day2','$day3','$day4','$day5','$day6','$pid', '$hasApproved')";
 	
 		$result=mysqli_query($con,$sql);
 		if($result){	
