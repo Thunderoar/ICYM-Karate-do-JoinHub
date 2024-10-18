@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 09, 2024 at 05:39 PM
+-- Host: 127.0.0.1
+-- Generation Time: Oct 18, 2024 at 08:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -81,7 +81,8 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `h
 (30, 'XTWIOL', '1728384510', '2024-10-09 22:49:29', '9999-12-31', 'yes'),
 (31, 'XTWIOL', '1728433989', '2024-10-09 22:49:23', '9999-12-31', 'yes'),
 (32, 'XTWIOL', '1728485531', '2024-10-09 22:53:27', '9999-12-31', 'yes'),
-(33, 'XTWIOL', '1728486893', '2024-10-09 23:16:58', '9999-12-31', 'yes');
+(33, 'XTWIOL', '1728486893', '2024-10-09 23:16:58', '9999-12-31', 'yes'),
+(34, 'XTWIOL', '1729232687', '2024-10-18', '1970-01-01', 'no');
 
 -- --------------------------------------------------------
 
@@ -104,10 +105,11 @@ CREATE TABLE `health_status` (
 --
 
 INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `remarks`, `userid`) VALUES
+('161958492', '', '', '', '', '', '1729232687'),
 ('17580962', '', '', '', '', '', '1728485531'),
 ('38888806', '', '', '', '', '', '1728384510'),
 ('46800272', '', '', '', '', '', '1728433989'),
-('575478311', '', '', '', '', '', '1728486893'),
+('575478311', '', '', '', '', 'test', '1728486893'),
 ('826633186', '', '', '', '', '', '1728383471'),
 ('826677281', '', '', '', '', '', '1728384120');
 
@@ -121,6 +123,7 @@ CREATE TABLE `images` (
   `imageid` varchar(200) NOT NULL,
   `adminid` varchar(20) DEFAULT NULL,
   `userid` varchar(20) DEFAULT NULL,
+  `staffid` varchar(20) DEFAULT NULL,
   `planid` varchar(8) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT 'placeholder.jpg',
   `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -130,9 +133,9 @@ CREATE TABLE `images` (
 -- Dumping data for table `images`
 --
 
-INSERT INTO `images` (`imageid`, `adminid`, `userid`, `planid`, `image_path`, `uploaded_at`) VALUES
-('5cd08614-8654-11ef-a918-3ca067e52da9', NULL, NULL, 'DAOYCK', 'uploads/event_1.jpg', '2024-10-09 15:37:16'),
-('71053592-8654-11ef-a918-3ca067e52da9', NULL, NULL, 'RMKNLU', 'uploads/image_11.jpg', '2024-10-09 15:37:50');
+INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `image_path`, `uploaded_at`) VALUES
+('8e78dd7a-8d19-11ef-a94c-004e01ffe201', NULL, NULL, NULL, 'TGJIOA', 'uploads/image_2.jpg', '2024-10-18 06:23:57'),
+('bd0c6359-8d19-11ef-a94c-004e01ffe201', NULL, '1729232687', NULL, NULL, NULL, '2024-10-18 06:25:15');
 
 -- --------------------------------------------------------
 
@@ -143,7 +146,8 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `planid`, `image_path`, `u
 CREATE TABLE `login` (
   `loginid` varchar(200) NOT NULL,
   `adminid` varchar(20) DEFAULT NULL,
-  `userid` varchar(20) NOT NULL,
+  `userid` varchar(20) DEFAULT NULL,
+  `staffid` varchar(100) DEFAULT NULL,
   `username` varchar(20) NOT NULL,
   `pass_key` varchar(20) NOT NULL,
   `securekey` varchar(200) NOT NULL,
@@ -154,17 +158,19 @@ CREATE TABLE `login` (
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`loginid`, `adminid`, `userid`, `username`, `pass_key`, `securekey`, `authority`) VALUES
-('0110b27d-8562-11ef-b414-3ca067e52da9', NULL, '1728384120', 'b', 'test1', '0110b2d2-8562-11ef-b414-3ca067e52da9', 'member'),
-('10d89236-8499-11ef-83d3-3ca067e52da9', NULL, '1728297797', 'test', 'test', '10d89278-8499-11ef-83d3-3ca067e52da9', 'member'),
-('123', '123', '123', '123', '123', '123', 'admin'),
-('12345', '1234', 'admintest', 'admintest', 'admintest', 'admintest', 'admin'),
-('1c5aa59d-85d6-11ef-bb7d-e9097018277d', NULL, '1728433989', 'q', 'q', '1c5aa65f-85d6-11ef-bb7d-e9097018277d', 'member'),
-('23a7f823-864e-11ef-a918-3ca067e52da9', NULL, '1728485531', 'h', 'h', '23a7f891-864e-11ef-a918-3ca067e52da9', 'member'),
-('54f7108e-8651-11ef-a918-3ca067e52da9', NULL, '1728486893', 'a', 'a', '54f7114d-8651-11ef-a918-3ca067e52da9', 'member'),
-('7979b578-8560-11ef-b414-3ca067e52da9', NULL, '1728383471', 'c', 'c', '7979b628-8560-11ef-b414-3ca067e52da9', 'member'),
-('dd2cca64-8562-11ef-b414-3ca067e52da9', NULL, '1728384510', 'a', 'a', 'dd2ccab9-8562-11ef-b414-3ca067e52da9', 'member'),
-('test', 'test', '1728121956', '1728121956', 'test', 'test', 'member');
+INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pass_key`, `securekey`, `authority`) VALUES
+('0110b27d-8562-11ef-b414-3ca067e52da9', NULL, '1728384120', NULL, 'b', 'test1', '0110b2d2-8562-11ef-b414-3ca067e52da9', 'member'),
+('10d89236-8499-11ef-83d3-3ca067e52da9', NULL, '1728297797', NULL, 'test', 'test', '10d89278-8499-11ef-83d3-3ca067e52da9', 'member'),
+('123', '123', '123', NULL, '123', '123', '123', 'admin'),
+('12345', '1234', 'admintest', NULL, 'admintest', 'admintest', 'admintest', 'admin'),
+('1c5aa59d-85d6-11ef-bb7d-e9097018277d', NULL, '1728433989', NULL, 'q', 'q', '1c5aa65f-85d6-11ef-bb7d-e9097018277d', 'member'),
+('23a7f823-864e-11ef-a918-3ca067e52da9', NULL, '1728485531', NULL, 'h', 'h', '23a7f891-864e-11ef-a918-3ca067e52da9', 'member'),
+('54f7108e-8651-11ef-a918-3ca067e52da9', NULL, '1728486893', NULL, 'a', 'a', '54f7114d-8651-11ef-a918-3ca067e52da9', 'member'),
+('7979b578-8560-11ef-b414-3ca067e52da9', NULL, '1728383471', NULL, 'c', 'c', '7979b628-8560-11ef-b414-3ca067e52da9', 'member'),
+('bd0c10a7-8d19-11ef-a94c-004e01ffe201', NULL, '1729232687', NULL, 'hello', 'hello', 'bd0c10d1-8d19-11ef-a94c-004e01ffe201', 'member'),
+('dd2cca64-8562-11ef-b414-3ca067e52da9', NULL, '1728384510', NULL, 'a', 'a', 'dd2ccab9-8562-11ef-b414-3ca067e52da9', 'member'),
+('test', 'test', '1728121956', NULL, '1728121956', 'test', 'test', 'member'),
+('ww', NULL, NULL, '1', 'Rashid', 'rashid', 'rashid', 'coach');
 
 -- --------------------------------------------------------
 
@@ -200,10 +206,7 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
-('DAOYCK', 'karate', 'karate', 'Event', 'Lifetime', 1, 'yes'),
-('KIDMSZ', 'a', 'a', 'Event', 'Lifetime', 1, 'yes'),
-('RMKNLU', 'karate2', 'karate2', 'Event', 'Lifetime', 1, 'yes'),
-('XLNAKW', 'a', 'a', 'Event', 'Lifetime', 1, 'yes'),
+('TGJIOA', 'picture', 'picture', 'Event', 'Lifetime', 0, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '1', 20, 'yes');
 
 -- --------------------------------------------------------
@@ -214,6 +217,7 @@ INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`,
 
 CREATE TABLE `sports_timetable` (
   `tid` varchar(45) NOT NULL,
+  `staffid` varchar(50) DEFAULT NULL,
   `tname` varchar(45) NOT NULL,
   `day1` varchar(200) NOT NULL,
   `day2` varchar(200) NOT NULL,
@@ -221,15 +225,19 @@ CREATE TABLE `sports_timetable` (
   `day4` varchar(200) NOT NULL,
   `day5` varchar(200) NOT NULL,
   `day6` varchar(200) NOT NULL,
-  `pid` varchar(8) NOT NULL
+  `pid` varchar(8) NOT NULL,
+  `hasApproved` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `sports_timetable`
 --
 
-INSERT INTO `sports_timetable` (`tid`, `tname`, `day1`, `day2`, `day3`, `day4`, `day5`, `day6`, `pid`) VALUES
-('b764ef36-862b-11ef-a53d-3ca067e52da9', 'practice', 'practice', 'practice', 'practice', 'practice', 'practice', 'practice', 'BJEFSY');
+INSERT INTO `sports_timetable` (`tid`, `staffid`, `tname`, `day1`, `day2`, `day3`, `day4`, `day5`, `day6`, `pid`, `hasApproved`) VALUES
+('48a96c46-8d18-11ef-a94c-004e01ffe201', 'Rashid', 'aaaa', 'aaaa', 'aaaa', 'aaaa', 'aaaa', 'aaaa', 'aaaa', 'BJEFSY', 'yes'),
+('7b00f52c-8d18-11ef-a94c-004e01ffe201', 'rashid', 'test', 'test', 'test', 'test', 'test', 'test', 'test', 'BJEFSY', 'yes'),
+('f3ce119d-8d17-11ef-a94c-004e01ffe201', '1', 'aa', 'aa', 'aa', 'aa', 'aa', 'aa', 'aa', 'BJEFSY', 'yes'),
+('fb3cb188-8d16-11ef-a94c-004e01ffe201', 'rashid', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'BJEFSY', 'yes');
 
 -- --------------------------------------------------------
 
@@ -250,7 +258,7 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`staffid`, `name`, `username`, `pass_key`, `role`) VALUES
-('1', 'Rashid Rahman', 'Rashid', '123456', 'coach');
+('rashid', 'Rashid Rahman', 'Rashid', 'rashid', 'coach');
 
 -- --------------------------------------------------------
 
@@ -276,7 +284,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
-('1728486893', 'a', 'UUID()', 'a', 'a', 'Male', '1', 'a@gmail.com', '', '2024-02-29');
+('1728486893', 'a', 'UUID()', 'a', 'a', 'Male', '1', 'a@gmail.com', '', '2024-02-29'),
+('1729232687', 'hello', 'UUID()', 'hello', 'hello', 'Male', '1', 'hello@gmail.com', '', '2024-02-20');
 
 --
 -- Indexes for dumped tables
@@ -325,6 +334,18 @@ ALTER TABLE `plan`
   ADD PRIMARY KEY (`planid`);
 
 --
+-- Indexes for table `sports_timetable`
+--
+ALTER TABLE `sports_timetable`
+  ADD PRIMARY KEY (`tid`);
+
+--
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+  ADD PRIMARY KEY (`staffid`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -338,7 +359,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `enrolls_to`
 --
 ALTER TABLE `enrolls_to`
-  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
