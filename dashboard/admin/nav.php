@@ -1,4 +1,249 @@
+<head>
+<script>
+var count=0;
 
+var elementMember;
+var elementplan;
+var elementoverview;
+var elementroutine;
+
+function collapseSidebar() {
+	if(count==0){
+		initializeMember();
+		var element=document.getElementById("navbarcollapse");
+		 element.className = element.className.replace("page-container sidebar-collapsed", "page-container");
+		  if(memcount==0)
+		  	elementMember.className=elementMember.className.replace("","has-sub");
+		  else if(memcount==1){
+		  	elementMember.className=elementMember.className.replace("","has-sub opened");
+		  }
+
+		  if(plancount==0)
+		  	elementplan.className=elementplan.className.replace("","has-sub");
+		  else if(plancount==1)
+		  	elementplan.className=elementplan.className.replace("","has-sub opened");
+
+		  if(overviewcount==0)
+		  	elementoverview.className=elementoverview.className.replace("","has-sub");
+		  else if(overviewcount==1)
+		  	elementoverview.className=elementoverview.className.replace("","has-sub opened");
+
+		  if(routinecount==0)
+		  	elementroutine.className=elementroutine.className.replace("","has-sub");
+		  else if(routinecount==1)
+		  	elementroutine.className=elementroutine.className.replace("","has-sub opened");
+
+		 count=1;
+	}
+	else if(count==1){
+		var element=document.getElementById("navbarcollapse");
+		 element.className = element.className.replace("page-container", "page-container sidebar-collapsed");
+		  
+		 
+		 if(memcount==0){
+		  	elementMember.className=elementMember.className.replace("has-sub","");
+		  }else if(memcount==1){
+		  	elementMember.className=elementMember.className.replace("has-sub opened","");
+		  } 	
+
+		  if(plancount==0)
+		  	elementplan.className=elementplan.className.replace("has-sub","");
+		  else
+		  	elementplan.className=elementplan.className.replace("has-sub opened","");
+
+		   if(overviewcount==0)
+		  	elementoverview.className=elementoverview.className.replace("has-sub","");
+		  else if(overviewcount==1)
+		  	elementoverview.className=elementoverview.className.replace("has-sub opened","");
+
+		  if(routinecount==0)
+		  	elementroutine.className=elementroutine.className.replace("has-sub","");
+		  else if(routinecount==1)
+		  	elementroutine.className=elementroutine.className.replace("has-sub opened","");
+
+		 count=0;
+	}
+ 
+}
+
+function initializeMember(){
+	elementMember=document.getElementById("hassubopen");
+	elementplan=document.getElementById("planhassubopen");
+	elementoverview=document.getElementById("overviewhassubopen");
+	elementroutine=document.getElementById("routinehassubopen");
+
+}
+
+var memcount=0;
+var plancount=0;
+var overviewcount=0;
+var routinecount=0;
+
+function memberExpand(passvalue){
+
+	if(passvalue==1){
+		if(memcount==0){
+		
+		    if(plancount==1){
+				elementplan.className=elementplan.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("planExpand");
+				 element.className = element.className.replace("visible", "");
+			 	plancount=0;
+		    }
+		    if(overviewcount==1){
+				elementoverview.className=elementoverview.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("overviewExpand");
+				 element.className = element.className.replace("visible", "");
+			 	overviewcount=0;
+		    }
+		    if(routinecount==1){
+		    	elementroutine.className=elementroutine.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("routineExpand");
+				 element.className = element.className.replace("visible", "");
+			 	  routinecount=0;
+
+		    }
+
+			elementMember.className=elementMember.className.replace("has-sub","has-sub opened");
+
+			var element=document.getElementById("memExpand");
+			 element.className = element.className.replace("", "visible");
+			 memcount=1;
+		}
+		else if(memcount==1){
+			elementMember.className=elementMember.className.replace("has-sub opened","has-sub");
+
+			var element=document.getElementById("memExpand");
+			 element.className = element.className.replace("visible", "");
+			 memcount=0;
+		}
+	}
+	else if(passvalue==2){
+		if(plancount==0){
+
+			if(memcount==1){
+				elementMember.className=elementMember.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("memExpand");
+				 element.className = element.className.replace("visible", "");
+			 	 memcount=0;
+		    }
+		    if(overviewcount==1){
+				elementoverview.className=elementoverview.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("overviewExpand");
+				 element.className = element.className.replace("visible", "");
+			 	overviewcount=0;
+		    }
+		    if(routinecount==1){
+		    	elementroutine.className=elementroutine.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("routineExpand");
+				 element.className = element.className.replace("visible", "");
+			 	  routinecount=0;
+
+		    }
+		
+			elementplan.className=elementplan.className.replace("has-sub","has-sub opened");
+
+			var element2=document.getElementById("planExpand");
+			 element2.className = element2.className.replace("", "visible");
+			 plancount=1;
+		}
+		else if(plancount==1){
+			elementplan.className=elementplan.className.replace("has-sub opened","has-sub");
+
+			var element2=document.getElementById("planExpand");
+			 element2.className = element2.className.replace("visible", "");
+			 plancount=0;
+		}
+	}
+	else if(passvalue==3){
+		if(overviewcount==0){
+		
+			if(plancount==1){
+				elementplan.className=elementplan.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("planExpand");
+				 element.className = element.className.replace("visible", "");
+			 	plancount=0;
+		    }
+		    if(memcount==1){
+				elementMember.className=elementMember.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("memExpand");
+				 element.className = element.className.replace("visible", "");
+			 	memcount=0;
+		    }
+		    if(routinecount==1){
+		    	elementroutine.className=elementroutine.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("routineExpand");
+				 element.className = element.className.replace("visible", "");
+			 	  routinecount=0;
+
+		    }
+
+			elementoverview.className=elementoverview.className.replace("has-sub","has-sub opened");
+
+			var element3=document.getElementById("overviewExpand");
+			 element3.className = element3.className.replace("", "visible");
+			 overviewcount=1;
+		}
+		else if(overviewcount==1){
+			elementoverview.className=elementoverview.className.replace("has-sub opened","has-sub");
+
+			var element3=document.getElementById("overviewExpand");
+			 element3.className = element3.className.replace("visible", "");
+			 overviewcount=0;
+		}
+	}
+	else if(passvalue==4){
+		if(routinecount==0){
+		
+			if(plancount==1){
+				elementplan.className=elementplan.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("planExpand");
+				 element.className = element.className.replace("visible", "");
+			 	plancount=0;
+		    }
+		    if(overviewcount==1){
+				elementoverview.className=elementoverview.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("overviewExpand");
+				 element.className = element.className.replace("visible", "");
+			 	overviewcount=0;
+		    }
+		   if(memcount==1){
+				elementMember.className=elementMember.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("memExpand");
+				 element.className = element.className.replace("visible", "");
+			 	memcount=0;
+		    }
+
+			elementroutine.className=elementroutine.className.replace("has-sub","has-sub opened");
+
+			var element4=document.getElementById("routineExpand");
+			 element4.className = element4.className.replace("", "visible");
+			 routinecount=1;
+		}
+		else if(routinecount==1){
+			elementroutine.className=elementroutine.className.replace("has-sub opened","has-sub");
+
+			var element4=document.getElementById("routineExpand");
+			 element4.className = element4.className.replace("visible", "");
+			 routinecount=0;
+		}
+
+	}
+}
+</script>
+</head>
 <ul id="main-menu" class="" >
 			
     <li id="dash"><a href="index.php"><i class="entypo-gauge"></i><span>Dashboard</span></a></li>
@@ -7,29 +252,24 @@
 				
 	<li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Payments</span></a></li>
 
-<li class="" id="hassubopen">
-    <a href="#" onclick="memberExpand('memExpand'); event.preventDefault();">
-        <i class="entypo-users"></i><span>Members</span>
-    </a>
-    <ul id="memExpand" style="display: none;">
-        <li class="active">
-            <a href="view_mem.php"><span>Edit Members</span></a>
-        </li>
-        <li>
-            <a href="table_view.php"><span>View Members</span></a>
-        </li>
-    </ul>
-</li>
+	<li class="" id="hassubopen"><a href="#" onclick="memberExpand(1)"><i class="entypo-users"></i><span>Members</span></a>
+		<ul id="memExpand">
+			<li class="active">
+				<a href="view_mem.php"><span>Edit Members</span></a></li>
+
+			<li><a href="table_view.php"><span>View Memeber</span></a></li>
+		</ul>
+	</li>
 
 	<li id="health_status"><a href="new_health_status.php"><i class="entypo-user-add"></i><span>Health Status</span></a> 	
 
-		<li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Planning</span></a>
+		<li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Sports Plan</span></a>
 
 		<ul id="planExpand">
 			<li class="active">
-				<a href="new_plan.php"><span>New Plan</span></a></li>
+				<a href="new_plan.php"><span>New Sports Plan</span></a></li>
 
-			<li><a href="view_plan.php"><span>Edit Plan</span></a></li>
+			<li><a href="view_plan.php"><span>Edit Subsciption Details</span></a></li>
 		</ul>
 
 	<li class="" id="overviewhassubopen"><a href="#" onclick="memberExpand(3)"><i class="entypo-box"></i><span>Overview</span></a>
@@ -49,19 +289,19 @@
 
 		</ul>
 
-	<li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Timetable</span></a>
+	<li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Sports Routine</span></a>
 
 		<ul id="routineExpand">
 			<li class="active">
-				<a href="addroutine.php"><span>Add to Timetable</span></a>
+				<a href="addroutine.php"><span>Add Sports Routine</span></a>
 			</li>
 
 			<li>
-				<a href="editroutine.php"><span>Edit Timetable</span></a>
+				<a href="editroutine.php"><span>Edit Sports Routine</span></a>
 			</li>
 
 			<li>
-				<a href="viewroutine.php"><span>View Timetable</span></a>
+				<a href="viewroutine.php"><span>View Sports Routine</span></a>
 			</li>
 
 		</ul>
