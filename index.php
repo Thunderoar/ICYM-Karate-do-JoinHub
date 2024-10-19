@@ -1,4 +1,7 @@
-
+<?php
+require 'include/db_conn.php';
+page_protect();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -199,9 +202,45 @@ require('header.php');
     </div>
 
 
-    <?php
-    require('element/gallery.php');
-    ?>
+<?php
+
+// Fetch images from the gallery_images table
+$query = "SELECT image_path FROM gallery_images";
+$result = mysqli_query($con, $query);
+
+if (mysqli_num_rows($result) > 0) {
+?>
+<div class="site-section" style="background-color: #f8f9fa; padding: 40px;">
+    <div class="container">
+        <div class="row align-items-center mb-4">
+            <div class="col-12 text-center">
+                <h2 class="section-title" style="font-size: 2.5rem; font-weight: bold; color: #343a40;">Gallery</h2>
+            </div>
+        </div>
+
+        <div class="row">
+        <?php
+        // Loop through the fetched images
+        while ($row = mysqli_fetch_assoc($result)) {
+            $imagePath = 'dashboard/admin/' . $row['image_path']; // Prepend the correct folder
+        ?>
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <a href="<?php echo $imagePath; ?>" data-fancybox="gal">
+                    <img src="<?php echo $imagePath; ?>" alt="Image" class="img-fluid rounded shadow">
+                </a>
+            </div>
+        <?php
+        }
+        ?>
+        </div>
+    </div>
+</div>
+<?php
+} else {
+    echo "<p>No images found in the gallery.</p>";
+}
+?>
+
 
 <div class="site-section">
         <div class="container">

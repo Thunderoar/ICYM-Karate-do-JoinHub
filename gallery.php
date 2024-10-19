@@ -3,6 +3,38 @@ require 'include/db_conn.php';
 page_protect();
 ?>
 
+<?php
+if (isset($_POST['delete_section_id'])) {
+    $section_id_to_delete = $_POST['delete_section_id'];
+
+    // Use prepared statements to prevent SQL injection
+    // First, delete the images related to this section
+    $delete_images_query = "DELETE FROM gallery_images WHERE section_id = ?";
+    if ($stmt = mysqli_prepare($con, $delete_images_query)) {
+        mysqli_stmt_bind_param($stmt, 'i', $section_id_to_delete); // 'i' is for integer
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        echo "Error preparing delete images query: " . mysqli_error($con);
+        exit;
+    }
+
+    // Now, delete the section
+    $delete_section_query = "DELETE FROM gallery_sections WHERE section_id = ?";
+    if ($stmt = mysqli_prepare($con, $delete_section_query)) {
+        mysqli_stmt_bind_param($stmt, 'i', $section_id_to_delete);
+        if (mysqli_stmt_execute($stmt)) {
+            echo "Section deleted successfully!";
+        } else {
+            echo "Error deleting section: " . mysqli_error($con);
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        echo "Error preparing delete section query: " . mysqli_error($con);
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,6 +51,7 @@ page_protect();
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+	<link rel="stylesheet" href="css/customBanner.css?v=<?php echo time(); ?>">
     
     <link rel="stylesheet" href="css/aos.css">
 
@@ -74,67 +107,25 @@ page_protect();
     background-color: rgba(0, 123, 255, 0.7) !important; /* Optional: make the button slightly transparent */
     border: none !important;
 }
-
-  .custom-hero-section {
-    background-color: #fff;
-    padding: 20px 0;
-  }
-
-  /* Customizing the hero image and contents */
-  .custom-hero-image {
-    background-image: url('images/karate_main.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 300px;
+.section-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    overflow: hidden;
-  }
+    width: 100%; /* Ensure it stretches across the full width */
+}
 
-  .custom-hero-contents {
-    padding-top: 80px;
-  }
+.button-container {
+    display: flex;
+    gap: 10px; /* Space between the buttons */
+}
 
-  .custom-hero-title {
-    font-size: 2.5rem;
-    color: #fff; /* White text */
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Drop shadow for readability */
-    margin: 0;
-  }
+.add-image-btn {
+    flex-grow: 0; /* Prevents it from expanding */
+}
 
-  /* Breadcrumb link styling */
-  .custom-breadcrumb-link {
-    color: #fff !important; /* White text for breadcrumb */
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Drop shadow for breadcrumb link */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background to stand out */
-    padding: 6px 12px;
-    border-radius: 4px;
-    text-decoration: none !important;
-    font-weight: bold;
-    transition: background-color 0.3s ease-in-out;
-  }
-
-  .custom-breadcrumb-link:hover {
-    background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
-    text-decoration: underline;
-  }
-
-  .custom-breadcrumb-text {
-    color: #fff; /* White text for the "Gallery" */
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Drop shadow for "Gallery" */
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .custom-hero-title {
-      font-size: 2rem !important;
-    }
-
-    .custom-hero-contents {
-      padding-top: 50px !important;
-    }
+.delete-section-btn {
+    flex-grow: 0; /* Prevents it from expanding */
+}
   }
     </style>
   </head>
@@ -244,7 +235,6 @@ page_protect();
     </div>
 </div>
     
-<!-- Display Gallery Sections dynamically from database -->
 <div class="row">
     <?php
     // Fetch sections from the database
@@ -252,8 +242,26 @@ page_protect();
     $sections_result = mysqli_query($con, $query);
 
     while ($section = mysqli_fetch_assoc($sections_result)) {
-        echo "<div class='col-12 col-md-4 mb-4'>";
-        echo "<h3>{$section['section_name']}</h3>";
+        echo "<div class='col-12 col-md-4 mb-4 position-relative'>"; // Added position-relative to section container
+        echo "<div class='section-header mb-2 d-flex justify-content-between align-items-center'>"; // Using flexbox for buttons alignment
+
+        // Section title
+        echo "<h3 class='d-inline-block'>{$section['section_name']}</h3>";
+
+        // Flex container for buttons
+        echo "<div class='button-container d-flex gap-2'>";
+        
+        // Add image button aligned to the left
+        echo "<button class='btn btn-primary add-image-btn' data-section-id='{$section['section_id']}'>+</button>";
+
+        // Delete section button aligned to the right
+        echo "<button class='btn btn-danger delete-section-btn' data-section-id='{$section['section_id']}'>Delete</button>";
+        
+        echo "</div>"; // Close button container
+
+        echo "</div>"; // Close section header
+
+        // Section description
         echo "<p>{$section['section_description']}</p>";
 
         // Fetch images for this section
@@ -261,33 +269,42 @@ page_protect();
         $images_query = "SELECT * FROM gallery_images WHERE section_id = '$section_id'";
         $images_result = mysqli_query($con, $images_query);
 
-        $image_count = mysqli_num_rows($images_result);
-        $image_index = 0;
-
         echo "<div class='row'>";
 
+        // Display images if they exist
         while ($image = mysqli_fetch_assoc($images_result)) {
             $image_path = 'dashboard/admin/' . $image['image_path']; // Prepending the correct path to the image
-            $is_rightmost = $image_index + 1 == $image_count; // Mark last image in row
-            
+
             echo "<div class='col-6 col-sm-6 col-md-4 col-lg-3 mb-4'>";
-            echo "<div class='image-container d-flex'>";
+            echo "<div class='image-container d-flex position-relative'>";
+
+            // Display image
             echo "<a href='{$image_path}' data-fancybox='gal' class='flex-grow-1'>
                     <img src='{$image_path}' alt='Image' class='img-fluid rounded shadow'>
                   </a>";
-            if ($is_rightmost) {
-                echo "<button class='btn btn-primary add-image-btn' data-section-id='{$section['section_id']}' data-image-id='{$image['image_id']}'>+</button>";
-            }
+
+            // Delete button for every image
+            echo "<button class='btn btn-danger btn-sm delete-image-btn position-absolute' style='top: 10px; right: 10px;' data-image-id='{$image['image_id']}'>Delete</button>";
+
             echo "</div>";
             echo "</div>";
-            
-            $image_index++;
         }
 
-        echo "</div></div>";
+        echo "</div>"; // Closing row for images
+
+        echo "</div>"; // Closing column for section
+
+        // Add a horizontal rule divider between sections
+        echo "<hr class='my-4'>"; // Adds space around the divider
     }
     ?>
 </div>
+
+
+
+
+
+
 
 
     <?php
@@ -342,6 +359,59 @@ document.querySelector('.close').addEventListener('click', function() {
     $('#newSectionModal').modal('hide');
     $('#imageUploadModal').modal('hide');
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Attach click event listener to all delete buttons
+    document.querySelectorAll('.delete-image-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const imageId = this.getAttribute('data-image-id');
+            
+            if (confirm("Are you sure you want to delete this image?")) {
+                // Send request to server to delete image
+                fetch('dashboard/admin/delete_image.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image_id: imageId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the image element from the page
+                        this.closest('.col-6').remove();
+                    } else {
+                        alert("Failed to delete the image.");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    });
+});
+
+    $(document).ready(function() {
+        // Delete section AJAX
+        $('.delete-section-btn').click(function() {
+            var section_id = $(this).data('section-id');
+            
+            if (confirm('Are you sure you want to delete this section?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'your_php_file.php', // Replace with the correct PHP file path
+                    data: { delete_section_id: section_id },
+                    success: function(response) {
+                        alert(response);
+                        location.reload(); // Refresh the page to reflect the changes
+                    },
+                    error: function() {
+                        alert('An error occurred while deleting the section.');
+                    }
+                });
+            }
+        });
+    });
+
   </script>
   
   </body>

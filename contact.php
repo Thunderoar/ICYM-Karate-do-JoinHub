@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+	<link rel="stylesheet" href="css/customBanner.css?v=<?php echo time(); ?>">
+	
     
   
     <link rel="stylesheet" href="css/aos.css">
@@ -41,18 +43,26 @@
 require('header.php');
 ?>
     
-    <div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="hero-wrap text-center" style="background-image: url('images/karate_main.jpg');" data-stellar-background-ratio="0.5">
-            <div class="hero-contents">
-              <h2>Get In Touch</h2>
-              <p><a href="index.php">Home</a> <span class="mx-2">/</span> <strong>Contact</strong></p>
-            </div>
+<div class="container-fluid">
+  <section class="custom-hero-section" aria-label="Gallery Hero Section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="custom-hero-image" role="img" aria-label="Karate background" data-stellar-background-ratio="0.5">
+          <div class="custom-hero-contents text-center">
+            <h2 class="custom-hero-title">About Us</h2>
+            <nav aria-label="breadcrumb">
+              <p>
+                <a href="index.php" class="custom-breadcrumb-link">Home</a>
+                <span class="mx-2">/</span> 
+                <strong>About Us</strong>
+              </p>
+            </nav>
           </div>
         </div>
       </div>
     </div>
+  </section>
+</div>
 
     <div class="site-section">
     <div class="container">

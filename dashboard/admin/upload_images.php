@@ -1,5 +1,5 @@
 <?php
-// Include the database conection
+// Include the database connection
 require '../../include/db_conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
         }
     }
 
-    echo "Images uploaded successfully!";
+    // Redirect back to the index page after successful upload
+    header("Location: ../../gallery.php");
+    exit();
 }
 ?>
