@@ -240,3 +240,80 @@ function memberExpand(passvalue){
 
 	}
 }
+sub opened","has-sub");
+
+				var element=document.getElementById("planExpand");
+				 element.className = element.className.replace("visible", "");
+			 	plancount=0;
+		    }
+		    if(memcount==1){
+				elementMember.className=elementMember.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("memExpand");
+				 element.className = element.className.replace("visible", "");
+			 	memcount=0;
+		    }
+		    if(routinecount==1){
+		    	elementroutine.className=elementroutine.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("routineExpand");
+				 element.className = element.className.replace("visible", "");
+			 	  routinecount=0;
+
+		    }
+
+			elementoverview.className=elementoverview.className.replace("has-sub","has-sub opened");
+
+			var element3=document.getElementById("overviewExpand");
+			 element3.className = element3.className.replace("", "visible");
+			 overviewcount=1;
+		}
+		else if(overviewcount==1){
+			elementoverview.className=elementoverview.className.replace("has-sub opened","has-sub");
+
+			var element3=document.getElementById("overviewExpand");
+			 element3.className = element3.className.replace("visible", "");
+			 overviewcount=0;
+		}
+	}
+	else if(passvalue==4){
+		if(routinecount==0){
+		
+			if(plancount==1){
+				elementplan.className=elementplan.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("planExpand");
+				 element.className = element.className.replace("visible", "");
+			 	plancount=0;
+		    }
+		    if(overviewcount==1){
+				elementoverview.className=elementoverview.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("overviewExpand");
+				 element.className = element.className.replace("visible", "");
+			 	overviewcount=0;
+		    }
+		   if(memcount==1){
+				elementMember.className=elementMember.className.replace("has-sub opened","has-sub");
+
+				var element=document.getElementById("memExpand");
+				 element.className = element.className.replace("visible", "");
+			 	memcount=0;
+		    }
+
+			elementroutine.className=elementroutine.className.replace("has-sub","has-sub opened");
+
+			var element4=document.getElementById("routineExpand");
+			 element4.className = element4.className.replace("", "visible");
+			 routinecount=1;
+		}
+		else if(routinecount==1){
+			elementroutine.className=elementroutine.className.replace("has-sub opened","has-sub");
+
+			var element4=document.getElementById("routineExpand");
+			 element4.className = element4.className.replace("visible", "");
+			 routinecount=0;
+		}
+
+	}
+}
