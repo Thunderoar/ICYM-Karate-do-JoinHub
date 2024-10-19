@@ -3,15 +3,14 @@ require 'include/db_conn.php';
 
 // Start the session if it hasn't been started
 if (session_status() == PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 
 // Check if the user is logged in
-if (!isset($_SESSION['user_data']) && !isset($_SESSION['logged'])) {
-  // If the user is NOT logged in
+if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
 } else {
-  // If the user IS logged in, run page_protect to ensure the page is protected
-  page_protect();
+    // If the user IS logged in, ensure the page is protected
+    page_protect(); // Ensure this function exists
 }
 ?>
 <!DOCTYPE html>

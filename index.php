@@ -78,7 +78,7 @@ require('header.php');
   </div>
 </div>
 
-    <!--<div class="site-section">
+    <div class="site-section">
       <div class="container">
         <div class="col-lg-8 ml-auto">
           <div class="row">
@@ -109,7 +109,7 @@ require('header.php');
           </div>
         </div>
       </div>
-    </div>-->
+    </div>
 
     <div class="container">
       <div class="row">
