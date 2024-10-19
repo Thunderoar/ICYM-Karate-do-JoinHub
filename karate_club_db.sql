@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2024 at 08:54 AM
+-- Generation Time: Oct 19, 2024 at 02:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,7 +82,58 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `h
 (31, 'XTWIOL', '1728433989', '2024-10-09 22:49:23', '9999-12-31', 'yes'),
 (32, 'XTWIOL', '1728485531', '2024-10-09 22:53:27', '9999-12-31', 'yes'),
 (33, 'XTWIOL', '1728486893', '2024-10-09 23:16:58', '9999-12-31', 'yes'),
-(34, 'XTWIOL', '1729232687', '2024-10-18', '1970-01-01', 'no');
+(34, 'XTWIOL', '1729232687', '2024-10-19 18:03:38', '9999-12-31', 'yes'),
+(35, 'XTWIOL', '1729326958', '2024-10-19 16:36:56', '9999-12-31', 'yes'),
+(36, 'XTWIOL', '1729331377', '2024-10-19', '1970-01-01', 'no'),
+(37, 'XTWIOL', '1729331491', '2024-10-19 18:03:35', '9999-12-31', 'yes');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery_images`
+--
+
+CREATE TABLE `gallery_images` (
+  `image_id` int(11) NOT NULL,
+  `section_id` int(11) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery_images`
+--
+
+INSERT INTO `gallery_images` (`image_id`, `section_id`, `image_path`, `uploaded_at`) VALUES
+(1, 1, 'uploads/image_6.jpg', '2024-10-19 11:29:54'),
+(2, 1, 'uploads/cat-sleepy.gif', '2024-10-19 12:01:42'),
+(3, 1, 'uploads/image_4.jpg', '2024-10-19 12:08:49'),
+(4, 1, 'uploads/image_5.jpg', '2024-10-19 12:08:49'),
+(5, 1, 'uploads/image_6.jpg', '2024-10-19 12:08:49'),
+(6, 1, 'uploads/image_7.jpg', '2024-10-19 12:08:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery_sections`
+--
+
+CREATE TABLE `gallery_sections` (
+  `section_id` int(11) NOT NULL,
+  `section_name` varchar(255) DEFAULT NULL,
+  `section_description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery_sections`
+--
+
+INSERT INTO `gallery_sections` (`section_id`, `section_name`, `section_description`, `created_at`) VALUES
+(1, 'test', 'wow', '2024-10-19 11:28:30'),
+(2, 'second test', 'event', '2024-10-19 12:08:17'),
+(3, 'third test', 'event', '2024-10-19 12:08:30'),
+(4, 'forth test', 'event', '2024-10-19 12:08:37');
 
 -- --------------------------------------------------------
 
@@ -105,13 +156,16 @@ CREATE TABLE `health_status` (
 --
 
 INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `remarks`, `userid`) VALUES
+('159244038', '', '', '', '', '', '1729326958'),
 ('161958492', '', '', '', '', '', '1729232687'),
 ('17580962', '', '', '', '', '', '1728485531'),
+('319821461', '', '', '', '', '', '1729331377'),
 ('38888806', '', '', '', '', '', '1728384510'),
 ('46800272', '', '', '', '', '', '1728433989'),
 ('575478311', '', '', '', '', 'test', '1728486893'),
 ('826633186', '', '', '', '', '', '1728383471'),
-('826677281', '', '', '', '', '', '1728384120');
+('826677281', '', '', '', '', '', '1728384120'),
+('874529438', '', '', '', '', '', '1729331491');
 
 -- --------------------------------------------------------
 
@@ -120,7 +174,7 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 --
 
 CREATE TABLE `images` (
-  `imageid` varchar(200) NOT NULL,
+  `imageid` int(200) NOT NULL,
   `adminid` varchar(20) DEFAULT NULL,
   `userid` varchar(20) DEFAULT NULL,
   `staffid` varchar(20) DEFAULT NULL,
@@ -134,8 +188,13 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `image_path`, `uploaded_at`) VALUES
-('8e78dd7a-8d19-11ef-a94c-004e01ffe201', NULL, NULL, NULL, 'TGJIOA', 'uploads/image_2.jpg', '2024-10-18 06:23:57'),
-('bd0c6359-8d19-11ef-a94c-004e01ffe201', NULL, '1729232687', NULL, NULL, NULL, '2024-10-18 06:25:15');
+(3, NULL, '1729326958', NULL, NULL, NULL, '2024-10-19 08:36:30'),
+(8, NULL, NULL, NULL, 'TGJIOA', 'uploads/image_2.jpg', '2024-10-18 06:23:57'),
+(9, NULL, NULL, NULL, 'ENKZJO', 'uploads/image_10.jpg', '2024-10-19 10:43:56'),
+(8983, NULL, '1729331377', NULL, NULL, NULL, '2024-10-19 09:50:14'),
+(8984, NULL, '1729232687', NULL, NULL, NULL, '2024-10-18 06:25:15'),
+(8985, NULL, '1729331491', NULL, NULL, NULL, '2024-10-19 09:51:46'),
+(8989, 'admintest', NULL, NULL, NULL, 'uploads/default_plan_image.jpg', '2024-10-19 11:03:43');
 
 -- --------------------------------------------------------
 
@@ -165,9 +224,12 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 ('12345', '1234', 'admintest', NULL, 'admintest', 'admintest', 'admintest', 'admin'),
 ('1c5aa59d-85d6-11ef-bb7d-e9097018277d', NULL, '1728433989', NULL, 'q', 'q', '1c5aa65f-85d6-11ef-bb7d-e9097018277d', 'member'),
 ('23a7f823-864e-11ef-a918-3ca067e52da9', NULL, '1728485531', NULL, 'h', 'h', '23a7f891-864e-11ef-a918-3ca067e52da9', 'member'),
+('3cfe7084-8df5-11ef-9394-004e01ffe201', NULL, '1729326958', NULL, 'b', 'b', '3cfe70c0-8df5-11ef-9394-004e01ffe201', 'member'),
 ('54f7108e-8651-11ef-a918-3ca067e52da9', NULL, '1728486893', NULL, 'a', 'a', '54f7114d-8651-11ef-a918-3ca067e52da9', 'member'),
 ('7979b578-8560-11ef-b414-3ca067e52da9', NULL, '1728383471', NULL, 'c', 'c', '7979b628-8560-11ef-b414-3ca067e52da9', 'member'),
+('8983b975-8dff-11ef-9394-004e01ffe201', NULL, '1729331377', NULL, 'c', 'c', '8983b988-8dff-11ef-9394-004e01ffe201', 'member'),
 ('bd0c10a7-8d19-11ef-a94c-004e01ffe201', NULL, '1729232687', NULL, 'hello', 'hello', 'bd0c10d1-8d19-11ef-a94c-004e01ffe201', 'member'),
+('c08b4665-8dff-11ef-9394-004e01ffe201', NULL, '1729331491', NULL, 'c', 'c', 'c08b467b-8dff-11ef-9394-004e01ffe201', 'member'),
 ('dd2cca64-8562-11ef-b414-3ca067e52da9', NULL, '1728384510', NULL, 'a', 'a', 'dd2ccab9-8562-11ef-b414-3ca067e52da9', 'member'),
 ('test', 'test', '1728121956', NULL, '1728121956', 'test', 'test', 'member'),
 ('ww', NULL, NULL, '1', 'Rashid', 'rashid', 'rashid', 'coach');
@@ -206,6 +268,7 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
+('ENKZJO', 'g', 'g', 'Event', 'Lifetime', 1, 'yes'),
 ('TGJIOA', 'picture', 'picture', 'Event', 'Lifetime', 0, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '1', 20, 'yes');
 
@@ -275,8 +338,8 @@ CREATE TABLE `users` (
   `gender` varchar(8) NOT NULL,
   `mobile` varchar(20) NOT NULL,
   `email` varchar(200) NOT NULL,
-  `dob` varchar(10) NOT NULL,
-  `joining_date` varchar(10) NOT NULL
+  `dob` varchar(40) NOT NULL,
+  `joining_date` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -285,7 +348,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`) VALUES
 ('1728486893', 'a', 'UUID()', 'a', 'a', 'Male', '1', 'a@gmail.com', '', '2024-02-29'),
-('1729232687', 'hello', 'UUID()', 'hello', 'hello', 'Male', '1', 'hello@gmail.com', '', '2024-02-20');
+('1729232687', 'hello', 'UUID()', 'hello', 'hello', 'Male', '1', 'hello@gmail.com', '', '2024-02-20'),
+('1729326958', 'b', 'UUID()', 'b', 'b', 'Male', '1', 'b@gmail.com', '', '2024-10-10'),
+('1729331491', 'c', 'UUID()', 'c', 'c', 'Male', '1', 'c@gmail.com', '2004-10-10', '2024-10-10');
 
 --
 -- Indexes for dumped tables
@@ -308,6 +373,19 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `enrolls_to`
   ADD PRIMARY KEY (`et_id`);
+
+--
+-- Indexes for table `gallery_images`
+--
+ALTER TABLE `gallery_images`
+  ADD PRIMARY KEY (`image_id`),
+  ADD KEY `section_id` (`section_id`);
+
+--
+-- Indexes for table `gallery_sections`
+--
+ALTER TABLE `gallery_sections`
+  ADD PRIMARY KEY (`section_id`);
 
 --
 -- Indexes for table `health_status`
@@ -359,7 +437,35 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `enrolls_to`
 --
 ALTER TABLE `enrolls_to`
-  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT for table `gallery_images`
+--
+ALTER TABLE `gallery_images`
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `gallery_sections`
+--
+ALTER TABLE `gallery_sections`
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `images`
+--
+ALTER TABLE `images`
+  MODIFY `imageid` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8990;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `gallery_images`
+--
+ALTER TABLE `gallery_images`
+  ADD CONSTRAINT `gallery_images_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `gallery_sections` (`section_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
