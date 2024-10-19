@@ -146,8 +146,8 @@ page_protect();
 				</select></td>
              </tr>
             <tr>
-               <td height="35">Date of Birth:</td>
-               <td height="35"><input type="date" data-date="" data-date-format="DD MMMM YYYY" value="2015-08-09"></td>
+               <td height="35">Date Of Birth:</td>
+               <td height="35"><input type="date" name="dob" id="boxx" required/ size="30"></td>
              </tr>
 			 <tr>
                <td height="35">Phone No:</td>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -54,62 +55,81 @@ require('header.php');
       </div>
     </div>
 
-    <div class="site-section">
-      <div class="container site-section pb-0">
-       
+<?php
+require 'include/db_conn.php';
 
-        <div class="row mb-5">
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">24 February, 2024</span>
-                <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
-              </div>
-            </div>
-          </div>
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">2 September, 2023</span>
-                <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
-              </div>
-            </div>
-          </div>
+// Fetch active plans from the database
+$query = "SELECT * FROM plan WHERE active = 'yes'"; // Fetch only active plans
+$result = mysqli_query($con, $query);
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">23 September, 2023</span>
-                <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
-              </div>
-            </div>
-          </div>
+// Check if there are any plans available
+if (mysqli_num_rows($result) > 0):
+?>
 
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-            <div class="custom-media d-block">
-              <div class="img-wrap mb-3">
-                <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
-              </div>
-              <div>
-                <span class="caption">20 September, 2023</span>
-                <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
-              </div>
-            </div>
-          </div>
+  <div class="site-section">
+    <div class="container site-section pb-0">
+<div class="row mb-5">
+  
+<?php
+// Loop through the plans and display them
+while ($plan = mysqli_fetch_assoc($result)):
+  // Sanitize and fetch the planid (as it is a string) to prevent SQL injection
+  $planid = mysqli_real_escape_string($con, $plan['planid']);
 
-        </div>        
+  // Ensure $planid is properly set
+  if (isset($planid)) {
+      // Fetch image associated with the plan
+      $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
+      $image_result = mysqli_query($con, $image_query);
+
+      // Check if query was successful and if there's an image
+      if ($image_result && mysqli_num_rows($image_result) > 0) {
+          $image = mysqli_fetch_assoc($image_result);
+          // Prepend the path to the image
+          $image_path = 'dashboard/admin/' . $image['image_path'];
+      } else {
+          // Use default image if no image is found
+          $image_path = 'images/default_plan_image.jpg';
+      }
+  } else {
+      // Use default image if planid is not set
+      $image_path = 'images/default_plan_image.jpg';
+  }
+?>
+  <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
+    <div class="custom-media d-block">
+      <div class="img-wrap mb-3">
+        <a href="<?php echo $image_path; ?>" data-fancybox="gal">
+          <img src="<?php echo $image_path; ?>" alt="Plan Image" class="img-fluid">
+        </a>
+      </div>
+      <div>
+        <span class="caption"><?php echo date('d F, Y', strtotime($plan['validity'])); ?></span>
+        <h3><?php echo $plan['planName']; ?></h3>
+        <p><?php echo $plan['description']; ?></p>
+        <!-- <p><strong>Price: </strong> RM <?php echo $plan['amount']; ?></p> -->
       </div>
     </div>
+  </div>
+<?php endwhile; ?>
+
+</div>
+</div>
+</div>
+<?php
+else:
+  echo "<p>No plans available at the moment.</p>";
+endif;
+
+// Close the database connection
+mysqli_close($con);
+?>
+
 
 <?php
 require('footer.html');

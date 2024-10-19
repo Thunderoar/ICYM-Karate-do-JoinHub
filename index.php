@@ -46,31 +46,37 @@ require('header.php');
 
 
     
-    <div>
-      <div class="row">
-        <div class="col-lg-12">
+<div>
+  <div class="row">
+    <div class="col-lg-12">
       <?php
-        // Fetch images from the database
-         $sql = "SELECT image_path FROM images WHERE planid IS NOT NULL"; // Selects all images associated with any planid
-          $result = $con->query($sql);
+        // Assuming we want to fetch the first image and details associated with a plan
+        // Adjust the query to select the plan details and image from the database
+        $sql = "SELECT p.planName, p.description, i.image_path 
+                FROM plan p 
+                INNER JOIN images i ON p.planid = i.planid 
+                WHERE p.planid IS NOT NULL LIMIT 1"; // Fetch plan details along with an associated image
+        $result = $con->query($sql);
 
-          if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-          echo '<div class="hero-wrap" style="background-image: url(dashboard/admin/' . htmlspecialchars($row['image_path']) . '");" data-stellar-background-ratio="0.5">';
-          }
+        if ($result->num_rows > 0) {
+          // Fetch the result for the first plan
+          $row = $result->fetch_assoc();
+          $planName = $row['planName'];
+          $description = $row['description'];
+          $imagePath = htmlspecialchars($row['image_path']); // Safe way to echo the image path
+          echo '<div class="hero-wrap" style="background-image: url(dashboard/admin/' . $imagePath . ');" data-stellar-background-ratio="0.5">';
         } else {
-        echo "No images found, Please create a New Plan with Images.";
+          echo "No plans found. Please create a New Plan with Images.";
         }
       ?>
-          <!-- temporary turn-off 'images/karate_main.jpg' -->
-            <div class="hero-contents">
-              <h2>Team after Training</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui distinctio aliquid dolor odio ullam odit cum veniam fuga aperiam aut.</p>
-            </div>
-          </div>
+        <div class="hero-contents">
+          <h2><?php echo htmlspecialchars($planName); ?></h2>
+          <p><?php echo htmlspecialchars($description); ?></p>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
     <!--<div class="site-section">
       <div class="container">

@@ -147,28 +147,33 @@ page_protect();
 				</div></a>
 			</div>
 
-			<div class="col-sm-3"><a href="over_members_month.php">
-				<div class="tile-stats tile-aqua">
-					<div class="icon"><i class="entypo-mail"></i></div>
-						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Joined This Month</h2><br>
-<?php
-date_default_timezone_set("Asia/Kuala_Lumpur");
-$date = date('Y-m'); // Get current year and month
-$query = "SELECT COUNT(*) as total FROM users WHERE joining_date LIKE '$date%'"; // Count the users joined this month
+<div class="col-sm-3">
+    <a href="over_members_month.php">
+        <div class="tile-stats tile-aqua">
+            <div class="icon"><i class="entypo-mail"></i></div>
+            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2>Joined This Month</h2><br>
+                <?php
+                date_default_timezone_set("Asia/Kuala_Lumpur");
+                $date = date('Y-m'); // Get current year and month
 
-$result = mysqli_query($con, $query); // Execute query
+                // Ensure the database connection is made
+                require_once '../../include/db_conn.php'; 
 
-if ($result) { // Check if the query was successful
-    $row = mysqli_fetch_assoc($result); // Fetch the result
-    echo $row['total']; // Display the count
-} else {
-    echo "Error: " . mysqli_error($con); // Display any error
-}
-?>
-						</div>
-				</div></a>
-			</div>
+                $query = "SELECT COUNT(*) as total FROM users WHERE joining_date LIKE '$date%'"; // Count the users joined this month
+                $result = mysqli_query($con, $query); // Execute query
+
+                if ($result) { // Check if the query was successful
+                    $row = mysqli_fetch_assoc($result); // Fetch the result
+                    echo $row['total']; // Display the count
+                } else {
+                    echo "Error: " . mysqli_error($con); // Display any error
+                }
+                ?>
+            </div>
+        </div>
+    </a>
+</div>
 
 			<div class="col-sm-3"><a href="view_plan.php">
 				<div class="tile-stats tile-blue">

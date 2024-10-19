@@ -22,7 +22,7 @@
 
 		<ul id="planExpand">
 			<li class="active">
-				<a href="new_plan.php"><span>View Plan</span></a></li>
+				<a href="new_plan.php"><span>Add Plan</span></a></li>
 
 			<li><a href="view_plan.php"><span>Edit Planning</span></a></li>
 		</ul>
@@ -34,9 +34,9 @@
 				<a href="over_members_month.php"><span>Members per Month</span></a>
 			</li>
 
-			<li>
+			<!-- <li>
 				<a href="over_members_year.php"><span>Members per Year</span></a>
-			</li>
+			</li> -->
 
 			<li>
 				<a href="revenue_month.php"><span>Income per Month</span></a>
