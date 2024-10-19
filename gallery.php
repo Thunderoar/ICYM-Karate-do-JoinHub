@@ -14,37 +14,6 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
 }
 ?>
 
-<?php
-if (isset($_POST['delete_section_id'])) {
-    $section_id_to_delete = $_POST['delete_section_id'];
-
-    // Use prepared statements to prevent SQL injection
-    // First, delete the images related to this section
-    $delete_images_query = "DELETE FROM gallery_images WHERE section_id = ?";
-    if ($stmt = mysqli_prepare($con, $delete_images_query)) {
-        mysqli_stmt_bind_param($stmt, 'i', $section_id_to_delete); // 'i' is for integer
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-    } else {
-        echo "Error preparing delete images query: " . mysqli_error($con);
-        exit;
-    }
-
-    // Now, delete the section
-    $delete_section_query = "DELETE FROM gallery_sections WHERE section_id = ?";
-    if ($stmt = mysqli_prepare($con, $delete_section_query)) {
-        mysqli_stmt_bind_param($stmt, 'i', $section_id_to_delete);
-        if (mysqli_stmt_execute($stmt)) {
-            echo "Section deleted successfully!";
-        } else {
-            echo "Error deleting section: " . mysqli_error($con);
-        }
-        mysqli_stmt_close($stmt);
-    } else {
-        echo "Error preparing delete section query: " . mysqli_error($con);
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -248,68 +217,58 @@ if (isset($_POST['delete_section_id'])) {
     
 <div class="row">
     <?php
-    // Fetch sections from the database
-    $query = "SELECT * FROM gallery_sections";
+    // Fetch sections and their images from the database
+    $query = "
+        SELECT gs.section_id, gs.section_name, gs.section_description, gi.image_id, gi.image_path
+        FROM gallery_sections gs
+        LEFT JOIN gallery_images gi ON gs.section_id = gi.section_id
+    ";
     $sections_result = mysqli_query($con, $query);
 
-    while ($section = mysqli_fetch_assoc($sections_result)) {
-        echo "<div class='col-12 col-md-4 mb-4 position-relative'>"; // Added position-relative to section container
-        echo "<div class='section-header mb-2 d-flex justify-content-between align-items-center'>"; // Using flexbox for buttons alignment
-
-        // Section title
-        echo "<h3 class='d-inline-block'>{$section['section_name']}</h3>";
-
-        // Flex container for buttons
-        echo "<div class='button-container d-flex gap-2'>";
-        
-        // Add image button aligned to the left
-        echo "<button class='btn btn-primary add-image-btn' data-section-id='{$section['section_id']}'>+</button>";
-
-        // Delete section button aligned to the right
-        echo "<button class='btn btn-danger delete-section-btn' data-section-id='{$section['section_id']}'>Delete</button>";
-        
-        echo "</div>"; // Close button container
-
-        echo "</div>"; // Close section header
-
-        // Section description
-        echo "<p>{$section['section_description']}</p>";
-
-        // Fetch images for this section
-        $section_id = $section['section_id'];
-        $images_query = "SELECT * FROM gallery_images WHERE section_id = '$section_id'";
-        $images_result = mysqli_query($con, $images_query);
-
-        echo "<div class='row'>";
-
-        // Display images if they exist
-        while ($image = mysqli_fetch_assoc($images_result)) {
-            $image_path = 'dashboard/admin/' . $image['image_path']; // Prepending the correct path to the image
-
-            echo "<div class='col-6 col-sm-6 col-md-4 col-lg-3 mb-4'>";
-            echo "<div class='image-container d-flex position-relative'>";
-
-            // Display image
-            echo "<a href='{$image_path}' data-fancybox='gal' class='flex-grow-1'>
-                    <img src='{$image_path}' alt='Image' class='img-fluid rounded shadow'>
-                  </a>";
-
-            // Delete button for every image
-            echo "<button class='btn btn-danger btn-sm delete-image-btn position-absolute' style='top: 10px; right: 10px;' data-image-id='{$image['image_id']}'>Delete</button>";
-
-            echo "</div>";
-            echo "</div>";
+    $sections = [];
+    while ($row = mysqli_fetch_assoc($sections_result)) {
+        $sections[$row['section_id']]['name'] = $row['section_name'];
+        $sections[$row['section_id']]['description'] = $row['section_description'];
+        if ($row['image_id']) {
+            $sections[$row['section_id']]['images'][] = [
+                'id' => $row['image_id'],
+                'path' => 'dashboard/admin/' . $row['image_path']
+            ];
         }
+    }
 
-        echo "</div>"; // Closing row for images
-
-        echo "</div>"; // Closing column for section
-
-        // Add a horizontal rule divider between sections
-        echo "<hr class='my-4'>"; // Adds space around the divider
+    foreach ($sections as $section_id => $section) {
+        ?>
+        <div class='col-12 col-md-4 mb-4 position-relative'>
+            <div class='section-header mb-2 d-flex justify-content-between align-items-center'>
+                <h3 class='d-inline-block'><?= htmlspecialchars($section['name']) ?></h3>
+                <div class='button-container d-flex gap-2'>
+                    <button class='btn btn-primary add-image-btn' data-section-id='<?= $section_id ?>'>+</button>
+                    <button class='btn btn-danger delete-section-btn' data-section-id='<?= $section_id ?>'>Delete</button>
+                </div>
+            </div>
+            <p><?= htmlspecialchars($section['description']) ?></p>
+            <div class='row'>
+                <?php if (!empty($section['images'])): ?>
+                    <?php foreach ($section['images'] as $image): ?>
+                        <div class='col-6 col-sm-6 col-md-4 col-lg-3 mb-4'>
+                            <div class='image-container d-flex position-relative'>
+                                <a href='<?= htmlspecialchars($image['path']) ?>' data-fancybox='gal' class='flex-grow-1'>
+                                    <img src='<?= htmlspecialchars($image['path']) ?>' alt='Image' class='img-fluid rounded shadow'>
+                                </a>
+                                <button class='btn btn-danger btn-sm delete-image-btn position-absolute' style='top: 10px; right: 10px;' data-image-id='<?= $image['id'] ?>'>Delete</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <hr class='my-4'>
+        <?php
     }
     ?>
 </div>
+
 
 
 
@@ -401,27 +360,27 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-    $(document).ready(function() {
-        // Delete section AJAX
-        $('.delete-section-btn').click(function() {
-            var section_id = $(this).data('section-id');
-            
-            if (confirm('Are you sure you want to delete this section?')) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'your_php_file.php', // Replace with the correct PHP file path
-                    data: { delete_section_id: section_id },
-                    success: function(response) {
-                        alert(response);
-                        location.reload(); // Refresh the page to reflect the changes
-                    },
-                    error: function() {
-                        alert('An error occurred while deleting the section.');
-                    }
-                });
-            }
+        $(document).ready(function() {
+            // Delete section AJAX
+            $('.delete-section-btn').click(function() {
+                var section_id = $(this).data('section-id');
+                
+                if (confirm('Are you sure you want to delete this section?')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'dashboard/admin/delete_section.php', // Replace with the correct PHP file path
+                        data: { delete_section_id: section_id },
+                        success: function(response) {
+                            alert(response);
+                            location.reload(); // Refresh the page to reflect the changes
+                        },
+                        error: function() {
+                            alert('An error occurred while deleting the section.');
+                        }
+                    });
+                }
+            });
         });
-    });
 
   </script>
   

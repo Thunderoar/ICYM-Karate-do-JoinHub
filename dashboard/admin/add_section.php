@@ -13,4 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Error: " . mysqli_error($con);
     }
 }
+
+
+    // Redirect back to the index page after successful upload
+    header("Location: ../../gallery.php");
+    exit();
 ?>
