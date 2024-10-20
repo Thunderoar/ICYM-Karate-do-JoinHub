@@ -2,16 +2,14 @@
 include './include/db_conn.php';
 
 // Assuming the session is already started during login
-//if (session_status() == PHP_SESSION_NONE) {
-//    session_start();
-//}
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 $user_id_auth = ltrim($_POST['user_id_auth']);
 $user_id_auth = rtrim($_POST['user_id_auth']);
-
 $pass_key = ltrim($_POST['pass_key']);
 $pass_key = rtrim($_POST['pass_key']);
-
 $user_id_auth = stripslashes($user_id_auth);
 $pass_key     = stripslashes($pass_key);
 
@@ -35,30 +33,24 @@ if ($pass_key == "" &&  $user_id_auth == "") {
 
     if ($is_admin_login) {
         // Admin login query
-        $sql = "
-            SELECT a.adminid, a.username, 'admin' as authority, i.image_path
-            FROM admin a
-            LEFT JOIN images i ON i.adminid = a.adminid
-            WHERE a.username = '$user_id_auth' AND a.pass_key = '$pass_key'
-        ";
+        $sql = "SELECT a.adminid, a.username, 'admin' as authority, i.image_path
+                FROM admin a
+                LEFT JOIN images i ON i.adminid = a.adminid
+                WHERE a.username = '$user_id_auth' AND a.pass_key = '$pass_key'";
     } elseif ($is_coach_login) {
         // Coach login query with join to login table
-        $sql = "
-            SELECT l.loginid, l.authority, l.username, l.userid, l.adminid, l.staffid, i.image_path
-            FROM login l
-            LEFT JOIN images i ON l.staffid = i.staffid
-            WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key' AND l.authority = 'coach'
-        ";
+        $sql = "SELECT l.loginid, l.authority, l.username, l.userid, l.adminid, l.staffid, i.image_path
+                FROM login l
+                LEFT JOIN images i ON l.staffid = i.staffid
+                WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key' AND l.authority = 'coach'";
     } else {
         // Member (user) login query with join to enrolls_to and plan tables
-        $sql = "
-            SELECT u.userid, u.username, 'member' as authority, i.image_path, e.planid, p.planName, p.description, p.planType, p.validity, p.amount
-            FROM users u
-            LEFT JOIN images i ON i.userid = u.userid
-            LEFT JOIN enrolls_to e ON e.userid = u.userid
-            LEFT JOIN plan p ON p.planid = e.planid
-            WHERE u.username = '$user_id_auth' AND u.pass_key = '$pass_key'
-        ";
+        $sql = "SELECT u.userid, u.username, 'member' as authority, i.image_path, e.planid, p.planName, p.description, p.planType, p.validity, p.amount
+                FROM users u
+                LEFT JOIN images i ON i.userid = u.userid
+                LEFT JOIN enrolls_to e ON e.userid = u.userid
+                LEFT JOIN plan p ON p.planid = e.planid
+                WHERE u.username = '$user_id_auth' AND u.pass_key = '$pass_key'";
     }
 
     $result = mysqli_query($con, $sql);
@@ -72,6 +64,7 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         session_start();
         if ($is_admin_login) {
             $_SESSION['adminid'] = $row['adminid'];
+            $_SESSION['is_admin_logged_in'] = true; // Set the session variable for admin
         } elseif ($is_coach_login) {
             $_SESSION['staffid'] = $row['staffid']; // Store coach's staff ID
         } else {
@@ -82,6 +75,7 @@ if ($pass_key == "" &&  $user_id_auth == "") {
             $_SESSION['planType'] = $row['planType']; // Store the plan's type
             $_SESSION['validity'] = $row['validity']; // Store the plan's validity
         }
+
         $_SESSION['user_data']      = $row['username'];  // Store username in session
         $_SESSION['logged']         = "start";
         $_SESSION['authority']      = $row['authority']; // 'admin', 'member', or 'coach'
@@ -101,7 +95,6 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         }
     } else {
         echo "<html><head><script>alert('Username OR Password is Invalid');</script></head></html>";
-        
         // Redirect based on whether it was an admin, coach, or user login
         if ($is_admin_login) {
             echo "<meta http-equiv='refresh' content='0; url=login-admin.php'>";  // Redirect to admin login page
@@ -113,4 +106,3 @@ if ($pass_key == "" &&  $user_id_auth == "") {
     }
 }
 ?>
-<!-- comment -->
