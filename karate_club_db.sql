@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2024 at 02:45 PM
+-- Generation Time: Oct 20, 2024 at 09:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -105,12 +105,7 @@ CREATE TABLE `gallery_images` (
 --
 
 INSERT INTO `gallery_images` (`image_id`, `section_id`, `image_path`, `uploaded_at`) VALUES
-(1, 1, 'uploads/image_6.jpg', '2024-10-19 11:29:54'),
-(2, 1, 'uploads/cat-sleepy.gif', '2024-10-19 12:01:42'),
-(3, 1, 'uploads/image_4.jpg', '2024-10-19 12:08:49'),
-(4, 1, 'uploads/image_5.jpg', '2024-10-19 12:08:49'),
-(5, 1, 'uploads/image_6.jpg', '2024-10-19 12:08:49'),
-(6, 1, 'uploads/image_7.jpg', '2024-10-19 12:08:49');
+(63, 7, 'uploads/image_4.jpg', '2024-10-20 06:27:24');
 
 -- --------------------------------------------------------
 
@@ -130,10 +125,7 @@ CREATE TABLE `gallery_sections` (
 --
 
 INSERT INTO `gallery_sections` (`section_id`, `section_name`, `section_description`, `created_at`) VALUES
-(1, 'test', 'wow', '2024-10-19 11:28:30'),
-(2, 'second test', 'event', '2024-10-19 12:08:17'),
-(3, 'third test', 'event', '2024-10-19 12:08:30'),
-(4, 'forth test', 'event', '2024-10-19 12:08:37');
+(7, 'test2', 'test2', '2024-10-20 06:07:04');
 
 -- --------------------------------------------------------
 
@@ -268,8 +260,8 @@ CREATE TABLE `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
-('ENKZJO', 'g', 'g', 'Event', 'Lifetime', 1, 'yes'),
-('TGJIOA', 'picture', 'picture', 'Event', 'Lifetime', 0, 'yes'),
+('CAFXVW', 'test', 'test', 'Event', 'Lifetime', 22, 'yes'),
+('ENKZJO', '1', '1', 'Event', '1', 1, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '1', 20, 'yes');
 
 -- --------------------------------------------------------
@@ -443,13 +435,13 @@ ALTER TABLE `enrolls_to`
 -- AUTO_INCREMENT for table `gallery_images`
 --
 ALTER TABLE `gallery_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `gallery_sections`
 --
 ALTER TABLE `gallery_sections`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `images`
