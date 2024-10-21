@@ -1,7 +1,23 @@
+overall
+notification system
+
+forgot password
+username
+password (check if password exst)
+new password
+confirm new pass
+
+
 member section,
+
+
+set deleted member as inactive member
+
 
 PAYMENTS
 their name only will appear, and if they had paid. the whole page will say, no pending payment in a bit of grey.
+
+undo payment.
 
 HEALTH STATUS
 show weight and height, also the member would
@@ -12,8 +28,16 @@ also shows Remarks.
 DASHBOARD
 error on welcome message, and revenue message, the error is Full_name.
 
+
+
 member dashboard:
 Paid Income = you have paid! Or you have not paid.
+
+username
+member id
+new pass
+confirm new pass
+
 green, sihat! atw tidak!
 biru, activiti hair ini
 biru gelap, event yg dijoin
