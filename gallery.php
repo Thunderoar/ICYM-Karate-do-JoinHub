@@ -93,12 +93,36 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
   </section>
 </div>
 
-    <!-- Button to trigger the form -->
-    <div class="add-section-container">
-      <button id="addSectionBtn" class="btn btn-info mb-4">Add New Section</button>
-    </div>
+<?php
+
+// Check if admin is logged in
+$is_admin_logged_in = isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in']; 
+
+// Fetch sections and their images from the database
+$query = "SELECT gs.section_id, gs.section_name, gs.section_description, gi.image_id, gi.image_path
+          FROM gallery_sections gs
+          LEFT JOIN gallery_images gi ON gs.section_id = gi.section_id";
+$sections_result = mysqli_query($con, $query);
+$sections = [];
+while ($row = mysqli_fetch_assoc($sections_result)) {
+    $section_id = $row['section_id'];
+    $sections[$section_id]['name'] = $row['section_name'];
+    $sections[$section_id]['description'] = $row['section_description'];
+    if ($row['image_id']) {
+        $sections[$section_id]['images'][] = [
+            'id' => $row['image_id'],
+            'path' => 'dashboard/admin/' . $row['image_path']
+        ];
+    }
+}
+?>
 
 <!-- Modal for adding a new section -->
+<?php if ($is_admin_logged_in): ?>
+<div class="add-section-container">
+    <button id="addSectionBtn" class="btn btn-info mb-4">Add New Section</button>
+</div>
+
 <div class="modal fade" id="newSectionModal" tabindex="-1" aria-labelledby="newSectionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -124,6 +148,7 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <!-- Modal for uploading images -->
 <div class="modal fade" id="imageUploadModal" tabindex="-1" aria-labelledby="imageUploadModalLabel" aria-hidden="true">

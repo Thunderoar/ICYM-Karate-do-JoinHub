@@ -37,28 +37,23 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     <link rel="stylesheet" href="css/homepagestyle.css">
     
 	<style>
-	div.gallery {
-		margin: 5px;
-		border: 1px solid #ccc;
-		float: left;
-		width: 180px;
-	}
+.custom-coach-section .owl-carousel .item {
+  display: none; /* Hide all items */
+}
 
-	div.gallery:hover {
-		border: 1px solid #777;
-	}
+.custom-coach-section .owl-carousel .item:nth-of-type(1),
+.custom-coach-section .owl-carousel .item:nth-of-type(2) {
+  display: block; /* Show only the first two items */
+}
 
-	div.gallery img {
-		width: 100%;
-		height: auto;
-	}
+.custom-coach-section .owl-carousel img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-	div.desc {
-		padding: 15px;
-		text-align: center;
-	}
 </style>
-
   </head>
   <body>
   
@@ -145,89 +140,36 @@ require('header.php');
       </div>
     </div>
 
-    <div class="site-section">
-      <div class="container">
-        <div class="row align-items-center mb-4">
-          <div class="col-12 text-center">
-            <h2 class="section-title">Our Coach</h2>
-          </div>
-          <div class="col-6 text-right">
-            <a href="#" class="custom-prev js-custom-prev-v2">Prev</a>
-            <span class="mx-2">/</span>
-            <a href="#" class="custom-next js-custom-next-v2">Next</a>
-          </div>
-        </div>
-		
-		<div class="gallery">
-			<div class="item player">
-			<a target="_blank" href="#">
-			<img src="images/coach_umayy.jpeg" alt="Image" width="600" height="400">
-			</a>
-			<div class="desc">Cik Nur Umayyah Binti Mohamed Yusof</div>
-		</div>
-		</div>
-		
-        <!--div class="owl-4-slider owl-carousel">
-          <div class="item player">
-            <a href="#"><img src="images/coach_umayy.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Cik Nur Umayyah Binti Mohamed Yusof</h3>
-            </div>
-          </div>
-          <div class="item player">
-            <a href="#"><img src="images/sensei_selvan.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Sensei Tamil Selvan A/L Vengadesan</h3>
-            </div>
-          </div>
-          <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Russell Vance</h3>
-              <p>#1 / Goal Keeper</p>
-            </div>
-          </div>
-          <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Carson Hodgson</h3>
-              <p>#3 / Forward</p>
-            </div>
-          </div>
-
-          <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Yanis Velasquez</h3>
-              <p>#4 / Forward</p>
-            </div>
-          </div>
-          <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Joshua Figueroa</h3>
-              <p>#8 / Forward</p>
-            </div>
-          </div>
-          <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Russell Vance</h3>
-              <p>#6 / Forward</p>
-            </div>
-          </div>
-          <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
-            <div class="p-4">
-              <h3>Carson Hodgson</h3>
-              <p>#9 / Forward</p>
-            </div>
-          </div>
-
-        </div-->
-        
+<div class="site-section custom-coach-section">
+  <div class="container">
+    <div class="row align-items-center mb-4">
+      <div class="col-12 text-center">
+        <h2 class="section-title">Our Coach</h2>
+      </div>
+      <div class="col-6 text-right">
+        <a href="#" class="custom-prev js-custom-prev-v2">Prev</a>
+        <span class="mx-2">/</span>
+        <a href="#" class="custom-next js-custom-next-v2">Next</a>
       </div>
     </div>
+    <div class="owl-4-slider owl-carousel">
+      <div class="item player">
+        <a href="#"><img src="images/coach_umayy.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
+        <div class="p-4">
+          <h3>Cik Nur Umayyah Binti Mohamed Yusof</h3>
+        </div>
+      </div>
+      <div class="item player">
+        <a href="#"><img src="images/sensei_selvan.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
+        <div class="p-4">
+          <h3>Sensei Tamil Selvan A/L Vengadesan</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 
 <?php
@@ -270,70 +212,75 @@ if (mysqli_num_rows($result) > 0) {
 ?>
 
 
-<div class="site-section">
-        <div class="container">
-            <div class="row align-items-center mb-2">
-                <div class="col-6">
-                    <h2 class="section-title">Events</h2>
-                </div>
-            </div>
 
-            <div class="row mb-5">
-                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-                    <div class="custom-media d-block">
-                        <div class="img-wrap mb-3">
-                            <a href="images/event_1.jpg" data-fancybox="gal"><img src="images/event_1.jpg" alt="Image" class="img-fluid"></a>
-                        </div>
-                        <div>
-                            <span class="caption">24 February, 2024</span>
-                            <h3>Majlis Makan Malam Pelajar dan Alumni KAYM</h3>
-                        </div>
-                    </div>
-                </div>
+<?php
+require 'include/db_conn.php';
 
-                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-                    <div class="custom-media d-block">
-                        <div class="img-wrap mb-3">
-                            <a href="images/karate_main.jpg" data-fancybox="gal"><img src="images/karate_main.jpg" alt="Image" class="img-fluid"></a>
-                        </div>
-                        <div>
-                            <span class="caption">2 September, 2023</span>
-                            <h3>First Ever Grand Group Training Malaysia Open 2023</h3>
-                        </div>
-                    </div>
-                </div>
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 
-                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-                    <div class="custom-media d-block">
-                        <div class="img-wrap mb-3">
-                            <a href="images/event_3.jpg" data-fancybox="gal"><img src="images/event_3.jpg" alt="Image" class="img-fluid"></a>
-                        </div>
-                        <div>
-                            <span class="caption">23 September, 2023</span>
-                            <h3>Demonstrasi Pada Hari Karnival Kanak-Kanak</h3>
-                        </div>
-                    </div>
-                </div>
+// Fetch active plans from the database
+$query = "SELECT * FROM plan WHERE active = 'yes'"; // Fetch only active plans
+$result = mysqli_query($con, $query);
 
-                <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-                    <div class="custom-media d-block">
-                        <div class="img-wrap mb-3">
-                            <a href="images/image_7.jpg" data-fancybox="gal"><img src="images/image_7.jpg" alt="Image" class="img-fluid"></a>
-                        </div>
-                        <div>
-                            <span class="caption">20 September, 2023</span>
-                            <h3>Pembukaan Booth dan Demonstrasi Sempena Pengambilan Ahli Baharu Kelab Karate KAYM</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
+// Check if there are any plans available
+if (mysqli_num_rows($result) > 0):
+?>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-4 text-center">
-                </div>
-            </div>
-        </div>
+  <div class="site-section">
+    <div class="container site-section pb-0">
+<div class="row mb-5">
+
+  
+<?php
+// Loop through the plans and display them
+while ($plan = mysqli_fetch_assoc($result)):
+  $planid = mysqli_real_escape_string($con, $plan['planid']);
+  $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
+  $image_result = mysqli_query($con, $image_query);
+  $image_path = ($image_result && mysqli_num_rows($image_result) > 0) ? 'dashboard/admin/' . mysqli_fetch_assoc($image_result)['image_path'] : 'images/default_plan_image.jpg';
+?>
+  <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
+    <div class="card">
+      <img src="<?php echo $image_path; ?>" alt="Plan Image" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title"><?php echo $plan['planName']; ?></h5>
+        <p class="card-text"><?php echo $plan['description']; ?></p>
+<p><strong>Validity:</strong> <?php echo $plan['validity']; ?> days</p>
+        <p><strong>Amount:</strong> $<?php echo $plan['amount']; ?></p>
+        
+<!-- Edit button for Bootstrap 4 -->
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPlanModal" 
+  data-planid="<?php echo $planid; ?>" 
+  data-planname="<?php echo $plan['planName']; ?>" 
+  data-description="<?php echo $plan['description']; ?>" 
+  data-validity="<?php echo $plan['validity']; ?>" 
+  data-amount="<?php echo $plan['amount']; ?>">
+  Edit
+</button>
+
+
+        <!-- Delete button -->
+        <form method="POST" action="" style="display:inline;">
+          <input type="hidden" name="planid" value="<?php echo $planid; ?>">
+          <button type="submit" name="deletePlan" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this plan?');">
+            Delete
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
+
+<?php endwhile; ?>
+
+    </div>
+  </div>
+
+<?php else: ?>
+  <p>No plans available at the moment.</p>
+<?php endif; ?>
 
     
 <?php
@@ -355,6 +302,20 @@ require('footer.html');
   <script src="js/main.js"></script>
     
   </body>
+  <script>
+  $(document).ready(function() {
+  // Custom settings for this section
+  $('.custom-coach-section .owl-carousel').owlCarousel({
+    items: 1, // or the appropriate number of visible items
+    loop: false, // Ensure no looping
+    nav: true, // Navigation buttons
+    dots: false, // Dots indicator
+  });
+  
+  // Explicitly remove other items if any are dynamically added
+  var items = $('.custom-coach-section .owl-carousel .item');
+  items.slice(2).remove(); // Ensure only first two items remain
+  </script>
 </html>
 <?php
 require 'important_include.php';
