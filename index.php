@@ -36,11 +36,32 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
 
     <link rel="stylesheet" href="css/homepagestyle.css">
     
+	<style>
+	div.gallery {
+		margin: 5px;
+		border: 1px solid #ccc;
+		float: left;
+		width: 180px;
+	}
+
+	div.gallery:hover {
+		border: 1px solid #777;
+	}
+
+	div.gallery img {
+		width: 100%;
+		height: auto;
+	}
+
+	div.desc {
+		padding: 15px;
+		text-align: center;
+	}
+</style>
+
   </head>
   <body>
   
-    
-  <!-- hello -->
   <div>
 
 
@@ -124,16 +145,6 @@ require('header.php');
       </div>
     </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-7">
-          
-        </div>
-      </div>
-
-      <a href="#"></a>
-    </div>
-
     <div class="site-section">
       <div class="container">
         <div class="row align-items-center mb-4">
@@ -146,20 +157,27 @@ require('header.php');
             <a href="#" class="custom-next js-custom-next-v2">Next</a>
           </div>
         </div>
-
-        <div class="owl-4-slider owl-carousel">
+		
+		<div class="gallery">
+			<div class="item player">
+			<a target="_blank" href="#">
+			<img src="images/coach_umayy.jpeg" alt="Image" width="600" height="400">
+			</a>
+			<div class="desc">Cik Nur Umayyah Binti Mohamed Yusof</div>
+		</div>
+		</div>
+		
+        <!--div class="owl-4-slider owl-carousel">
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
+            <a href="#"><img src="images/coach_umayy.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
-              <h3>Jakub Bates</h3>
-              <p>#10 / Forward</p>
+              <h3>Cik Nur Umayyah Binti Mohamed Yusof</h3>
             </div>
           </div>
           <div class="item player">
-            <a href="#"><img src="images/question.jpg" alt="Image" class="img-fluid rounded shadow"></a>
+            <a href="#"><img src="images/sensei_selvan.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
             <div class="p-4">
-              <h3>Joshua Figueroa</h3>
-              <p>#7 / Forward</p>
+              <h3>Sensei Tamil Selvan A/L Vengadesan</h3>
             </div>
           </div>
           <div class="item player">
@@ -206,7 +224,7 @@ require('header.php');
             </div>
           </div>
 
-        </div>
+        </div-->
         
       </div>
     </div>
