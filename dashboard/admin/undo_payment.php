@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($userid) && !empty($planid)) {
         // Update the 'enrolls_to' table to undo the payment
         $query = "UPDATE enrolls_to 
-                  SET hasPaid = 'no', paid_date = NULL, expire = NULL 
+                  SET hasPaid = 'yes', paid_date = NULL, expire = NULL, hasApproved = 'no'
                   WHERE userid = '$userid' AND planid = '$planid'";
 
         // Execute the query and check for success

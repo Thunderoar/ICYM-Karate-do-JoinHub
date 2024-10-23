@@ -99,7 +99,7 @@ page_protect();
             <th>Name</th>
             <th>Phone</th>
             <th>E-Mail</th>
-            <th>Plan Name</th> <!-- New column for Plan Name -->
+            <th>Plan Name</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -120,6 +120,9 @@ if (mysqli_num_rows($result) > 0) {
         $planid = $row['planid'];
         $planName = $row['planName'];
         $hasPaid = $row['hasPaid'];
+        $hasApproved = $row['hasApproved']; // Check if payment is approved
+        $et_id = $row['et_id']; // Get the payment ID
+        $receiptIMG = $row['receiptIMG']; // Get the receipt image path
 
         echo "<tr>";
         echo "<td>" . $sno . "</td>";
@@ -131,24 +134,60 @@ if (mysqli_num_rows($result) > 0) {
 
         $sno++;
 
-        // Only show "Add Payment" button if user has not paid
+        // Action based on payment and approval status
         if ($hasPaid === 'no') {
+            // Payment not made
             echo "<td>
                     <form action='make_payments.php' method='post'>
                         <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                         <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
-                        <input type='submit' class='a1-btn a1-blue' value='Add Payment' class='btn btn-info'/>
+                        <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
+                        <input type='submit' class='a1-btn a1-blue' value='Confirm Payment'/>
                     </form>
+                    <p>Payment ID: $et_id</p>
                   </td>";
-        } else {
-            // Show "Undo Payment" button if the user has already paid
+        } elseif ($hasPaid === 'yes' && $hasApproved === 'no') {
+            // Payment made but not approved
             echo "<td>
-                    <form action='undo_payment.php' method='post'>
+                    <form action='make_payments.php' method='post' style='display:inline;'>
                         <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                         <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
-                        <input type='submit' class='a1-btn a1-red' value='Undo Payment' class='btn btn-warning'/>
+                        <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
+                        <input type='submit' class='a1-btn a1-green' value='Approve Payment'/>
                     </form>
+                    <form action='cancel_payment.php' method='post' style='display:inline;'>
+                        <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
+                        <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
+                        <input type='submit' class='a1-btn a1-yellow' value='Cancel Payment' onclick='return confirm(\"Are you sure you want to cancel this payment?\");'/>
+                    </form>
+                    <p>Payment Pending Approval</p>
+                    <p>Payment ID: $et_id</p>
                   </td>";
+        } elseif ($hasPaid === 'yes' && $hasApproved === 'yes') {
+            // Payment made and approved
+            echo "<td>
+                    <p>Payment Approved</p>
+                    <p>Payment ID: $et_id</p>";
+
+            // Check if receipt is available
+            if (!empty($receiptIMG)) {
+                echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
+            } else {
+                echo "<p>No Receipt Available</p>";
+            }
+
+            // Button to undo approved payment
+            echo "<form action='undo_payment.php' method='post' style='display:inline;'>
+                    <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
+                    <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
+                    <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
+                    <input type='submit' class='a1-btn a1-red' value='Undo Approved Payment' onclick='return confirm(\"Are you sure you want to undo this payment?\");'/>
+                  </form>";
+
+            echo "</td>";
+        } else {
+            // Default fallback if neither condition applies
+            echo "<td>No Action Needed</td>";
         }
         echo "</tr>";
     }
@@ -158,6 +197,9 @@ if (mysqli_num_rows($result) > 0) {
 ?>
     </tbody>
 </table>
+
+
+
 
 
 

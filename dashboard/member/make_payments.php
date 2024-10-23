@@ -112,50 +112,61 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 		
 		
 		
-		<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8 a1-light-gray" style="width:500px; margin:0 auto;">
-		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>MAKE PAYMENT</h6>
+<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
+    <div class="a1-card-8 a1-light-gray" style="width:500px; margin:0 auto;">
+        <div class="a1-container a1-dark-gray a1-center">
+            <h6>MAKE PAYMENT</h6>
         </div>
-       <form id="form1" name="form1" method="post" class="a1-container" action="submit_payments.php">
-         <table width="100%" border="0" align="center">
-         <tr>
-           <td height="35"><table width="100%" border="0" align="center">
-           	 <tr>
-           	   <td height="35">MEMBERSHIP ID:</td>
-           	   <td height="35"><input type="text" name="m_id" id="boxx" value="<?php echo $uid; ?>" readonly/></td>
-         	   </tr>
-			   
-			   <tr>
-               <td height="35">NAME:</td>
-               <td height="35"><input type="text" name="u_name" id="boxx" value="<?php echo $name; ?>" placeholder="Member Name" maxlength="30" readonly/>
-                 
-             </tr>
-             <tr>
-               <td height="35">CURRENT PLAN</td>
-               <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
-			   <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td></td>
-             </tr>
-             
-		   
-            
-             <tr>
-			  <table id="plandetls">
-             </table>
-			 
-            
-           </table></td>
-		   
-         </tr>
-		  <tr>
-               <td height="35">&nbsp;</td>
-               <td height="35">&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="ADD PAYMENT" >
-                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
-             </tr>
-         </table>
-       </form>
+        <!-- Add enctype attribute for file upload -->
+        <form id="form1" name="form1" method="post" class="a1-container" action="submit_payments.php" enctype="multipart/form-data">
+            <table width="100%" border="0" align="center">
+                <tr>
+                    <td height="35">
+                        <table width="100%" border="0" align="center">
+                            <tr>
+                                <td height="35">MEMBERSHIP ID:</td>
+                                <td height="35"><input type="text" name="m_id" id="boxx" value="<?php echo $uid; ?>" readonly/></td>
+                            </tr>
+                            <tr>
+                                <td height="35">NAME:</td>
+                                <td height="35"><input type="text" name="u_name" id="boxx" value="<?php echo $name; ?>" placeholder="Member Name" maxlength="30" readonly/></td>
+                            </tr>
+                            <tr>
+                                <td height="35">CURRENT PLAN:</td>
+                                <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td>
+                                <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td>
+                            </tr>
+                            <tr>
+                                <!-- File input for payment receipt with preview -->
+                                <td height="35">Upload Receipt:</td>
+                                <td height="35">
+                                    <input type="file" name="receiptIMG" id="receiptIMG" accept="image/*" onchange="previewImage();"/>
+                                </td>
+                            </tr>
+                            <!-- Image preview -->
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <img id="receiptPreview" src="#" alt="Receipt Preview" style="display: none; max-width: 100%; height: auto; border: 1px solid #ccc; margin-top: 10px;">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="35">&nbsp;</td>
+                    <td height="35" class="text-center">
+                        <!-- Reverted to previous button styles -->
+                        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add Payment" style="margin-right: 10px;">
+                        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset" style="margin-right: 10px;" onclick="resetPreview();">
+                        <!-- New 'Return' button -->
+                        <a href="payments.php" class="a1-btn a1-blue" style="text-decoration: none;">Return</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
-    </div>   
+</div>
+ 
 		
 		
 		
@@ -193,6 +204,32 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
         		}
         		
         	}
+			
+// JavaScript function to preview the uploaded image
+function previewImage() {
+    var preview = document.getElementById('receiptPreview');
+    var file = document.getElementById('receiptIMG').files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.style.display = 'block'; // Show the image preview
+    };
+
+    if (file) {
+        reader.readAsDataURL(file); // Convert file to base64 string
+    } else {
+        preview.src = "";
+        preview.style.display = 'none'; // Hide preview if no file
+    }
+}
+
+// Reset image preview when the form is reset
+function resetPreview() {
+    var preview = document.getElementById('receiptPreview');
+    preview.src = "";
+    preview.style.display = 'none';
+}
         </script>
 
 <?php

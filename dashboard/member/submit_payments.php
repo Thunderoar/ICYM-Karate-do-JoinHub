@@ -9,10 +9,11 @@ $plan = $_POST['plan'];
 // If you have specific expire dates based on plan types, adjust accordingly.
 $expire_date = '9999-12-31'; // Arbitrary future date for lifetime plans.
 
+$receiptIMG = $_POST['receiptIMG'];
+
 // Proceed with the update query
 $query = "UPDATE enrolls_to 
-          SET hasPaid='yes', paid_date=NOW(), 
-              expire='$expire_date' 
+          SET hasPaid='yes', paid_date=NOW(), expire='$expire_date', hasApproved='no', receiptIMG='$receiptIMG'
           WHERE userid='$memID' AND planid='$plan'";
 
 if (mysqli_query($con, $query)) {

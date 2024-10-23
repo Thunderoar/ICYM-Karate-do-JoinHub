@@ -11,8 +11,7 @@ $expire_date = '9999-12-31'; // Arbitrary future date for lifetime plans.
 
 // Proceed with the update query
 $query = "UPDATE enrolls_to 
-          SET hasPaid='yes', paid_date=NOW(), 
-              expire='$expire_date' 
+          SET hasPaid='yes', paid_date=NOW(), expire='$expire_date', hasApproved='yes'
           WHERE userid='$memID' AND planid='$plan'";
 
 if (mysqli_query($con, $query)) {
