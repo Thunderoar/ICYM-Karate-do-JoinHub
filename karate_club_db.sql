@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2024 at 07:30 AM
+-- Generation Time: Oct 23, 2024 at 12:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -110,7 +110,7 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `h
 (72, 'ENKZJO', '1729326958', '', '', 'no'),
 (74, 'XTWIOL', '1729653160', '', '', 'no'),
 (75, 'CAFXVW', '1729653160', '', '', 'no'),
-(76, 'XTWIOL', '1729654531', '2024-10-23', '2024-11-23', 'yes'),
+(76, 'XTWIOL', '1729654531', '2024-10-23 18:10:06', '9999-12-31', 'yes'),
 (78, 'CAFXVW', '1729654531', '', '2024-11-23 11:40:07', 'no'),
 (79, 'ENKZJO', '1729654531', '', '2024-11-23 13:03:34', 'no');
 
@@ -132,7 +132,13 @@ CREATE TABLE `gallery_images` (
 --
 
 INSERT INTO `gallery_images` (`image_id`, `section_id`, `image_path`, `uploaded_at`) VALUES
-(63, 7, 'uploads/image_4.jpg', '2024-10-20 06:27:24');
+(63, 7, 'uploads/image_4.jpg', '2024-10-20 06:27:24'),
+(64, 8, 'uploads/image_1.jpg', '2024-10-23 09:41:43'),
+(65, 8, 'uploads/image_2.jpg', '2024-10-23 09:41:43'),
+(66, 8, 'uploads/image_3.jpg', '2024-10-23 09:41:43'),
+(67, 8, 'uploads/image_4.jpg', '2024-10-23 09:41:43'),
+(68, 8, 'uploads/image_5.jpg', '2024-10-23 09:41:43'),
+(69, 8, 'uploads/image_6.jpg', '2024-10-23 09:41:43');
 
 -- --------------------------------------------------------
 
@@ -152,7 +158,8 @@ CREATE TABLE `gallery_sections` (
 --
 
 INSERT INTO `gallery_sections` (`section_id`, `section_name`, `section_description`, `created_at`) VALUES
-(7, 'test2', 'test2', '2024-10-20 06:07:04');
+(7, 'test2', 'test2', '2024-10-20 06:07:04'),
+(8, 'WAH', 'WAH', '2024-10-23 09:41:33');
 
 -- --------------------------------------------------------
 
@@ -336,6 +343,9 @@ CREATE TABLE `plan` (
   `planName` varchar(20) NOT NULL,
   `description` varchar(200) NOT NULL,
   `planType` varchar(50) NOT NULL,
+  `startDate` varchar(50) NOT NULL,
+  `endDate` varchar(50) NOT NULL,
+  `duration` int(50) NOT NULL,
   `validity` varchar(20) NOT NULL DEFAULT 'Lifetime',
   `amount` int(10) NOT NULL DEFAULT 0,
   `active` varchar(255) NOT NULL
@@ -345,10 +355,11 @@ CREATE TABLE `plan` (
 -- Dumping data for table `plan`
 --
 
-INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `validity`, `amount`, `active`) VALUES
-('CAFXVW', 'test', 'test', 'Event', 'Lifetime', 22, 'yes'),
-('ENKZJO', '1', '1', 'Event', '1', 1, 'yes'),
-('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '1', 20, 'yes');
+INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
+('CAFXVW', 'qweqweqw', 'werwer', 'Event', '2024-10-23', '2024-10-26', 3, '', 213, 'yes'),
+('DZMCAH', 'real', 'real', 'Event', '2024-10-23', '2024-10-26', 3, '', 250, 'yes'),
+('ENKZJO', '1', '1', 'Event', '', '', 0, '1', 1, 'yes'),
+('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '1', 20, 'yes');
 
 -- --------------------------------------------------------
 
@@ -522,13 +533,13 @@ ALTER TABLE `enrolls_to`
 -- AUTO_INCREMENT for table `gallery_images`
 --
 ALTER TABLE `gallery_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `gallery_sections`
 --
 ALTER TABLE `gallery_sections`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
