@@ -2,14 +2,19 @@
 require '../../include/db_conn.php';
 page_protect();
 
+// Capture form data
 $planid = $_POST['planid'];
 $name = $_POST['planname'];
 $desc = $_POST['desc'];
 $planType = $_POST['plantype'];
 $amount = $_POST['amount'];
+$startDate = $_POST['startDate']; // Added: Start date
+$endDate = $_POST['endDate']; // Added: End date
+$duration = $_POST['duration']; // Added: Duration
 
 // Insert data into plan table
-$query = "INSERT INTO plan(planid, planName, description, planType, amount, active) VALUES('$planid', '$name', '$desc', '$planType', '$amount', 'yes')";
+$query = "INSERT INTO plan(planid, planName, description, planType, startDate, endDate, duration, amount, active) 
+          VALUES('$planid', '$name', '$desc', '$planType', '$startDate', '$endDate', '$duration', '$amount', 'yes')";
 
 if (mysqli_query($con, $query)) {
     echo "<head><script>alert('PLAN Added');</script></head></html>";

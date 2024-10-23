@@ -121,7 +121,7 @@
           <h3 class="mb-4">Sign Up</h3>
           <form action="secure_signup.php" class="signup-form" method='post' autocomplete="off">
 		  
-		    <legend>Personal Information</legend>
+		    <!-- <legend>Personal Information</legend> -->
             <div class="form-group">
               <label for="u_name">Username</label>
               <input type="text" class="form-control" name="u_name" id="u_name" placeholder="Username" autocomplete="off" required>
@@ -157,7 +157,7 @@
         <div id="sign-in-section" style="display:none;">
           <h3 class="mb-4">Sign In</h3>
           <form action="secure_login.php" class="signin-form" method='post' id="bb">
-            <legend>Login Information</legend>
+            <!--<legend>Login Information</legend>-->
             <div class="form-group">
               <label for="user_id_auth">Username</label>
               <input type="text" placeholder="Username" class="form-control" name="user_id_auth" id="user_id_auth" data-rule-minlength="6" data-rule-required="true" required>

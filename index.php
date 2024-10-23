@@ -230,8 +230,11 @@ if (mysqli_num_rows($result) > 0):
 ?>
 
   <div class="site-section">
-    <div class="container site-section pb-0">
+    <div class="container pb-0">
 <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="section-title">Events</h2>
+      </div>
 
   
 <?php
@@ -248,27 +251,6 @@ while ($plan = mysqli_fetch_assoc($result)):
       <div class="card-body">
         <h5 class="card-title"><?php echo $plan['planName']; ?></h5>
         <p class="card-text"><?php echo $plan['description']; ?></p>
-<p><strong>Validity:</strong> <?php echo $plan['validity']; ?> days</p>
-        <p><strong>Amount:</strong> $<?php echo $plan['amount']; ?></p>
-        
-<!-- Edit button for Bootstrap 4 -->
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPlanModal" 
-  data-planid="<?php echo $planid; ?>" 
-  data-planname="<?php echo $plan['planName']; ?>" 
-  data-description="<?php echo $plan['description']; ?>" 
-  data-validity="<?php echo $plan['validity']; ?>" 
-  data-amount="<?php echo $plan['amount']; ?>">
-  Edit
-</button>
-
-
-        <!-- Delete button -->
-        <form method="POST" action="" style="display:inline;">
-          <input type="hidden" name="planid" value="<?php echo $planid; ?>">
-          <button type="submit" name="deletePlan" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this plan?');">
-            Delete
-          </button>
-        </form>
       </div>
     </div>
   </div>

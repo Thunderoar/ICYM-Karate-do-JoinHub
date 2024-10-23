@@ -92,11 +92,11 @@ $sql = "
 
         // Redirect based on the user's or admin's authority level
         if ($_SESSION['authority'] == "admin") {
-            header("location: ./dashboard/admin/");
+            header("location: index.php");
         } elseif ($_SESSION['authority'] == "member") {
-            header("location: ./dashboard/member/");
+            header("location: index.php");
         } elseif ($_SESSION['authority'] == "coach") {
-            header("location: ./dashboard/coach/");
+            header("location: index.php");
         } else {
             echo "<html><head><script>alert('Invalid Authority');</script></head></html>";
             echo "<meta http-equiv='refresh' content='0; url=index.php'>";

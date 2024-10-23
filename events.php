@@ -1,5 +1,5 @@
 <?php
-require 'include/db_conn.php';
+require 'include/db_conn.php'; // Make sure this file correctly establishes the $con connection
 
 // Handle the form submission for deleting a plan
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deletePlan'])) {
@@ -14,31 +14,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deletePlan'])) {
     }
 }
 
-
+// Handle the form submission for editing a plan
 if (isset($_POST['editPlan'])) {
-    $planid = $_POST['planid'];
-    $planname = $_POST['planName'];
-    $desc = $_POST['description'];
-    $val = $_POST['validity'];
-    $amount = $_POST['amount'];
+    $planid = mysqli_real_escape_string($con, $_POST['planid']);
+    $planName = mysqli_real_escape_string($con, $_POST['planName']);
+    $description = mysqli_real_escape_string($con, $_POST['description']);
+    $validity = mysqli_real_escape_string($con, $_POST['validity']);
+    $amount = mysqli_real_escape_string($con, $_POST['amount']);
 
     // Update query
-    $sql = "UPDATE plan SET planName='$planName', description='$description', validity='$validity', amount='$amount' WHERE planid=$planid";
+    $sql = "UPDATE plan SET planName='$planName', description='$description', validity='$validity', amount='$amount' WHERE planid='$planid'";
     
     if (mysqli_query($con, $sql)) {
         // Redirect to the updated page or success message
         header('Location: plans.php?status=success');
+        exit;
     } else {
         // Handle failure
         echo "Error: " . mysqli_error($con);
     }
 }
 
+// Fetch plan details
+if (isset($_GET['planId'])) {
+    $planId = mysqli_real_escape_string($con, $_GET['planId']); // Sanitize input
+    $query = "SELECT * FROM plan WHERE planid = '$planId'";
+    $result = mysqli_query($con, $query);
 
-// Fetch plans from the database
-$plans_query = "SELECT * FROM plan";
-$result = mysqli_query($con, $plans_query);
+    if (!$result) {
+        die("Query failed: " . mysqli_error($con));
+    }
+
+    $row = mysqli_fetch_assoc($result);
+
+}
+
+// Close the connection
+mysqli_close($con);
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -125,12 +140,12 @@ $result = mysqli_query($con, $query);
 if (mysqli_num_rows($result) > 0):
 ?>
 
-  <div class="site-section">
-    <div class="container site-section pb-0">
-<div class="row mb-5">
 
-  
+<div class="row mb-5">
 <?php
+// Assuming the user's authority level is stored in session
+$user_authority = $_SESSION['authority'] ?? ''; // Replace this with your actual session variable
+
 // Loop through the plans and display them
 while ($plan = mysqli_fetch_assoc($result)):
   $planid = mysqli_real_escape_string($con, $plan['planid']);
@@ -144,35 +159,34 @@ while ($plan = mysqli_fetch_assoc($result)):
       <div class="card-body">
         <h5 class="card-title"><?php echo $plan['planName']; ?></h5>
         <p class="card-text"><?php echo $plan['description']; ?></p>
-<p><strong>Validity:</strong> <?php echo $plan['validity']; ?> days</p>
-        <p><strong>Amount:</strong> $<?php echo $plan['amount']; ?></p>
+        <!-- <p><strong>Validity:</strong> <?php echo $plan['validity']; ?> days</p> -->
+        <!-- <p><strong>Amount:</strong> $<?php echo $plan['amount']; ?></p> -->
         
-<!-- Edit button for Bootstrap 4 -->
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPlanModal" 
-  data-planid="<?php echo $planid; ?>" 
-  data-planname="<?php echo $plan['planName']; ?>" 
-  data-description="<?php echo $plan['description']; ?>" 
-  data-validity="<?php echo $plan['validity']; ?>" 
-  data-amount="<?php echo $plan['amount']; ?>">
-  Edit
-</button>
-
-
-        <!-- Delete button -->
-        <form method="POST" action="" style="display:inline;">
-          <input type="hidden" name="planid" value="<?php echo $planid; ?>">
-          <button type="submit" name="deletePlan" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this plan?');">
-            Delete
+        <?php if ($user_authority === 'admin'): // Change 'admin' to your actual admin role identifier ?>
+          <!-- Edit button for Bootstrap 4 -->
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPlanModal" 
+            data-planid="<?php echo $planid; ?>" 
+            data-planname="<?php echo $plan['planName']; ?>" 
+            data-description="<?php echo $plan['description']; ?>" 
+            data-validity="<?php echo $plan['validity']; ?>" 
+            data-amount="<?php echo $plan['amount']; ?>">
+            Edit
           </button>
-        </form>
+
+          <!-- Delete button -->
+          <form method="POST" action="" style="display:inline;">
+            <input type="hidden" name="planid" value="<?php echo $planid; ?>">
+            <button type="submit" name="deletePlan" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this plan?');">
+              Delete
+            </button>
+          </form>
+        <?php endif; ?>
       </div>
     </div>
   </div>
-
 <?php endwhile; ?>
+</div>
 
-    </div>
-  </div>
 
 <?php else: ?>
   <p>No plans available at the moment.</p>
@@ -189,6 +203,7 @@ while ($plan = mysqli_fetch_assoc($result)):
         </button>
       </div>
       <form method="POST" action="dashboard/admin/updateplan.php">
+	  <input type="hidden" name="origin" value="eventpage">
         <div class="modal-body">
           <input type="hidden" name="planid" id="editPlanId">
           <div class="mb-3">
@@ -208,22 +223,21 @@ while ($plan = mysqli_fetch_assoc($result)):
             <input type="number" class="form-control" id="editAmount" name="amount" required>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" name="editPlan" class="btn btn-primary">Save changes</button>
-        </div>
+<div class="d-flex justify-content-between">
+    <button type="submit" name="editPlan" class="btn btn-primary">Save changes</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
       </form>
     </div>
   </div>
-
+  </div>
 
 
 
 <?php
 require('footer.html');
 ?>
-    
-  </div>
+
 
 <!-- Bootstrap 4 JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -240,7 +254,7 @@ require('footer.html');
   <script src="js/main.js"></script>
     
   </body>
-  <script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
   var editPlanModal = document.getElementById('editPlanModal');
 
@@ -264,18 +278,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-function populatePlanData(planId) {
-  // Fetch the plan details based on planId (via AJAX or passing PHP variables)
-  // You can use AJAX to get the details dynamically or pass the data into the modal from the server-side.
-  const planDetails = <?php echo json_encode($row); ?>; // this assumes `$row` contains the plan data
-  
-  document.getElementById('editPlanId').value = planDetails.planid;
-  document.getElementById('editPlanName').value = planDetails.planName;
-  document.getElementById('editDescription').value = planDetails.description;
-  document.getElementById('editValidity').value = planDetails.validity;
-  document.getElementById('editAmount').value = planDetails.amount;
-}
-
 // Assuming you have jQuery included in your project
 $(document).ready(function() {
   $('#editPlanModal').on('show.bs.modal', function (event) {
@@ -284,9 +286,9 @@ $(document).ready(function() {
     var modal = $(this);
     modal.find('#editPlanId').val(planId);
 
-    // Fetch and populate the rest of the fields if needed
+    // Fetch and populate the rest of the fields via AJAX if needed
     $.ajax({
-      url: 'dashboard\admin\fetch_plan_details.php',
+      url: 'dashboard/admin/fetch_plan_details.php', // Ensure correct URL format
       method: 'GET',
       data: { planid: planId },
       success: function(response) {
@@ -295,11 +297,15 @@ $(document).ready(function() {
         modal.find('#editDescription').val(response.desc);
         modal.find('#editValidity').val(response.planval);
         modal.find('#editAmount').val(response.amount);
+      },
+      error: function(xhr, status, error) {
+        console.error('Error fetching plan details:', error);
       }
     });
   });
 });
 </script>
+
 </html>
 <?php
 require 'important_include.php';

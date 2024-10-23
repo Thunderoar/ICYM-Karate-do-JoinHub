@@ -86,34 +86,35 @@ page_protect();
 
 		<hr />
 		
-		<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">
-		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>NEW PLAN DETAILS</h6>
+<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
+    <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">
+        <div class="a1-container a1-dark-gray a1-center">
+            <h6>NEW PLAN DETAILS</h6>
         </div>
-       <form id="form1" name="form1" method="post" class="a1-container" action="submit_plan_new.php" enctype="multipart/form-data">
-         <table width="100%" border="0" align="center">
-         <tr>
-           <td height="35"><table width="100%" border="0" align="center">
-		   <tr>
-               <td height="35">Type of Plan:</td>
-               <td height="35"><select name="plantype" id="plantype" required>
+        <form id="form1" name="form1" method="post" class="a1-container" action="submit_plan_new.php" enctype="multipart/form-data">
+            <table width="100%" border="0" align="center">
+                <tr>
+                    <td height="35">
+                        <table width="100%" border="0" align="center">
+                            <tr>
+                                <td height="35">Type of Plan:</td>
+                                <td height="35">
+                                    <select name="plantype" id="plantype" required onchange="updateFeeLabel()">
+                                        <option value="">--Please Select--</option>
+                                        <option value="Core">Core</option>
+                                        <option value="Event">Event</option>
+                                        <option value="Tournament">Tournament</option>
+                                        <option value="Collaboration">Collaboration</option>
+                                    </select>
+                                </td>
+                            </tr>  
 
-					<option value="">--Please Select--</option>
-					<option value="Core">Core</option>
-					<option value="Event">Event</option>
-					<option value="Tournament">Tournament</option>
-					<option value="Collaboration">Collaboration</option>
-				</select></td>
-             </tr>  
-
-			 <!DOCTYPE html>
-
-			 <tr>
-			 <td height="35">Event Image: </td>
-				<td height="35">
-				<input type="file" name="image" accept="image/*">
-			</tr>
+                            <tr>
+                                <td height="35">Event Image:</td>
+                                <td height="35">
+                                    <input type="file" name="image" accept="image/*">
+                                </td>
+                            </tr>
 
            	 <tr>
            	   <td height="35">PLAN ID:</td>
@@ -128,37 +129,63 @@ page_protect();
 						?>
 				<input type="text" name="planid" id="planID" readonly value="<?php echo getRandomWord(); ?>"></td>
          	   </tr>
-             <tr>
-               <td height="35">Plan Name:</td>
-               <td height="35"><input name="planname" id="planName" type="text" placeholder="Enter plan name" size="40"></td>
-             </tr>
-             <tr>
-               <td height="35">Plan Description</td>
-               <td height="35"><input type="text" name="desc" id="planDesc" placeholder="Enter plan description" size="40"></td>
-             </tr>
 
-             <tr>
-               <td height="35">Plan Validity</td>
-               <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter period of validity" size="40"></td>
-             </tr>
+                            <tr>
+                                <td height="35">Plan Name:</td>
+                                <td height="35">
+                                    <input name="planname" id="planName" type="text" placeholder="Enter plan name" size="40">
+                                </td>
+                            </tr>
 
-             <tr>
-               <td height="35">Plan Fee:</td>
-               <td height="35"><input type="text" name="amount" id="planAmnt" placeholder="Enter plan amount" size="40"></td>
-             </tr>     
-            
-             <tr>
-             <tr>
-               <td height="35">&nbsp;</td>
-               <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="CREATE PLAN" >
-                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
-             </tr>
-           </table></td>
-         </tr>
-         </table>
-       </form>
+                            <tr>
+                                <td height="35">Plan Description:</td>
+                                <td height="35">
+                                    <input type="text" name="desc" id="planDesc" placeholder="Enter plan description" size="40">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td height="35">Start Date:</td>
+                                <td height="35">
+                                    <input type="date" name="startDate"  id="startDate" onchange="calculateDuration()">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td height="35">End Date:</td>
+                                <td height="35">
+                                    <input type="date" name="endDate"  id="endDate" onchange="calculateDuration()">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td height="35">Duration (Days):</td>
+                                <td height="35">
+                                    <input type="number" name="duration"  id="duration" readonly>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td height="35" id="feeLabel">Plan Fee:</td>
+                                <td height="35">
+                                    <input type="text" name="amount" id="planAmnt" placeholder="Enter plan amount" size="40">
+                                </td>
+                            </tr>     
+
+                            <tr>
+                                <td height="35">&nbsp;</td>
+                                <td height="35">
+                                    <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="CREATE PLAN">
+                                    <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
-    </div>   
+</div>
 		
 		
 
@@ -166,6 +193,34 @@ page_protect();
     	</div>
 
     </body>
+	<script>
+	function updateFeeLabel() {
+        const selectedPlanType = document.getElementById('plantype').value;
+        const feeLabel = document.getElementById('feeLabel');
+
+        // Update the label text based on selected plan type
+        if (selectedPlanType) {
+            feeLabel.innerText = selectedPlanType + " Fee:"; // Update the label to show the selected plan type
+        } else {
+            feeLabel.innerText = "Plan Fee:"; // Default label if no plan is selected
+        }
+    }
+	
+    function calculateDuration() {
+        const startDateInput = document.getElementById('startDate').value;
+        const endDateInput = document.getElementById('endDate').value;
+
+        if (startDateInput && endDateInput) {
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(endDateInput);
+            const duration = (endDate - startDate) / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+
+            document.getElementById('duration').value = duration >= 0 ? duration : 0; // Ensure duration is not negative
+        } else {
+            document.getElementById('duration').value = ''; // Clear duration if dates are not both selected
+        }
+    }
+</script>
 </html>
 
 

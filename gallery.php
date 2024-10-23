@@ -52,7 +52,6 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     margin-bottom: 20px;
 }
 
- 
     </style>
   </head>
   <body>
@@ -116,13 +115,18 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
     }
 }
 ?>
-
-<!-- Modal for adding a new section -->
 <?php if ($is_admin_logged_in): ?>
-<div class="add-section-container">
+<!-- Global Edit Button -->
+<div class="text-center mb-4">
+    <button id="globalEditBtn" class="btn btn-warning">Enter Edit Mode</button>
+</div>
+
+<!-- Add New Section Button (Initially Hidden) -->
+<div class="add-section-container text-center" style="display: none;">
     <button id="addSectionBtn" class="btn btn-info mb-4">Add New Section</button>
 </div>
 
+<!-- Modal for adding a new section -->
 <div class="modal fade" id="newSectionModal" tabindex="-1" aria-labelledby="newSectionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -185,11 +189,10 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
         </div>
     </div>
 </div>
-
 <div>
     <?php
     $is_admin_logged_in = isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'];
-    
+
     // Fetch sections and their images from the database
     $query = "SELECT gs.section_id, gs.section_name, gs.section_description, gi.image_id, gi.image_path
               FROM gallery_sections gs
@@ -216,28 +219,27 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
         }
         $count++; ?>
         <div class="col-12 col-md-4 mb-4 position-relative">
-            <div class="section-header mb-2 d-flex justify-content-between align-items-center">
+            <div class="section-header mb-2">
                 <h3 class="d-inline-block"><?= htmlspecialchars($section['name']) ?></h3>
-                <?php if ($is_admin_logged_in): ?>
-                <button class="btn btn-secondary edit-btn" data-section-id="<?= $section_id ?>">Edit</button>
-                <div class="button-container d-flex gap-2" style="display: none;" id="buttons-<?= $section_id ?>">
-                    <button class="btn btn-primary add-image-btn" data-section-id="<?= $section_id ?>">+</button>
-                    <button class="btn btn-danger delete-section-btn" data-section-id="<?= $section_id ?>">-</button>
+                <div class="button-container gap-2" style="display: none;" id="buttons-<?= $section_id ?>">
+                    <button class="btn btn-primary add-image-btn" data-section-id="<?= $section_id ?>">Add Image</button>
+                    <button class="btn btn-danger delete-section-btn" data-section-id="<?= $section_id ?>">Delete Section</button>
                 </div>
-                <?php endif; ?>
             </div>
             <p><?= htmlspecialchars($section['description']) ?></p>
             <div class="row">
                 <?php if (!empty($section['images'])): ?>
                     <?php foreach ($section['images'] as $image): ?>
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                            <div class="image-container d-flex position-relative">
+                            <div class="image-container position-relative">
                                 <a href="<?= htmlspecialchars($image['path']) ?>" data-fancybox="gal" class="flex-grow-1">
                                     <img src="<?= htmlspecialchars($image['path']) ?>" alt="Image" class="img-fluid rounded shadow">
                                 </a>
-                                <?php if ($is_admin_logged_in): ?>
-                                <button class="btn btn-danger btn-sm delete-image-btn position-absolute" style="top: 10px; right: 10px;" data-image-id="<?= $image['id'] ?>">-</button>
-                                <?php endif; ?>
+                                <div class="delete-button-container" style="display: none;">
+                                    <?php if ($is_admin_logged_in): ?>
+                                        <button class="btn btn-danger btn-sm delete-image-btn position-absolute" style="top: 10px; right: 10px;" data-image-id="<?= $image['id'] ?>">-</button>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -262,6 +264,7 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
 
 
 
+
     <?php
     require('footer.html');
     ?>
@@ -270,7 +273,7 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
   </div>
 
   <!-- Include JS scripts -->
-  <script src="js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
@@ -281,104 +284,116 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
   <script src="js/aos.js"></script>
   <script src="js/main.js"></script>
 
-  <script>
-  const addSectionBtn = document.getElementById('addSectionBtn');
-  const formContainer = document.getElementById('formContainer');
+<script>
+$(document).ready(function() {
+    // Ensure the button containers are hidden on page load
+    $('.button-container').hide();
 
-document.addEventListener('DOMContentLoaded', function () {
     // Button to trigger the form for adding a new section
-    document.getElementById('addSectionBtn').addEventListener('click', function () {
-        // Hide the image upload form if visible
+    $('#addSectionBtn').on('click', function() {
         $('#imageUploadModal').modal('hide');
-        // Show the new section modal
         $('#newSectionModal').modal('show');
     });
 
-    // Button to trigger the form for adding images to a section
-    document.querySelectorAll('.add-image-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const sectionId = this.getAttribute('data-section-id');
-            // Set the section ID in the image upload form
-            document.getElementById('section_id').value = sectionId;
-            // Hide the new section form if visible
-            $('#newSectionModal').modal('hide');
-            // Show the image upload modal
-            $('#imageUploadModal').modal('show');
-        });
-    });
-
-    // Close buttons for modals
-    document.querySelector('.close').addEventListener('click', function () {
+    // Add image button logic
+    $(document).on('click', '.add-image-btn', function() {
+        const sectionId = $(this).data('section-id');
+        $('#section_id').val(sectionId);
         $('#newSectionModal').modal('hide');
-        $('#imageUploadModal').modal('hide');
+        $('#imageUploadModal').modal('show');
     });
 
-    // Attach click event listener to all delete buttons
-    document.querySelectorAll('.delete-image-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const imageId = this.getAttribute('data-image-id');
-            if (confirm("Are you sure you want to delete this image?")) {
-                // Send request to server to delete image
-                fetch('dashboard/admin/delete_image.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ image_id: imageId }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Remove the image element from the page
-                        this.closest('.col-6').remove();
-                    } else {
-                        alert("Failed to delete the image.");
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        });
+    // Edit button logic - show buttons for the clicked section, hide for others
+    $(document).on('click', '.edit-btn', function() {
+        const sectionId = $(this).data('section-id');
+        $('.button-container').not(`#buttons-${sectionId}`).hide(); // Hide all except the clicked one
+        $(`#buttons-${sectionId}`).toggle(); // Toggle the clicked one
     });
 
-    // Delete section AJAX
-    $('.delete-section-btn').click(function () {
-        var section_id = $(this).data('section-id');
+    // Show delete button on hover
+    $(document).on('mouseenter', '.image-container', function() {
+        $(this).find('.delete-button-container').show(); // Show delete button
+    }).on('mouseleave', '.image-container', function() {
+        $(this).find('.delete-button-container').hide(); // Hide delete button
+    });
+
+    // Delete image logic
+    $(document).on('click', '.delete-image-btn', function() {
+        const imageId = $(this).data('image-id');
+        if (confirm("Are you sure you want to delete this image?")) {
+            fetch('dashboard/admin/delete_image.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image_id: imageId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    $(this).closest('.col-6').remove();
+                } else {
+                    alert("Failed to delete the image.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the image.');
+            });
+        }
+    });
+
+    // Delete section logic
+    $(document).on('click', '.delete-section-btn', function() {
+        const section_id = $(this).data('section-id');
         if (confirm('Are you sure you want to delete this section?')) {
             $.ajax({
                 type: 'POST',
-                url: 'dashboard/admin/delete_section.php', // Replace with the correct PHP file path
+                url: 'dashboard/admin/delete_section.php',
                 data: { delete_section_id: section_id },
-                success: function (response) {
+                success: function(response) {
                     alert(response);
-                    location.reload(); // Refresh the page to reflect the changes
+                    location.reload(); // Refresh the page to reflect changes
                 },
-                error: function () {
+                error: function() {
                     alert('An error occurred while deleting the section.');
                 }
             });
         }
     });
-
-    // Edit button logic
-    const editButtons = document.querySelectorAll('.edit-btn');
-    editButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const sectionId = this.getAttribute('data-section-id');
-            const buttonContainer = document.getElementById(`buttons-${sectionId}`);
-            if (buttonContainer.style.display === 'none' || buttonContainer.style.display === '') {
-                buttonContainer.style.display = 'flex';
-            } else {
-                buttonContainer.style.display = 'none';
-            }
-        });
-    });
 });
 
+    let isEditing = false; // Track editing state
+
+    document.getElementById('globalEditBtn').addEventListener('click', function() {
+        // Toggle editing state
+        isEditing = !isEditing;
+
+        // Show or hide the Add New Section button
+        const addSectionContainer = document.querySelector('.add-section-container');
+        addSectionContainer.style.display = isEditing ? 'block' : 'none'; // Show below Edit Mode button
+
+        // Show or hide all button containers in sections
+        const buttonContainers = document.querySelectorAll('.button-container');
+        buttonContainers.forEach(container => {
+            container.style.display = isEditing ? 'flex' : 'none'; // Change 'flex' or 'none' based on layout
+        });
+
+        // Change the button text and color based on the editing state
+        if (isEditing) {
+            this.textContent = 'Exit Edit Mode';
+            this.classList.remove('btn-warning');
+            this.classList.add('btn-danger'); // Change to red when in edit mode
+        } else {
+            this.textContent = 'Enter Edit Mode';
+            this.classList.remove('btn-danger');
+            this.classList.add('btn-warning'); // Change back to original color
+        }
+    });
+</script>
 
 
 
-
-  </script>
   
   </body>
 </html>

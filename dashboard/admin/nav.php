@@ -18,13 +18,13 @@
 
 	<li id="health_status"><a href="new_health_status.php"><i class="entypo-user-add"></i><span>Health Status</span></a> 	
 
-		<li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Planning</span></a>
+		<li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Event Planning</span></a>
 
 		<ul id="planExpand">
 			<li class="active">
-				<a href="new_plan.php"><span>Add Plan</span></a></li>
+				<a href="new_plan.php"><span>Add New Event</span></a></li>
 
-			<li><a href="view_plan.php"><span>Edit Planning</span></a></li>
+			<li><a href="view_plan.php"><span>Edit Event</span></a></li>
 		</ul>
 
 	<li class="" id="overviewhassubopen"><a href="#" onclick="memberExpand(3)"><i class="entypo-box"></i><span>Overview</span></a>
