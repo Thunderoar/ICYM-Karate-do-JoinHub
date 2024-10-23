@@ -45,12 +45,20 @@ if ($pass_key == "" &&  $user_id_auth == "") {
                 WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key' AND l.authority = 'coach'";
     } else {
         // Member (user) login query with join to enrolls_to and plan tables
-        $sql = "SELECT u.userid, u.username, 'member' as authority, i.image_path, e.planid, p.planName, p.description, p.planType, p.validity, p.amount
-                FROM users u
-                LEFT JOIN images i ON i.userid = u.userid
-                LEFT JOIN enrolls_to e ON e.userid = u.userid
-                LEFT JOIN plan p ON p.planid = e.planid
-                WHERE u.username = '$user_id_auth' AND u.pass_key = '$pass_key'";
+$sql = "
+    SELECT u.userid, u.username, 'member' AS authority, i.image_path, 
+           e.planid, p.planName, p.description, p.planType, p.validity, p.amount
+    FROM users u
+    LEFT JOIN images i ON i.userid = u.userid
+    LEFT JOIN enrolls_to e ON e.userid = u.userid
+    LEFT JOIN plan p ON p.planid = e.planid
+    WHERE u.username = '$user_id_auth' AND u.pass_key = '$pass_key' 
+    AND e.et_id = (
+        SELECT MAX(et.et_id) 
+        FROM enrolls_to et 
+        WHERE et.userid = u.userid
+    )";
+
     }
 
     $result = mysqli_query($con, $sql);

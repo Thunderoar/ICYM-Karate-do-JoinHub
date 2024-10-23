@@ -141,7 +141,14 @@ if (mysqli_num_rows($result) > 0) {
                     </form>
                   </td>";
         } else {
-            echo "<td>No Action Needed</td>"; // Indicate no action is needed
+            // Show "Undo Payment" button if the user has already paid
+            echo "<td>
+                    <form action='undo_payment.php' method='post'>
+                        <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
+                        <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
+                        <input type='submit' class='a1-btn a1-red' value='Undo Payment' class='btn btn-warning'/>
+                    </form>
+                  </td>";
         }
         echo "</tr>";
     }
@@ -149,9 +156,9 @@ if (mysqli_num_rows($result) > 0) {
     echo "<tr><td colspan='7'>No records found</td></tr>";
 }
 ?>
-				</tbody>
+    </tbody>
+</table>
 
-		</table>
 
 
 			<?php include('footer.php'); ?>

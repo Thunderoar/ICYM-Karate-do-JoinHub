@@ -105,10 +105,27 @@ page_protect();
            	   <td height="35">Timetable Name:</td>
            	   <td height="35"><input name="rname"  size="30" required/></td>
          	   </tr>
-			    <tr>
-           	   <td height="35">plan id:</td>
-           	   <td height="35"><input name="pidd"  size="30" value="BJEFSY" required/></td>
-         	   </tr>
+<tr>
+    <td height="35">Plan:</td>
+    <td height="35">
+        <select name="pidd" required>
+            <option value="" disabled selected>Select a plan</option> <!-- Default option -->
+            <?php
+            // Fetch plans from the database
+            $query = "SELECT planid, planName FROM plan WHERE active='yes'"; // Assuming you only want active plans
+            $result = mysqli_query($con, $query);
+            
+            if ($result) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo '<option value="' . $row['planid'] . '">' . $row['planName'] . '</option>';
+                }
+            } else {
+                echo '<option value="" disabled>Error fetching plans</option>'; // Handle errors
+            }
+            ?>
+        </select>
+    </td>
+</tr>
 			   
 			   <tr>
                <td height="35">DAY 1:</td>

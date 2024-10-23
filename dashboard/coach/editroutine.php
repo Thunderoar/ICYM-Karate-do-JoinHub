@@ -96,53 +96,39 @@ page_protect();
 
 		<hr />
 		
-		<table class="table table-bordered datatable" id="table-1" border=1>
-			
-				<tr>
-					<th>Sl.No</th>
-					<th>Timetable Name</th>
-					<th>Timetable Details</th>
-					<th>Delete Timetable</th>
-				</tr>
-		
-				<tbody>
+<table class="table table-bordered datatable" id="table-1" border=1>
+    <tr>
+        <th>Sl.No</th>
+        <th>Timetable Name</th>
+        <th>Timetable Details</th>
+        <th>Delete Timetable</th>
+    </tr>
+    <tbody>
+    <?php
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+        $currentStaffId = $_SESSION['staffid']; // Make sure you set this in your login process
 
-				<?php
+        // Modify the query to fetch timetables only for the current coach
+        $query = "SELECT * FROM sports_timetable WHERE staffid = '$currentStaffId'";
+        $result = mysqli_query($con, $query);
+        $sno = 1;
 
+        if (mysqli_affected_rows($con) != 0) {
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                echo "<tr><td>".$sno."</td>";
+                echo "<td>" . $row['tname'] . "</td>";
+                echo '<td><a href="editdetailroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable" ></a></td>';
+                echo "<td><form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'><input type='hidden' name='name' value='" . $row['tid'] . "'/><input type='submit' value='Delete' width='20px' id='boxxe' class='a1-btn a1-orange'/></form></td></tr>";
+                $sno++;
+            }
+        }
+    ?>
+    </tbody>
+</table>
 
-					$query  = "select * from sports_timetable";
-					//echo $query;
-					$result = mysqli_query($con, $query);
-					$sno    = 1;
-
-					if (mysqli_affected_rows($con) != 0) 
-					{
-					    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
-						{
-
-					       
-					           
-					                
-					                 echo "<tr><td>".$sno."</td>";
-					                echo "<td>" . $row['tname'] . "</td>";
-					           
-					                
-					                $sno++;
-					                
-					              echo '<td><a href="editdetailroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable" ></a></td>';
-								 // echo '<td><a href="deleteroutine.php?id='.$row['tid'].'"><input type="button" class="a1-btn a1-blue" value="Delete Routine" ></a></td></tr>';
-								 echo "<td><form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'><input type='hidden' name='name' value='" . $row['tid'] . "'/><input type='submit' value='Delete' width='20px' id='boxxe' class='a1-btn a1-orange'/></form></td></tr>";
-									
-					                $uid = 0;
-					            
-					        
-					    }
-					}
-
-					?>									
-				</tbody>
-
-		</table>
 
 
 				

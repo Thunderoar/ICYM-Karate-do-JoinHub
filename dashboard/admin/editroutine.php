@@ -1,9 +1,6 @@
 <?php
 require '../../include/db_conn.php';
 page_protect();
- 
-
-
 ?>
 
 <!DOCTYPE html>
@@ -96,84 +93,67 @@ page_protect();
 
 		<hr />
 		
-		<table class="table table-bordered datatable" id="table-1" border=1>
-			
-				<tr>
-					<th>No</th>
-					<th>Timetable Name</th>
-					<th>Timetable Details</th>
-					<th>Delete Timetable</th>
-					<th>Approve Timetable</th>
-				</tr>
-		
-				<tbody>
+            <table class="table table-bordered datatable" id="table-1" border=1>
+                <tr>
+                    <th>No</th>
+                    <th>Timetable Name</th>
+                    <th>Event</th> <!-- New Event Column -->
+                    <th>Timetable Details</th>
+                    <th>Delete Timetable</th>
+                    <th>Approve Timetable</th>
+                </tr>
+                <tbody>
+                <?php
+                // Updated SQL query to join timetable and plan tables
+                $query = "SELECT tt.*, p.planName 
+                          FROM sports_timetable tt 
+                          JOIN plan p ON tt.planid = p.planid";
+                $result = mysqli_query($con, $query);
+                $sno = 1;
 
-<?php
-$query = "SELECT * FROM sports_timetable";
-// Execute the query
-$result = mysqli_query($con, $query);
-$sno = 1;
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                        $hasApproved = $row['hasApproved'];
+                        
+                        echo "<tr><td>" . $sno . "</td>";
+                        echo "<td>" . htmlspecialchars($row['tname']) . "</td>"; 
+                        echo "<td>" . htmlspecialchars($row['planName']) . "</td>"; // Display the plan name as the event
+                        $sno++;
 
-if (mysqli_num_rows($result) > 0) { // Use mysqli_num_rows to check for rows
-    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        $hasApproved = $row['hasApproved'];
-        
-        echo "<tr><td>" . $sno . "</td>";
-        echo "<td>" . htmlspecialchars($row['tname']) . "</td>"; // Use htmlspecialchars to prevent XSS
-        $sno++;
+                        // Edit Timetable Button
+                        echo '<td><a href="editdetailroutine.php?id=' . htmlspecialchars($row['tid']) . '">
+                              <input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable"></a></td>';
 
-        // Edit Timetable Button
-        echo '<td><a href="editdetailroutine.php?id=' . htmlspecialchars($row['tid']) . '">
-              <input type="button" class="a1-btn a1-blue" id="boxxe" value="Edit Timetable"></a></td>';
+                        // Delete Timetable Button
+                        echo "<td>
+                                <form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'>
+                                    <input type='hidden' name='name' value='" . htmlspecialchars($row['tid']) . "'/>
+                                    <input type='submit' value='Delete' class='a1-btn a1-orange'/>
+                                </form>
+                              </td>";
 
-        // Delete Timetable Button
-        echo "<td>
-                <form action='deleteroutine.php' method='post' onsubmit='return ConfirmDelete()'>
-                    <input type='hidden' name='name' value='" . htmlspecialchars($row['tid']) . "'/>
-                    <input type='submit' value='Delete' class='a1-btn a1-orange'/>
-                </form>
-              </td>";
-
-        // Approval and Rejection Buttons
-        echo "<td>";
-        
-        if ($hasApproved === 'Not Yet') {
-            // Show Approve and Reject buttons
-            echo "<form action='approve_reject_routine.php' method='post'>
-                    <input type='hidden' name='tid' value='" . htmlspecialchars($row['tid']) . "' />
-                    <button type='submit' name='action' value='approve' class='a1-btn a1-green'>✔</button>
-                    <button type='submit' name='action' value='reject' class='a1-btn a1-red'>✘</button>
-                  </form>";
-        } elseif ($hasApproved === 'yes') {
-            echo "<span class='approved'>Approved</span>";
-        } else {
-            echo "<span class='rejected'>Rejected</span>";
-        }
-
-        echo "</td>";
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='5'>No records found</td></tr>"; // Handle no records found
-}
-?>
-							
-				</tbody>
-
-		</table>
-
-
-				
-		
-		
-		
-		
-		
-		
-		
-
-			
-
+                        // Approval and Rejection Buttons
+                        echo "<td>";
+                        if ($hasApproved === 'Not Yet') {
+                            echo "<form action='approve_reject_routine.php' method='post'>
+                                    <input type='hidden' name='tid' value='" . htmlspecialchars($row['tid']) . "' />
+                                    <button type='submit' name='action' value='approve' class='a1-btn a1-green'>✔</button>
+                                    <button type='submit' name='action' value='reject' class='a1-btn a1-red'>✘</button>
+                                  </form>";
+                        } elseif ($hasApproved === 'yes') {
+                            echo "<span class='approved'>Approved</span>";
+                        } else {
+                            echo "<span class='rejected'>Rejected</span>";
+                        }
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>No records found</td></tr>"; // Adjusted column span
+                }
+                ?>
+                </tbody>
+            </table>
     	</div>
 
     </body>
