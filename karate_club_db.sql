@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2024 at 12:46 PM
+-- Generation Time: Oct 23, 2024 at 04:30 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -93,26 +93,28 @@ CREATE TABLE `enrolls_to` (
   `userid` varchar(20) NOT NULL,
   `paid_date` varchar(40) NOT NULL,
   `expire` varchar(40) NOT NULL,
-  `hasPaid` varchar(5) NOT NULL DEFAULT 'no'
+  `hasPaid` varchar(5) NOT NULL DEFAULT 'no',
+  `hasApproved` varchar(5) NOT NULL,
+  `receiptIMG` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
 --
 
-INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`) VALUES
-(35, 'XTWIOL', '1729326958', '', '', 'no'),
-(37, 'XTWIOL', '1729331491', '', '', 'no'),
-(58, 'XTWIOL', '1729500896', '', '', 'no'),
-(69, 'XTWIOL', '1729589256', '', '', 'no'),
-(70, 'CAFXVW', '1729589256', '', '', 'no'),
-(71, 'CAFXVW', '1729326958', '', '', 'no'),
-(72, 'ENKZJO', '1729326958', '', '', 'no'),
-(74, 'XTWIOL', '1729653160', '', '', 'no'),
-(75, 'CAFXVW', '1729653160', '', '', 'no'),
-(76, 'XTWIOL', '1729654531', '2024-10-23 18:10:06', '9999-12-31', 'yes'),
-(78, 'CAFXVW', '1729654531', '', '2024-11-23 11:40:07', 'no'),
-(79, 'ENKZJO', '1729654531', '', '2024-11-23 13:03:34', 'no');
+INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
+(35, 'XTWIOL', '1729326958', '', '', 'no', '', ''),
+(37, 'XTWIOL', '1729331491', '', '', 'no', '', ''),
+(58, 'XTWIOL', '1729500896', '', '', 'no', 'no', ''),
+(69, 'XTWIOL', '1729589256', '', '', 'no', '', ''),
+(70, 'CAFXVW', '1729589256', '', '', 'no', '', ''),
+(71, 'CAFXVW', '1729326958', '', '', 'no', '', ''),
+(72, 'ENKZJO', '1729326958', '', '', 'no', '', ''),
+(74, 'XTWIOL', '1729653160', '', '', 'no', '', ''),
+(75, 'CAFXVW', '1729653160', '', '', 'no', '', ''),
+(76, 'XTWIOL', '1729654531', '', '', 'no', 'no', ''),
+(78, 'CAFXVW', '1729654531', '', '', 'no', 'no', ''),
+(79, 'ENKZJO', '1729654531', '2024-10-23 22:28:48', '9999-12-31', 'yes', 'yes', '');
 
 -- --------------------------------------------------------
 
@@ -357,9 +359,8 @@ CREATE TABLE `plan` (
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
 ('CAFXVW', 'qweqweqw', 'werwer', 'Event', '2024-10-23', '2024-10-26', 3, '', 213, 'yes'),
-('DZMCAH', 'real', 'real', 'Event', '2024-10-23', '2024-10-26', 3, '', 250, 'yes'),
 ('ENKZJO', '1', '1', 'Event', '', '', 0, '1', 1, 'yes'),
-('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '1', 20, 'yes');
+('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes');
 
 -- --------------------------------------------------------
 
