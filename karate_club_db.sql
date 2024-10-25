@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2024 at 04:30 PM
+-- Generation Time: Oct 25, 2024 at 10:58 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,6 +54,7 @@ INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zi
 ('696159057', '1729654531', '', '', '', ''),
 ('762966398', '1729502982', '', '', '', ''),
 ('769730378', '1729499715', '', '', '', ''),
+('791246783', '1729816197', '', '', '', ''),
 ('889334180', '1729506355', '', '', '', ''),
 ('935899936', '1729499109', '', '', '', ''),
 ('948864454', '1729503655', '', '', '', ''),
@@ -95,7 +96,7 @@ CREATE TABLE `enrolls_to` (
   `expire` varchar(40) NOT NULL,
   `hasPaid` varchar(5) NOT NULL DEFAULT 'no',
   `hasApproved` varchar(5) NOT NULL,
-  `receiptIMG` varchar(50) NOT NULL
+  `receiptIMG` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -104,8 +105,8 @@ CREATE TABLE `enrolls_to` (
 
 INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
 (35, 'XTWIOL', '1729326958', '', '', 'no', '', ''),
-(37, 'XTWIOL', '1729331491', '', '', 'no', '', ''),
-(58, 'XTWIOL', '1729500896', '', '', 'no', 'no', ''),
+(37, 'XTWIOL', '1729331491', '', '', 'no', 'no', ''),
+(58, 'XTWIOL', '1729500896', '2024-10-24 08:42:42', '9999-12-31', 'yes', 'yes', '../../dashboard/admin/uploads/payment/cat-sleepy.gif'),
 (69, 'XTWIOL', '1729589256', '', '', 'no', '', ''),
 (70, 'CAFXVW', '1729589256', '', '', 'no', '', ''),
 (71, 'CAFXVW', '1729326958', '', '', 'no', '', ''),
@@ -114,7 +115,9 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `h
 (75, 'CAFXVW', '1729653160', '', '', 'no', '', ''),
 (76, 'XTWIOL', '1729654531', '', '', 'no', 'no', ''),
 (78, 'CAFXVW', '1729654531', '', '', 'no', 'no', ''),
-(79, 'ENKZJO', '1729654531', '2024-10-23 22:28:48', '9999-12-31', 'yes', 'yes', '');
+(79, 'ENKZJO', '1729654531', '2024-10-23 22:32:01', '9999-12-31', 'yes', 'yes', ''),
+(80, 'CAFXVW', '1729500896', '', '2024-11-25 08:27:02', 'no', '', ''),
+(81, 'XTWIOL', '1729816197', '2024-10-25', '1970-01-01', 'no', '', '');
 
 -- --------------------------------------------------------
 
@@ -191,6 +194,7 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('198765922', '', '', '', '', '', '1729499988'),
 ('204334593', '', '', '', '', '', '1729589256'),
 ('205571730', '', '', '', '', '', '1729503562'),
+('206420275', '', '', '', '', '', '1729816197'),
 ('277790349', '', '', '', '', '', '1729499001'),
 ('297159777', '', '', '', '', '', '1729500022'),
 ('319821461', '', '', '', '', '', '1729331377'),
@@ -248,6 +252,7 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('3', NULL, '1729326958', NULL, NULL, NULL, '2024-10-19 08:36:30'),
 ('3fc07e44-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503504', NULL, NULL, NULL, '2024-10-21 09:38:37'),
 ('4', NULL, '1729500525', NULL, NULL, NULL, '2024-10-21 08:48:55'),
+('4b9288ef-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, NULL, NULL, '2024-10-25 00:30:11'),
 ('5', NULL, '1729499689', NULL, NULL, NULL, '2024-10-21 08:35:06'),
 ('515', NULL, '1729499673', NULL, NULL, NULL, '2024-10-21 08:34:41'),
 ('5e628491-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, NULL, NULL, '2024-10-21 09:39:29'),
@@ -304,6 +309,7 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 ('2f0b6ebb-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503048', NULL, 'noo', 'noo', '2f0b6ecb-8f8f-11ef-a5b9-004e01ffe201', 'member'),
 ('3cfe7084-8df5-11ef-9394-004e01ffe201', NULL, '1729326958', NULL, 'b', 'b', '3cfe70c0-8df5-11ef-9394-004e01ffe201', 'member'),
 ('3fc06360-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503504', NULL, 'e', 'e', '3fc06373-8f90-11ef-a5b9-004e01ffe201', 'member'),
+('4b927727-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, 'u', 'u', '4b927736-9268-11ef-8788-004e01ffe201', 'member'),
 ('4dd8cffc-8f89-11ef-a5b9-004e01ffe201', NULL, '1729500525', NULL, 'a', 'a', '4dd8d00b-8f89-11ef-a5b9-004e01ffe201', 'member'),
 ('54f7108e-8651-11ef-a918-3ca067e52da9', NULL, '1728486893', NULL, 'a', 'a', '54f7114d-8651-11ef-a918-3ca067e52da9', 'member'),
 ('5e626f5f-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, 'h', 'h', '5e626f6e-8f90-11ef-a5b9-004e01ffe201', 'member'),
@@ -360,7 +366,34 @@ CREATE TABLE `plan` (
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
 ('CAFXVW', 'qweqweqw', 'werwer', 'Event', '2024-10-23', '2024-10-26', 3, '', 213, 'yes'),
 ('ENKZJO', '1', '1', 'Event', '', '', 0, '1', 1, 'yes'),
+('JUCDZN', 'future', 'future', 'Event', '2024-10-31', '2024-11-30', 30, 'Lifetime', 20, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `site_content`
+--
+
+CREATE TABLE `site_content` (
+  `content_id` int(11) NOT NULL,
+  `section_name` varchar(50) NOT NULL,
+  `content_text` text DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `site_content`
+--
+
+INSERT INTO `site_content` (`content_id`, `section_name`, `content_text`, `image_path`, `last_updated`, `created_at`) VALUES
+(1, 'about_hero_image', NULL, 'images/hero_1729843905_aaf684e335f14f2b.jpg', '2024-10-25 08:11:45', '2024-10-25 07:42:51'),
+(2, 'about_main_text', 'WOW!', NULL, '2024-10-25 08:15:45', '2024-10-25 07:42:51'),
+(3, 'about_secondary_text', 'Our mission is to develop athletes who excel both in sports and in life.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51'),
+(4, 'about_column_1', 'We offer world-class training facilities and experienced coaching staasdasdff to help our athletes reach their full potential.', NULL, '2024-10-25 07:59:31', '2024-10-25 07:42:51'),
+(5, 'about_column_2', 'Our programs focus on both physical training and mental preparation, creating well-rounded athletes ready for competition.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51');
 
 -- --------------------------------------------------------
 
@@ -417,6 +450,33 @@ INSERT INTO `staff` (`staffid`, `name`, `username`, `pass_key`, `role`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `team_members`
+--
+
+CREATE TABLE `team_members` (
+  `member_id` int(11) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `position` varchar(100) NOT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `display_order` int(11) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `team_members`
+--
+
+INSERT INTO `team_members` (`member_id`, `full_name`, `position`, `image_path`, `display_order`, `active`, `created_at`, `updated_at`) VALUES
+(1, 'Jakub Bated', 'www22sdsdwq', 'images/team_1_1729827128.jpg', 1, 1, '2024-10-25 01:42:54', '2024-10-25 08:15:50'),
+(2, 'Joshua Figueroa', 'CEO, Founderqwe', 'images/player_1.jpg', 2, 1, '2024-10-25 01:42:54', '2024-10-25 01:56:56'),
+(3, 'Russell Vance', 'CEO, Founder', 'images/player_5.jpg', 3, 1, '2024-10-25 01:42:54', '2024-10-25 01:42:54'),
+(4, 'Carson Hodgson', 'CEO, Founder', 'images/player_3.jpg', 4, 1, '2024-10-25 01:42:54', '2024-10-25 01:42:54');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -439,9 +499,33 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`, `hasApproved`) VALUES
-('1729331491', 'c', 'UUID()', 'c', 'c', 'Male', '1', 'c@gmail.com', '2004-10-10', '2024-10-10', 'Yes'),
+('1729331491', 'c', 'UUID()', 'c', 'c', 'Male', '1', 'c@gmail.com', '2004-10-10', '2024-10-10', 'No'),
 ('1729500896', 'o', 'UUID()', 'o', 'o', 'Male', '1', 'o@gmail.com', '2004-10-10', '2024-10-10', 'Yes'),
-('1729654531', 'a', 'df9bf123-90ef-11ef-954f-004e01ffe201', 'a', 'a', '', '', 'a@gmail.com', '', '', 'Yes');
+('1729654531', 'a', 'df9bf123-90ef-11ef-954f-004e01ffe201', 'a', 'a', '', '', 'a@gmail.com', '', '', 'Yes'),
+('1729816197', 'u', '4b918e84-9268-11ef-8788-004e01ffe201', 'u', 'u', '', '', 'u@gmail.com', '', '', 'Yes');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `v_about_content`
+-- (See below for the actual view)
+--
+CREATE TABLE `v_about_content` (
+`content_id` int(11)
+,`section_name` varchar(50)
+,`content_text` text
+,`image_path` varchar(255)
+,`last_updated` timestamp
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `v_about_content`
+--
+DROP TABLE IF EXISTS `v_about_content`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_about_content`  AS SELECT `site_content`.`content_id` AS `content_id`, `site_content`.`section_name` AS `section_name`, `site_content`.`content_text` AS `content_text`, `site_content`.`image_path` AS `image_path`, `site_content`.`last_updated` AS `last_updated` FROM `site_content` WHERE `site_content`.`section_name` like 'about%' ORDER BY `site_content`.`content_id` ASC ;
 
 --
 -- Indexes for dumped tables
@@ -469,8 +553,7 @@ ALTER TABLE `enrolls_to`
 -- Indexes for table `gallery_images`
 --
 ALTER TABLE `gallery_images`
-  ADD PRIMARY KEY (`image_id`),
-  ADD KEY `section_id` (`section_id`);
+  ADD PRIMARY KEY (`image_id`);
 
 --
 -- Indexes for table `gallery_sections`
@@ -503,6 +586,13 @@ ALTER TABLE `plan`
   ADD PRIMARY KEY (`planid`);
 
 --
+-- Indexes for table `site_content`
+--
+ALTER TABLE `site_content`
+  ADD PRIMARY KEY (`content_id`),
+  ADD UNIQUE KEY `idx_section_name` (`section_name`);
+
+--
 -- Indexes for table `sports_timetable`
 --
 ALTER TABLE `sports_timetable`
@@ -513,6 +603,12 @@ ALTER TABLE `sports_timetable`
 --
 ALTER TABLE `staff`
   ADD PRIMARY KEY (`staffid`);
+
+--
+-- Indexes for table `team_members`
+--
+ALTER TABLE `team_members`
+  ADD PRIMARY KEY (`member_id`);
 
 --
 -- Indexes for table `users`
@@ -528,7 +624,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `enrolls_to`
 --
 ALTER TABLE `enrolls_to`
-  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `gallery_images`
@@ -541,6 +637,18 @@ ALTER TABLE `gallery_images`
 --
 ALTER TABLE `gallery_sections`
   MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `site_content`
+--
+ALTER TABLE `site_content`
+  MODIFY `content_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `team_members`
+--
+ALTER TABLE `team_members`
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
