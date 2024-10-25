@@ -117,7 +117,7 @@ page_protect();
                             </tr>
 
            	 <tr>
-           	   <td height="35">PLAN ID:</td>
+           	   <td height="35">Plan ID:</td>
            	   <td height="35"><?php
 							function getRandomWord($len = 6)
 							{
@@ -138,7 +138,7 @@ page_protect();
                             </tr>
 
                             <tr>
-                                <td height="35">Plan Description:</td>
+                                <td height="35">Description:</td>
                                 <td height="35">
                                     <input type="text" name="desc" id="planDesc" placeholder="Enter plan description" size="40">
                                 </td>

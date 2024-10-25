@@ -85,95 +85,97 @@ $isApproved = $row['hasApproved'];
 				<div class="approval-message">Please wait for approval by the Club Manager.</div><br>
             <?php else: ?>
                 <div class="row">
-                    <div class="col-sm-3">
-                        <a href="revenue_month.php">
-                            <div class="tile-stats tile-red">
-                                <div class="icon"><i class="entypo-users"></i></div>
-                                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                                    <h2>Paid Income This Month</h2><br>
-                                    <?php
-                                    date_default_timezone_set("Asia/Kuala_Lumpur");
-                                    $date = date('Y-m');
-                                    $query = "SELECT * FROM enrolls_to WHERE paid_date LIKE '$date%'";
-                                    $result = mysqli_query($con, $query);
-                                    $revenue = 0;
-                                    if (mysqli_num_rows($result) != 0) {
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            $query1 = "SELECT amount FROM plan WHERE planid='" . $row['planid'] . "'";
-                                            $result1 = mysqli_query($con, $query1);
-                                            if ($result1) {
-                                                $plan = mysqli_fetch_assoc($result1);
-                                                $revenue += floatval($plan['amount']);
-                                            }
-                                        }
-                                    }
-                                    echo "RM" . number_format($revenue, 2);
-                                    ?>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <a href="table_view.php">
-                            <div class="tile-stats tile-green">
-                                <div class="icon"><i class="entypo-chart-bar"></i></div>
-                                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                                    <h2>Total <br>Members</h2><br>
-                                    <?php
-                                    $query = "SELECT COUNT(*) FROM users";
-                                    $result = mysqli_query($con, $query);
-                                    if ($result) {
-                                        $row = mysqli_fetch_array($result);
-                                        echo $row['COUNT(*)'];
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <a href="over_members_month.php">
-                            <div class="tile-stats tile-aqua">
-                                <div class="icon"><i class="entypo-mail"></i></div>
-                                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                                    <h2>Joined This Month</h2><br>
-                                    <?php
-                                    date_default_timezone_set("Asia/Kuala_Lumpur");
-                                    $date = date('Y-m');
-                                    $query = "SELECT COUNT(*) as total FROM users WHERE joining_date LIKE '$date%'";
-                                    $result = mysqli_query($con, $query);
-                                    if ($result) {
-                                        $row = mysqli_fetch_assoc($result);
-                                        echo $row['total'];
-                                    } else {
-                                        echo "Error: " . mysqli_error($con);
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <a href="view_plan.php">
-                            <div class="tile-stats tile-blue">
-                                <div class="icon"><i class="entypo-rss"></i></div>
-                                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                                    <h2>Total Plan Available</h2><br>
-                                    <?php
-                                    $query = "SELECT COUNT(*) FROM plan WHERE active='yes'";
-                                    $result = mysqli_query($con, $query);
-                                    if ($result) {
-                                        $row = mysqli_fetch_array($result);
-                                        echo $row['COUNT(*)'];
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+			<div class="col-sm-3"><a href="payments.php">
+				<div class="tile-stats tile-red">
+					<div class="icon"><i class="entypo-users"></i></div>
+						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
+						<h2>You have paid</h2><br>
+						<?php
+							date_default_timezone_set("Asia/Kuala_Lumpur");
+							$date  = date('Y-m');
+							$query = "select * from enrolls_to WHERE  paid_date LIKE '$date%'";
+							//echo $query;
+							$result  = mysqli_query($con, $query);
+							$revenue = 0;
+							if (mysqli_affected_rows($con) != 0) {
+								while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+									$query1 = "SELECT * FROM plan WHERE planid='" . $row['planid'] . "'";
+									$result1 = mysqli_query($con, $query1);
+									
+									if ($result1) {
+										$value = mysqli_fetch_row($result1);
+										
+										// Ensure both $value[4] and $revenue are numeric before addition
+										$revenue = floatval($value[4]) + floatval($revenue);
+									}
+								}
+							}
+							echo "RM".$revenue;
+							?>
+						</div>
+				</div></a>
+			</div>
+			<div class="col-sm-3"><a href="new_health_status.php">
+				<div class="tile-stats tile-green">
+					<div class="icon"><i class="entypo-chart-bar"></i></div>
+						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
+						<h2>Healthy!<br></h2><br>
+							<?php
+							$query = "select COUNT(*) from users";
+							$result = mysqli_query($con, $query);
+							$i      = 1;
+							if (mysqli_affected_rows($con) != 0) {
+							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+							        //echo $row['COUNT(*)'];
+							    }
+							}
+							$i = 1;
+							?>
+						</div>
+				</div></a>
+			</div>
+			<div class="col-sm-3"><a href="viewroutine.php">
+				<div class="tile-stats tile-aqua">
+					<div class="icon"><i class="entypo-mail"></i></div>
+						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
+						<h2>Today's activity</h2><br>
+							<?php
+							date_default_timezone_set("Asia/Kuala_Lumpur");
+							$date  = date('Y-m');
+							$query = "select COUNT(*) from users WHERE joining_date LIKE '$date%'";
+							//echo $query;
+							$result = mysqli_query($con, $query);
+							$i      = 1;
+							if (mysqli_affected_rows($con) != 0) {
+							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+							        echo $row['COUNT(*)'];
+							    }
+							}
+							$i = 1;
+							?>
+						</div>
+				</div></a>
+			</div>
+			<div class="col-sm-3"><a href="view_plan.php">
+				<div class="tile-stats tile-blue">
+					<div class="icon"><i class="entypo-rss"></i></div>
+						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
+						<h2>Joined Activity</h2><br>
+							<?php
+							$query = "select COUNT(*) from plan where active='yes'";
+							//echo $query;
+							$result  = mysqli_query($con, $query);
+							$i = 1;
+							if (mysqli_affected_rows($con) != 0) {
+							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+							        echo $row['COUNT(*)'];
+							    }
+							}
+							$i = 1;
+							?>
+						</div>
+				</div></a>
+			</div>
                 </div>
             <?php endif; ?>
 

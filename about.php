@@ -1,3 +1,171 @@
+<?php
+require 'include/db_conn.php';
+
+// Start the session if it hasn't been started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Helper function to check admin status
+function isAdminLoggedIn() {
+    return isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] === true;
+}
+
+// Secure content sanitization function
+function sanitizeInput($input) {
+    global $con;
+    return mysqli_real_escape_string($con, strip_tags(trim($input)));
+}
+
+// Fetch about content
+function getAboutContent() {
+    global $con;
+    $content = [];
+    $sql = "SELECT section_name, content_text, image_path FROM site_content WHERE section_name LIKE 'about%'";
+    $result = $con->query($sql);
+    while($row = $result->fetch_assoc()) {
+        $content[$row['section_name']] = [
+            'text' => $row['content_text'],
+            'image' => $row['image_path']
+        ];
+    }
+    return $content;
+}
+
+// Fetch team members
+function getTeamMembers() {
+    global $con;
+    $sql = "SELECT * FROM team_members WHERE active = 1 ORDER BY display_order";
+    $result = $con->query($sql);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Secure file upload function
+function handleFileUpload($file, $target_dir, $prefix) {
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+    $max_size = 5 * 1024 * 1024; // 5MB
+    
+    if (!in_array($file['type'], $allowed_types)) {
+        return false;
+    }
+    
+    if ($file['size'] > $max_size) {
+        return false;
+    }
+    
+    $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $new_filename = $prefix . '_' . time() . '_' . bin2hex(random_bytes(8)) . '.' . $file_extension;
+    $target_file = $target_dir . $new_filename;
+    
+    if (!move_uploaded_file($file['tmp_name'], $target_file)) {
+        return false;
+    }
+    
+    return $target_file;
+}
+
+// Handle content updates
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['is_admin_logged_in']) {
+    $response = ['success' => true]; // Default to true and set false on failure
+    
+    // Update about content
+    if (isset($_POST['update_about'])) {
+        foreach ($_POST['content'] as $section => $text) {
+            $safe_section = sanitizeInput($section);
+            $safe_text = sanitizeInput($text);
+            $sql = "UPDATE site_content SET content_text = '$safe_text' WHERE section_name = '$safe_section'";
+            if (!$con->query($sql)) {
+                $response['success'] = false;
+                break; // Optional: Stop on failure
+            }
+        }
+    }
+    // Handle hero image upload
+    if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] == 0) {
+        $target_dir = "images/";
+        $image_path = handleFileUpload($_FILES['hero_image'], $target_dir, 'hero');
+        
+        if ($image_path) {
+            $safe_path = sanitizeInput($image_path);
+            $sql = "UPDATE site_content SET image_path = '$safe_path' WHERE section_name = 'about_hero_image'";
+            if (!$con->query($sql)) {
+                $response['success'] = false;
+            }
+        } else {
+            $response['success'] = false; // File upload error
+        }
+    }
+    
+    // Handle team updates
+    if (isset($_POST['update_team'])) {
+        foreach ($_POST['team'] as $id => $member) {
+            $safe_id = (int)$id;
+            $safe_name = sanitizeInput($member['name']);
+            $safe_position = sanitizeInput($member['position']);
+            
+            $sql = "UPDATE team_members SET 
+                    full_name = '$safe_name', 
+                    position = '$safe_position' 
+                    WHERE member_id = $safe_id";
+            if (!$con->query($sql)) {
+                $response['success'] = false;
+                break;
+            }
+        }
+        
+        // Handle team member image uploads
+        if (isset($_FILES['team_image'])) {
+            foreach ($_FILES['team_image']['error'] as $id => $error) {
+                if ($error == 0) {
+                    $target_dir = "images/";
+                    $image_path = handleFileUpload(
+                        [
+                            'name' => $_FILES['team_image']['name'][$id],
+                            'type' => $_FILES['team_image']['type'][$id],
+                            'tmp_name' => $_FILES['team_image']['tmp_name'][$id],
+                            'error' => $_FILES['team_image']['error'][$id],
+                            'size' => $_FILES['team_image']['size'][$id]
+                        ],
+                        $target_dir,
+                        'team_' . $id
+                    );
+                    
+                    if ($image_path) {
+                        $safe_id = (int)$id;
+                        $safe_path = sanitizeInput($image_path);
+                        $sql = "UPDATE team_members SET image_path = '$safe_path' WHERE member_id = $safe_id";
+                        if (!$con->query($sql)) {
+                            $response['success'] = false;
+                            break;
+                        }
+                    } else {
+                        $response['success'] = false; // File upload error
+                        break;
+                    }
+                }
+            }
+        }
+    }
+	
+	echo json_encode($response);
+    exit;
+    
+    // Handle AJAX requests
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+    
+    // Handle regular form submissions
+    header('Location: ' . $_SERVER['PHP_SELF'] . '?updated=1');
+    exit;
+}
+
+$aboutContent = getAboutContent();
+$teamMembers = getTeamMembers();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -64,157 +232,104 @@ require('header.php');
   </section>
 </div>
 
-    <div class="site-section">
-      <div class="container">
+<div class="site-section">
+    <div class="container">
+        <?php if (isAdminLoggedIn()): ?>
+            <form method="POST" id="aboutForm" enctype="multipart/form-data">
+                <input type="hidden" name="update_about" value="1">
+        <?php endif; ?>
+
         <div class="row justify-content-between mb-5">
-          <div class="col-lg-7 mb-5 mb-md-0 mb-lg-0">
-            <img src="images/hero_1.jpg" alt="Image" class="img-fluid">
-          </div>
-          <div class="col-lg-4">
-            <h3 class="mb-4">About Us</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis provident facere ducimus voluptatum, laudantium fugiat in aliquid! Ea necessitatibus ex provident. Voluptate sint, eaque ratione consequuntur earum nisi velit, quidem.</p>
-            <p>Autem, odit, eligendi? Autem consequatur suscipit alias corporis perspiciatis minus sunt voluptate incidunt magni tempora.</p>
-          </div>
+            <div class="col-lg-7 mb-5 mb-md-0 mb-lg-0">
+                <img src="<?php echo htmlspecialchars($aboutContent['about_hero_image']['image']); ?>" alt="Image" class="img-fluid">
+                
+                <?php if (isAdminLoggedIn()): ?>
+                    <input type="file" name="hero_image" class="form-control mt-2" accept="image/*">
+                <?php endif; ?>
+            </div>
+            <div class="col-lg-4">
+                <h3 class="mb-4">About Us</h3>
+                
+                <?php if (isAdminLoggedIn()): ?>
+                    <textarea name="content[about_main_text]" class="form-control mb-3" rows="5"><?php echo htmlspecialchars($aboutContent['about_main_text']['text']); ?></textarea>
+                    <textarea name="content[about_secondary_text]" class="form-control" rows="3"><?php echo htmlspecialchars($aboutContent['about_secondary_text']['text']); ?></textarea>
+                <?php else: ?>
+                    <p><?php echo nl2br(htmlspecialchars($aboutContent['about_main_text']['text'])); ?></p>
+                    <p><?php echo nl2br(htmlspecialchars($aboutContent['about_secondary_text']['text'])); ?></p>
+                <?php endif; ?>
+            </div>
         </div>
+        
         <div class="row">
-          <div class="col-lg-7">
-            <div class="row">
-              <div class="col-lg-6">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit sint maiores atque alias, distinctio tempore!</p>
-              </div>
-              <div class="col-lg-6">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit sint maiores atque alias, distinctio tempore!</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="site-section">
-      <div class="container">
-
-        <div class="row align-items-center mb-2">
-          <div class="col-6">
-            <h2 class="section-title">Team</h2>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_4.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Jakub Bates</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_1.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Joshua Figueroa</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_5.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Russell Vance</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_3.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Carson Hodgson</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_4.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Jakub Bates</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_1.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Joshua Figueroa</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_5.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Russell Vance</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="item player">
-              <a href="#"><img src="images/player_3.jpg" alt="Image" class="img-fluid"></a>
-              <div class="p-4">
-                <h3>Carson Hodgson</h3>
-                <p>CEO, Founder</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <div class="site-section ">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4">
-            <h2 class="section-title">Events</h2>
-          </div>
-          <div class="col-lg-8 ml-auto">
-            <div class="row">
-              <div class="col-md-6 col-lg-6 mb-5 mb-lg-0">
-                <div class="custom-media d-flex">
-                  <div class="img-wrap mr-3">
-                    <a href="#"><img src="images/img_1.jpg" alt="Image" class="img-fluid"></a>
-                  </div>
-                  <div>
-                    <span class="caption">Latest News</span>
-                    <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                    <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-                  </div>
+            <div class="col-lg-7">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <?php if (isAdminLoggedIn()): ?>
+                            <textarea name="content[about_column_1]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_column_1']['text']); ?></textarea>
+                        <?php else: ?>
+                            <p><?php echo nl2br(htmlspecialchars($aboutContent['about_column_1']['text'])); ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="col-lg-6">
+                        <?php if (isAdminLoggedIn()): ?>
+                            <textarea name="content[about_column_2]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_column_2']['text']); ?></textarea>
+                        <?php else: ?>
+                            <p><?php echo nl2br(htmlspecialchars($aboutContent['about_column_2']['text'])); ?></p>
+                        <?php endif; ?>
+                    </div>
                 </div>
-              </div>
-              <div class="col-md-6 col-lg-6 mb-5 mb-lg-0">
-                <div class="custom-media d-flex">
-                  <div class="img-wrap mr-3">
-                    <a href="#"><img src="images/img_2.jpg" alt="Image" class="img-fluid"></a>
-                  </div>
-                  <div>
-                    <span class="caption">Team</span>
-                    <h3><a href="#">Line for the upcoming match</a></h3>
-                    <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
+
+        <?php if (isAdminLoggedIn()): ?>
+            <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+            </form>
+        <?php endif; ?>
+
+
+            <!-- Team Section -->
+            <div class="row align-items-center mb-2">
+                <div class="col-6">
+                    <h2 class="section-title">Team</h2>
+                </div>
+            </div>
+            
+            <?php if (isAdminLoggedIn()): ?>
+            <form method="POST" id="teamForm" enctype="multipart/form-data">
+                <input type="hidden" name="update_team" value="1">
+            <?php endif; ?>
+            
+            <div class="row">
+                <?php foreach ($teamMembers as $member): ?>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                    <div class="item player">
+                        <a href="#"><img src="<?php echo htmlspecialchars($member['image_path']); ?>" alt="Image" class="img-fluid"></a>
+                        <div class="p-4">
+                            <?php if (isAdminLoggedIn()): ?>
+                            <input type="text" name="team[<?php echo $member['member_id']; ?>][name]" 
+                                   value="<?php echo htmlspecialchars($member['full_name']); ?>" class="form-control mb-2">
+                            <input type="text" name="team[<?php echo $member['member_id']; ?>][position]" 
+                                   value="<?php echo htmlspecialchars($member['position']); ?>" class="form-control">
+                            <input type="file" name="team_image[<?php echo $member['member_id']; ?>]" class="form-control mt-2" accept="image/*">
+                            <?php else: ?>
+                            <h3><?php echo htmlspecialchars($member['full_name']); ?></h3>
+                            <p><?php echo htmlspecialchars($member['position']); ?></p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <?php if (isAdminLoggedIn()): ?>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+            </form>
+            <?php endif; ?>
+        </div>
     </div>
 
 <?php
@@ -236,6 +351,37 @@ require('footer.html');
   <script src="js/main.js"></script>
     
   </body>
+    <?php if (isAdminLoggedIn()): ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                
+                fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Changes saved successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error saving changes. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error saving changes. Please try again.');
+                });
+            });
+        });
+    });
+    </script>
+    <?php endif; ?>
 </html>
 <?php
 require 'important_include.php';

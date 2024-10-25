@@ -30,38 +30,49 @@
         <div class="row footer-inner" style="background-color: #00003c" >
           <div class="col-lg-3">
             <div class="widget mb-4">
-              <h3>About Us</h3>
+              <h3 style="color: white!important;">About Us</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium vitae aliquam quia beatae necessitatibus omnis nisi, maxime tempora neque et!</p>
             </div>
           </div>
           <div class="col-lg-3">
-            <div class="widget mb-4">
-              <h3>Upcoming Match</h3>
-              <ul class="list-unstyled links">
-                <li>
-                  <a href="#">
-                    <span class="d-block">May 19, 2020</span>
-                    SportsTeam vs. LaLegua
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span class="d-block">May 19, 2020</span>
-                    SportsTeam vs. LaLegua
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span class="d-block">May 19, 2020</span>
-                    SportsTeam vs. LaLegua
-                  </a>
-                </li>
-              </ul>
-            </div>
+<?php
+// Assuming database connection is already established
+
+// Query to get the upcoming match from the plan table
+$query = "SELECT planName, startDate, description FROM plan WHERE startDate >= CURDATE() ORDER BY startDate ASC LIMIT 3";
+$result = mysqli_query($con, $query);
+
+// Check if there are results
+if(mysqli_num_rows($result) > 0) {
+    echo '<div class="widget mb-4">';
+	echo '<h3 style="color: white!important;">Upcoming Event</h3>';
+    echo '<ul class="list-unstyled links">';
+
+    // Loop through the results and display each upcoming match
+    while($row = mysqli_fetch_assoc($result)) {
+        $date = date("F j, Y", strtotime($row['startDate']));
+        echo '<li>';
+        echo '<a href="#">';
+        echo '<span class="d-block">' . $date . '</span>';
+        echo '<span class="d-block" style="font-size: 1.5em; font-weight: bold;">' . $row['planName'] . '</span>'; // Increased font size for plan name
+        echo '<span class="d-block">' . $row['description'] . '</span>'; // Description on the next line
+        echo '</a>';
+        echo '</li>';
+    }
+
+    echo '</ul>';
+    echo '</div>';
+} else {
+    echo '<p>No upcoming matches found.</p>';
+}
+?>
+
+
+
           </div>
           <div class="col-lg-4">
             <div class="widget mb-4">
-              <h3>Social</h3>
+              <h3 style="color: white!important;">Social</h3>
               <ul class="list-unstyled social">
                 <li><a href="https://www.instagram.com/icymkaratedo?igsh=MWVsYzBzdWRsb2pmaA=="><span class="mr-2 icon-instagram"></span> Instagram</a></li>
               </ul>

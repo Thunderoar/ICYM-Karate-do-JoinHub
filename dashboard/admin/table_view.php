@@ -97,65 +97,57 @@ page_protect();
 
 		<hr />
 		
-		<table class="table table-bordered datatable" id="table-1" border=1>
-			<thead>
-				<tr><h2>
-					<th>Sl.No</th>
-					<!-- <th>Membership Expiry</th> -->
-					<th>Member ID</th>
-					<th>Name</th>
-					<th>Contact</th>
-					<th>E-Mail</th>
-					<th>Gender</th>
-					<th>Joining Date</th>
-					<th>Action</th></h2>
-				</tr>
-			</thead>
-				<tbody>
+<table class="table table-bordered datatable" id="table-1" border=1>
+    <thead>
+        <tr><h2>
+            <th>Sl.No</th>
+            <th>Member ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>E-Mail</th>
+            <th>Gender</th>
+            <th>Joining Date</th>
+            <th>Action</th></h2>
+        </tr>
+    </thead>
+    <tbody>
 
-				<?php
-$query  = "SELECT * FROM users ORDER BY joining_date";
-$result = mysqli_query($con, $query);
-$sno    = 1;
+    <?php
+    $query  = "SELECT * FROM users ORDER BY joining_date";
+    $result = mysqli_query($con, $query);
+    $sno    = 1;
 
-if ($result && mysqli_num_rows($result) > 0) { // Check if the query was successful and has rows
-    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        $uid = $row['userid'];
+    if ($result && mysqli_num_rows($result) > 0) { // Check if the query was successful and has rows
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+            $uid = $row['userid'];
 
-        // Fetch enrollment details for the current user
-        $query1 = "SELECT * FROM enrolls_to WHERE userid='$uid'";
-        $result1 = mysqli_query($con, $query1);
+            // Output user data directly from the users table
+            echo "<tr><td>" . $sno . "</td>";
+            echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['joining_date']) . "</td>";
 
-        if ($result1 && mysqli_num_rows($result1) > 0) { // Check if the query was successful and has rows
-            while ($row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
-                echo "<tr><td>" . $sno . "</td>";
-                //echo "<td>" . $row1['expire'] . "</td>";
-                echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['joining_date']) . "</td>";
+            // Increment the serial number
+            $sno++;
 
-                // Increment the serial number
-                $sno++;
-
-                // Create a form to view all details
-                echo "<td>
-                        <form action='viewall_detail.php' method='post'>
-                            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                            <input type='submit' class='a1-btn a1-blue' value='View All'/>
-                        </form>
-                      </td></tr>";
-            }
+            // Create a form to view all details
+            echo "<td>
+                    <form action='viewall_detail.php' method='post'>
+                        <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+                        <input type='submit' class='a1-btn a1-blue' value='View All'/>
+                    </form>
+                  </td></tr>";
         }
+    } else {
+        echo "<tr><td colspan='8'>No records found</td></tr>"; // Display message if no users found
     }
-} else {
-    echo "<tr><td colspan='9'>No records found</td></tr>"; // Display message if no users found
-}
-?>
-					</tbody>
-				</table>
+    ?>
+    </tbody>
+</table>
+
 
 <script>
 	

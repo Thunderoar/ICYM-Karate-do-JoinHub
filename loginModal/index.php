@@ -135,7 +135,7 @@
               <input type="password" class="form-control" name="pass_key" id="pass_key" placeholder="Password" autocomplete="off" required>
             </div>
             <!-- <legend>Account Details</legend> -->
-            <input type="hidden" class="form-control" name="hasApproved" id="textfield" value="Not Yet">
+            <input type="hidden" class="form-control" name="hasApproved" id="textfield" value="No">
             <div class="form-group">
               <input type="hidden" class="form-control" name="address_id" id="address_id" placeholder="Address ID" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" readonly required/>
             </div>

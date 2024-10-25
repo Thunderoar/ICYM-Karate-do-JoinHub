@@ -120,9 +120,9 @@ if (mysqli_num_rows($result) > 0) {
         $planid = $row['planid'];
         $planName = $row['planName'];
         $hasPaid = $row['hasPaid'];
-        $hasApproved = $row['hasApproved']; // Check if payment is approved
-        $et_id = $row['et_id']; // Get the payment ID
-        $receiptIMG = $row['receiptIMG']; // Get the receipt image path
+        $hasApproved = $row['hasApproved'];
+        $et_id = $row['et_id'];
+        $receiptIMG = $row['receiptIMG'];
 
         echo "<tr>";
         echo "<td>" . $sno . "</td>";
@@ -130,7 +130,7 @@ if (mysqli_num_rows($result) > 0) {
         echo "<td>" . htmlspecialchars($row['username']) . "</td>";
         echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
         echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-        echo "<td>" . htmlspecialchars($planName) . "</td>"; // Display the plan name
+        echo "<td>" . htmlspecialchars($planName) . "</td>"; 
 
         $sno++;
 
@@ -197,6 +197,7 @@ if (mysqli_num_rows($result) > 0) {
 ?>
     </tbody>
 </table>
+
 
 
 
