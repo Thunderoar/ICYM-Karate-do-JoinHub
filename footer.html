@@ -1,3 +1,18 @@
+<?php
+require 'include/db_conn.php';
+
+
+// Retrieve 'About Us' content from site_content table
+$aboutUsQuery = "SELECT section_name, content_text, image_path FROM site_content WHERE section_name IN ('about_hero_image', 'about_main_text', 'about_secondary_text', 'about_column_1', 'about_column_2')";
+$aboutUsResult = $con->query($aboutUsQuery);
+
+$aboutUsContent = [];
+while ($row = $aboutUsResult->fetch_assoc()) {
+    $aboutUsContent[$row['section_name']] = $row; // Organize content by section name
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">  
   <head>
@@ -28,12 +43,12 @@
     <div class="footer">
       <div>
         <div class="row footer-inner" style="background-color: #00003c" >
-          <div class="col-lg-3">
-            <div class="widget mb-4">
-              <h3 style="color: white!important;">About Us</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium vitae aliquam quia beatae necessitatibus omnis nisi, maxime tempora neque et!</p>
-            </div>
-          </div>
+<div class="col-lg-3">
+    <div class="widget mb-4">
+        <h3 style="color: white!important;">About Us</h3>
+                        <p><?php echo nl2br(htmlspecialchars($aboutUsContent['about_column_1']['content_text'])); ?></p>
+    </div>
+</div>
           <div class="col-lg-3">
 <?php
 // Assuming database connection is already established
@@ -84,3 +99,4 @@ if(mysqli_num_rows($result) > 0) {
 	
 	</body>
 	</html>
+	

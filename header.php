@@ -12,6 +12,8 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     // If the user IS logged in, ensure the page is protected
     page_protect(); // Ensure this function exists
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
