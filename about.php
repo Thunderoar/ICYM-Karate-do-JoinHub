@@ -234,6 +234,14 @@ require('header.php');
 
 <div class="site-section">
     <div class="container">
+	    <?php if (isAdminLoggedIn()): ?>
+    <div class="edit-mode-controls mb-4">
+        <button id="toggleEditMode" class="btn btn-secondary">
+            Exit Edit Mode
+        </button>
+    </div>
+    <?php endif; ?>
+	
         <?php if (isAdminLoggedIn()): ?>
             <form method="POST" id="aboutForm" enctype="multipart/form-data">
                 <input type="hidden" name="update_about" value="1">
@@ -353,33 +361,126 @@ require('footer.html');
   </body>
     <?php if (isAdminLoggedIn()): ?>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    // Edit mode toggle functionality
+    const toggleButton = document.getElementById('toggleEditMode');
+    const aboutForm = document.getElementById('aboutForm');
+    const teamForm = document.getElementById('teamForm');
+    
+    let isEditMode = true; // the logic is inverted for some reason, true=view mode, false=edit mode....for some reason...
+    
+    function toggleEditMode() {
+        isEditMode = !isEditMode;
+        
+        toggleButton.textContent = isEditMode ? 'Exit Edit Mode' : 'Enter Edit Mode';
+        
+        // Toggle form elements
+        const allInputs = document.querySelectorAll('input:not([type="hidden"]), textarea');
+        const allButtons = document.querySelectorAll('button[type="submit"]');
+        
+        allInputs.forEach(input => {
+            input.style.display = isEditMode ? 'block' : 'none';
+            if (isEditMode) {
+                const previewElements = document.querySelectorAll('.preview-text');
+                previewElements.forEach(el => el.remove());
+            } else {
+                const displayText = document.createElement(
+                    input.tagName === 'TEXTAREA' || input.type === 'file' ? 'p' : 
+                    input.classList.contains('mb-2') ? 'h3' : 'p'
+                );
+                displayText.classList.add('preview-text');
+                displayText.textContent = input.type === 'file' ? '' : input.value;
+                input.parentNode.insertBefore(displayText, input);
+            }
+        });
+        
+        allButtons.forEach(button => {
+            button.style.display = isEditMode ? 'block' : 'none';
+        });
+
+        // Disable form submissions when not in edit mode
         const forms = document.querySelectorAll('form');
         forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(form);
-                
-                fetch(window.location.href, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Changes saved successfully!');
-                        location.reload();
+            const elements = form.elements;
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].disabled = !isEditMode;
+            }
+        });
+    }
+    
+    // Call toggleEditMode immediately to set initial state
+    toggleEditMode();
+    
+    toggleButton.addEventListener('click', toggleEditMode);
+
+    // AJAX form submission
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!isEditMode) {
+                alert('Please enter edit mode to save changes.');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            // Disable submit button and show loading state
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+            }
+            
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message with Bootstrap toast if available, otherwise use alert
+                    if (typeof bootstrap !== 'undefined') {
+                        const toastContainer = document.createElement('div');
+                        toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+                        toastContainer.style.zIndex = '11';
+                        toastContainer.innerHTML = `
+                            <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="d-flex">
+                                    <div class="toast-body">
+                                        Changes saved successfully!
+                                    </div>
+                                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        `;
+                        document.body.appendChild(toastContainer);
+                        const toast = new bootstrap.Toast(toastContainer.querySelector('.toast'));
+                        toast.show();
+                        setTimeout(() => toastContainer.remove(), 5000);
                     } else {
-                        alert('Error saving changes. Please try again.');
+                        alert('Changes saved successfully!');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+                    location.reload();
+                } else {
                     alert('Error saving changes. Please try again.');
-                });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving changes. Please try again.');
+            })
+            .finally(() => {
+                // Re-enable submit button and restore original text
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Save Changes';
+                }
             });
         });
     });
+});
     </script>
     <?php endif; ?>
 </html>
