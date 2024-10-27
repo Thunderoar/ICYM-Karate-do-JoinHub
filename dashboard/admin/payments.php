@@ -159,8 +159,16 @@ if (mysqli_num_rows($result) > 0) {
                         <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
                         <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                         <input type='submit' class='a1-btn a1-yellow' value='Cancel Payment' onclick='return confirm(\"Are you sure you want to cancel this payment?\");'/>
-                    </form>
-                    <p>Payment Pending Approval</p>
+                    </form>";
+					
+			 // Check if receipt is available
+            if (!empty($receiptIMG)) {
+                echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
+            } else {
+                echo "<p>No Receipt Available</p>";
+            }
+					
+			echo"<p>Payment Pending Approval</p>
                     <p>Payment ID: $et_id</p>
                   </td>";
         } elseif ($hasPaid === 'yes' && $hasApproved === 'yes') {
@@ -169,7 +177,7 @@ if (mysqli_num_rows($result) > 0) {
                     <p>Payment Approved</p>
                     <p>Payment ID: $et_id</p>";
 
-            // Check if receipt is available
+			// Check if receipt is available
             if (!empty($receiptIMG)) {
                 echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
             } else {
