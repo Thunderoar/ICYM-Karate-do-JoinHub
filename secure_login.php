@@ -42,7 +42,7 @@ if ($pass_key == "" &&  $user_id_auth == "") {
         $sql = "SELECT l.loginid, l.authority, l.username, l.userid, l.adminid, l.staffid, i.image_path
                 FROM login l
                 LEFT JOIN images i ON l.staffid = i.staffid
-                WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key' AND l.authority = 'coach'";
+                WHERE l.username = '$user_id_auth' AND l.pass_key = '$pass_key' AND l.authority = 'staff'";
     } else {
         // Member (user) login query with join to enrolls_to and plan tables
 $sql = "
@@ -95,7 +95,7 @@ $sql = "
             header("location: index.php");
         } elseif ($_SESSION['authority'] == "member") {
             header("location: index.php");
-        } elseif ($_SESSION['authority'] == "coach") {
+        } elseif ($_SESSION['authority'] == "staff") {
             header("location: index.php");
         } else {
             echo "<html><head><script>alert('Invalid Authority');</script></head></html>";

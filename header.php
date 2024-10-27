@@ -222,6 +222,10 @@ if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
       // If the user is a member, use the member dashboard and logout links
       $dashboard_link = 'dashboard/member/';
       $logout_link = 'dashboard/member/logout.php';
+  } elseif ($_SESSION['authority'] == 'staff') {
+      // If the user is a member, use the member dashboard and logout links
+      $dashboard_link = 'dashboard/coach/';
+      $logout_link = 'dashboard/coach/logout.php';
   }
 
   // Display the user info (profile picture, username, and appropriate links)
