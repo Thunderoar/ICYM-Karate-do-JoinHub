@@ -54,27 +54,29 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
 }
 
     .section-title {
-      font-size: 2rem !important;
+      font-size: 1.5rem !important;
       font-weight: bold !important;
-      margin-bottom: 2rem !important;
+      margin-bottom: 1rem !important;
       text-align: center !important;
       color: #000 !important;
     }
     
     .container {
-      max-width: 800px !important;
+      max-width: 1200px !important;
       margin: 0 auto !important;
-      padding: 0 1rem !important;
+      padding: 0 0.5rem !important;
     }
     
     .grid {
       display: grid !important;
       grid-template-columns: repeat(2, 1fr) !important;
-      gap: 2rem !important;
-      padding: 1rem !important;
+      gap: 1rem !important;
+      padding: 0.5rem !important;
+      justify-items: center !important;
+      align-items: center !important;
     }
     
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .grid {
         grid-template-columns: 1fr !important;
       }
@@ -82,32 +84,40 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     
     .coach-card {
       background: #fff !important;
-      border-radius: 0.5rem !important;
+      border-radius: 0.25rem !important;
       overflow: hidden !important;
+      text-align: center !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      max-width: 300px !important;
     }
     
     .coach-card img {
-      width: 100% !important;
-      height: auto !important;
-      border-radius: 0.5rem !important;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+      object-fit: cover !important;
+      border-radius: 0.25rem !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
       display: block !important;
+      margin: 0 auto !important;
     }
     
     .coach-card h3 {
-      font-size: 1.25rem !important;
-      margin: 1rem 0 !important;
-      padding: 0 1rem !important;
+      font-size: 0.9rem !important;
+      margin: 0.5rem 0 !important;
+      padding: 0 0.5rem !important;
       color: #333 !important;
       font-weight: 500 !important;
+      text-align: center !important;
     }
     
     .mb-8 {
-      margin-bottom: 2rem !important;
+      margin-bottom: 1rem !important;
     }
     
     .p-4 {
-      padding: 1rem !important;
+      padding: 0.5rem !important;
     }
 </style>
   </head>
