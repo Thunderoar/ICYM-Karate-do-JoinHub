@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 27, 2024 at 09:40 AM
+-- Generation Time: Oct 27, 2024 at 03:52 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -46,14 +46,18 @@ INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zi
 ('159297509', '1729589256', '', '', '', ''),
 ('178160492', '1729503048', '', '', '', ''),
 ('233879111', '1729503254', '', '', '', ''),
+('244071432', '1730037014', '', '', '', ''),
+('259825696', '1730044070', '', '', '', ''),
 ('398226207', '1729503605', '', '', '', ''),
 ('443957638', '1729499689', '', '', '', ''),
 ('445117942', '1729500525', '', '', '', ''),
 ('474709767', '1729653160', '', '', '', ''),
 ('541188054', '1729503562', '', '', '', ''),
 ('651796491', '1729501754', '', '', '', ''),
+('664647014', '1730036662', '', '', '', ''),
 ('672538767', '1729500022', '', '', '', ''),
 ('696159057', '1729654531', '', '', '', ''),
+('737416117', '1730035207', '', '', '', ''),
 ('762966398', '1729502982', '', '', '', ''),
 ('769730378', '1729499715', '', '', '', ''),
 ('791246783', '1729816197', '', '', '', ''),
@@ -103,27 +107,20 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
   `hasApproved` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
   `receiptIMG` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`et_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
 --
 
 INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
-(35, 'XTWIOL', '1729326958', '', '', 'no', '', ''),
-(37, 'XTWIOL', '1729331491', '', '', 'no', 'no', ''),
-(58, 'XTWIOL', '1729500896', '2024-10-24 08:42:42', '9999-12-31', 'yes', 'yes', '../../dashboard/admin/uploads/payment/cat-sleepy.gif'),
-(69, 'XTWIOL', '1729589256', '', '', 'no', '', ''),
-(70, 'CAFXVW', '1729589256', '', '', 'no', '', ''),
-(71, 'CAFXVW', '1729326958', '', '', 'no', '', ''),
-(72, 'ENKZJO', '1729326958', '', '', 'no', '', ''),
-(74, 'XTWIOL', '1729653160', '', '', 'no', '', ''),
-(75, 'CAFXVW', '1729653160', '', '', 'no', '', ''),
-(76, 'XTWIOL', '1729654531', '', '', 'no', 'no', ''),
-(78, 'CAFXVW', '1729654531', '', '', 'no', 'no', ''),
+(58, 'XTWIOL', '1729500896', '2024-10-27 21:43:31', '9999-12-31', 'yes', 'yes', '../../dashboard/admin/uploads/payment/cat-sleepy.gif'),
 (79, 'ENKZJO', '1729654531', '2024-10-23 22:32:01', '9999-12-31', 'yes', 'yes', ''),
-(80, 'CAFXVW', '1729500896', '', '2024-11-25 08:27:02', 'no', '', ''),
-(81, 'XTWIOL', '1729816197', '2024-10-25', '1970-01-01', 'no', '', '');
+(80, 'CAFXVW', '1729500896', '2024-10-27 21:25:38', '9999-12-31', 'yes', 'yes', ''),
+(82, 'XTWIOL', '1730035207', '2024-10-27 21:26:06', '9999-12-31', 'yes', 'yes', '../../dashboard/admin/uploads/payment/investigate_color.png'),
+(83, 'XTWIOL', '1730036662', '2024-10-27 21:48:11', '9999-12-31', 'yes', 'yes', ''),
+(84, 'JUCDZN', '1730036662', '2024-10-27 21:50:06', '9999-12-31', 'yes', 'no', ''),
+(86, 'XTWIOL', '1730044070', '2024-10-27 23:48:53', '9999-12-31', 'yes', 'yes', '');
 
 -- --------------------------------------------------------
 
@@ -200,6 +197,7 @@ CREATE TABLE IF NOT EXISTS `health_status` (
 --
 
 INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `remarks`, `userid`) VALUES
+('127361533', '', '', '', '', '', '1730037014'),
 ('15697384', '', '', '', '', '', '1729502982'),
 ('159244038', '', '', '', '', '', '1729326958'),
 ('161958492', '', '', '', '', '', '1729232687'),
@@ -214,6 +212,7 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('338833368', '', '', '', '', '', '1729653160'),
 ('361339141', '', '', '', '', '', '1729503655'),
 ('377819181', '', '', '', '', '', '1729503048'),
+('387732098', '', '', '', '', '', '1730035207'),
 ('388848522', '', '', '', '', '', '1729500806'),
 ('38888806', '', '', '', '', '', '1728384510'),
 ('398395806', '', '', '', '', '', '1729499109'),
@@ -230,9 +229,11 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('80936596', '', '', '', '', '', '1729499036'),
 ('826633186', '', '', '', '', '', '1728383471'),
 ('826677281', '', '', '', '', '', '1728384120'),
+('860622780', '', '', '', '', '', '1730036662'),
 ('872369437', '', '', '', '', '', '1729502959'),
 ('874529438', '', '', '', '', '', '1729331491'),
 ('88203510', '', '', '', '', '', '1729500525'),
+('918803354', '', '', '', '', '', '1730044070'),
 ('955419055', '', '', '', '', '', '1729500896'),
 ('95897886', '', '', '', '', '', '1729501754');
 
@@ -265,12 +266,14 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('2ea50c7f-8f8c-11ef-a5b9-004e01ffe201', NULL, '1729501754', NULL, NULL, NULL, '2024-10-21 09:09:31'),
 ('2f0b7fa6-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503048', NULL, NULL, NULL, '2024-10-21 09:31:00'),
 ('3', NULL, '1729326958', NULL, NULL, NULL, '2024-10-19 08:36:30'),
+('38067411-9466-11ef-96fe-004e01ffe201', NULL, '1730035207', NULL, NULL, NULL, '2024-10-27 13:20:21'),
 ('3fc07e44-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503504', NULL, NULL, NULL, '2024-10-21 09:38:37'),
 ('4', NULL, '1729500525', NULL, NULL, NULL, '2024-10-21 08:48:55'),
 ('4b9288ef-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, NULL, NULL, '2024-10-25 00:30:11'),
 ('5', NULL, '1729499689', NULL, NULL, NULL, '2024-10-21 08:35:06'),
 ('515', NULL, '1729499673', NULL, NULL, NULL, '2024-10-21 08:34:41'),
 ('5e628491-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, NULL, NULL, '2024-10-21 09:39:29'),
+('6aae6da4-946a-11ef-96fe-004e01ffe201', NULL, '1730037014', NULL, NULL, NULL, '2024-10-27 13:50:24'),
 ('79fe9b2e-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503605', NULL, NULL, NULL, '2024-10-21 09:40:15'),
 ('8', NULL, NULL, NULL, 'TGJIOA', 'uploads/image_2.jpg', '2024-10-18 06:23:57'),
 ('8983', NULL, '1729331377', NULL, NULL, NULL, '2024-10-19 09:50:14'),
@@ -283,8 +286,10 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('9327316', NULL, '1729499715', NULL, NULL, NULL, '2024-10-21 08:36:32'),
 ('9327317', NULL, '1729499988', NULL, NULL, NULL, '2024-10-21 08:39:56'),
 ('97108066-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503655', NULL, NULL, NULL, '2024-10-21 09:41:04'),
+('97673448-9469-11ef-96fe-004e01ffe201', NULL, '1730036662', NULL, NULL, NULL, '2024-10-27 13:44:30'),
 ('af9126c9-90ec-11ef-9771-004e01ffe201', NULL, '1729653160', NULL, NULL, NULL, '2024-10-23 03:12:50'),
 ('c1a6ad2f-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503254', NULL, NULL, NULL, '2024-10-21 09:35:06'),
+('d785ab4b-947a-11ef-96fe-004e01ffe201', NULL, '1730044070', NULL, NULL, NULL, '2024-10-27 15:47:59'),
 ('dc81088c-8f96-11ef-a5b9-004e01ffe201', NULL, '1729506355', NULL, NULL, NULL, '2024-10-21 10:25:58'),
 ('df9cf0f4-90ef-11ef-954f-004e01ffe201', NULL, '1729654531', NULL, NULL, NULL, '2024-10-23 03:35:39'),
 ('e823ad64-9057-11ef-a5b9-004e01ffe201', NULL, '1729589256', NULL, NULL, NULL, '2024-10-22 09:27:51'),
@@ -325,20 +330,24 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 ('262d5d4c-8f8a-11ef-a5b9-004e01ffe201', NULL, '1729500896', NULL, 'o', 'o', '262d5d5b-8f8a-11ef-a5b9-004e01ffe201', 'member'),
 ('2ea4f5e5-8f8c-11ef-a5b9-004e01ffe201', NULL, '1729501754', NULL, 'yy', 'yy', '2ea4f5fa-8f8c-11ef-a5b9-004e01ffe201', 'member'),
 ('2f0b6ebb-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503048', NULL, 'noo', 'noo', '2f0b6ecb-8f8f-11ef-a5b9-004e01ffe201', 'member'),
+('38065f55-9466-11ef-96fe-004e01ffe201', NULL, '1730035207', NULL, 'hey', 'hey', '38065f69-9466-11ef-96fe-004e01ffe201', 'member'),
 ('3cfe7084-8df5-11ef-9394-004e01ffe201', NULL, '1729326958', NULL, 'b', 'b', '3cfe70c0-8df5-11ef-9394-004e01ffe201', 'member'),
 ('3fc06360-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503504', NULL, 'e', 'e', '3fc06373-8f90-11ef-a5b9-004e01ffe201', 'member'),
 ('4b927727-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, 'u', 'u', '4b927736-9268-11ef-8788-004e01ffe201', 'member'),
 ('4dd8cffc-8f89-11ef-a5b9-004e01ffe201', NULL, '1729500525', NULL, 'a', 'a', '4dd8d00b-8f89-11ef-a5b9-004e01ffe201', 'member'),
 ('54f7108e-8651-11ef-a918-3ca067e52da9', NULL, '1728486893', NULL, 'a', 'a', '54f7114d-8651-11ef-a918-3ca067e52da9', 'member'),
 ('5e626f5f-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, 'h', 'h', '5e626f6e-8f90-11ef-a5b9-004e01ffe201', 'member'),
+('6aae584a-946a-11ef-96fe-004e01ffe201', NULL, '1730037014', NULL, 'k', 'k', '6aae585f-946a-11ef-96fe-004e01ffe201', 'member'),
 ('7979b578-8560-11ef-b414-3ca067e52da9', NULL, '1728383471', NULL, 'c', 'c', '7979b628-8560-11ef-b414-3ca067e52da9', 'member'),
 ('79fe8f8e-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503605', NULL, 'mm', 'mm', '79fe8f9f-8f90-11ef-a5b9-004e01ffe201', 'member'),
 ('8983b975-8dff-11ef-9394-004e01ffe201', NULL, '1729331377', NULL, 'c', 'c', '8983b988-8dff-11ef-9394-004e01ffe201', 'member'),
 ('9710727c-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503655', NULL, 'tt', 'tt', '9710728f-8f90-11ef-a5b9-004e01ffe201', 'member'),
+('976721ba-9469-11ef-96fe-004e01ffe201', NULL, '1730036662', NULL, 'hey', 'hey', '976721ca-9469-11ef-96fe-004e01ffe201', 'member'),
 ('af9112e6-90ec-11ef-9771-004e01ffe201', NULL, '1729653160', NULL, 'a', 'a', 'af9112f6-90ec-11ef-9771-004e01ffe201', 'member'),
 ('bd0c10a7-8d19-11ef-a94c-004e01ffe201', NULL, '1729232687', NULL, 'hello', 'hello', 'bd0c10d1-8d19-11ef-a94c-004e01ffe201', 'member'),
 ('c08b4665-8dff-11ef-9394-004e01ffe201', NULL, '1729331491', NULL, 'c', 'c', 'c08b467b-8dff-11ef-9394-004e01ffe201', 'member'),
 ('c1a68d18-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503254', NULL, 'aa', 'aa', 'c1a68d29-8f8f-11ef-a5b9-004e01ffe201', 'member'),
+('d785919d-947a-11ef-96fe-004e01ffe201', NULL, '1730044070', NULL, 'y', 'y', 'd78591b1-947a-11ef-96fe-004e01ffe201', 'member'),
 ('dd2cca64-8562-11ef-b414-3ca067e52da9', NULL, '1728384510', NULL, 'a', 'a', 'dd2ccab9-8562-11ef-b414-3ca067e52da9', 'member'),
 ('df9cd6b5-90ef-11ef-954f-004e01ffe201', NULL, '1729654531', NULL, 'a', 'a', 'df9cd6f1-90ef-11ef-954f-004e01ffe201', 'member'),
 ('e8238a14-9057-11ef-a5b9-004e01ffe201', NULL, '1729589256', NULL, 'hello', 'hello', 'e8238a2e-9057-11ef-a5b9-004e01ffe201', 'member'),
@@ -406,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `site_content` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`content_id`),
   UNIQUE KEY `idx_section_name` (`section_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `site_content`
@@ -414,10 +423,11 @@ CREATE TABLE IF NOT EXISTS `site_content` (
 
 INSERT INTO `site_content` (`content_id`, `section_name`, `content_text`, `image_path`, `last_updated`, `created_at`) VALUES
 (1, 'about_hero_image', NULL, 'images/hero_1729843905_aaf684e335f14f2b.jpg', '2024-10-25 08:11:45', '2024-10-25 07:42:51'),
-(2, 'about_main_text', 'WOW!', NULL, '2024-10-25 08:15:45', '2024-10-25 07:42:51'),
+(2, 'about_main_text', 'WOW!', NULL, '2024-10-27 14:44:48', '2024-10-25 07:42:51'),
 (3, 'about_secondary_text', 'Our mission is to develop athletes who excel both in sports and in life.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51'),
 (4, 'about_column_1', 'We offer world-class training facilities and experienced coaching staasdasdff to help our athletes reach their full potential.', NULL, '2024-10-25 07:59:31', '2024-10-25 07:42:51'),
-(5, 'about_column_2', 'Our programs focus on both physical training and mental preparation, creating well-rounded athletes ready for competition.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51');
+(5, 'about_column_2', 'Our programs focus on both physical training and mental preparation, creating well-rounded athletes ready for competition.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51'),
+(6, 'contact_form', '<div class=\"site-section\">...your HTML content here...</div>', NULL, '2024-10-27 15:38:34', '2024-10-27 15:38:34');
 
 -- --------------------------------------------------------
 
@@ -491,6 +501,8 @@ CREATE TABLE IF NOT EXISTS `team_members` (
   `active` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `featured` tinyint(1) DEFAULT '0',
+  `jersey_number` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`member_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -498,11 +510,11 @@ CREATE TABLE IF NOT EXISTS `team_members` (
 -- Dumping data for table `team_members`
 --
 
-INSERT INTO `team_members` (`member_id`, `full_name`, `position`, `image_path`, `display_order`, `active`, `created_at`, `updated_at`) VALUES
-(1, 'Jakub Bated', 'www22sdsdwq', 'images/team_1_1729827128.jpg', 1, 1, '2024-10-25 01:42:54', '2024-10-25 08:15:50'),
-(2, 'Joshua Figueroa', 'CEO, Founderqwe', 'images/player_1.jpg', 2, 1, '2024-10-25 01:42:54', '2024-10-25 01:56:56'),
-(3, 'Russell Vance', 'CEO, Founder', 'images/player_5.jpg', 3, 1, '2024-10-25 01:42:54', '2024-10-25 01:42:54'),
-(4, 'Carson Hodgson', 'CEO, Founder', 'images/player_3.jpg', 4, 1, '2024-10-25 01:42:54', '2024-10-25 01:42:54');
+INSERT INTO `team_members` (`member_id`, `full_name`, `position`, `image_path`, `display_order`, `active`, `created_at`, `updated_at`, `featured`, `jersey_number`) VALUES
+(1, 'Member 1', 'Black Belt', 'images/team_1_1729827128.jpg', 1, 1, '2024-10-25 01:42:54', '2024-10-27 14:59:35', 1, NULL),
+(2, 'Member 2', 'Black Belt', 'images/team_1_1729827128.jpg', 2, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL),
+(3, 'Member 3', 'Black Belt', 'images/team_1_1729827128.jpg', 3, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL),
+(4, 'Member 4', 'Black Belt', 'images/team_1_1729827128.jpg', 4, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -534,7 +546,10 @@ INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `g
 ('1729331491', 'c', 'UUID()', 'c', 'c', 'Male', '1', 'c@gmail.com', '2004-10-10', '2024-10-10', 'No'),
 ('1729500896', 'o', 'UUID()', 'o', 'o', 'Male', '1', 'o@gmail.com', '2004-10-10', '2024-10-10', 'Yes'),
 ('1729654531', 'a', 'df9bf123-90ef-11ef-954f-004e01ffe201', 'a', 'a', '', '', 'a@gmail.com', '', '', 'Yes'),
-('1729816197', 'u', '4b918e84-9268-11ef-8788-004e01ffe201', 'u', 'u', '', '', 'u@gmail.com', '', '', 'Yes');
+('1729816197', 'u', '4b918e84-9268-11ef-8788-004e01ffe201', 'u', 'u', '', '', 'u@gmail.com', '', '', 'Yes'),
+('1730036662', 'hey', '9766f4d3-9469-11ef-96fe-004e01ffe201', 'hey', 'hey', '', '', 'hey@gmail.com', '', '', 'Yes'),
+('1730037014', 'k', '6aae1980-946a-11ef-96fe-004e01ffe201', 'k', 'k', '', '', 'k@gmail.com', '', '', 'Yes'),
+('1730044070', 'y', 'd7854af5-947a-11ef-96fe-004e01ffe201', 'y', 'y', '', '', 'y@gmail.com', '', '', 'Yes');
 
 -- --------------------------------------------------------
 
