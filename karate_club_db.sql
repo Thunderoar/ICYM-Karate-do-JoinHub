@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 25, 2024 at 10:58 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: 127.0.0.1:3306
+-- Generation Time: Oct 27, 2024 at 09:40 AM
+-- Server version: 8.3.0
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,13 +27,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `address`
 --
 
-CREATE TABLE `address` (
-  `addressid` varchar(20) NOT NULL,
-  `userid` varchar(20) NOT NULL,
-  `streetName` varchar(40) NOT NULL,
-  `state` varchar(40) NOT NULL,
-  `city` varchar(40) NOT NULL,
-  `zipcode` varchar(5) NOT NULL
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE IF NOT EXISTS `address` (
+  `addressid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `streetName` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `state` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `city` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `zipcode` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`addressid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -67,12 +69,14 @@ INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zi
 -- Table structure for table `admin`
 --
 
-CREATE TABLE `admin` (
-  `adminid` varchar(20) NOT NULL,
-  `username` varchar(20) NOT NULL,
-  `pass_key` varchar(20) NOT NULL,
-  `securekey` varchar(20) NOT NULL,
-  `Full_name` varchar(50) NOT NULL
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE IF NOT EXISTS `admin` (
+  `adminid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `securekey` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `Full_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`adminid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -88,16 +92,18 @@ INSERT INTO `admin` (`adminid`, `username`, `pass_key`, `securekey`, `Full_name`
 -- Table structure for table `enrolls_to`
 --
 
-CREATE TABLE `enrolls_to` (
-  `et_id` int(100) NOT NULL,
-  `planid` varchar(8) NOT NULL,
-  `userid` varchar(20) NOT NULL,
-  `paid_date` varchar(40) NOT NULL,
-  `expire` varchar(40) NOT NULL,
-  `hasPaid` varchar(5) NOT NULL DEFAULT 'no',
-  `hasApproved` varchar(5) NOT NULL,
-  `receiptIMG` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `enrolls_to`;
+CREATE TABLE IF NOT EXISTS `enrolls_to` (
+  `et_id` int NOT NULL AUTO_INCREMENT,
+  `planid` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
+  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `paid_date` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `expire` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `hasPaid` varchar(5) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'no',
+  `hasApproved` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `receiptIMG` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`et_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
@@ -125,12 +131,15 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `h
 -- Table structure for table `gallery_images`
 --
 
-CREATE TABLE `gallery_images` (
-  `image_id` int(11) NOT NULL,
-  `section_id` int(11) DEFAULT NULL,
-  `image_path` varchar(255) DEFAULT NULL,
-  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `gallery_images`;
+CREATE TABLE IF NOT EXISTS `gallery_images` (
+  `image_id` int NOT NULL AUTO_INCREMENT,
+  `section_id` int DEFAULT NULL,
+  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `uploaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`image_id`),
+  KEY `gallery_images_ibfk_1` (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `gallery_images`
@@ -151,12 +160,14 @@ INSERT INTO `gallery_images` (`image_id`, `section_id`, `image_path`, `uploaded_
 -- Table structure for table `gallery_sections`
 --
 
-CREATE TABLE `gallery_sections` (
-  `section_id` int(11) NOT NULL,
-  `section_name` varchar(255) DEFAULT NULL,
-  `section_description` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `gallery_sections`;
+CREATE TABLE IF NOT EXISTS `gallery_sections` (
+  `section_id` int NOT NULL AUTO_INCREMENT,
+  `section_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `section_description` text COLLATE utf8mb4_general_ci,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`section_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `gallery_sections`
@@ -172,14 +183,16 @@ INSERT INTO `gallery_sections` (`section_id`, `section_name`, `section_descripti
 -- Table structure for table `health_status`
 --
 
-CREATE TABLE `health_status` (
-  `healthid` varchar(100) NOT NULL,
-  `calorie` varchar(8) NOT NULL DEFAULT '',
-  `height` varchar(8) NOT NULL DEFAULT '',
-  `weight` varchar(8) NOT NULL DEFAULT '',
-  `fat` varchar(8) NOT NULL DEFAULT '',
-  `remarks` varchar(200) NOT NULL DEFAULT '',
-  `userid` varchar(20) NOT NULL
+DROP TABLE IF EXISTS `health_status`;
+CREATE TABLE IF NOT EXISTS `health_status` (
+  `healthid` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `calorie` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `height` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `weight` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `fat` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `remarks` varchar(200) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`healthid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -229,14 +242,16 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 -- Table structure for table `images`
 --
 
-CREATE TABLE `images` (
-  `imageid` varchar(200) NOT NULL,
-  `adminid` varchar(20) DEFAULT NULL,
-  `userid` varchar(20) DEFAULT NULL,
-  `staffid` varchar(20) DEFAULT NULL,
-  `planid` varchar(8) DEFAULT NULL,
-  `image_path` varchar(255) DEFAULT 'placeholder.jpg',
-  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
+DROP TABLE IF EXISTS `images`;
+CREATE TABLE IF NOT EXISTS `images` (
+  `imageid` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `adminid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `userid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `staffid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `planid` varchar(8) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT 'placeholder.jpg',
+  `uploaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`imageid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -281,15 +296,17 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 -- Table structure for table `login`
 --
 
-CREATE TABLE `login` (
-  `loginid` varchar(200) NOT NULL,
-  `adminid` varchar(20) DEFAULT NULL,
-  `userid` varchar(20) DEFAULT NULL,
-  `staffid` varchar(100) DEFAULT NULL,
-  `username` varchar(20) NOT NULL,
-  `pass_key` varchar(20) NOT NULL,
-  `securekey` varchar(200) NOT NULL,
-  `authority` varchar(50) NOT NULL
+DROP TABLE IF EXISTS `login`;
+CREATE TABLE IF NOT EXISTS `login` (
+  `loginid` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `adminid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `userid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `staffid` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `username` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `securekey` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `authority` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`loginid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -302,6 +319,7 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 ('10d89236-8499-11ef-83d3-3ca067e52da9', NULL, '1728297797', NULL, 'test', 'test', '10d89278-8499-11ef-83d3-3ca067e52da9', 'member'),
 ('123', '123', '123', NULL, '123', '123', '123', 'admin'),
 ('12345', '1234', 'admintest', NULL, 'admintest', 'admintest', 'admintest', 'admin'),
+('12345678', NULL, NULL, 'rashid', 'rashid', 'rashid', 'rashid', 'staff'),
 ('1c5aa59d-85d6-11ef-bb7d-e9097018277d', NULL, '1728433989', NULL, 'q', 'q', '1c5aa65f-85d6-11ef-bb7d-e9097018277d', 'member'),
 ('23a7f823-864e-11ef-a918-3ca067e52da9', NULL, '1728485531', NULL, 'h', 'h', '23a7f891-864e-11ef-a918-3ca067e52da9', 'member'),
 ('262d5d4c-8f8a-11ef-a5b9-004e01ffe201', NULL, '1729500896', NULL, 'o', 'o', '262d5d5b-8f8a-11ef-a5b9-004e01ffe201', 'member'),
@@ -333,10 +351,11 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 -- Table structure for table `log_users`
 --
 
-CREATE TABLE `log_users` (
-  `logid` int(11) NOT NULL,
-  `userid` varchar(20) NOT NULL,
-  `action` varchar(20) NOT NULL,
+DROP TABLE IF EXISTS `log_users`;
+CREATE TABLE IF NOT EXISTS `log_users` (
+  `logid` int NOT NULL,
+  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
   `cdate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -346,17 +365,19 @@ CREATE TABLE `log_users` (
 -- Table structure for table `plan`
 --
 
-CREATE TABLE `plan` (
-  `planid` varchar(8) NOT NULL,
-  `planName` varchar(20) NOT NULL,
-  `description` varchar(200) NOT NULL,
-  `planType` varchar(50) NOT NULL,
-  `startDate` varchar(50) NOT NULL,
-  `endDate` varchar(50) NOT NULL,
-  `duration` int(50) NOT NULL,
-  `validity` varchar(20) NOT NULL DEFAULT 'Lifetime',
-  `amount` int(10) NOT NULL DEFAULT 0,
-  `active` varchar(255) NOT NULL
+DROP TABLE IF EXISTS `plan`;
+CREATE TABLE IF NOT EXISTS `plan` (
+  `planid` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
+  `planName` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `planType` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `startDate` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `endDate` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `duration` int NOT NULL,
+  `validity` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Lifetime',
+  `amount` int NOT NULL DEFAULT '0',
+  `active` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`planid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -375,14 +396,17 @@ INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `startDate`
 -- Table structure for table `site_content`
 --
 
-CREATE TABLE `site_content` (
-  `content_id` int(11) NOT NULL,
-  `section_name` varchar(50) NOT NULL,
-  `content_text` text DEFAULT NULL,
-  `image_path` varchar(255) DEFAULT NULL,
-  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `site_content`;
+CREATE TABLE IF NOT EXISTS `site_content` (
+  `content_id` int NOT NULL AUTO_INCREMENT,
+  `section_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `content_text` text COLLATE utf8mb4_general_ci,
+  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`content_id`),
+  UNIQUE KEY `idx_section_name` (`section_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `site_content`
@@ -401,18 +425,20 @@ INSERT INTO `site_content` (`content_id`, `section_name`, `content_text`, `image
 -- Table structure for table `sports_timetable`
 --
 
-CREATE TABLE `sports_timetable` (
-  `tid` varchar(45) NOT NULL,
-  `planid` varchar(50) DEFAULT NULL,
-  `staffid` varchar(50) DEFAULT NULL,
-  `tname` varchar(45) NOT NULL,
-  `day1` varchar(200) NOT NULL,
-  `day2` varchar(200) NOT NULL,
-  `day3` varchar(200) NOT NULL,
-  `day4` varchar(200) NOT NULL,
-  `day5` varchar(200) NOT NULL,
-  `day6` varchar(200) NOT NULL,
-  `hasApproved` varchar(10) NOT NULL
+DROP TABLE IF EXISTS `sports_timetable`;
+CREATE TABLE IF NOT EXISTS `sports_timetable` (
+  `tid` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `planid` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `staffid` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tname` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `day1` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `day2` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `day3` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `day4` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `day5` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `day6` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `hasApproved` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -432,12 +458,14 @@ INSERT INTO `sports_timetable` (`tid`, `planid`, `staffid`, `tname`, `day1`, `da
 -- Table structure for table `staff`
 --
 
-CREATE TABLE `staff` (
-  `staffid` varchar(40) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `pass_key` varchar(50) NOT NULL,
-  `role` varchar(25) NOT NULL
+DROP TABLE IF EXISTS `staff`;
+CREATE TABLE IF NOT EXISTS `staff` (
+  `staffid` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`staffid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -453,16 +481,18 @@ INSERT INTO `staff` (`staffid`, `name`, `username`, `pass_key`, `role`) VALUES
 -- Table structure for table `team_members`
 --
 
-CREATE TABLE `team_members` (
-  `member_id` int(11) NOT NULL,
-  `full_name` varchar(100) NOT NULL,
-  `position` varchar(100) NOT NULL,
-  `image_path` varchar(255) DEFAULT NULL,
-  `display_order` int(11) DEFAULT NULL,
-  `active` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `team_members`;
+CREATE TABLE IF NOT EXISTS `team_members` (
+  `member_id` int NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `position` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `display_order` int DEFAULT NULL,
+  `active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`member_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `team_members`
@@ -480,18 +510,20 @@ INSERT INTO `team_members` (`member_id`, `full_name`, `position`, `image_path`, 
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `userid` varchar(20) NOT NULL,
-  `pass_key` varchar(100) NOT NULL,
-  `imageid` varchar(200) NOT NULL,
-  `username` varchar(40) NOT NULL,
-  `fullName` varchar(100) NOT NULL,
-  `gender` varchar(8) NOT NULL,
-  `mobile` varchar(20) NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `dob` varchar(40) NOT NULL,
-  `joining_date` varchar(40) NOT NULL,
-  `hasApproved` varchar(10) DEFAULT NULL
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `imageid` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `fullName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `gender` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
+  `mobile` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `dob` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `joining_date` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `hasApproved` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -510,8 +542,9 @@ INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `g
 -- Stand-in structure for view `v_about_content`
 -- (See below for the actual view)
 --
-CREATE TABLE `v_about_content` (
-`content_id` int(11)
+DROP VIEW IF EXISTS `v_about_content`;
+CREATE TABLE IF NOT EXISTS `v_about_content` (
+`content_id` int
 ,`section_name` varchar(50)
 ,`content_text` text
 ,`image_path` varchar(255)
@@ -525,130 +558,8 @@ CREATE TABLE `v_about_content` (
 --
 DROP TABLE IF EXISTS `v_about_content`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_about_content`  AS SELECT `site_content`.`content_id` AS `content_id`, `site_content`.`section_name` AS `section_name`, `site_content`.`content_text` AS `content_text`, `site_content`.`image_path` AS `image_path`, `site_content`.`last_updated` AS `last_updated` FROM `site_content` WHERE `site_content`.`section_name` like 'about%' ORDER BY `site_content`.`content_id` ASC ;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `address`
---
-ALTER TABLE `address`
-  ADD PRIMARY KEY (`addressid`);
-
---
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`adminid`);
-
---
--- Indexes for table `enrolls_to`
---
-ALTER TABLE `enrolls_to`
-  ADD PRIMARY KEY (`et_id`);
-
---
--- Indexes for table `gallery_images`
---
-ALTER TABLE `gallery_images`
-  ADD PRIMARY KEY (`image_id`);
-
---
--- Indexes for table `gallery_sections`
---
-ALTER TABLE `gallery_sections`
-  ADD PRIMARY KEY (`section_id`);
-
---
--- Indexes for table `health_status`
---
-ALTER TABLE `health_status`
-  ADD PRIMARY KEY (`healthid`);
-
---
--- Indexes for table `images`
---
-ALTER TABLE `images`
-  ADD PRIMARY KEY (`imageid`);
-
---
--- Indexes for table `login`
---
-ALTER TABLE `login`
-  ADD PRIMARY KEY (`loginid`);
-
---
--- Indexes for table `plan`
---
-ALTER TABLE `plan`
-  ADD PRIMARY KEY (`planid`);
-
---
--- Indexes for table `site_content`
---
-ALTER TABLE `site_content`
-  ADD PRIMARY KEY (`content_id`),
-  ADD UNIQUE KEY `idx_section_name` (`section_name`);
-
---
--- Indexes for table `sports_timetable`
---
-ALTER TABLE `sports_timetable`
-  ADD PRIMARY KEY (`tid`);
-
---
--- Indexes for table `staff`
---
-ALTER TABLE `staff`
-  ADD PRIMARY KEY (`staffid`);
-
---
--- Indexes for table `team_members`
---
-ALTER TABLE `team_members`
-  ADD PRIMARY KEY (`member_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`userid`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `enrolls_to`
---
-ALTER TABLE `enrolls_to`
-  MODIFY `et_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
-
---
--- AUTO_INCREMENT for table `gallery_images`
---
-ALTER TABLE `gallery_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
-
---
--- AUTO_INCREMENT for table `gallery_sections`
---
-ALTER TABLE `gallery_sections`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `site_content`
---
-ALTER TABLE `site_content`
-  MODIFY `content_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `team_members`
---
-ALTER TABLE `team_members`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+DROP VIEW IF EXISTS `v_about_content`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_about_content`  AS SELECT `site_content`.`content_id` AS `content_id`, `site_content`.`section_name` AS `section_name`, `site_content`.`content_text` AS `content_text`, `site_content`.`image_path` AS `image_path`, `site_content`.`last_updated` AS `last_updated` FROM `site_content` WHERE (`site_content`.`section_name` like 'about%') ORDER BY `site_content`.`content_id` ASC ;
 
 --
 -- Constraints for dumped tables

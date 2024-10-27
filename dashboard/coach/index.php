@@ -16,39 +16,28 @@ page_protect();
 	
 	<link rel="stylesheet" href="../../css/dashboard/sidebar.css">
      <style>
-    	.page-container .sidebar-menu #main-menu li#dash > a {
-    	background-color: #2b303a;
-    	color: #ffffff;
-		}
-		.home-button {
-    position: fixed; /* Fixed positioning */
-    bottom: 20px; /* Distance from the bottom of the viewport */
-    right: 20px; /* Distance from the right of the viewport */
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white; /* Text color */
-    padding: 20px 25px; /* Padding around the button */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* No underline */
-    font-size: 16px; /* Font size */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
-    transition: background-color 0.3s; /* Transition effect */
-}
-
-.home-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-.row {
-    display: flex; /* Enables flexbox layout */
-    flex-wrap: wrap; /* Allows wrapping of tiles on smaller screens */
-    justify-content: space-between; /* Space between tiles */
-}
-
-.tile-stats {
-    display: flex; /* Make the tile-stats a flex container */
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: space-between; /* Distribute space evenly */
-    height: 100%; /* Ensures all boxes take the same height */
-}
+        .page-container .sidebar-menu #main-menu li#dash > a {
+            background-color: #2b303a;
+            color: #ffffff;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .tile-stats {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        /* Style for the approval message */
+        .approval-message {
+            color: grey;
+            font-size: 36px; /* Change size as needed */
+            text-align: center;
+            margin: 20px 0; /* Add some spacing around the message */
+        }
 
     </style>
 
