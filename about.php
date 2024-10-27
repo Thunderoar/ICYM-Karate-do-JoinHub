@@ -302,41 +302,41 @@ require('header.php');
                 </div>
             </div>
             
-            <?php if (isAdminLoggedIn()): ?>
+            <?php //if (isAdminLoggedIn()): ?>
             <form method="POST" id="teamForm" enctype="multipart/form-data">
                 <input type="hidden" name="update_team" value="1">
-            <?php endif; ?>
+            <?php //endif; ?>
             
             <div class="row">
-                <?php foreach ($teamMembers as $member): ?>
+                <?php //foreach ($teamMembers as $member): ?>
                 <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                     <div class="item player">
-                        <a href="#"><img src="<?php echo htmlspecialchars($member['image_path']); ?>" alt="Image" class="img-fluid"></a>
+                        <a href="#"><img src="<?php //echo htmlspecialchars($member['image_path']); ?>" alt="Image" class="img-fluid"></a>
                         <div class="p-4">
-                            <?php if (isAdminLoggedIn()): ?>
-                            <input type="text" name="team[<?php echo $member['member_id']; ?>][name]" 
-                                   value="<?php echo htmlspecialchars($member['full_name']); ?>" class="form-control mb-2">
-                            <input type="text" name="team[<?php echo $member['member_id']; ?>][position]" 
-                                   value="<?php echo htmlspecialchars($member['position']); ?>" class="form-control">
-                            <input type="file" name="team_image[<?php echo $member['member_id']; ?>]" class="form-control mt-2" accept="image/*">
-                            <?php else: ?>
-                            <h3><?php echo htmlspecialchars($member['full_name']); ?></h3>
-                            <p><?php echo htmlspecialchars($member['position']); ?></p>
-                            <?php endif; ?>
+                            <?php //if (isAdminLoggedIn()): ?>
+                            <input type="text" name="team[<?php //echo $member['member_id']; ?>][name]" 
+                                   value="<?php //echo htmlspecialchars($member['full_name']); ?>" class="form-control mb-2">
+                            <input type="text" name="team[<?php //echo $member['member_id']; ?>][position]" 
+                                   value="<?php //echo htmlspecialchars($member['position']); ?>" class="form-control">
+                            <input type="file" name="team_image[<?php //echo $member['member_id']; ?>]" class="form-control mt-2" accept="image/*">
+                            <?php //else: ?>
+                            <h3><?php //echo htmlspecialchars($member['full_name']); ?></h3>
+                            <p><?php //echo htmlspecialchars($member['position']); ?></p>
+                            <?php //endif; ?>
                         </div>
                     </div>
                 </div>
-                <?php endforeach; ?>
+                <?php //endforeach; ?>
             </div>
             
-            <?php if (isAdminLoggedIn()): ?>
+            <?php //if (isAdminLoggedIn()): ?>
             <div class="row mt-4">
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
             </form> -->
-            <?php endif; ?>
+            <?php //endif; ?>
         </div>
     </div>
 
