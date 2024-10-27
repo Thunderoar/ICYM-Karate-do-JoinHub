@@ -53,6 +53,62 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+    .section-title {
+      font-size: 2rem !important;
+      font-weight: bold !important;
+      margin-bottom: 2rem !important;
+      text-align: center !important;
+      color: #000 !important;
+    }
+    
+    .container {
+      max-width: 800px !important;
+      margin: 0 auto !important;
+      padding: 0 1rem !important;
+    }
+    
+    .grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 2rem !important;
+      padding: 1rem !important;
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+    
+    .coach-card {
+      background: #fff !important;
+      border-radius: 0.5rem !important;
+      overflow: hidden !important;
+    }
+    
+    .coach-card img {
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 0.5rem !important;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+      display: block !important;
+    }
+    
+    .coach-card h3 {
+      font-size: 1.25rem !important;
+      margin: 1rem 0 !important;
+      padding: 0 1rem !important;
+      color: #333 !important;
+      font-weight: 500 !important;
+    }
+    
+    .mb-8 {
+      margin-bottom: 2rem !important;
+    }
+    
+    .p-4 {
+      padding: 1rem !important;
+    }
 </style>
   </head>
   <body>
@@ -107,67 +163,29 @@ require('header.php');
   </div>
 </div>
 
-    <div class="site-section">
-      <div class="container">
-        <div class="col-lg-8 ml-auto">
-          <div class="row">
-            <div class="col-md-6 col-lg-6 mb-5 mb-lg-0">
-              <div class="custom-media d-flex">
-                <div class="img-wrap mr-3">
-                  <a href="#"><img src="images/image_1.jpg" alt="Image" class="img-fluid"></a>
-                </div>
-                <div>
-                  <span class="caption">Latest News</span>
-                  <h3><a href="#">Roman Greg scorer 4 goals</a></h3>
-                  <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6 mb-5 mb-lg-0">
-              <div class="custom-media d-flex">
-                <div class="img-wrap mr-3">
-                  <a href="#"><img src="images/image_2.jpg" alt="Image" class="img-fluid"></a>
-                </div>
-                <div>
-                  <span class="caption">Team</span>
-                  <h3><a href="#">Line for the upcoming match</a></h3>
-                  <p class="mb-0"><a href="#" class="more"><span class="mr-2">+</span>Learn More</a></p>
-                </div>
-              </div>
-            </div>
+  <div class="site-section custom-coach-section">
+    <div class="container">
+      <div class="mb-8">
+        <h2 class="section-title">Our Coach</h2>
+      </div>
+      
+      <div class="grid">
+        <div class="coach-card">
+          <img src="images/coach_umayy.jpeg" alt="Coach Umayyah">
+          <div class="p-4">
+            <h3>Cik Nur Umayyah Binti Mohamed Yusof</h3>
+          </div>
+        </div>
+        
+        <div class="coach-card">
+          <img src="images/sensei_selvan.jpeg" alt="Sensei Tamil Selvan">
+          <div class="p-4">
+            <h3>Sensei Tamil Selvan A/L Vengadesan</h3>
           </div>
         </div>
       </div>
     </div>
-
-<div class="site-section custom-coach-section">
-  <div class="container">
-    <div class="row align-items-center mb-4">
-      <div class="col-12 text-center">
-        <h2 class="section-title">Our Coach</h2>
-      </div>
-      <div class="col-6 text-right">
-        <a href="#" class="custom-prev js-custom-prev-v2">Prev</a>
-        <span class="mx-2">/</span>
-        <a href="#" class="custom-next js-custom-next-v2">Next</a>
-      </div>
-    </div>
-    <div class="owl-4-slider owl-carousel">
-      <div class="item player">
-        <a href="#"><img src="images/coach_umayy.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
-        <div class="p-4">
-          <h3>Cik Nur Umayyah Binti Mohamed Yusof</h3>
-        </div>
-      </div>
-      <div class="item player">
-        <a href="#"><img src="images/sensei_selvan.jpeg" alt="Image" class="img-fluid rounded shadow"></a>
-        <div class="p-4">
-          <h3>Sensei Tamil Selvan A/L Vengadesan</h3>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
 
 
 
