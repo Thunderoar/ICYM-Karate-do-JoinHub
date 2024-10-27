@@ -85,36 +85,53 @@ $isApproved = $row['hasApproved'];
 				<div class="approval-message">Please wait for approval by the Club Manager.</div><br>
             <?php else: ?>
                 <div class="row">
-			<div class="col-sm-3"><a href="payments.php">
-				<div class="tile-stats tile-red">
-					<div class="icon"><i class="entypo-users"></i></div>
-						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>You have paid</h2><br>
-						<?php
-							date_default_timezone_set("Asia/Kuala_Lumpur");
-							$date  = date('Y-m');
-							$query = "select * from enrolls_to WHERE  paid_date LIKE '$date%'";
-							//echo $query;
-							$result  = mysqli_query($con, $query);
-							$revenue = 0;
-							if (mysqli_affected_rows($con) != 0) {
-								while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-									$query1 = "SELECT * FROM plan WHERE planid='" . $row['planid'] . "'";
-									$result1 = mysqli_query($con, $query1);
-									
-									if ($result1) {
-										$value = mysqli_fetch_row($result1);
-										
-										// Ensure both $value[4] and $revenue are numeric before addition
-										$revenue = floatval($value[4]) + floatval($revenue);
-									}
-								}
-							}
-							echo "RM".$revenue;
-							?>
-						</div>
-				</div></a>
-			</div>
+<div class="col-sm-3"><a href="payments.php">
+<div class="tile-stats tile-red">
+    <div class="icon"><i class="entypo-users"></i></div>
+    <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+        <h2>You have paid</h2><br>
+        <?php
+            date_default_timezone_set("Asia/Kuala_Lumpur");
+            $date = date('Y-m');
+            
+            // Get the user's ID from the session
+            $userId = $_SESSION['userid']; // Make sure to start the session at the top of your PHP file
+
+            // Query to get the payments made by the logged-in user that are paid and approved
+            $query = "SELECT planid FROM enrolls_to WHERE userid = '$userId' AND paid_date LIKE '$date%' AND hasPaid = 1 AND hasApproved = 1";
+            $result = mysqli_query($con, $query);
+            $revenue = 0;
+
+            // Check if there are any payments made
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    // Query to get the plan details based on the plan ID
+                    $query1 = "SELECT amount FROM plan WHERE planid='" . $row['planid'] . "'";
+                    $result1 = mysqli_query($con, $query1);
+                    
+                    if ($result1) {
+                        $value = mysqli_fetch_assoc($result1);
+                        
+                        // Ensure the amount is numeric before addition
+                        if (isset($value['amount'])) {
+                            $revenue += floatval($value['amount']); // Use floatval to ensure it's treated as a number
+                        }
+                    }
+                }
+            }
+
+            // Display the calculated revenue only if it's greater than zero
+            if ($revenue > 0) {
+                echo "RM" . number_format($revenue, 2); // Format to two decimal places
+            } else {
+                echo "No payments made this month.";
+            }
+        ?>
+    </div>
+</div>
+
+</a></div>
+
 			<div class="col-sm-3"><a href="new_health_status.php">
 				<div class="tile-stats tile-green">
 					<div class="icon"><i class="entypo-chart-bar"></i></div>

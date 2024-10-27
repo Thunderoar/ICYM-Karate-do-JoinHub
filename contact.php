@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -49,12 +51,12 @@ require('header.php');
       <div class="col-lg-12">
         <div class="custom-hero-image" role="img" aria-label="Karate background" data-stellar-background-ratio="0.5">
           <div class="custom-hero-contents text-center">
-            <h2 class="custom-hero-title">About Us</h2>
+            <h2 class="custom-hero-title">Contact</h2>
             <nav aria-label="breadcrumb">
               <p>
                 <a href="index.php" class="custom-breadcrumb-link">Home</a>
                 <span class="mx-2">/</span> 
-                <strong>About Us</strong>
+                <strong>Contact</strong>
               </p>
             </nav>
           </div>
@@ -116,13 +118,13 @@ require('header.php');
           <div class="p-4 mb-3 bg-white">
             <h3 class="h5 text-black mb-3">Contact Info</h3>
             <p class="mb-0 font-weight-bold text-black">Address</p>
-            <p class="mb-4 text-black">203 Fake St. Mountain View, San Francisco, California, USA</p>
+            <p class="mb-4 text-black"></p>
   
             <p class="mb-0 font-weight-bold text-black">Phone</p>
-            <p class="mb-4"><a href="#">+1 232 3235 324</a></p>
+            <p class="mb-4"><a href="#"></a></p>
   
             <p class="mb-0 font-weight-bold text-black">Email Address</p>
-            <p class="mb-0"><a href="#">youremail@domain.com</a></p>
+            <p class="mb-0"><a href="#"></a></p>
   
           </div>
   

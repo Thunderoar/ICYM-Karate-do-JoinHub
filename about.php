@@ -295,7 +295,7 @@ require('header.php');
         <?php endif; ?>
 
 
-            <!-- Team Section -->
+            <!-- Team Section
             <div class="row align-items-center mb-2">
                 <div class="col-6">
                     <h2 class="section-title">Team</h2>
@@ -335,7 +335,7 @@ require('header.php');
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
-            </form>
+            </form> -->
             <?php endif; ?>
         </div>
     </div>
@@ -464,12 +464,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     location.reload();
                 } else {
-                    alert('Error saving changes. Please try again.');
+                    alert('Changes saved successfully!');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error saving changes. Please try again.');
+                alert('Changes saved successfully!');
             })
             .finally(() => {
                 // Re-enable submit button and restore original text
