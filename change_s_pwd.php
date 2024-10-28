@@ -16,16 +16,20 @@ if ($pass == $passconfirm) {
         $login_count = mysqli_num_rows($login_result);
 
         if ($login_count == 1) {
-            // Fetch the user's authority level (admin or user)
+            // Fetch the user's authority level (admin, user, or staff)
             $login_data = mysqli_fetch_assoc($login_result);
             $authority = $login_data['authority'];
 
             // Update the password in the login table
             mysqli_query($con, "UPDATE login SET pass_key='$pass' WHERE username='$user_id_auth'");
 
-            // If authority is 'user', update the password in the users table as well
+            // Update the password in the corresponding tables based on authority level
             if ($authority == 'user') {
                 mysqli_query($con, "UPDATE users SET pass_key='$pass' WHERE username='$user_id_auth'");
+            } elseif ($authority == 'staff') {
+                mysqli_query($con, "UPDATE staff SET pass_key='$pass' WHERE username='$user_id_auth'");
+            } elseif ($authority == 'admin') {
+                mysqli_query($con, "UPDATE admin SET pass_key='$pass' WHERE username='$user_id_auth'");
             }
 
             // Redirect and alert based on authority
