@@ -107,7 +107,11 @@ page_protect();
                     <?php
                     date_default_timezone_set("Asia/Kuala_Lumpur");
                     $date = date('Y-m');
-                    $query = "SELECT * FROM enrolls_to WHERE paid_date LIKE '$date%'";
+                    // Modified query to include hasPaid and hasApproved conditions
+                    $query = "SELECT enrolls_to.* FROM enrolls_to 
+                             WHERE paid_date LIKE '$date%' 
+                             AND hasPaid = 'yes' 
+                             AND hasApproved = 'yes'";
                     $result = mysqli_query($con, $query);
                     $revenue = 0;
                     if (mysqli_num_rows($result) != 0) {

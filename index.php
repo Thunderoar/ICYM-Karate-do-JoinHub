@@ -141,37 +141,51 @@ require('header.php');
 
 
     
-<div>
-  <div class="row">
-    <div class="col-lg-12">
-      <?php
-        // Assuming we want to fetch the first image and details associated with a plan
-        // Adjust the query to select the plan details and image from the database
-        $sql = "SELECT p.planName, p.description, i.image_path 
-                FROM plan p 
-                INNER JOIN images i ON p.planid = i.planid 
-                WHERE p.planid IS NOT NULL LIMIT 1"; // Fetch plan details along with an associated image
-        $result = $con->query($sql);
+<div id="event-slideshow" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <?php
+      $sql = "SELECT p.planid, p.planName, p.description, i.image_path
+              FROM plan p 
+              INNER JOIN images i ON p.planid = i.planid 
+              WHERE p.planid IS NOT NULL";
+      $result = $con->query($sql);
+      $isActive = true;
 
-        if ($result->num_rows > 0) {
-          // Fetch the result for the first plan
-          $row = $result->fetch_assoc();
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
           $planName = $row['planName'];
           $description = $row['description'];
-          $imagePath = htmlspecialchars($row['image_path']); // Safe way to echo the image path
+          $imagePath = htmlspecialchars($row['image_path']);
+          $activeClass = $isActive ? 'active' : '';
+          $isActive = false;
+
+          echo '<div class="carousel-item ' . $activeClass . '">';
           echo '<div class="hero-wrap" style="background-image: url(dashboard/admin/' . $imagePath . ');" data-stellar-background-ratio="0.5">';
-        } else {
-          echo "No plans found. Please create a New Plan with Images.";
+          echo '<div class="hero-contents">';
+          echo '<h2>' . htmlspecialchars($planName) . '</h2>';
+          echo '<p>' . htmlspecialchars($description) . '</p>';
+          echo '</div></div></div>';
         }
-      ?>
-        <div class="hero-contents">
-          <h2><?php echo htmlspecialchars($planName); ?></h2>
-          <p><?php echo htmlspecialchars($description); ?></p>
-        </div>
-      </div>
-    </div>
+      } else {
+        echo "No plans found. Please create a New Plan with Images.";
+      }
+    ?>
   </div>
+
+  <!-- Previous Button -->
+  <a class="carousel-control-prev" href="#event-slideshow" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+
+  <!-- Next Button -->
+  <a class="carousel-control-next" href="#event-slideshow" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 </div>
+
+
 
   <div class="site-section custom-coach-section">
     <div class="container">

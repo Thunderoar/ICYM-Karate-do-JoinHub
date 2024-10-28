@@ -96,12 +96,17 @@ $isApproved = $row['hasApproved'];
             
             // Get the user's ID from the session
             $userId = $_SESSION['userid']; // Make sure to start the session at the top of your PHP file
-
-            // Query to get the payments made by the logged-in user that are paid and approved
-            $query = "SELECT planid FROM enrolls_to WHERE userid = '$userId' AND paid_date LIKE '$date%' AND hasPaid = 1 AND hasApproved = 1";
+            
+            // Updated query to use 'yes' instead of 1
+            $query = "SELECT planid FROM enrolls_to 
+                     WHERE userid = '$userId' 
+                     AND paid_date LIKE '$date%' 
+                     AND hasPaid = 'yes' 
+                     AND hasApproved = 'yes'";
+            
             $result = mysqli_query($con, $query);
             $revenue = 0;
-
+            
             // Check if there are any payments made
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -119,7 +124,7 @@ $isApproved = $row['hasApproved'];
                     }
                 }
             }
-
+            
             // Display the calculated revenue only if it's greater than zero
             if ($revenue > 0) {
                 echo "RM" . number_format($revenue, 2); // Format to two decimal places
@@ -173,26 +178,40 @@ $isApproved = $row['hasApproved'];
 						</div>
 				</div></a>
 			</div>
-			<div class="col-sm-3"><a href="view_plan.php">
-				<div class="tile-stats tile-blue">
-					<div class="icon"><i class="entypo-rss"></i></div>
-						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Joined Activity</h2><br>
-							<?php
-							$query = "select COUNT(*) from plan where active='yes'";
-							//echo $query;
-							$result  = mysqli_query($con, $query);
-							$i = 1;
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        echo $row['COUNT(*)'];
-							    }
-							}
-							$i = 1;
-							?>
-						</div>
-				</div></a>
-			</div>
+<div class="col-sm-3">
+    <a href="view_plan.php">
+        <div class="tile-stats tile-blue">
+            <div class="icon"><i class="entypo-rss"></i></div>
+            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2>Joined Activity</h2><br>
+                <?php
+                if (!isset($_SESSION['userid'])) {
+                    echo "0"; // Show 0 if not logged in
+                } else {
+                    $userid = mysqli_real_escape_string($con, $_SESSION['userid']);
+                    
+                    // Query to count active plans that the user has joined
+                    $query = "SELECT COUNT(*) as plan_count 
+                             FROM enrolls_to e 
+                             INNER JOIN plan p ON e.planid = p.planid 
+                             WHERE e.userid = '$userid' 
+                             AND p.active = 'yes' 
+                             AND e.hasApproved = 'yes'";
+                    
+                    $result = mysqli_query($con, $query);
+                    
+                    if ($result && mysqli_affected_rows($con) != 0) {
+                        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                        echo htmlspecialchars($row['plan_count']);
+                    } else {
+                        echo "0";
+                    }
+                }
+                ?>
+            </div>
+        </div>
+    </a>
+</div>
                 </div>
             <?php endif; ?>
 
