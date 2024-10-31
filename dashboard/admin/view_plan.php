@@ -96,6 +96,19 @@ th {
 
 		<hr />
 
+<?php
+// Update the query to fetch slug from the plan_pages table
+$query = "SELECT p.planid, p.planName, p.description, p.planType, p.startDate, p.endDate, 
+          p.duration, p.amount, pp.slug 
+          FROM plan p 
+          LEFT JOIN plan_pages pp ON p.planid = pp.planid 
+          WHERE p.active='yes' 
+          ORDER BY p.amount DESC";
+
+$result = mysqli_query($con, $query);
+$sno = 1;
+?>
+
 <table class="table table-bordered datatable" id="table-1" border="1">
     <thead>
         <tr>
@@ -108,20 +121,12 @@ th {
             <th onclick="sortTable(6)">End Date</th>
             <th onclick="sortTable(7)">Duration (Days)</th>
             <th onclick="sortTable(8)">Rate</th>
+            <th onclick="sortTable(9)">Page URL</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        // Update the query to fetch additional fields
-        $query = "SELECT planid, planName, description, planType, startDate, endDate, duration, amount 
-                    FROM plan 
-                    WHERE active='yes' 
-                    ORDER BY amount DESC";
-        
-        $result = mysqli_query($con, $query);
-        $sno = 1;
-
         if (mysqli_affected_rows($con) != 0) {
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                 $msgid = $row['planid'];
@@ -135,6 +140,13 @@ th {
                 echo "<td>" . date('Y-m-d', strtotime($row['endDate'])) . "</td>";
                 echo "<td>" . $row['duration'] . "</td>";
                 echo "<td>RM" . $row['amount'] . "</td>";
+                
+                // Add slug URL column
+                if ($row['slug']) {
+                    echo "<td><a href='../../plans/" . $row['slug'] . "' target='_blank'>" . $row['slug'] . "</a></td>";
+                } else {
+                    echo "<td><span class='text-muted'>No URL yet</span></td>";
+                }
                 
                 $sno++;
                 
