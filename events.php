@@ -126,70 +126,102 @@ require('header.php');
 
 <?php
 require 'include/db_conn.php';
-
-// Start the session if it hasn't been started
 if (session_status() == PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 
-// Fetch active plans from the database
-$query = "SELECT * FROM plan WHERE active = 'yes'"; // Fetch only active plans
+// Update query to include slug from plan_pages
+$query = "SELECT p.*, pp.slug, pp.page_title 
+          FROM plan p 
+          LEFT JOIN plan_pages pp ON p.planid = pp.planid 
+          WHERE p.active = 'yes' LIMIT 8";
 $result = mysqli_query($con, $query);
 
-// Check if there are any plans available
+// Get user's authority level from session
+$user_authority = $_SESSION['authority'] ?? '';
+
 if (mysqli_num_rows($result) > 0):
 ?>
-
-
-<div class="row mb-5">
-<?php
-// Assuming the user's authority level is stored in session
-$user_authority = $_SESSION['authority'] ?? ''; // Replace this with your actual session variable
-
-// Loop through the plans and display them
-while ($plan = mysqli_fetch_assoc($result)):
-  $planid = mysqli_real_escape_string($con, $plan['planid']);
-  $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
-  $image_result = mysqli_query($con, $image_query);
-  $image_path = ($image_result && mysqli_num_rows($image_result) > 0) ? 'dashboard/admin/' . mysqli_fetch_assoc($image_result)['image_path'] : 'images/default_plan_image.jpg';
-?>
-  <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
-    <div class="card">
-      <img src="<?php echo $image_path; ?>" alt="Plan Image" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title"><?php echo $plan['planName']; ?></h5>
-        <p class="card-text"><?php echo $plan['description']; ?></p>
-        <!-- <p><strong>Validity:</strong> <?php echo $plan['validity']; ?> days</p> -->
-        <!-- <p><strong>Amount:</strong> $<?php echo $plan['amount']; ?></p> -->
-        
-        <?php if ($user_authority === 'admin'): // Change 'admin' to your actual admin role identifier ?>
-          <!-- Edit button for Bootstrap 4 -->
-          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPlanModal" 
-            data-planid="<?php echo $planid; ?>" 
-            data-planname="<?php echo $plan['planName']; ?>" 
-            data-description="<?php echo $plan['description']; ?>" 
-            data-validity="<?php echo $plan['validity']; ?>" 
-            data-amount="<?php echo $plan['amount']; ?>">
-            Edit
-          </button>
-
-          <!-- Delete button -->
-          <form method="POST" action="" style="display:inline;">
-            <input type="hidden" name="planid" value="<?php echo $planid; ?>">
-            <button type="submit" name="deletePlan" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this plan?');">
-              Delete
-            </button>
-          </form>
-        <?php endif; ?>
-      </div>
+<div class="site-section">
+    <div class="container pb-0">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title">Events</h2>
+            </div>
+            
+            <?php while ($plan = mysqli_fetch_assoc($result)):
+                $planid = mysqli_real_escape_string($con, $plan['planid']);
+                
+                // Fetch plan images
+                $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
+                $image_result = mysqli_query($con, $image_query);
+                $image_path = ($image_result && mysqli_num_rows($image_result) > 0) 
+                    ? 'dashboard/admin/' . mysqli_fetch_assoc($image_result)['image_path']
+                    : 'images/default_plan_image.jpg';
+            ?>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
+                <div class="card h-100">
+                    <img src="<?php echo htmlspecialchars($image_path); ?>" 
+                         alt="Plan Image" 
+                         class="card-img-top">
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <?php echo htmlspecialchars($plan['planName']); ?>
+                        </h5>
+                        <p class="card-text flex-grow-1">
+                            <?php echo htmlspecialchars(substr($plan['description'], 0, 100) . '...'); ?>
+                        </p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-primary">
+                                    RM<?php echo number_format($plan['amount'], 2); ?>
+                                </span>
+                                <?php if ($plan['slug']): ?>
+                                    <a href="plans/<?php echo htmlspecialchars($plan['slug']); ?>" 
+                                       class="btn btn-primary">Read More...</a>
+                                <?php else: ?>
+                                    <button class="btn btn-secondary" disabled>Coming Soon</button>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <?php if ($user_authority === 'admin'): ?>
+                                <div class="admin-controls mt-2">
+                                    <button type="button" 
+                                            class="btn btn-primary btn-sm" 
+                                            data-toggle="modal" 
+                                            data-target="#editPlanModal"
+                                            data-planid="<?php echo htmlspecialchars($planid); ?>"
+                                            data-planname="<?php echo htmlspecialchars($plan['planName']); ?>"
+                                            data-description="<?php echo htmlspecialchars($plan['description']); ?>"
+                                            data-validity="<?php echo htmlspecialchars($plan['validity']); ?>"
+                                            data-amount="<?php echo htmlspecialchars($plan['amount']); ?>">
+                                        Edit
+                                    </button>
+                                    <form method="POST" action="" style="display:inline;">
+                                        <input type="hidden" 
+                                               name="planid" 
+                                               value="<?php echo htmlspecialchars($planid); ?>">
+                                        <button type="submit" 
+                                                name="deletePlan" 
+                                                class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Are you sure you want to delete this plan?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endwhile; ?>
+        </div>
     </div>
-  </div>
-<?php endwhile; ?>
 </div>
-
-
 <?php else: ?>
-  <p>No plans available at the moment.</p>
+    <p>No plans available at the moment.</p>
 <?php endif; ?>
 
 <!-- Edit Plan Modal -->

@@ -119,6 +119,32 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     .p-4 {
       padding: 0.5rem !important;
     }
+	
+	.card {
+    height: 100%;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.modal-body img {
+    max-height: 300px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.additional-content {
+    max-height: 300px;
+    overflow-y: auto;
+}
 </style>
   </head>
   <body>
@@ -213,106 +239,112 @@ require('header.php');
 
 
 
-
 <?php
+require 'include/db_conn.php';
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Update query to include slug from plan_pages
+$query = "SELECT p.*, pp.slug, pp.page_title 
+          FROM plan p 
+          LEFT JOIN plan_pages pp ON p.planid = pp.planid 
+          WHERE p.active = 'yes' LIMIT 8";
+$result = mysqli_query($con, $query);
+
+if (mysqli_num_rows($result) > 0):
+?>
+<div class="site-section">
+    <div class="container pb-0">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title">Events</h2>
+            </div>
+            
+            <?php
+            while ($plan = mysqli_fetch_assoc($result)):
+                $planid = mysqli_real_escape_string($con, $plan['planid']);
+                
+                // Fetch plan images
+                $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
+                $image_result = mysqli_query($con, $image_query);
+                $image_path = ($image_result && mysqli_num_rows($image_result) > 0) 
+                    ? 'dashboard/admin/' . mysqli_fetch_assoc($image_result)['image_path'] 
+                    : 'images/default_plan_image.jpg';
+            ?>
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
+                <div class="card h-100">
+                    <img src="<?php echo $image_path; ?>" alt="Plan Image" class="card-img-top">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title"><?php echo $plan['planName']; ?></h5>
+                        <p class="card-text flex-grow-1"><?php echo substr($plan['description'], 0, 100) . '...'; ?></p>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary">RM<?php echo number_format($plan['amount'], 2); ?></span>
+                                <?php if ($plan['slug']): ?>
+                                    <a href="plans/<?php echo $plan['slug']; ?>" class="btn btn-primary">Read More...</a>
+                                <?php else: ?>
+                                    <button class="btn btn-secondary" disabled>Coming Soon</button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endwhile; ?>
+        </div>
+    </div>
+</div>
+<?php else: ?>
+    <p>No plans available at the moment.</p>
+<?php endif; ?>
+
+ <?php
 
 // Fetch images from the gallery_images table
-$query = "SELECT image_path FROM gallery_images";
+$query = "SELECT image_path FROM gallery_images LIMIT 8";
 $result = mysqli_query($con, $query);
 
 if (mysqli_num_rows($result) > 0) {
 ?>
 <div class="site-section" style="background-color: #f8f9fa; padding: 40px;">
-    <div class="container">
-        <div class="row align-items-center mb-4">
-            <div class="col-12 text-center">
-                <h2 class="section-title" style="font-size: 2.5rem; font-weight: bold; color: #343a40;">Gallery</h2>
-            </div>
-        </div>
+    <div class="text-center mb-4">
+        <h2 class="section-title" style="font-size: 2.5rem; font-weight: bold; color: #343a40;">Gallery</h2>
+    </div>
 
+    <!-- Inner container to center the gallery content -->
+    <div class="">
         <div class="row">
-        <?php
-        // Loop through the fetched images
-        while ($row = mysqli_fetch_assoc($result)) {
-            $imagePath = 'dashboard/admin/' . $row['image_path']; // Prepend the correct folder
-        ?>
-            <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <a href="<?php echo $imagePath; ?>" data-fancybox="gal">
-                    <img src="<?php echo $imagePath; ?>" alt="Image" class="img-fluid rounded shadow">
-                </a>
-            </div>
-        <?php
-        }
-        ?>
+            <?php
+            // Loop through the fetched images
+            while ($row = mysqli_fetch_assoc($result)) {
+                $imagePath = 'dashboard/admin/' . $row['image_path']; // Prepend the correct folder
+            ?>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <a href="<?php echo $imagePath; ?>" data-fancybox="gal">
+                        <img src="<?php echo $imagePath; ?>" alt="Image" class="img-fluid rounded shadow">
+                    </a>
+                </div>
+            <?php
+            }
+            ?>
         </div>
     </div>
 </div>
+
+
 <?php
 } else {
     echo "<p>No images found in the gallery.</p>";
 }
-?>
-
-
-
-<?php
-require 'include/db_conn.php';
-
-// Start the session if it hasn't been started
-if (session_status() == PHP_SESSION_NONE) {
-  session_start();
-}
-
-// Fetch active plans from the database
-$query = "SELECT * FROM plan WHERE active = 'yes'"; // Fetch only active plans
-$result = mysqli_query($con, $query);
-
-// Check if there are any plans available
-if (mysqli_num_rows($result) > 0):
-?>
-
-  <div class="site-section">
-    <div class="container pb-0">
-<div class="row mb-5">
-      <div class="col-12 text-center">
-        <h2 class="section-title">Events</h2>
-      </div>
-
-  
-<?php
-// Loop through the plans and display them
-while ($plan = mysqli_fetch_assoc($result)):
-  $planid = mysqli_real_escape_string($con, $plan['planid']);
-  $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
-  $image_result = mysqli_query($con, $image_query);
-  $image_path = ($image_result && mysqli_num_rows($image_result) > 0) ? 'dashboard/admin/' . mysqli_fetch_assoc($image_result)['image_path'] : 'images/default_plan_image.jpg';
-?>
-  <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
-    <div class="card">
-      <img src="<?php echo $image_path; ?>" alt="Plan Image" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title"><?php echo $plan['planName']; ?></h5>
-        <p class="card-text"><?php echo $plan['description']; ?></p>
-      </div>
-    </div>
-  </div>
-
-<?php endwhile; ?>
-
-    </div>
-  </div>
-
-<?php else: ?>
-  <p>No plans available at the moment.</p>
-<?php endif; ?>
-
-    
+?>   
 <?php
 require('footer.html');
 ?>
 
   </div>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/jquery-ui.js"></script>
