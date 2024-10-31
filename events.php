@@ -134,7 +134,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $query = "SELECT p.*, pp.slug, pp.page_title 
           FROM plan p 
           LEFT JOIN plan_pages pp ON p.planid = pp.planid 
-          WHERE p.active = 'yes' LIMIT 8";
+          WHERE p.active = 'yes'";
 $result = mysqli_query($con, $query);
 
 // Get user's authority level from session
