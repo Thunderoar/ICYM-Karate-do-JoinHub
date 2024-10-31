@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 27, 2024 at 03:52 PM
+-- Generation Time: Oct 31, 2024 at 06:52 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -65,6 +65,7 @@ INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zi
 ('935899936', '1729499109', '', '', '', ''),
 ('948864454', '1729503655', '', '', '', ''),
 ('965810506', '1729503504', '', '', '', ''),
+('982014755', '1730087557', '', '', '', ''),
 ('995837925', '1729502959', '', '', '', '');
 
 -- --------------------------------------------------------
@@ -88,7 +89,25 @@ CREATE TABLE IF NOT EXISTS `admin` (
 --
 
 INSERT INTO `admin` (`adminid`, `username`, `pass_key`, `securekey`, `Full_name`) VALUES
-('admintest', 'admintest', 'admintest1', 'admintest', 'admintest');
+('admintest', 'admintest', 'admintest', 'admintest', 'admintest');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_messages`
+--
+
+DROP TABLE IF EXISTS `contact_messages`;
+CREATE TABLE IF NOT EXISTS `contact_messages` (
+  `message_id` int NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `subject` varchar(200) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('new','read','replied') DEFAULT 'new',
+  PRIMARY KEY (`message_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -107,20 +126,16 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
   `hasApproved` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
   `receiptIMG` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`et_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
 --
 
 INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
-(58, 'XTWIOL', '1729500896', '2024-10-27 21:43:31', '9999-12-31', 'yes', 'yes', '../../dashboard/admin/uploads/payment/cat-sleepy.gif'),
-(79, 'ENKZJO', '1729654531', '2024-10-23 22:32:01', '9999-12-31', 'yes', 'yes', ''),
-(80, 'CAFXVW', '1729500896', '2024-10-27 21:25:38', '9999-12-31', 'yes', 'yes', ''),
-(82, 'XTWIOL', '1730035207', '2024-10-27 21:26:06', '9999-12-31', 'yes', 'yes', '../../dashboard/admin/uploads/payment/investigate_color.png'),
-(83, 'XTWIOL', '1730036662', '2024-10-27 21:48:11', '9999-12-31', 'yes', 'yes', ''),
-(84, 'JUCDZN', '1730036662', '2024-10-27 21:50:06', '9999-12-31', 'yes', 'no', ''),
-(86, 'XTWIOL', '1730044070', '2024-10-27 23:48:53', '9999-12-31', 'yes', 'yes', '');
+(88, 'XTWIOL', '1730087557', '2024-10-28', '1970-01-01', 'no', '', ''),
+(89, 'UGZVJQ', '1730087557', '', '2024-11-28 11:54:08', 'no', '', ''),
+(90, 'TGNJRZ', '1730087557', '', '2024-11-28 11:54:13', 'no', '', '');
 
 -- --------------------------------------------------------
 
@@ -136,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `gallery_images` (
   `uploaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`image_id`),
   KEY `gallery_images_ibfk_1` (`section_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `gallery_images`
@@ -149,7 +164,17 @@ INSERT INTO `gallery_images` (`image_id`, `section_id`, `image_path`, `uploaded_
 (66, 8, 'uploads/image_3.jpg', '2024-10-23 09:41:43'),
 (67, 8, 'uploads/image_4.jpg', '2024-10-23 09:41:43'),
 (68, 8, 'uploads/image_5.jpg', '2024-10-23 09:41:43'),
-(69, 8, 'uploads/image_6.jpg', '2024-10-23 09:41:43');
+(69, 8, 'uploads/image_6.jpg', '2024-10-23 09:41:43'),
+(70, 8, 'uploads/image_2.jpg', '2024-10-28 02:16:46'),
+(71, 8, 'uploads/image_3.jpg', '2024-10-28 02:16:46'),
+(72, 8, 'uploads/image_4.jpg', '2024-10-28 02:16:46'),
+(73, 8, 'uploads/image_5.jpg', '2024-10-28 02:16:46'),
+(74, 8, 'uploads/image_6.jpg', '2024-10-28 02:16:46'),
+(75, 8, 'uploads/image_7.jpg', '2024-10-28 02:16:46'),
+(76, 8, 'uploads/image_8.jpg', '2024-10-28 02:16:46'),
+(77, 8, 'uploads/image_10.jpg', '2024-10-28 02:16:46'),
+(78, 8, 'uploads/image_11.jpg', '2024-10-28 02:16:46'),
+(79, 8, 'uploads/image_12.jpg', '2024-10-28 02:16:46');
 
 -- --------------------------------------------------------
 
@@ -210,6 +235,7 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('297159777', '', '', '', '', '', '1729500022'),
 ('319821461', '', '', '', '', '', '1729331377'),
 ('338833368', '', '', '', '', '', '1729653160'),
+('353479103', '', '', '', '', '', '1730087557'),
 ('361339141', '', '', '', '', '', '1729503655'),
 ('377819181', '', '', '', '', '', '1729503048'),
 ('387732098', '', '', '', '', '', '1730035207'),
@@ -261,6 +287,10 @@ CREATE TABLE IF NOT EXISTS `images` (
 
 INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `image_path`, `uploaded_at`) VALUES
 ('04d46f48-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729502982', NULL, NULL, NULL, '2024-10-21 09:29:49'),
+('16e092c9-9689-11ef-aaee-004e01ffe201', NULL, NULL, NULL, 'KYDZOV', 'uploads/6721d39503ce1_event_1.jpg', '2024-10-30 06:35:01'),
+('1769271a-94e0-11ef-96fe-004e01ffe201', NULL, '1730087557', NULL, NULL, NULL, '2024-10-28 03:52:45'),
+('1f44babb-94d2-11ef-96fe-004e01ffe201', NULL, NULL, NULL, 'UGZVJQ', 'uploads/image_2_671ef31e09eec.jpg', '2024-10-28 02:12:46'),
+('20af0194-9754-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'WDCFUK', 'uploads/672328394cfbc_karate_main.jpg', '2024-10-31 06:48:25'),
 ('2147483647', NULL, '1729500022', NULL, NULL, NULL, '2024-10-21 08:41:08'),
 ('262d799d-8f8a-11ef-a5b9-004e01ffe201', NULL, '1729500896', NULL, NULL, NULL, '2024-10-21 08:54:57'),
 ('2ea50c7f-8f8c-11ef-a5b9-004e01ffe201', NULL, '1729501754', NULL, NULL, NULL, '2024-10-21 09:09:31'),
@@ -282,13 +312,14 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('8989', 'admintest', NULL, NULL, NULL, 'uploads/default_plan_image.jpg', '2024-10-19 11:03:43'),
 ('8990', NULL, '1729499036', NULL, NULL, NULL, '2024-10-21 08:24:04'),
 ('8991', NULL, '1729499109', NULL, NULL, NULL, '2024-10-21 08:25:15'),
-('9', NULL, NULL, NULL, 'ENKZJO', 'uploads/image_10.jpg', '2024-10-19 10:43:56'),
 ('9327316', NULL, '1729499715', NULL, NULL, NULL, '2024-10-21 08:36:32'),
 ('9327317', NULL, '1729499988', NULL, NULL, NULL, '2024-10-21 08:39:56'),
 ('97108066-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503655', NULL, NULL, NULL, '2024-10-21 09:41:04'),
 ('97673448-9469-11ef-96fe-004e01ffe201', NULL, '1730036662', NULL, NULL, NULL, '2024-10-27 13:44:30'),
 ('af9126c9-90ec-11ef-9771-004e01ffe201', NULL, '1729653160', NULL, NULL, NULL, '2024-10-23 03:12:50'),
+('b3fd23a2-9753-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'HAJBWP', 'uploads/67232782e6b24_image_8.jpg', '2024-10-31 06:45:22'),
 ('c1a6ad2f-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503254', NULL, NULL, NULL, '2024-10-21 09:35:06'),
+('c297f3e8-94c4-11ef-96fe-004e01ffe201', NULL, NULL, NULL, 'TGNJRZ', 'uploads/event_1_671edcb3189d6.jpg', '2024-10-28 00:37:07'),
 ('d785ab4b-947a-11ef-96fe-004e01ffe201', NULL, '1730044070', NULL, NULL, NULL, '2024-10-27 15:47:59'),
 ('dc81088c-8f96-11ef-a5b9-004e01ffe201', NULL, '1729506355', NULL, NULL, NULL, '2024-10-21 10:25:58'),
 ('df9cf0f4-90ef-11ef-954f-004e01ffe201', NULL, '1729654531', NULL, NULL, NULL, '2024-10-23 03:35:39'),
@@ -325,6 +356,7 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 ('123', '123', '123', NULL, '123', '123', '123', 'admin'),
 ('12345', '1234', 'admintest', NULL, 'admintest', 'admintest', 'admintest', 'admin'),
 ('12345678', NULL, NULL, 'rashid', 'rashid', 'rashid', 'rashid', 'staff'),
+('17690dc6-94e0-11ef-96fe-004e01ffe201', NULL, '1730087557', NULL, 'hello', 'hello', '17690ddc-94e0-11ef-96fe-004e01ffe201', 'member'),
 ('1c5aa59d-85d6-11ef-bb7d-e9097018277d', NULL, '1728433989', NULL, 'q', 'q', '1c5aa65f-85d6-11ef-bb7d-e9097018277d', 'member'),
 ('23a7f823-864e-11ef-a918-3ca067e52da9', NULL, '1728485531', NULL, 'h', 'h', '23a7f891-864e-11ef-a918-3ca067e52da9', 'member'),
 ('262d5d4c-8f8a-11ef-a5b9-004e01ffe201', NULL, '1729500896', NULL, 'o', 'o', '262d5d5b-8f8a-11ef-a5b9-004e01ffe201', 'member'),
@@ -394,10 +426,67 @@ CREATE TABLE IF NOT EXISTS `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
-('CAFXVW', 'qweqweqw', 'werwer', 'Event', '2024-10-23', '2024-10-26', 3, '', 213, 'yes'),
-('ENKZJO', '1', '1', 'Event', '', '', 0, '1', 1, 'yes'),
+('EAHCDQ', 'Event 1', 'Example description of event 1', 'Event', '2024-10-31', '2024-11-28', 28, 'Lifetime', 50, 'yes'),
+('FNQZGU', 's', 's', 'Event', '2024-10-16', '2024-10-23', 7, 'Lifetime', 20, 'yes'),
+('HAJBWP', 'BLOG TEST', 'BLOG TEST', 'Event', '2024-11-01', '2024-11-29', 28, 'Lifetime', 40, 'yes'),
 ('JUCDZN', 'future', 'future', 'Event', '2024-10-31', '2024-11-30', 30, 'Lifetime', 20, 'yes'),
+('KYDZOV', 'testt', 'testt', 'Event', '2024-10-30', '2024-11-20', 21, 'Lifetime', 30, 'yes'),
+('TGNJRZ', 'Event 1', 'Example description of event 1', 'Event', '2024-10-31', '2024-11-14', 14, 'Lifetime', 50, 'yes'),
+('UGZVJQ', 'Example 2', 'Example Desc 2', 'Event', '2024-10-29', '2024-10-31', 2, 'Lifetime', 50, 'yes'),
+('WDCFUK', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'Event', '2024-11-01', '2024-11-09', 8, 'Lifetime', 40, 'yes'),
 ('XTWIOL', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `plan_pages`
+--
+
+DROP TABLE IF EXISTS `plan_pages`;
+CREATE TABLE IF NOT EXISTS `plan_pages` (
+  `page_id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `planid` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `page_title` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `page_content` text COLLATE utf8mb4_general_ci,
+  `meta_description` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `slug` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `published` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`page_id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `planid` (`planid`(250))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `plan_pages`
+--
+
+INSERT INTO `plan_pages` (`page_id`, `planid`, `page_title`, `page_content`, `meta_description`, `slug`, `created_at`, `updated_at`, `published`) VALUES
+('page_6721d39502bf46.59430875', 'KYDZOV', 'testt', 'testt', 'testt', 'testt', '2024-10-30 06:35:01', '2024-10-30 06:35:01', 1),
+('page_67232782e67e51.63127978', 'HAJBWP', 'BLOG TEST', 'BLOG TEST', 'BLOG TEST', 'blog-test', '2024-10-31 06:45:22', '2024-10-31 06:45:22', 1),
+('page_672328394cc9d5.50626830', 'WDCFUK', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'test-blog-again', '2024-10-31 06:48:25', '2024-10-31 06:48:25', 1),
+('page_6723288cc44a54.37870147', 'FNQZGU', 's', 's', 's', 's', '2024-10-31 06:49:48', '2024-10-31 06:49:48', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `plan_page_sections`
+--
+
+DROP TABLE IF EXISTS `plan_page_sections`;
+CREATE TABLE IF NOT EXISTS `plan_page_sections` (
+  `section_id` char(36) NOT NULL,
+  `page_id` char(36) DEFAULT NULL,
+  `section_title` varchar(150) DEFAULT NULL,
+  `section_content` text,
+  `section_order` int DEFAULT NULL,
+  `section_type` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`section_id`),
+  KEY `page_id` (`page_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -415,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `site_content` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`content_id`),
   UNIQUE KEY `idx_section_name` (`section_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `site_content`
@@ -427,7 +516,10 @@ INSERT INTO `site_content` (`content_id`, `section_name`, `content_text`, `image
 (3, 'about_secondary_text', 'Our mission is to develop athletes who excel both in sports and in life.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51'),
 (4, 'about_column_1', 'We offer world-class training facilities and experienced coaching staasdasdff to help our athletes reach their full potential.', NULL, '2024-10-25 07:59:31', '2024-10-25 07:42:51'),
 (5, 'about_column_2', 'Our programs focus on both physical training and mental preparation, creating well-rounded athletes ready for competition.', NULL, '2024-10-25 07:42:51', '2024-10-25 07:42:51'),
-(6, 'contact_form', '<div class=\"site-section\">...your HTML content here...</div>', NULL, '2024-10-27 15:38:34', '2024-10-27 15:38:34');
+(6, 'contact_form', '<div class=\"site-section\">...your HTML content here...</div>', NULL, '2024-10-27 15:38:34', '2024-10-27 15:38:34'),
+(7, 'contact_address', 'Your Address Here', NULL, '2024-10-27 23:55:18', '2024-10-27 23:55:18'),
+(8, 'contact_phone', 'Your Phone Number', NULL, '2024-10-27 23:55:18', '2024-10-27 23:55:18'),
+(9, 'contact_email', 'your@email.com', NULL, '2024-10-27 23:55:18', '2024-10-27 23:55:18');
 
 -- --------------------------------------------------------
 
@@ -543,13 +635,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`, `hasApproved`) VALUES
-('1729331491', 'c', 'UUID()', 'c', 'c', 'Male', '1', 'c@gmail.com', '2004-10-10', '2024-10-10', 'No'),
 ('1729500896', 'o', 'UUID()', 'o', 'o', 'Male', '1', 'o@gmail.com', '2004-10-10', '2024-10-10', 'Yes'),
-('1729654531', 'a', 'df9bf123-90ef-11ef-954f-004e01ffe201', 'a', 'a', '', '', 'a@gmail.com', '', '', 'Yes'),
-('1729816197', 'u', '4b918e84-9268-11ef-8788-004e01ffe201', 'u', 'u', '', '', 'u@gmail.com', '', '', 'Yes'),
-('1730036662', 'hey', '9766f4d3-9469-11ef-96fe-004e01ffe201', 'hey', 'hey', '', '', 'hey@gmail.com', '', '', 'Yes'),
-('1730037014', 'k', '6aae1980-946a-11ef-96fe-004e01ffe201', 'k', 'k', '', '', 'k@gmail.com', '', '', 'Yes'),
-('1730044070', 'y', 'd7854af5-947a-11ef-96fe-004e01ffe201', 'y', 'y', '', '', 'y@gmail.com', '', '', 'Yes');
+('1730087557', 'hello', '1768cef2-94e0-11ef-96fe-004e01ffe201', 'hello', 'hello', '', '', 'hello@gmail.com', '', '', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -560,10 +647,10 @@ INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `g
 DROP VIEW IF EXISTS `v_about_content`;
 CREATE TABLE IF NOT EXISTS `v_about_content` (
 `content_id` int
-,`section_name` varchar(50)
 ,`content_text` text
 ,`image_path` varchar(255)
 ,`last_updated` timestamp
+,`section_name` varchar(50)
 );
 
 -- --------------------------------------------------------
