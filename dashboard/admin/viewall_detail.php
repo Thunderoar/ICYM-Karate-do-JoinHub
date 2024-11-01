@@ -79,27 +79,28 @@ WHERE u.userid = ?";
                 if (mysqli_num_rows($result) == 1) {
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
                     // Assign values
-                    $name = htmlspecialchars($row['username']);
-                    $gender = htmlspecialchars($row['gender']);
-                    $mobile = htmlspecialchars($row['mobile']);
-                    $email = htmlspecialchars($row['email']);
-                    $dob = htmlspecialchars($row['dob']);         
-                    $jdate = htmlspecialchars($row['joining_date']);
-                    $streetname = htmlspecialchars($row['streetName']);
-                    $state = htmlspecialchars($row['state']);
-                    $city = htmlspecialchars($row['city']);  
-                    $zipcode = htmlspecialchars($row['zipcode']);
-                    $calorie = htmlspecialchars($row['calorie']);
-                    $height = htmlspecialchars($row['height']);
-                    $weight = htmlspecialchars($row['weight']);
-                    $fat = htmlspecialchars($row['fat']);
-                    $planname = htmlspecialchars($row['planName']);
-                    $pamount = htmlspecialchars($row['amount']);
-                    $pvalidity = htmlspecialchars($row['validity']);
-                    $pdescription = htmlspecialchars($row['description']);
-                    $paiddate = htmlspecialchars($row['paid_date']);
-                    $expire = htmlspecialchars($row['expire']);
-                    $remarks = htmlspecialchars($row['remarks']);
+$name = htmlspecialchars($row['username'] ?? '');
+$gender = htmlspecialchars($row['gender'] ?? '');
+$mobile = htmlspecialchars($row['mobile'] ?? '');
+$email = htmlspecialchars($row['email'] ?? '');
+$dob = htmlspecialchars($row['dob'] ?? '');         
+$jdate = htmlspecialchars($row['joining_date'] ?? '');
+$streetname = htmlspecialchars($row['streetName'] ?? '');
+$state = htmlspecialchars($row['state'] ?? '');
+$city = htmlspecialchars($row['city'] ?? '');  
+$zipcode = htmlspecialchars($row['zipcode'] ?? '');
+$calorie = htmlspecialchars($row['calorie'] ?? '');
+$height = htmlspecialchars($row['height'] ?? '');
+$weight = htmlspecialchars($row['weight'] ?? '');
+$fat = htmlspecialchars($row['fat'] ?? '');
+$planname = htmlspecialchars($row['planName'] ?? '');
+$pamount = htmlspecialchars($row['amount'] ?? '');
+$pvalidity = htmlspecialchars($row['validity'] ?? '');
+$pdescription = htmlspecialchars($row['description'] ?? '');
+$paiddate = htmlspecialchars($row['paid_date'] ?? '');
+$expire = htmlspecialchars($row['expire'] ?? '');
+$remarks = htmlspecialchars($row['remarks'] ?? '');
+
                 } else {
                     echo "<script>alert('No records found for the selected user.');</script>";
                 }
