@@ -158,6 +158,58 @@ input:checked + .slider:before {
 		<hr />
 
 <?php
+// Pagination settings
+$records_per_page = 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $records_per_page;
+
+// Get search parameters
+$search_term = isset($_GET['search']) ? mysqli_real_escape_string($con, $_GET['search']) : '';
+$search_column = isset($_GET['search_column']) ? $_GET['search_column'] : 'planName';
+$show_inactive = isset($_GET['show_inactive']) ? $_GET['show_inactive'] : 'no';
+
+// Base query for counting total records
+$count_query = "SELECT COUNT(*) as total FROM plan p ";
+
+// Base query for fetching records
+$query = "SELECT p.planid, p.planName, p.description, p.planType, p.startDate, p.endDate, 
+          p.duration, p.amount, p.active, pp.slug, 
+          (SELECT COUNT(*) FROM images i WHERE i.planid = p.planid) as image_count,
+          (SELECT slug FROM plan_pages WHERE planid = p.planid LIMIT 1) as page_slug 
+          FROM plan p 
+          LEFT JOIN plan_pages pp ON p.planid = pp.planid ";
+
+// Build WHERE clause
+$where_conditions = [];
+if ($show_inactive !== 'yes') {
+    $where_conditions[] = "p.active='yes'";
+}
+if ($search_term !== '') {
+    $where_conditions[] = "$search_column LIKE '%$search_term%'";
+}
+
+if (!empty($where_conditions)) {
+    $where_clause = "WHERE " . implode(' AND ', $where_conditions);
+    $query .= $where_clause;
+    $count_query .= $where_clause;
+}
+
+// Add ordering and pagination
+$query .= " ORDER BY p.active DESC, p.amount DESC LIMIT $offset, $records_per_page";
+
+// Get total records for pagination
+$total_records_result = mysqli_query($con, $count_query);
+$total_records = mysqli_fetch_assoc($total_records_result)['total'];
+$total_pages = ceil($total_records / $records_per_page);
+
+// Execute main query
+$result = mysqli_query($con, $query);
+$sno = $offset + 1;
+?>
+
+
+
+<?php
 // Get the filter parameter, default to showing only active plans
 $show_inactive = isset($_GET['show_inactive']) ? $_GET['show_inactive'] : 'no';
 
@@ -180,6 +232,7 @@ $result = mysqli_query($con, $query);
 $sno = 1;
 ?>
 
+
 <div class="mb-3">
     <form method="GET" class="form-inline" id="filterForm" style="display: flex; align-items: center; gap: 10px;">
         <label class="switch">
@@ -194,6 +247,13 @@ $sno = 1;
     </form>
 </div>
 
+<!-- Results Summary -->
+<div class="mb-3">
+    Showing <?php echo $offset + 1; ?> to <?php echo min($offset + $records_per_page, $total_records); ?> 
+    of <?php echo $total_records; ?> entries
+</div>
+<h3>Current Active Plan</h3>
+<!-- Table Structure (Same as before) -->
 <table class="table table-bordered datatable" id="table-1" border="1">
     <thead>
         <tr>
@@ -269,13 +329,47 @@ $sno = 1;
                 
                 $msgid = 0;
             }
-        }
+        } else {
+            echo "<tr><td colspan='13' class='text-center'>No records found</td></tr>";
+        }		
         ?>																
     </tbody>
 </table>
 
 
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php if ($page > 1): ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=1&search=<?php echo urlencode($search_term); ?>&search_column=<?php echo urlencode($search_column); ?>&show_inactive=<?php echo urlencode($show_inactive); ?>">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search_term); ?>&search_column=<?php echo urlencode($search_column); ?>&show_inactive=<?php echo urlencode($show_inactive); ?>">Previous</a>
+            </li>
+        <?php endif; ?>
 
+        <?php
+        // Show up to 5 page numbers, centered around current page
+        $start_page = max(1, $page - 2);
+        $end_page = min($total_pages, $page + 2);
+
+        for ($i = $start_page; $i <= $end_page; $i++): ?>
+            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search_term); ?>&search_column=<?php echo urlencode($search_column); ?>&show_inactive=<?php echo urlencode($show_inactive); ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <?php if ($page < $total_pages): ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search_term); ?>&search_column=<?php echo urlencode($search_column); ?>&show_inactive=<?php echo urlencode($show_inactive); ?>">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $total_pages; ?>&search=<?php echo urlencode($search_term); ?>&search_column=<?php echo urlencode($search_column); ?>&show_inactive=<?php echo urlencode($show_inactive); ?>">Last</a>
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
 <?php include('footer.php'); ?>
     	</div>
