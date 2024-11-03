@@ -27,6 +27,27 @@ page_protect();
 	{
 		width:220px;
 	}
+	 #space
+{
+line-height:0.5cm;
+}
+.home-button {
+    position: fixed; /* Fixed positioning */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: 20px; /* Distance from the right of the viewport */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
+    padding: 20px 25px; /* Padding around the button */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 16px; /* Font size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.home-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
 	</style>
 
 </head>
@@ -196,7 +217,8 @@ page_protect();
              <tr>
                <td height="35">&nbsp;</td>
                <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Register" >
-                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
+                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+				 <input class="a1-btn a1-blue" type="button" value="Return" onclick="window.location.href='view_mem.php'"></td>
              </tr>
            </table></td>
          </tr>
@@ -232,6 +254,7 @@ page_protect();
         
         
 			<?php include('footer.php'); ?>
+						<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="view_mem.php">Return Back</a>	
     	</div>
 
     </body>
