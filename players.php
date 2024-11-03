@@ -252,6 +252,28 @@ $con->close();
             .carousel-card { flex: 0 0 calc(100% - 20px); }
             .players-grid { grid-template-columns: 1fr; }
         }
+		/* Add this CSS */
+.editable-content {
+    display: none;
+}
+
+.edit-mode-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.edit-mode-button:hover {
+    background-color: #0056b3;
+}
+
+.carousel-card.editing {
+    pointer-events: none;
+}
     </style>
 	
   </head>
@@ -299,38 +321,44 @@ require('header.php');
 <div class="site-section">
     <div class="section-header">
         <h2 class="section-title">Our Prominent Member</h2>
+        <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] == 'start' && $_SESSION['authority'] == 'admin'): ?>
+            <button id="editModeButton" class="edit-mode-button" onclick="toggleEditMode()">Enter Edit Mode</button>
+        <?php endif; ?>
     </div>
     <div class="carousel-container">
         <button class="carousel-button prev-button" onclick="moveCarousel(-1)">←</button>
-
         <!-- Global Form Wrapper -->
         <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] == 'start' && $_SESSION['authority'] == 'admin'): ?>
             <form action="dashboard/admin/edit_memberfront.php" method="POST" enctype="multipart/form-data">
         <?php endif; ?>
-
         <div class="carousel-wrapper">
             <?php foreach($featured_players as $index => $player): ?>
                 <div class="carousel-card" data-player-id="<?php echo $player['member_id']; ?>">
                     <div class="player-image">
-                        <img src="<?php echo htmlspecialchars($player['image_path']); ?>" 
-                             alt="<?php echo htmlspecialchars($player['full_name']); ?>">
+                        <img id="preview-<?php echo $index; ?>" src="<?php echo htmlspecialchars('dashboard/admin/' . $player['image_path']); ?>" alt="Player Image">
                     </div>
                     <div class="player-info">
                         <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] == 'start' && $_SESSION['authority'] == 'admin'): ?>
-                            <!-- Editable Inputs for Admins -->
-                            <input type="hidden" name="members[<?php echo $index; ?>][member_id]" value="<?php echo $player['member_id']; ?>">
-                            <label>
-                                Name:
-                                <input type="text" name="members[<?php echo $index; ?>][full_name]" value="<?php echo htmlspecialchars($player['full_name']); ?>">
-                            </label>
-                            <label>
-                                Position:
-                                <input type="text" name="members[<?php echo $index; ?>][position]" value="<?php echo htmlspecialchars($player['position']); ?>">
-                            </label>
-                            <label>
-                                Image:
-                                <input type="file" name="members[<?php echo $index; ?>][image_path]">
-                            </label>
+                            <!-- Editable Content -->
+                            <div class="view-content">
+                                <h3><?php echo htmlspecialchars($player['full_name']); ?></h3>
+                                <p><?php echo htmlspecialchars($player['position']); ?></p>
+                            </div>
+                            <div class="editable-content">
+                                <input type="hidden" name="members[<?php echo $index; ?>][member_id]" value="<?php echo $player['member_id']; ?>">
+                                <label>
+                                    Name:
+                                    <input type="text" name="members[<?php echo $index; ?>][full_name]" value="<?php echo htmlspecialchars($player['full_name']); ?>">
+                                </label>
+                                <label>
+                                    Position:
+                                    <input type="text" name="members[<?php echo $index; ?>][position]" value="<?php echo htmlspecialchars($player['position']); ?>">
+                                </label>
+                                <label>
+                                    Image:
+                                    <input type="file" name="members[<?php echo $index; ?>][image_path]" onchange="previewImage(event, 'preview-<?php echo $index; ?>')">
+                                </label>
+                            </div>
                         <?php elseif (isset($_SESSION['logged']) && $_SESSION['logged'] == 'start'): ?>
                             <!-- Display Only for Non-Admin Logged-in Users -->
                             <h3><?php echo htmlspecialchars($player['full_name']); ?></h3>
@@ -345,13 +373,11 @@ require('header.php');
                 </div>
             <?php endforeach; ?>
         </div>
-
         <!-- Global Save Changes Button for Admins -->
         <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] == 'start' && $_SESSION['authority'] == 'admin'): ?>
-            <button type="submit" class="global-save-button">Save Changes</button>
+            <button type="submit" class="global-save-button editable-content">Save Changes</button>
             </form> <!-- End of Global Form Wrapper -->
         <?php endif; ?>
-
         <button class="carousel-button next-button" onclick="moveCarousel(1)">→</button>
     </div>
 </div>
@@ -429,82 +455,143 @@ require('footer.html');
         </div>
     </div>
     <script>
-        // Carousel functionality
-        let currentPosition = 0;
-        const wrapper = document.querySelector('.carousel-wrapper');
-        const cards = document.querySelectorAll('.carousel-card');
-        const cardWidth = cards[0].offsetWidth + 20; // Including margin
-        const maxPosition = cards.length - 4; // Show 4 cards at once
+// Existing carousel variables
+let currentPosition = 0;
+const wrapper = document.querySelector('.carousel-wrapper');
+const cards = document.querySelectorAll('.carousel-card');
+const cardWidth = cards[0].offsetWidth + 20; // Including margin
+let maxPosition = cards.length - 4; // Show 4 cards at once
 
-        function moveCarousel(direction) {
-            currentPosition = Math.min(Math.max(currentPosition + direction, 0), maxPosition);
-            wrapper.style.transform = `translateX(-${currentPosition * cardWidth}px)`;
-            
-            // Update button states
-            document.querySelector('.prev-button').disabled = currentPosition === 0;
-            document.querySelector('.next-button').disabled = currentPosition === maxPosition;
-        }
+// Add edit mode state
+let isEditMode = false;
 
-        // Filter functionality
-        function filterPlayers(position) {
-            window.location.href = `?position=${encodeURIComponent(position)}`;
-        }
-
-        // Modal functionality
-        const modal = document.getElementById('playerModal');
-        const playerCards = document.querySelectorAll('.player-card, .carousel-card');
-        const closeModal = document.querySelector('.close-modal');
-
+// Edit mode toggle function
+function toggleEditMode() {
+    const editButton = document.getElementById('editModeButton');
+    const editableElements = document.querySelectorAll('.editable-content');
+    const viewElements = document.querySelectorAll('.view-content');
+    const saveButton = document.querySelector('.global-save-button');
+    
+    isEditMode = !isEditMode;
+    
+    if (isEditMode) {
+        editButton.textContent = 'Exit Edit Mode';
+        editableElements.forEach(el => el.style.display = 'block');
+        viewElements.forEach(el => el.style.display = 'none');
+        if (saveButton) saveButton.style.display = 'block';
+        
+        // Disable card click events in edit mode
         playerCards.forEach(card => {
-            card.addEventListener('click', async () => {
-                const playerId = card.dataset.playerId;
-                try {
-                    const response = await fetch(`get_player_details.php?id=${playerId}`);
-                    const playerDetails = await response.json();
-                    
-                    document.getElementById('playerDetails').innerHTML = `
-                        <div class="player-modal-content">
-                            <img src="${playerDetails.image_path}" alt="${playerDetails.full_name}" 
-                                 style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto; display: block;">
-                            <h2>${playerDetails.full_name}</h2>
-                            <p>Position: ${playerDetails.position}</p>
-                            <p>Jersey Number: ${playerDetails.jersey_number}</p>
-                        </div>
-                    `;
-                    modal.style.display = 'block';
-                } catch (error) {
-                    console.error('Error fetching player details:', error);
-                }
-            });
+            card.style.pointerEvents = 'none';
         });
-
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
+    } else {
+        editButton.textContent = 'Enter Edit Mode';
+        editableElements.forEach(el => el.style.display = 'none');
+        viewElements.forEach(el => el.style.display = 'block');
+        if (saveButton) saveButton.style.display = 'none';
+        
+        // Re-enable card click events
+        playerCards.forEach(card => {
+            card.style.pointerEvents = 'auto';
         });
+    }
+}
 
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
+// Carousel functionality
+function moveCarousel(direction) {
+    currentPosition = Math.min(Math.max(currentPosition + direction, 0), maxPosition);
+    wrapper.style.transform = `translateX(-${currentPosition * cardWidth}px)`;
+    
+    // Update button states
+    document.querySelector('.prev-button').disabled = currentPosition === 0;
+    document.querySelector('.next-button').disabled = currentPosition === maxPosition;
+}
 
-        // Handle responsive viewing
-        function updateCarouselView() {
-            const viewportWidth = window.innerWidth;
-            let cardsToShow;
+// Filter functionality
+function filterPlayers(position) {
+    window.location.href = `?position=${encodeURIComponent(position)}`;
+}
+
+// Modal functionality
+const modal = document.getElementById('playerModal');
+const playerCards = document.querySelectorAll('.player-card, .carousel-card');
+const closeModal = document.querySelector('.close-modal');
+
+playerCards.forEach(card => {
+    card.addEventListener('click', async () => {
+        // Don't open modal if in edit mode
+        if (isEditMode) return;
+        
+        const playerId = card.dataset.playerId;
+        try {
+            const response = await fetch(`get_player_details.php?id=${playerId}`);
+            const playerDetails = await response.json();
             
-            if (viewportWidth <= 480) cardsToShow = 1;
-            else if (viewportWidth <= 768) cardsToShow = 2;
-            else if (viewportWidth <= 1024) cardsToShow = 3;
-            else cardsToShow = 4;
-            
-            maxPosition = cards.length - cardsToShow;
-            currentPosition = Math.min(currentPosition, maxPosition);
-            wrapper.style.transform = `translateX(-${currentPosition * cardWidth}px)`;
+            document.getElementById('playerDetails').innerHTML = `
+                <div class="player-modal-content">
+                    <img src="${playerDetails.image_path}" alt="${playerDetails.full_name}" 
+                         style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto; display: block;">
+                    <h2>${playerDetails.full_name}</h2>
+                    <p>Position: ${playerDetails.position}</p>
+                    <p>Jersey Number: ${playerDetails.jersey_number}</p>
+                </div>
+            `;
+            modal.style.display = 'block';
+        } catch (error) {
+            console.error('Error fetching player details:', error);
         }
+    });
+});
 
-        window.addEventListener('resize', updateCarouselView);
-        updateCarouselView(); // Initial setup
+closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Handle responsive viewing
+function updateCarouselView() {
+    const viewportWidth = window.innerWidth;
+    let cardsToShow;
+    
+    if (viewportWidth <= 480) cardsToShow = 1;
+    else if (viewportWidth <= 768) cardsToShow = 2;
+    else if (viewportWidth <= 1024) cardsToShow = 3;
+    else cardsToShow = 4;
+    
+    maxPosition = cards.length - cardsToShow;
+    currentPosition = Math.min(currentPosition, maxPosition);
+    wrapper.style.transform = `translateX(-${currentPosition * cardWidth}px)`;
+}
+
+// Image preview functionality
+function previewImage(event, previewId) {
+    const file = event.target.files[0];
+    const preview = document.getElementById(previewId);
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        preview.src = e.target.result;
+    };
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+
+// Initialize
+window.addEventListener('resize', updateCarouselView);
+updateCarouselView(); // Initial setup
+
+// Initialize edit mode state on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const editableElements = document.querySelectorAll('.editable-content');
+    const saveButton = document.querySelector('.global-save-button');
+    editableElements.forEach(el => el.style.display = 'none');
+    if (saveButton) saveButton.style.display = 'none';
+});
     </script>
   </body>
   
