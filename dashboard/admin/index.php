@@ -131,24 +131,46 @@ page_protect();
         </a>
     </div>
 
-    <div class="col-sm-3">
-        <a href="view_mem.php">
-            <div class="tile-stats tile-green">
-                <div class="icon"><i class="entypo-chart-bar"></i></div>
-                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Total <br>Members</h2><br>
-                    <?php
-                    $query = "SELECT COUNT(*) FROM users";
-                    $result = mysqli_query($con, $query);
-                    if ($result) {
-                        $row = mysqli_fetch_array($result);
-                        echo $row['COUNT(*)'];
-                    }
-                    ?>
-                </div>
+<div class="col-sm-3">
+    <a href="view_mem.php">
+        <div class="tile-stats tile-green">
+            <div class="icon"><i class="entypo-chart-bar"></i></div>
+            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2>Total <br>Members</h2><br>
+                <?php
+                // Query to count all users
+                $query_total = "SELECT COUNT(*) as total_members FROM users";
+                $result_total = mysqli_query($con, $query_total);
+                $total_members = 0;
+
+                if ($result_total) {
+                    $row_total = mysqli_fetch_array($result_total);
+                    $total_members = $row_total['total_members'];
+                }
+
+                // Query to count unapproved users (where hasApproved is 'No')
+                $query_unapproved = "SELECT COUNT(*) as unapproved_members FROM users WHERE hasApproved = 'No'";
+                $result_unapproved = mysqli_query($con, $query_unapproved);
+                $unapproved_members = 0;
+
+                if ($result_unapproved) {
+                    $row_unapproved = mysqli_fetch_array($result_unapproved);
+                    $unapproved_members = $row_unapproved['unapproved_members'];
+                }
+
+                // Display total members and unapproved members in parentheses
+                echo $total_members;
+if ($unapproved_members > 0) {
+    echo " <br>($unapproved_members Unapproved)";
+}
+
+                ?>
             </div>
-        </a>
-    </div>
+        </div>
+    </a>
+</div>
+
+
 
     <div class="col-sm-3">
         <a href="over_members_month.php">
