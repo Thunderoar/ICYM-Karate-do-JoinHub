@@ -23,6 +23,27 @@ if (isset($_POST['name'])) {
         .page-container .sidebar-menu #main-menu li#hassubopen > a {
             background-color: #2b303a; color: #ffffff;
         }
+		 #space
+{
+line-height:0.5cm;
+}
+.home-button {
+    position: fixed; /* Fixed positioning */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: 20px; /* Distance from the right of the viewport */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
+    padding: 20px 25px; /* Padding around the button */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 16px; /* Font size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.home-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -212,7 +233,7 @@ $remarks = htmlspecialchars($row['remarks'] ?? '');
                                 <td height="35">&nbsp;</td>
                                 <td height="35">
                                     <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="EDIT">
-                                    <a href="table_view.php"><input class="a1-btn a1-blue" value="BACK"></a>
+                                    <a href="view_mem.php"><input class="a1-btn a1-blue" value="BACK"></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -222,10 +243,13 @@ $remarks = htmlspecialchars($row['remarks'] ?? '');
         </div>   
 
         <?php include('footer.php'); ?>
+		<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="view_mem.php">Return Back</a>	
     </div>
+
 </div>
 
 </body>
+
 </html>    
 
 <?php
