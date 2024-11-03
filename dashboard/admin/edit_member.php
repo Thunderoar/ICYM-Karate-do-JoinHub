@@ -88,6 +88,7 @@ if (isset($_POST['name'])) {
 					</div>
 			</div>
 			<h3>Edit Member Details</h3>
+			
 			<hr/>
 			<?php
 // SQL query to retrieve user, address, health, enrolls, and plan data using LEFT JOIN
@@ -241,11 +242,15 @@ if ($stmt = mysqli_prepare($con, $query)) {
              <br>
             
              <tr>
-             <tr>
-               <td height="35">&nbsp;</td>
-               <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE" >
-                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
-             </tr>
+<tr>
+    <td height="35">&nbsp;</td>
+    <td height="35">
+        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE">
+        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+        <input class="a1-btn a1-blue" type="button" value="Return" onclick="window.location.href='view_mem.php'">
+    </td>
+</tr>
+
            </table></td>
          </tr>
          </table>
