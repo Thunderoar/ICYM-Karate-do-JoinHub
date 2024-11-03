@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 03, 2024 at 05:40 AM
+-- Generation Time: Nov 03, 2024 at 02:58 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -211,8 +211,8 @@ DROP TABLE IF EXISTS `health_status`;
 CREATE TABLE IF NOT EXISTS `health_status` (
   `healthid` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `calorie` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `height` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `weight` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `height` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `weight` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `fat` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `remarks` varchar(200) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
@@ -237,7 +237,7 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('297159777', '', '', '', '', '', '1729500022'),
 ('319821461', '', '', '', '', '', '1729331377'),
 ('338833368', '', '', '', '', '', '1729653160'),
-('353479103', '', '', '', '', '', '1730087557'),
+('353479103', '', '160', '48', '', '', '1730087557'),
 ('361339141', '', '', '', '', '', '1729503655'),
 ('377819181', '', '', '', '', '', '1729503048'),
 ('387732098', '', '', '', '', '', '1730035207'),
@@ -460,7 +460,7 @@ INSERT INTO `plan` (`planid`, `tid`, `planName`, `description`, `planType`, `sta
 ('UCBWGR', '622355865', 'jjj', 'jjj', 'Event', '2024-11-03', '2024-11-08', 5, 'Lifetime', 20, 'yes'),
 ('UGZVJQ', '', 'Example 2', 'Example Desc 2', 'Event', '2024-10-29', '2024-10-31', 2, 'Lifetime', 50, 'no'),
 ('WDCFUK', '', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'Event', '2024-11-01', '2024-11-09', 8, 'Lifetime', 40, 'no'),
-('WJIXFB', '464856491', 'gg', 'gg', 'Event', '2024-11-03', '2024-11-06', 4, 'Lifetime', 60, 'yes'),
+('WJIXFB', '464856491', 'gg', 'gg', 'Event', '2024-11-03', '2024-11-03', 1, 'Lifetime', 60, 'yes'),
 ('XTWIOL', '', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes'),
 ('YTWAVM', '460690516', 'tr', 'tr', 'Event', '2024-11-02', '2024-11-09', 7, 'Lifetime', 20, 'no'),
 ('YVTEOD', '711413702', 'yi', 'yi', 'Event', '2024-11-02', '2024-11-09', 7, 'Lifetime', 20, 'no'),
@@ -659,8 +659,8 @@ CREATE TABLE IF NOT EXISTS `team_members` (
 --
 
 INSERT INTO `team_members` (`member_id`, `full_name`, `position`, `image_path`, `display_order`, `active`, `created_at`, `updated_at`, `featured`, `jersey_number`) VALUES
-(1, 'Member 1', 'Black Belt', 'images/team_1_1729827128.jpg', 1, 1, '2024-10-25 01:42:54', '2024-10-27 14:59:35', 1, NULL),
-(2, 'Member 2', 'Black Belt', 'images/team_1_1729827128.jpg', 2, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL),
+(1, 'Member 1', 'Black Belt', 'uploads/team_members/event_3.jpg', 1, 1, '2024-10-25 01:42:54', '2024-11-03 13:24:11', 1, NULL),
+(2, 'Member 2', 'Black Belt', 'uploads/team_members/image_4.jpg', 2, 1, '2024-10-25 01:42:54', '2024-11-03 13:28:52', 1, NULL),
 (3, 'Member 3', 'Black Belt', 'images/team_1_1729827128.jpg', 3, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL),
 (4, 'Member 4', 'Black Belt', 'images/team_1_1729827128.jpg', 4, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL);
 
@@ -723,9 +723,6 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('day_6726cc639cb616.29259644', '464856491', 1, 'gg'),
 ('day_6726cf1974d8d4.38236568', '92618308', 1, 'WOW'),
 ('day_6726cf28a099c1.41472425', '473138343', 1, 'WOW'),
-('aebab107-9987-11ef-8372-004e01ffe201', '464856491', 2, ''),
-('af6e2ec8-9987-11ef-8372-004e01ffe201', '464856491', 3, ''),
-('b54b95f7-9987-11ef-8372-004e01ffe201', '464856491', 4, ''),
 ('day_6726d9ebe10438.92649793', '622355865', 1, 'jjj'),
 ('day_6726db6feb2906.31552246', '988627636', 1, 'ert'),
 ('b34b566a-998a-11ef-8372-004e01ffe201', '988627636', 3, NULL),
