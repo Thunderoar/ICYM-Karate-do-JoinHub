@@ -89,7 +89,7 @@ page_protect();
 <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
     <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">
         <div class="a1-container a1-dark-gray a1-center">
-            <h6>NEW PLAN DETAILS</h6>
+            <h6>NEW PLAN AND TIMETABLE DETAILS</h6>
         </div>
         <form id="form1" name="form1" method="post" class="a1-container" action="submit_plan_new.php" enctype="multipart/form-data">
             <table width="100%" border="0" align="center">
@@ -129,6 +129,10 @@ page_protect();
 						?>
 				<input type="text" name="planid" id="planID" readonly value="<?php echo getRandomWord(); ?>"></td>
          	   </tr>
+			              	   <tr>
+           	   <!--<td height="35">YOUR ADDRESS ID:</td>-->
+           	   <td height="0"><input type="hidden" id="boxx" name="timetable_id" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" required/></td>
+           	   </tr> 
 
                             <tr>
                                 <td height="35">Plan Name:</td>
@@ -172,16 +176,53 @@ page_protect();
                                 </td>
                             </tr>     
 
-                            <tr>
+                            <!-- <tr> old
                                 <td height="35">&nbsp;</td>
                                 <td height="35">
                                     <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="CREATE PLAN">
                                     <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
                                 </td>
-                            </tr>
-                        </table>
+                            </tr> -->
+                <tr>
+                    <td colspan="2" height="35"><strong>Timetable Details:</strong></td>
+                </tr>
+                <tr>
+                    <td height="35">Timetable Name:</td>
+                    <td height="35">
+                        <input type="text" name="tname" id="tname" placeholder="Enter timetable name" size="40">
                     </td>
                 </tr>
+
+<!-- HTML form for adding days -->
+<tr>
+    <td colspan="2">
+        <div id="daysContainer">
+            <!-- Initial Day Field -->
+            <div class="day-entry">
+                <label>Day 1 Activities:</label>
+                <input type="text" name="days[]" placeholder="Activities for Day 1" size="40">
+                <button type="button" onclick="removeDay(this)">Remove</button>
+            </div>
+        </div>
+        <button type="button" onclick="addDay()">Add Day</button>
+    </td>
+</tr>
+
+                <tr>
+                    <td height="35">Approved:</td>
+                    <td height="35">
+                        <input type="checkbox" name="hasApproved" value="1"> Yes
+                    </td>
+                </tr>
+<tr>
+    <td height="35">&nbsp;</td>
+    <td height="35">
+        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="CREATE PLAN AND TIMETABLE">
+        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+        <input class="a1-btn a1-blue" type="button" value="Return" onclick="window.location.href='view_plan.php'">
+    </td>
+</tr>
+
             </table>
         </form>
     </div>
@@ -220,6 +261,24 @@ page_protect();
             document.getElementById('duration').value = ''; // Clear duration if dates are not both selected
         }
     }
+	let dayCount = 1;
+
+function addDay() {
+    dayCount++;
+    const dayEntry = document.createElement('div');
+    dayEntry.className = 'day-entry';
+    dayEntry.innerHTML = `
+        <label>Day ${dayCount} Activities:</label>
+        <input type="text" name="days[]" placeholder="Activities for Day ${dayCount}" size="40">
+        <button type="button" onclick="removeDay(this)">Remove</button>
+    `;
+    document.getElementById('daysContainer').appendChild(dayEntry);
+}
+
+function removeDay(button) {
+    const dayEntry = button.parentElement;
+    dayEntry.remove();
+}
 </script>
 </html>
 
