@@ -95,6 +95,10 @@ page_protect();
 
 		<h3>Edit Member</h3>
 
+<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+
+    <a href="new_entry.php" style="text-align: center; padding: 8px 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">Add new Member</a>
+</div>
 		<hr />
 		
 <table class="table table-bordered datatable" id="table-1">
@@ -149,13 +153,13 @@ if (mysqli_num_rows($result) != 0) {
         // Action buttons
         echo "<td>
         <div class='btn-group' role='group'>
+		<form action='viewall_detail.php' method='post'>
+                        <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+                        <input type='submit' class='a1-btn a1-green btn' value='More Info'/>
+                    </form>
             <form action='read_member.php' method='post' style='display:inline-block;'>
                 <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
                 <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
-            </form>
-            <form action='edit_member.php' method='post' style='display:inline-block;'>
-                <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                <input type='submit' class='a1-btn a1-green btn' value='Edit'/>
             </form>
             <form action='del_member.php' method='post' onsubmit='return ConfirmDelete()' style='display:inline-block;'>
                 <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
