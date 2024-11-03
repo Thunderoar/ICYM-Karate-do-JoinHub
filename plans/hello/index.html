@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{PLAN_TITLE} - Plan Details</title>
+            <meta name="robots" content="noindex, nofollow">
+            <style>
+                body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+                header { border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 20px; }
+                .date, .author { color: #888; font-size: 0.9em; }
+                .content-section { margin-bottom: 20px; }
+                .content-section h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+                .edit-btn { display: block; margin-top: 10px; text-align: center; }
+                .img-container { text-align: center; margin-top: 20px; }
+                .img-container img { max-width: 100%; height: auto; }
+            </style>
+            </head><body>
+
+            <header>
+                <h1>{PLAN_TITLE}</h1>
+                <p class="date">Published on {CREATED_DATE}</p>
+                <p class="author">Plan Type: {PLAN_TYPE}</p>
+            </header>
+
+            <article>
+                <section class="content-section">
+                    <h2>Overview</h2>
+                    <p>{PLAN_DESCRIPTION}</p>
+                </section>
+                
+                <section class="content-section">
+                    <h2>Details</h2>
+                    <p>Duration: {DURATION}</p>
+                    <p>Validity: {VALIDITY}</p>
+                    <p>Amount: ${AMOUNT}</p>
+                </section>
+
+                <section class="content-section">
+                    <h2>Schedule</h2>
+                    <p>Check out the weekly timetable and specific days for this plan.</p>
+                    <p>Monday: {DAY1}</p>
+                    <p>Tuesday: {DAY2}</p>
+                    <p>Wednesday: {DAY3}</p>
+                    <!-- Continue for other days -->
+                </section>
+                
+                <section class="img-container">
+                    <h2>Highlights</h2>
+                    <img src="{HIGHLIGHT_IMAGE_PATH}" alt="Plan Highlights">
+                </section>
+
+                <div class="edit-btn">
+                    <button onclick="window.location.href='edit_plan.php?slug=hello'">Edit this Plan</button>
+                </div>
+            </article>
+            
+            </body></html>
