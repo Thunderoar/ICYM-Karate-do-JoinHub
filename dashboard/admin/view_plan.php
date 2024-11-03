@@ -169,15 +169,17 @@ $search_column = isset($_GET['search_column']) ? $_GET['search_column'] : 'planN
 $show_inactive = isset($_GET['show_inactive']) ? $_GET['show_inactive'] : 'no';
 
 // Base query for counting total records
-$count_query = "SELECT COUNT(*) as total FROM plan p ";
+$count_query = "SELECT COUNT(DISTINCT p.planid) as total FROM plan p ";
 
 // Base query for fetching records
-$query = "SELECT p.planid, p.planName, p.description, p.planType, p.startDate, p.endDate, 
+$query = "SELECT DISTINCT p.planid, p.planName, p.description, p.planType, p.startDate, p.endDate, 
           p.duration, p.amount, p.active, pp.slug, 
           (SELECT COUNT(*) FROM images i WHERE i.planid = p.planid) as image_count,
           (SELECT slug FROM plan_pages WHERE planid = p.planid LIMIT 1) as page_slug 
           FROM plan p 
-          LEFT JOIN plan_pages pp ON p.planid = pp.planid ";
+          LEFT JOIN plan_pages pp ON p.planid = pp.planid 
+          LEFT JOIN sports_timetable st ON p.planid = st.planid 
+          LEFT JOIN timetable_days td ON st.tid = td.tid ";
 
 // Build WHERE clause
 $where_conditions = [];
@@ -195,7 +197,7 @@ if (!empty($where_conditions)) {
 }
 
 // Add ordering and pagination
-$query .= " ORDER BY p.active DESC, p.amount DESC LIMIT $offset, $records_per_page";
+$query .= " GROUP BY p.planid ORDER BY p.active DESC, p.amount DESC LIMIT $offset, $records_per_page";
 
 // Get total records for pagination
 $total_records_result = mysqli_query($con, $count_query);
@@ -207,30 +209,39 @@ $result = mysqli_query($con, $query);
 $sno = $offset + 1;
 ?>
 
-
-
 <?php
 // Get the filter parameter, default to showing only active plans
 $show_inactive = isset($_GET['show_inactive']) ? $_GET['show_inactive'] : 'no';
 
 // Modify the query to handle both active and inactive plans
-$query = "SELECT p.planid, p.planName, p.description, p.planType, p.startDate, p.endDate, 
+$query = "SELECT DISTINCT p.planid, p.planName, p.description, p.planType, p.startDate, p.endDate, 
           p.duration, p.amount, p.active, pp.slug, 
           (SELECT COUNT(*) FROM images i WHERE i.planid = p.planid) as image_count,
-          (SELECT slug FROM plan_pages WHERE planid = p.planid LIMIT 1) as page_slug 
+          (SELECT slug FROM plan_pages WHERE planid = p.planid LIMIT 1) as page_slug,
+          st.tname, td.day_number, td.activities, st.tid
           FROM plan p 
-          LEFT JOIN plan_pages pp ON p.planid = pp.planid ";
+          LEFT JOIN plan_pages pp ON p.planid = pp.planid 
+          LEFT JOIN sports_timetable st ON p.planid = st.planid 
+          LEFT JOIN timetable_days td ON st.tid = td.tid ";
 
 // Add WHERE clause based on filter
+$where_conditions = [];
 if ($show_inactive !== 'yes') {
-    $query .= "WHERE p.active='yes' ";
+    $where_conditions[] = "p.active='yes'";
 }
 
-$query .= "ORDER BY p.active DESC, p.amount DESC";
+// Combine WHERE conditions if any
+if (!empty($where_conditions)) {
+    $query .= "WHERE " . implode(" AND ", $where_conditions) . " ";
+}
+
+// Append ordering
+$query .= " GROUP BY p.planid ORDER BY p.active DESC, p.amount DESC";
 
 $result = mysqli_query($con, $query);
 $sno = 1;
 ?>
+
 
 
 <div class="mb-3">
@@ -252,8 +263,16 @@ $sno = 1;
     Showing <?php echo $offset + 1; ?> to <?php echo min($offset + $records_per_page, $total_records); ?> 
     of <?php echo $total_records; ?> entries
 </div>
-<h3>Current Active Plan</h3>
-<!-- Table Structure (Same as before) -->
+
+<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+
+    <a href="new_plan.php" style="text-align: center; padding: 8px 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">New Plan</a>
+</div>
+    <h3 style="margin-right: 20px;">Current Active Plan</h3>
+
+
+
+<!-- Table Structure -->
 <table class="table table-bordered datatable" id="table-1" border="1">
     <thead>
         <tr>
@@ -269,6 +288,7 @@ $sno = 1;
             <th onclick="sortTable(9)">Page URL</th>
             <th onclick="sortTable(10)">Status</th>
             <th onclick="sortTable(11)">Images</th>
+            <th>Timetable</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -277,9 +297,10 @@ $sno = 1;
         if (mysqli_affected_rows($con) != 0) {
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                 $msgid = $row['planid'];
+                $tid = $row['tid']; 
                 $status_class = $row['active'] === 'yes' ? 'text-success' : 'text-danger';
                 $status_text = $row['active'] === 'yes' ? 'Active' : 'Inactive';
-                
+
                 echo "<tr>";
                 echo "<td>" . $sno . "</td>";
                 echo "<td>" . $row['planid'] . "</td>";
@@ -290,7 +311,7 @@ $sno = 1;
                 echo "<td>" . date('Y-m-d', strtotime($row['endDate'])) . "</td>";
                 echo "<td>" . $row['duration'] . "</td>";
                 echo "<td>RM" . $row['amount'] . "</td>";
-                
+
                 // Add slug URL column with status indicator
                 if ($row['page_slug']) {
                     $url_status = $row['active'] === 'yes' ? '' : ' (Inactive)';
@@ -299,42 +320,53 @@ $sno = 1;
                 } else {
                     echo "<td><span class='text-muted'>No URL yet</span></td>";
                 }
-                
+
                 // Add status column
                 echo "<td class='" . $status_class . "'>" . $status_text . "</td>";
-                
+
                 // Add images count column
                 echo "<td>" . $row['image_count'] . " images</td>";
-                
-                $sno++;
-                
-                echo '<td>';
-                echo '<a href="edit_plan.php?id=' . $row['planid'] . '">
-                        <input type="button" class="a1-btn a1-blue" id="boxxe" style="width:100%" value="Edit Plan">
-                      </a>';
-                
-                // Change button text and action based on active status
-                if ($row['active'] === 'yes') {
-                    echo '<form action="del_plan.php" method="post" onSubmit="return ConfirmDeactivate();">
-                            <input type="hidden" name="name" value="' . $msgid . '"/>
-                            <input type="submit" id="button1" value="Mark as Inactive" class="a1-btn a1-orange" style="width:100%"/>
-                          </form>';
+
+               // Add "View Timetable" button
+                echo "<td>";
+                if (!empty($tid)) {
+                    echo "<a href='timetable_detail.php?id=" . $tid . "' class='btn btn-primary'>View Timetable</a>";
                 } else {
-                    echo '<form action="activate_plan.php" method="post" onSubmit="return ConfirmActivate();">
-                            <input type="hidden" name="name" value="' . $msgid . '"/>
-                            <input type="submit" id="button1" value="Mark as Active" class="a1-btn a1-green" style="width:100%"/>
-                          </form>';
+                    echo "<span class='text-muted'>No Timetable</span>";
                 }
-                echo '</td></tr>';
-                
-                $msgid = 0;
+                echo "</td>";
+
+                // Action column
+                echo "<td>";
+                echo "<a href='edit_plan.php?id=" . $row['planid'] . "'>
+                        <input type='button' class='a1-btn a1-blue' style='width:100%' value='Edit Plan'>
+                      </a>";
+
+                if ($row['active'] === 'yes') {
+                    echo "<form action='del_plan.php' method='post' onSubmit='return ConfirmDeactivate();'>
+                            <input type='hidden' name='name' value='" . $msgid . "'/>
+                            <input type='submit' value='Mark as Inactive' class='a1-btn a1-orange' style='width:100%'/>
+                          </form>";
+                } else {
+                    echo "<form action='activate_plan.php' method='post' onSubmit='return ConfirmActivate();'>
+                            <input type='hidden' name='name' value='" . $msgid . "'/>
+                            <input type='submit' value='Mark as Active' class='a1-btn a1-green' style='width:100%'/>
+                          </form>";
+                }
+                echo "</td>";
+                echo "</tr>";
+
+                $sno++;
             }
         } else {
-            echo "<tr><td colspan='13' class='text-center'>No records found</td></tr>";
+            echo "<tr><td colspan='14' class='text-center'>No records found</td></tr>";
         }		
         ?>																
     </tbody>
 </table>
+
+
+
 
 
 <!-- Pagination -->
