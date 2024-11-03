@@ -132,7 +132,7 @@ page_protect();
     </div>
 
     <div class="col-sm-3">
-        <a href="table_view.php">
+        <a href="view_mem.php">
             <div class="tile-stats tile-green">
                 <div class="icon"><i class="entypo-chart-bar"></i></div>
                 <div class="num" data-postfix="" data-duration="1500" data-delay="0">
@@ -178,7 +178,7 @@ page_protect();
             <div class="tile-stats tile-blue">
                 <div class="icon"><i class="entypo-rss"></i></div>
                 <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Total Plan Available</h2><br>
+                    <h2>Total Active Event</h2><br>
                     <?php
                     $query = "SELECT COUNT(*) FROM plan WHERE active='yes'";
                     $result = mysqli_query($con, $query);
