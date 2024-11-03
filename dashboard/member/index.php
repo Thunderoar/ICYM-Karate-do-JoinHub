@@ -137,25 +137,88 @@ $isApproved = $row['hasApproved'];
 
 </a></div>
 
-			<div class="col-sm-3"><a href="new_health_status.php">
-				<div class="tile-stats tile-green">
-					<div class="icon"><i class="entypo-chart-bar"></i></div>
-						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Healthy!<br></h2><br>
-							<?php
-							$query = "select COUNT(*) from users";
-							$result = mysqli_query($con, $query);
-							$i      = 1;
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        //echo $row['COUNT(*)'];
-							    }
-							}
-							$i = 1;
-							?>
-						</div>
-				</div></a>
-			</div>
+<?php
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Initialize variables
+$bmiMessage = "No Health Data Available - Please update your height and weight.";
+$bmi = null;
+
+// Check if user is logged in
+if (isset($_SESSION['userid']) && !empty($_SESSION['userid'])) {
+    $userid = intval($_SESSION['userid']); // Convert to integer for security
+    
+    // Use prepared statement to prevent SQL injection
+    $query = "SELECT height, weight FROM health_status WHERE userid = ?";
+    if ($stmt = mysqli_prepare($con, $query)) {
+        mysqli_stmt_bind_param($stmt, "i", $userid);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $height = floatval($row['height']); // Convert to float
+            $weight = floatval($row['weight']); // Convert to float
+            
+            if (empty($height) || empty($weight)) {
+                $bmiMessage = "Incomplete Health Data - Please update your height and weight.";
+            } elseif ($height > 0 && $weight > 0) {
+                // Check if height is in meters (assuming height should be between 1 and 3 meters)
+                if ($height > 3) {
+                    $height = $height / 100; // Convert from cm to meters if necessary
+                }
+                
+                $bmi = $weight / ($height * $height);
+                $bmi = round($bmi, 2);
+                
+// Determine health status based on BMI
+                if ($bmi < 18.5) {
+                    $bmiMessage = htmlspecialchars("Underweight") . "<br><br><br><br>" . htmlspecialchars("(BMI: $bmi)");
+                    $tileClass = "tile-red"; // Add visual indicator
+                } elseif ($bmi >= 18.5 && $bmi <= 24.9) {
+                    $bmiMessage = htmlspecialchars("Healthy") . "<br><br><br><br>" . htmlspecialchars("(BMI: $bmi)");
+                    $tileClass = "tile-green";
+                } elseif ($bmi >= 25 && $bmi <= 29.9) {
+                    $bmiMessage = htmlspecialchars("Overweight") . "<br><br><br><br>" . htmlspecialchars("(BMI: $bmi)");
+                    $tileClass = "tile-orange";
+                } else {
+                    $bmiMessage = htmlspecialchars("Obese") . "<br><br><br><br>" . htmlspecialchars("(BMI: $bmi)");
+                    $tileClass = "tile-red";
+                }
+            } else {
+                $bmiMessage = htmlspecialchars("Invalid Health Data") . "<br>" . htmlspecialchars("Please update your height and weight.");
+            }
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        $bmiMessage = "System Error - Please try again later.";
+        error_log("Failed to prepare BMI calculation query: " . mysqli_error($con));
+    }
+} else {
+    $bmiMessage = "Please log in to view your health status.";
+}
+
+// Set default tile class if not set
+if (!isset($tileClass)) {
+    $tileClass = "tile-blue";
+}
+?>
+
+<div class="col-sm-3">
+    <a href="new_health_status.php">
+        <div class="tile-stats <?php echo htmlspecialchars($tileClass); ?>">
+            <div class="icon"><i class="entypo-chart-bar"></i></div>
+            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2><?php echo $bmiMessage; ?></h2>
+            </div>
+        </div>
+    </a>
+</div>
+
+
 			<div class="col-sm-3"><a href="viewroutine.php">
 				<div class="tile-stats tile-aqua">
 					<div class="icon"><i class="entypo-mail"></i></div>
