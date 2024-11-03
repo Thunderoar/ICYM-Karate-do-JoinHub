@@ -125,7 +125,7 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 // Modified query for pagination
-$query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, u.hasApproved 
+$query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, u.hasApproved, u.dob
            FROM users u
            LEFT JOIN enrolls_to e ON u.userid = e.userid
            ORDER BY u.joining_date 
@@ -161,10 +161,19 @@ if (mysqli_num_rows($result) != 0) {
                 <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
                 <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
             </form>
+			                <form action='health_status_entry.php' method='post'>
+                    <input type='hidden' name='uid' value='" . $row['userid'] . "'/>
+                    <input type='hidden' name='uname' value='" . $row['username'] . "'/>
+                    <input type='hidden' name='udob' value='" . $row['dob'] . "'/>
+                    <input type='hidden' name='ujoin' value='" . $row['joining_date'] . "'/>
+                    <input type='hidden' name='ugender' value='" . $row['gender'] . "'/>
+                    <input type='submit' class='a1-btn a1-purple' value='Update Health'/>
+                </form>
             <form action='del_member.php' method='post' onsubmit='return ConfirmDelete()' style='display:inline-block;'>
                 <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
                 <input type='submit' class='a1-btn a1-orange btn' value='Delete'/>
             </form>";
+			
 
         // Show Approve button if not approved yet
         if ($row['hasApproved'] == 'Not Yet' || $row['hasApproved'] == 'No') {
