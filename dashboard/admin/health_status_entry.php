@@ -25,7 +25,7 @@ if(isset($_POST['submit'])){
 
 	if(mysqli_query($con,$query)){
 		echo "<head><script>alert('Health Status Added ');</script></head></html>";
-        echo "<meta http-equiv='refresh' content='0; url=new_health_status.php'>";
+        echo "<meta http-equiv='refresh' content='0; url=view_mem.php'>";
 
 	}
 	else{
