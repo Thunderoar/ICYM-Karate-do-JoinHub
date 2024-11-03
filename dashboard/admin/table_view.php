@@ -94,7 +94,10 @@ page_protect();
 				</div>
 
 		<h3>Member Detail</h3>
+<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
 
+    <a href="view_mem.php" style="text-align: center; padding: 8px 16px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">Edit Member Detail</a>
+</div>
 		<hr />
 		
 <table class="table table-bordered datatable" id="table-1" border=1>
