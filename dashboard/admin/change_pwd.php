@@ -14,6 +14,8 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	
+	<link rel="stylesheet" href="../../css/dashboard/sidebar.css"> 
 	<style>
     	.page-container .sidebar-menu #main-menu li#adminprofile > a {
     	background-color: #2b303a;
@@ -36,11 +38,9 @@ page_protect();
 			<header class="logo-env">
 			
 			<!-- logo -->
-			<div class="logo">
-				<a href="main.php">
-					<img src="logo1.png" alt="" width="192" height="80" />
-				</a>
-			</div>
+			<?php
+			 require('../../element/loggedin-logo.html');
+			?>
 			
 					<!-- logo collapse icon -->
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
@@ -70,8 +70,9 @@ page_protect();
 						
 						<ul class="list-inline links-list pull-right">
 
-							<li>Welcome <?php echo $_SESSION['full_name']; ?> 
-							</li>							
+					<?php
+						require('../../element/loggedin-welcome.html');
+					?>								
 						
 							<li>
 								<a href="logout.php">
