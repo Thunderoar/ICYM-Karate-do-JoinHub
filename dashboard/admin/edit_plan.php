@@ -123,10 +123,12 @@ page_protect();
             <td height="35">
                 <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE PLAN">
                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+                <a href="view_plan.php" class="a1-btn a1-blue">Return</a>
             </td>
         </tr>
     </table>
 </form>
+
 
                 </div>
             </div>   
