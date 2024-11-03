@@ -190,6 +190,9 @@ $teamMembers = getTeamMembers();
 
     <link rel="stylesheet" href="css/homepagestyle.css">
     
+	<style>
+
+</style>
   </head>
   <body>
   
@@ -247,47 +250,47 @@ require('header.php');
                 <input type="hidden" name="update_about" value="1">
         <?php endif; ?>
 
-        <div class="row justify-content-between mb-5">
-            <div class="col-lg-7 mb-5 mb-md-0 mb-lg-0">
-                <img src="<?php echo htmlspecialchars($aboutContent['about_hero_image']['image']); ?>" alt="Image" class="img-fluid">
-                
-                <?php if (isAdminLoggedIn()): ?>
-                    <input type="file" name="hero_image" class="form-control mt-2" accept="image/*">
-                <?php endif; ?>
-            </div>
-            <div class="col-lg-4">
-                <h3 class="mb-4">About Us</h3>
-                
-                <?php if (isAdminLoggedIn()): ?>
-                    <textarea name="content[about_main_text]" class="form-control mb-3" rows="5"><?php echo htmlspecialchars($aboutContent['about_main_text']['text']); ?></textarea>
-                    <textarea name="content[about_secondary_text]" class="form-control" rows="3"><?php echo htmlspecialchars($aboutContent['about_secondary_text']['text']); ?></textarea>
-                <?php else: ?>
-                    <p><?php echo nl2br(htmlspecialchars($aboutContent['about_main_text']['text'])); ?></p>
-                    <p><?php echo nl2br(htmlspecialchars($aboutContent['about_secondary_text']['text'])); ?></p>
-                <?php endif; ?>
-            </div>
-        </div>
+<div class="row justify-content-between mb-5">
+    <div class="col-lg-7 mb-5 mb-md-0 mb-lg-0">
+        <img src="<?php echo htmlspecialchars($aboutContent['about_hero_image']['image']); ?>" alt="Image" class="img-fluid">
         
+        <?php if (isAdminLoggedIn()): ?>
+            <input type="file" name="hero_image" class="form-control mt-2" accept="image/*">
+        <?php endif; ?>
+    </div>
+    <div class="col-lg-4">
+        <h3 class="mb-4">About Us</h3>
+        
+        <?php if (isAdminLoggedIn()): ?>
+            <textarea name="content[about_main_text]" class="form-control mb-3"><?php echo htmlspecialchars($aboutContent['about_main_text']['text']); ?></textarea>
+            <textarea name="content[about_secondary_text]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_secondary_text']['text']); ?></textarea>
+        <?php else: ?>
+            <p><?php echo nl2br(htmlspecialchars($aboutContent['about_main_text']['text'])); ?></p>
+            <p><?php echo nl2br(htmlspecialchars($aboutContent['about_secondary_text']['text'])); ?></p>
+        <?php endif; ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
         <div class="row">
-            <div class="col-lg-7">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <?php if (isAdminLoggedIn()): ?>
-                            <textarea name="content[about_column_1]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_column_1']['text']); ?></textarea>
-                        <?php else: ?>
-                            <p><?php echo nl2br(htmlspecialchars($aboutContent['about_column_1']['text'])); ?></p>
-                        <?php endif; ?>
-                    </div>
-                    <div class="col-lg-6">
-                        <?php if (isAdminLoggedIn()): ?>
-                            <textarea name="content[about_column_2]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_column_2']['text']); ?></textarea>
-                        <?php else: ?>
-                            <p><?php echo nl2br(htmlspecialchars($aboutContent['about_column_2']['text'])); ?></p>
-                        <?php endif; ?>
-                    </div>
-                </div>
+            <div class="col-lg-6">
+                <?php if (isAdminLoggedIn()): ?>
+                    <textarea name="content[about_column_1]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_column_1']['text']); ?></textarea>
+                <?php else: ?>
+                    <p><?php echo nl2br(htmlspecialchars($aboutContent['about_column_1']['text'])); ?></p>
+                <?php endif; ?>
+            </div>
+            <div class="col-lg-6">
+                <?php if (isAdminLoggedIn()): ?>
+                    <textarea name="content[about_column_2]" class="form-control"><?php echo htmlspecialchars($aboutContent['about_column_2']['text']); ?></textarea>
+                <?php else: ?>
+                    <p><?php echo nl2br(htmlspecialchars($aboutContent['about_column_2']['text'])); ?></p>
+                <?php endif; ?>
             </div>
         </div>
+    </div>
+</div>
 
         <?php if (isAdminLoggedIn()): ?>
             <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
@@ -369,44 +372,59 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let isEditMode = true; // the logic is inverted for some reason, true=view mode, false=edit mode....for some reason...
     
-    function toggleEditMode() {
-        isEditMode = !isEditMode;
-        
-        toggleButton.textContent = isEditMode ? 'Exit Edit Mode' : 'Enter Edit Mode';
-        
-        // Toggle form elements
-        const allInputs = document.querySelectorAll('input:not([type="hidden"]), textarea');
-        const allButtons = document.querySelectorAll('button[type="submit"]');
-        
-        allInputs.forEach(input => {
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    
+    toggleButton.textContent = isEditMode ? 'Exit Edit Mode' : 'Enter Edit Mode';
+    
+    // Toggle form elements
+    const allInputs = document.querySelectorAll('input:not([type="hidden"]), textarea');
+    const allButtons = document.querySelectorAll('button[type="submit"]');
+    
+    allInputs.forEach(input => {
+        if (input.type === 'file') {
+            // Handle file inputs separately
             input.style.display = isEditMode ? 'block' : 'none';
+        } else if (input.tagName === 'TEXTAREA') {
+            // For textareas, toggle readonly instead of display
+            input.readOnly = !isEditMode;
+            input.style.resize = isEditMode ? 'vertical' : 'none';
+            input.style.backgroundColor = isEditMode ? '#ffffff' : '#f8f9fa';
+            input.style.cursor = isEditMode ? 'auto' : 'default';
+        } else {
+            // Handle other input types
+            input.style.display = isEditMode ? 'block' : 'none';
+        }
+
+        if (!input.tagName === 'TEXTAREA') {  // Skip preview text for textareas
             if (isEditMode) {
                 const previewElements = document.querySelectorAll('.preview-text');
                 previewElements.forEach(el => el.remove());
             } else {
                 const displayText = document.createElement(
-                    input.tagName === 'TEXTAREA' || input.type === 'file' ? 'p' : 
+                    input.type === 'file' ? 'p' : 
                     input.classList.contains('mb-2') ? 'h3' : 'p'
                 );
                 displayText.classList.add('preview-text');
                 displayText.textContent = input.type === 'file' ? '' : input.value;
                 input.parentNode.insertBefore(displayText, input);
             }
-        });
-        
-        allButtons.forEach(button => {
-            button.style.display = isEditMode ? 'block' : 'none';
-        });
+        }
+    });
+    
+    allButtons.forEach(button => {
+        button.style.display = isEditMode ? 'block' : 'none';
+    });
 
-        // Disable form submissions when not in edit mode
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
-            const elements = form.elements;
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].disabled = !isEditMode;
-            }
-        });
-    }
+    // Disable form submissions when not in edit mode
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        const elements = form.elements;
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].disabled = !isEditMode;
+        }
+    });
+}
     
     // Call toggleEditMode immediately to set initial state
     toggleEditMode();
