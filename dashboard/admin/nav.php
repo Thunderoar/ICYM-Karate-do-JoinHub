@@ -19,8 +19,8 @@
 		</ul>
 	</li> -->
 	
-<!--<li><a href="view_plan.php"><i class="entypo-quote"></i><span>Event Planning</span></a></li>
-	 <li id="health_status"><a href="new_health_status.php"><i class="entypo-user-add"></i><span>Health Status</span></a> 	
+<li><a href="view_plan.php"><i class="entypo-quote"></i><span>Event Planning</span></a></li>
+	 <!--<li id="health_status"><a href="new_health_status.php"><i class="entypo-user-add"></i><span>Health Status</span></a>
 
 		 <li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Event Planning</span></a>
 
