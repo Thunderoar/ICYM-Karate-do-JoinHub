@@ -20,8 +20,8 @@ $plan = $_POST['plan'];
 $pass_key = $_POST['pass_key'];
 
 // Insert into users table
-$query = "INSERT INTO users(username, fullName, gender, mobile, email, dob, joining_date, imageid, userid, pass_key) 
-          VALUES ('$uname', '$uname', '$gender', '$phn', '$email', '$dob', '$jdate', 'UUID()', '$memID', '$pass_key')";
+$query = "INSERT INTO users(username, fullName, gender, mobile, email, dob, joining_date, imageid, userid, pass_key, hasApproved) 
+          VALUES ('$uname', '$uname', '$gender', '$phn', '$email', '$dob', '$jdate', 'UUID()', '$memID', '$pass_key', 'No')";
 if (mysqli_query($con, $query)) {
     
     // Retrieve information about the selected plan
