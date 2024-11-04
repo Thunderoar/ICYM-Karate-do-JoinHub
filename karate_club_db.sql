@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 03, 2024 at 02:58 PM
+-- Generation Time: Nov 04, 2024 at 01:58 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -29,12 +29,12 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE IF NOT EXISTS `address` (
-  `addressid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `streetName` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `state` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `city` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `zipcode` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `addressid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `streetName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `state` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `city` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `zipcode` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`addressid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -77,11 +77,11 @@ INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zi
 
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE IF NOT EXISTS `admin` (
-  `adminid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `pass_key` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `securekey` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `Full_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `adminid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `securekey` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Full_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`adminid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -101,12 +101,12 @@ INSERT INTO `admin` (`adminid`, `username`, `pass_key`, `securekey`, `Full_name`
 DROP TABLE IF EXISTS `contact_messages`;
 CREATE TABLE IF NOT EXISTS `contact_messages` (
   `message_id` int NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `subject` varchar(200) NOT NULL,
-  `message` text NOT NULL,
+  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `subject` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `message` text COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('new','read','replied') DEFAULT 'new',
+  `status` enum('new','read','replied') COLLATE utf8mb4_general_ci DEFAULT 'new',
   PRIMARY KEY (`message_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -119,13 +119,13 @@ CREATE TABLE IF NOT EXISTS `contact_messages` (
 DROP TABLE IF EXISTS `enrolls_to`;
 CREATE TABLE IF NOT EXISTS `enrolls_to` (
   `et_id` int NOT NULL AUTO_INCREMENT,
-  `planid` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
-  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `paid_date` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `expire` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `hasPaid` varchar(5) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'no',
-  `hasApproved` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
-  `receiptIMG` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `planid` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `paid_date` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `expire` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `hasPaid` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'no',
+  `hasApproved` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `receiptIMG` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`et_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -149,7 +149,7 @@ DROP TABLE IF EXISTS `gallery_images`;
 CREATE TABLE IF NOT EXISTS `gallery_images` (
   `image_id` int NOT NULL AUTO_INCREMENT,
   `section_id` int DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `uploaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`image_id`),
   KEY `gallery_images_ibfk_1` (`section_id`)
@@ -187,8 +187,8 @@ INSERT INTO `gallery_images` (`image_id`, `section_id`, `image_path`, `uploaded_
 DROP TABLE IF EXISTS `gallery_sections`;
 CREATE TABLE IF NOT EXISTS `gallery_sections` (
   `section_id` int NOT NULL AUTO_INCREMENT,
-  `section_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `section_description` text COLLATE utf8mb4_general_ci,
+  `section_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `section_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`section_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -209,13 +209,13 @@ INSERT INTO `gallery_sections` (`section_id`, `section_name`, `section_descripti
 
 DROP TABLE IF EXISTS `health_status`;
 CREATE TABLE IF NOT EXISTS `health_status` (
-  `healthid` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `calorie` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `healthid` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `calorie` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `height` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `weight` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `fat` varchar(8) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `remarks` varchar(200) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `fat` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `remarks` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`healthid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -274,12 +274,12 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 
 DROP TABLE IF EXISTS `images`;
 CREATE TABLE IF NOT EXISTS `images` (
-  `imageid` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `adminid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `userid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `staffid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `planid` varchar(8) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT 'placeholder.jpg',
+  `imageid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `adminid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `staffid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `planid` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'placeholder.jpg',
   `uploaded_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`imageid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -341,14 +341,14 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 
 DROP TABLE IF EXISTS `login`;
 CREATE TABLE IF NOT EXISTS `login` (
-  `loginid` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `adminid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `userid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `staffid` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `username` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `pass_key` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `securekey` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `authority` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `loginid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `adminid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `staffid` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `securekey` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `authority` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`loginid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -403,8 +403,8 @@ INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pas
 DROP TABLE IF EXISTS `log_users`;
 CREATE TABLE IF NOT EXISTS `log_users` (
   `logid` int NOT NULL,
-  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `action` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `cdate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -416,17 +416,17 @@ CREATE TABLE IF NOT EXISTS `log_users` (
 
 DROP TABLE IF EXISTS `plan`;
 CREATE TABLE IF NOT EXISTS `plan` (
-  `planid` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
-  `tid` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
-  `planName` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `planType` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `startDate` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `endDate` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `planid` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tid` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `planName` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `planType` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `startDate` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `endDate` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `duration` int NOT NULL,
-  `validity` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Lifetime',
+  `validity` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Lifetime',
   `amount` int NOT NULL DEFAULT '0',
-  `active` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `active` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`planid`),
   KEY `idx_plan_name` (`planName`),
   KEY `idx_plan_type` (`planType`),
@@ -439,32 +439,7 @@ CREATE TABLE IF NOT EXISTS `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `tid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
-('BHRYPU', '4679207', 'testtt', 'testtt', 'Event', '2024-11-03', '2024-11-04', 2, 'Lifetime', 60, 'no'),
-('BTCHQW', '667381273', 'ju', 'ju', 'Event', '2024-11-02', '2024-11-15', 13, 'Lifetime', 20, 'no'),
-('EGYHRF', '', 'w', 'w', 'Event', '2024-11-08', '2024-11-15', 7, 'Lifetime', 50, 'no'),
-('ERQZBC', '', 'b', 'b', 'Event', '2024-11-02', '2024-11-13', 11, 'Lifetime', 50, 'no'),
-('FLERKI', '', 'c', 'c', 'Event', '2024-11-09', '2024-11-28', 19, 'Lifetime', 50, 'no'),
-('FNQZGU', '', 's', 's', 'Event', '2024-10-16', '2024-10-23', 7, 'Lifetime', 20, 'no'),
-('FPEIQZ', '950324499', 'po', 'po', 'Event', '2024-11-03', '2024-11-08', 6, '', 60, 'no'),
-('HAJBWP', '', 'BLOG TEST', 'BLOG TEST', 'Event', '2024-11-01', '2024-11-29', 28, 'Lifetime', 40, 'no'),
-('HOFGTW', '652237158', 'yoo', 'yoo', 'Event', '2024-11-02', '2024-11-04', 3, 'Lifetime', 20, 'no'),
-('JMYLRP', '988627636', 'ert', 'ert', 'Event', '2024-11-03', '2024-11-06', 1, 'Lifetime', 20, 'yes'),
-('JOIBCX', '', 'hg', 'hg', 'Event', '2024-11-02', '2024-11-14', 12, 'Lifetime', 20, 'no'),
-('JUCDZN', '', 'future', 'future', 'Event', '2024-10-31', '2024-11-30', 30, 'Lifetime', 20, 'no'),
-('KTQNRL', '', 'A', 'A', 'Event', '2024-11-01', '2024-11-09', 8, 'Lifetime', 20, 'no'),
-('KYDZOV', '', 'testt', 'testt', 'Event', '2024-10-30', '2024-11-20', 21, 'Lifetime', 30, 'no'),
-('MZIXNT', '', 'et', 'et', 'Event', '2024-11-02', '2024-11-16', 14, 'Lifetime', 20, 'no'),
-('OSITRG', '', 'ui', 'ui', 'Event', '2024-11-02', '2024-11-09', 7, 'Lifetime', 20, 'no'),
-('SBAMJZ', '', 'yu', 'yu', 'Event', '2024-11-02', '2024-11-14', 12, 'Lifetime', 20, 'no'),
-('TGNJRZ', '', 'Event 1', 'Example description of event 1', 'Event', '2024-10-31', '2024-11-14', 14, 'Lifetime', 50, 'no'),
-('UCBWGR', '622355865', 'jjj', 'jjj', 'Event', '2024-11-03', '2024-11-08', 5, 'Lifetime', 20, 'yes'),
-('UGZVJQ', '', 'Example 2', 'Example Desc 2', 'Event', '2024-10-29', '2024-10-31', 2, 'Lifetime', 50, 'no'),
-('WDCFUK', '', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'Event', '2024-11-01', '2024-11-09', 8, 'Lifetime', 40, 'no'),
-('WJIXFB', '464856491', 'gg', 'gg', 'Event', '2024-11-03', '2024-11-03', 1, 'Lifetime', 60, 'yes'),
-('XTWIOL', '', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes'),
-('YTWAVM', '460690516', 'tr', 'tr', 'Event', '2024-11-02', '2024-11-09', 7, 'Lifetime', 20, 'no'),
-('YVTEOD', '711413702', 'yi', 'yi', 'Event', '2024-11-02', '2024-11-09', 7, 'Lifetime', 20, 'no'),
-('ZLQPJV', '', 'hello', 'hello', 'Event', '2024-11-02', '2024-11-14', 12, 'Lifetime', 20, 'no');
+('XTWIOL', '', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes');
 
 -- --------------------------------------------------------
 
@@ -474,12 +449,12 @@ INSERT INTO `plan` (`planid`, `tid`, `planName`, `description`, `planType`, `sta
 
 DROP TABLE IF EXISTS `plan_pages`;
 CREATE TABLE IF NOT EXISTS `plan_pages` (
-  `page_id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `planid` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `page_title` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `page_content` text COLLATE utf8mb4_general_ci,
-  `meta_description` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `slug` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `page_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `planid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `page_title` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `page_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `meta_description` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `slug` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `published` tinyint(1) DEFAULT '1',
@@ -493,31 +468,9 @@ CREATE TABLE IF NOT EXISTS `plan_pages` (
 --
 
 INSERT INTO `plan_pages` (`page_id`, `planid`, `page_title`, `page_content`, `meta_description`, `slug`, `created_at`, `updated_at`, `published`) VALUES
-('page_6721d39502bf46.59430875', 'KYDZOV', 'testt', 'testt', 'testt', 'testt', '2024-10-30 06:35:01', '2024-10-30 06:35:01', 1),
-('page_67232782e67e51.63127978', 'HAJBWP', 'BLOG TEST', 'BLOG TEST', 'BLOG TEST', 'blog-test', '2024-10-31 06:45:22', '2024-10-31 06:45:22', 1),
-('page_672328394cc9d5.50626830', 'WDCFUK', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'TEST BLOG AGAIN', 'test-blog-again', '2024-10-31 06:48:25', '2024-10-31 06:48:25', 1),
-('page_6723288cc44a54.37870147', 'FNQZGU', 's', 's', 's', 's', '2024-10-31 06:49:48', '2024-10-31 06:49:48', 1),
-('page_6723391bd2db79.18684561', 'KTQNRL', 'A', 'A', 'A', 'a', '2024-10-31 08:00:27', '2024-10-31 08:00:27', 1),
-('page_672436008622e3.68326319', 'ERQZBC', 'b', 'b', 'b', 'b', '2024-11-01 01:59:28', '2024-11-01 01:59:28', 1),
-('page_672436157c21e0.54934270', 'FLERKI', 'c', 'c', 'c', 'c', '2024-11-01 01:59:49', '2024-11-01 01:59:49', 1),
-('page_67243b6c093dc5.22836767', 'EGYHRF', 'w', 'w', 'w', 'w', '2024-11-01 02:22:36', '2024-11-01 02:22:36', 1),
-('page_67243c5427b741.62970273', 'ZLQPJV', 'hello', 'hello', 'hello', 'hello', '2024-11-01 02:26:28', '2024-11-01 02:26:28', 1),
 ('page_672440785b00f5.08825658', 'MTDQCH', 'hellos', 'hellos', 'hellos', 'hellos', '2024-11-01 02:44:08', '2024-11-01 02:44:08', 1),
-('page_6725ad8613bc08.43390233', 'MZIXNT', 'et', 'et', 'et', 'et-1', '2024-11-02 04:41:42', '2024-11-02 04:41:42', 1),
 ('page_6725ad49a3a4f6.40544225', 'THSMAF', 'et', 'et', 'et', 'et', '2024-11-02 04:40:41', '2024-11-02 04:40:41', 1),
-('page_6725ac0aa735f2.69431277', 'JOIBCX', 'hg', 'hg', 'hg', 'hg', '2024-11-01 20:35:22', '2024-11-02 04:35:22', 1),
-('page_6725acb4542496.18842960', 'SBAMJZ', 'yu', 'yu', 'yu', 'yu', '2024-11-01 20:38:12', '2024-11-02 04:38:12', 1),
-('page_6725b78388e2d4.53613020', 'OSITRG', 'ui', 'ui', 'ui', 'ui', '2024-11-01 21:24:19', '2024-11-02 05:24:19', 1),
-('page_6725b99453f9e1.97801313', 'YVTEOD', 'yi', 'yi', 'yi', 'yi', '2024-11-01 21:33:08', '2024-11-02 05:33:08', 1),
-('page_6725bce3cf7da8.82637780', 'BTCHQW', 'ju', 'ju', 'ju', 'ju', '2024-11-01 21:47:15', '2024-11-02 05:47:15', 1),
-('page_6725d5897b3ef4.57108942', 'YTWAVM', 'tr', 'tr', 'tr', 'tr', '2024-11-01 23:32:25', '2024-11-02 07:32:25', 1),
-('page_6725d892867be3.97571261', 'HOFGTW', 'yoo', 'yoo', 'yoo', 'yoo', '2024-11-01 23:45:22', '2024-11-02 07:45:22', 1),
-('page_67262173e86336.68842971', 'FPEIQZ', 'po', 'po', 'po', 'po', '2024-11-02 04:56:19', '2024-11-02 12:56:19', 1),
-('page_6726c9edd4c9a9.40068102', 'BHRYPU', 'testtt', 'testtt', 'testtt', 'testtt', '2024-11-02 16:55:09', '2024-11-03 00:55:09', 1),
-('page_6726cc639cc708.52327846', 'WJIXFB', 'gg', 'gg', 'gg', 'gg', '2024-11-02 17:05:39', '2024-11-03 01:05:39', 1),
-('page_6726cf1974f279.76136256', 'JIFKPO', 'WOW', 'WOW', 'WOW', '', '2024-11-02 17:17:13', '2024-11-03 01:17:13', 1),
-('page_6726d9ebe11212.26865694', 'UCBWGR', 'jjj', 'jjj', 'jjj', 'jjj', '2024-11-02 18:03:23', '2024-11-03 02:03:23', 1),
-('page_6726db6feb82c8.89285068', 'JMYLRP', 'ert', 'ert', 'ert', 'ert', '2024-11-02 18:09:51', '2024-11-03 02:09:51', 1);
+('page_6726cf1974f279.76136256', 'JIFKPO', 'WOW', 'WOW', 'WOW', '', '2024-11-02 17:17:13', '2024-11-03 01:17:13', 1);
 
 -- --------------------------------------------------------
 
@@ -548,9 +501,9 @@ CREATE TABLE IF NOT EXISTS `plan_page_sections` (
 DROP TABLE IF EXISTS `site_content`;
 CREATE TABLE IF NOT EXISTS `site_content` (
   `content_id` int NOT NULL AUTO_INCREMENT,
-  `section_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `content_text` text COLLATE utf8mb4_general_ci,
-  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `section_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `content_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `image_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`content_id`),
@@ -580,11 +533,11 @@ INSERT INTO `site_content` (`content_id`, `section_name`, `content_text`, `image
 
 DROP TABLE IF EXISTS `sports_timetable`;
 CREATE TABLE IF NOT EXISTS `sports_timetable` (
-  `tid` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
-  `planid` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `staffid` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `tname` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
-  `hasApproved` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `tid` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `planid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `staffid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tname` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `hasApproved` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -593,20 +546,9 @@ CREATE TABLE IF NOT EXISTS `sports_timetable` (
 --
 
 INSERT INTO `sports_timetable` (`tid`, `planid`, `staffid`, `tname`, `hasApproved`) VALUES
-('449d8de7-98d4-11ef-8372-004e01ffe201', 'SBAMJZ', NULL, 'hg', '0'),
-('460690516', 'YTWAVM', NULL, 'tr', '0'),
-('464856491', 'WJIXFB', NULL, 'gg', '0'),
-('4679207', 'BHRYPU', NULL, 'testtt', '0'),
 ('48a96c46-8d18-11ef-a94c-004e01ffe201', 'BJEFSY', 'Rashid', 'aaaa', 'yes'),
-('622355865', 'UCBWGR', NULL, 'jjj', '0'),
-('652237158', 'HOFGTW', NULL, 'yoo', '0'),
-('667381273', 'BTCHQW', NULL, 'ju', '0'),
-('711413702', 'YVTEOD', NULL, 'yi', '0'),
 ('7b00f52c-8d18-11ef-a94c-004e01ffe201', 'BJEFSY', 'rashid', 'test', 'yes'),
-('950324499', 'FPEIQZ', NULL, 'po', '0'),
-('988627636', 'JMYLRP', NULL, 'ert', '0'),
 ('9cfff539-90fd-11ef-954f-004e01ffe201', 'CAFXVW', 'rashid', 'test', 'yes'),
-('b60126f5-98da-11ef-8372-004e01ffe201', 'OSITRG', NULL, 'ui', '0'),
 ('f3ce119d-8d17-11ef-a94c-004e01ffe201', 'BJEFSY', '1', 'aa', 'yes'),
 ('fb3cb188-8d16-11ef-a94c-004e01ffe201', 'BJEFSY', 'rashid', 'yes', 'yes');
 
@@ -618,11 +560,11 @@ INSERT INTO `sports_timetable` (`tid`, `planid`, `staffid`, `tname`, `hasApprove
 
 DROP TABLE IF EXISTS `staff`;
 CREATE TABLE IF NOT EXISTS `staff` (
-  `staffid` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `pass_key` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `role` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
+  `staffid` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `role` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`staffid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -642,15 +584,15 @@ INSERT INTO `staff` (`staffid`, `name`, `username`, `pass_key`, `role`) VALUES
 DROP TABLE IF EXISTS `team_members`;
 CREATE TABLE IF NOT EXISTS `team_members` (
   `member_id` int NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `position` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `full_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `position` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `image_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `display_order` int DEFAULT NULL,
   `active` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `featured` tinyint(1) DEFAULT '0',
-  `jersey_number` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jersey_number` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`member_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -689,46 +631,18 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('6725aa5c75593', 'PVNOCY', 1, 'test'),
 ('day_6726207ed138e4.09339605', '655468533', 1, 'test'),
 ('day_6725ac0aa70fd0.75049811', '0', 1, 'test'),
-('day_6725acb45411f1.24666910', '449d8de7-98d4-11ef-8372-004e01ffe201', 1, 'test'),
-('day_6725b78388b784.67232852', 'b60126f5-98da-11ef-8372-004e01ffe201', 1, 'test'),
-('day_6725b99453b538.63822171', '711413702', 1, 'test'),
-('day_6725bce3cf4219.91368216', '667381273', 1, 'test'),
-('day_6725bce3cf6ca8.06762455', '667381273', 2, 'test'),
-('day_6725d5897b0fa7.59241568', '460690516', 1, 'test'),
-('day_6725d5897b21e3.54323531', '460690516', 2, 'test'),
-('day_6725d5897b2fe9.69268946', '460690516', 3, 'test'),
-('deb14ee7-9922-11ef-8372-004e01ffe201', '950324499', 2, 'ew'),
-('day_67262173e84926.64537263', '950324499', 1, 'test'),
-('e3898c8b-9922-11ef-8372-004e01ffe201', '950324499', 3, 'wew'),
-('e3d4153e-9922-11ef-8372-004e01ffe201', '950324499', 4, 'wew'),
-('a3f92ef3-9923-11ef-8372-004e01ffe201', '950324499', 5, 'fd'),
-('a4d50643-9923-11ef-8372-004e01ffe201', '950324499', 6, 'fd'),
-('c3c997d1-9925-11ef-8372-004e01ffe201', '652237158', 1, ''),
-('4f91a430-992d-11ef-8372-004e01ffe201', '950324499', 11, NULL),
-('c45ed333-9925-11ef-8372-004e01ffe201', '652237158', 2, ''),
-('c4e080e6-9925-11ef-8372-004e01ffe201', '652237158', 3, ''),
-('4f917c66-992d-11ef-8372-004e01ffe201', '950324499', 9, NULL),
-('4f918ff0-992d-11ef-8372-004e01ffe201', '950324499', 10, NULL),
-('4f916896-992d-11ef-8372-004e01ffe201', '950324499', 8, NULL),
-('3d9e57d9-992d-11ef-8372-004e01ffe201', '950324499', 7, NULL),
-('4f91b438-992d-11ef-8372-004e01ffe201', '950324499', 12, NULL),
-('4f91c4ef-992d-11ef-8372-004e01ffe201', '950324499', 13, NULL),
-('4f91d729-992d-11ef-8372-004e01ffe201', '950324499', 14, NULL),
-('4f91e6c0-992d-11ef-8372-004e01ffe201', '950324499', 15, NULL),
-('4f91f98f-992d-11ef-8372-004e01ffe201', '950324499', 16, NULL),
-('day_6726c9edd4a9a9.01969500', '4679207', 1, 'testtt'),
 ('day_6726cb41902ce9.24094170', '574511568', 1, 'testtt'),
 ('day_6726cbc57af975.25485836', '149645521', 1, 'testtt'),
 ('day_6726cbd39c3bc0.74671018', '2265016', 1, 'fg'),
-('day_6726cc639cb616.29259644', '464856491', 1, 'gg'),
 ('day_6726cf1974d8d4.38236568', '92618308', 1, 'WOW'),
 ('day_6726cf28a099c1.41472425', '473138343', 1, 'WOW'),
-('day_6726d9ebe10438.92649793', '622355865', 1, 'jjj'),
-('day_6726db6feb2906.31552246', '988627636', 1, 'ert'),
-('b34b566a-998a-11ef-8372-004e01ffe201', '988627636', 3, NULL),
-('b34b6d93-998a-11ef-8372-004e01ffe201', '988627636', 4, NULL),
-('7b69fbc9-998a-11ef-8372-004e01ffe201', '4679207', 2, ''),
-('b34b3e47-998a-11ef-8372-004e01ffe201', '988627636', 2, NULL);
+('day_6728cb39944e59.34765918', '174532960', 1, NULL),
+('day_6728cb39946162.56949739', '174532960', 2, NULL),
+('day_6728cb39947090.24752937', '174532960', 3, NULL),
+('day_6728cd60754817.72663183', '433860664', 1, NULL),
+('day_6728cd60755874.33438462', '433860664', 2, NULL),
+('day_6728cd60756517.81659827', '433860664', 3, NULL),
+('day_6728cd607574b7.87020113', '433860664', 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -738,17 +652,17 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `userid` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `pass_key` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `imageid` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `fullName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `gender` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
-  `mobile` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `dob` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `joining_date` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `hasApproved` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `imageid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `fullName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `gender` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `dob` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `joining_date` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `hasApproved` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
