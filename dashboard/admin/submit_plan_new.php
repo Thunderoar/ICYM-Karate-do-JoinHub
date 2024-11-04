@@ -320,10 +320,12 @@ function generateUniqueSlug($con, $name, $planid = null) {
     return $slug;
 }
 
+// Initialize the script and check for form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Start transaction for atomic operations
     mysqli_begin_transaction($con);
     try {
-        // Get and sanitize form data
+        // Retrieve and sanitize form data for plan details
         $planid = mysqli_real_escape_string($con, $_POST['planid']);
         $name = mysqli_real_escape_string($con, $_POST['planname']);
         $desc = mysqli_real_escape_string($con, $_POST['desc']);
@@ -332,14 +334,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $startDate = mysqli_real_escape_string($con, $_POST['startDate']);
         $endDate = mysqli_real_escape_string($con, $_POST['endDate']);
         $duration = mysqli_real_escape_string($con, $_POST['duration']);
-        $tname = mysqli_real_escape_string($con, $_POST['tname']);
-        $tid = mysqli_real_escape_string($con, $_POST['timetable_id']);
-        $hasApproved = isset($_POST['hasApproved']) ? 1 : 0;
-
-        // Generate slug for the plan
+        
+        // Generate slug for the plan based on the name
         $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/', '-', $name), '-'));
 
-        // Insert into plan table
+        // Insert the new plan into the `plan` table
         $insertPlan = "INSERT INTO plan (planid, tid, planName, description, planType, startDate, endDate, duration, amount, active) 
                        VALUES ('$planid', '$tid', '$name', '$desc', '$planType', '$startDate', '$endDate', '$duration', '$amount', 'yes')";
         
@@ -347,45 +346,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error creating plan: " . mysqli_error($con));
         }
 
-        // Insert timetable
+        // Handle the timetable submission
+        $tid = mysqli_real_escape_string($con, $_POST['timetable_id']);
+        $tname = mysqli_real_escape_string($con, $_POST['tname']);
+        $hasApproved = isset($_POST['hasApproved']) ? 1 : 0;
+
+        // Insert into `sports_timetable`
         $insertTimetable = "INSERT INTO sports_timetable (tid, planid, tname, hasApproved) 
-                           VALUES ('$tid', '$planid', '$tname', $hasApproved)";
+                            VALUES ('$tid', '$planid', '$tname', $hasApproved)";
         
         if (!mysqli_query($con, $insertTimetable)) {
             throw new Exception("Error creating timetable: " . mysqli_error($con));
         }
 
-        // Get the tid of the inserted timetable
-        $getTid = "SELECT tid FROM sports_timetable WHERE planid = '$planid'";
-        $tidResult = mysqli_query($con, $getTid);
-        
-        if (!$tidResult) {
-            throw new Exception("Error getting timetable ID: " . mysqli_error($con));
-        }
-        
-        $tidRow = mysqli_fetch_assoc($tidResult);
-        $tid = $tidRow['tid'];
-
-        // Preemptively add days to timetable_days
+        // Preemptively add days to `timetable_days` based on duration
         $numDays = (int)((strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24)) + 1;
         for ($i = 1; $i <= $numDays; $i++) {
             $day_id = uniqid('day_', true);
             $insertDay = "INSERT INTO timetable_days (day_id, tid, day_number, activities) 
-                         VALUES ('$day_id', '$tid', $i, NULL)";
+                          VALUES ('$day_id', '$tid', $i, NULL)";
             if (!mysqli_query($con, $insertDay)) {
                 throw new Exception("Error adding day $i: " . mysqli_error($con));
             }
         }
 
-        // Handle days input
+        // Update `timetable_days` with specific activities if provided
         if (!empty($_POST['days'])) {
             foreach ($_POST['days'] as $index => $activities) {
                 $day_number = $index + 1;
                 $activities = mysqli_real_escape_string($con, $activities);
-                $day_id = uniqid('day_', true);
                 
                 $updateDay = "UPDATE timetable_days SET activities='$activities' 
-                             WHERE tid='$tid' AND day_number='$day_number'";
+                              WHERE tid='$tid' AND day_number='$day_number'";
                 
                 if (!mysqli_query($con, $updateDay)) {
                     throw new Exception("Error updating day $day_number: " . mysqli_error($con));
@@ -393,24 +385,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Handle image upload
+        // Handle image upload for the plan
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $upload_dir = "../../uploads/plans/";
             
+            // Create directory if it doesn't exist
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0777, true);
             }
 
+            // Process the image file
             $file_extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
             $new_filename = uniqid('plan_', true) . '.' . $file_extension;
             $target_path = $upload_dir . $new_filename;
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
                 $relative_path = 'uploads/plans/' . $new_filename;
-                $relative_path = mysqli_real_escape_string($con, $relative_path);
                 
                 $insertImage = "INSERT INTO images (imageid, planid, image_path) 
-                               VALUES (UUID(), '$planid', '$relative_path')";
+                                VALUES (UUID(), '$planid', '$relative_path')";
                 
                 if (!mysqli_query($con, $insertImage)) {
                     throw new Exception("Error saving image: " . mysqli_error($con));
@@ -420,7 +413,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Create plan page
+        // Insert the initial page for the plan
         $page_id = uniqid('page_', true);
         $current_time = date('Y-m-d H:i:s');
         
@@ -431,22 +424,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error creating plan page: " . mysqli_error($con));
         }
         
-        // Create plan directory
-        try {
+        // Call function to create plan directory if it exists
+        if (function_exists('createPlanDirectory')) {
             createPlanDirectory($con, $slug);
-        } catch (Exception $e) {
-            throw new Exception("Error creating plan directory: " . $e->getMessage());
         }
 
+        // Commit the transaction if everything is successful
         mysqli_commit($con);
         
-        echo "<script>
-                alert('Plan created successfully!');
-                window.location.href = 'view_plan.php';
-              </script>";
+        // Display success message
+echo "<script>
+        alert('Plan created successfully!');
+        window.location.href = 'timetable_detail.php?id=" . $tid . "&planid=" . $planid . "#timetable-details';
+      </script>";
+
         
     } catch (Exception $e) {
+        // Rollback transaction on error
         mysqli_rollback($con);
+        
+        // Display error message
         echo "<script>
                 alert('Error: " . mysqli_real_escape_string($con, $e->getMessage()) . "');
                 window.location.href = 'new_plan.php';

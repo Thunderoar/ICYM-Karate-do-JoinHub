@@ -16,9 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $planid = mysqli_real_escape_string($con, $_POST['planid']);
         $tid = mysqli_real_escape_string($con, $_POST['tid']);
 
-        // Verify the plan and timetable relationship
-        $check_query = "SELECT st.tid, p.planid FROM sports_timetable st INNER JOIN plan p ON st.planid = p.planid WHERE st.tid = '$tid' AND p.planid = '$planid'";
-        $result = mysqli_query($con, $check_query);
+        // First verify the plan and timetable relationship
+        $check_query = "SELECT st.tid, p.planid 
+                       FROM sports_timetable st 
+                       INNER JOIN plan p ON st.planid = p.planid 
+                       WHERE st.tid = ? AND p.planid = ?";
+        $stmt = mysqli_prepare($con, $check_query);
+        mysqli_stmt_bind_param($stmt, "ii", $tid, $planid);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
         if (mysqli_num_rows($result) == 0) {
             throw new Exception("Invalid plan and timetable combination");
@@ -33,42 +39,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $duration = isset($_POST['duration']) ? mysqli_real_escape_string($con, $_POST['duration']) : null;
         $amount = isset($_POST['amount']) ? mysqli_real_escape_string($con, $_POST['amount']) : null;
 
-        // Build update query dynamically based on provided fields
-        $updateFields = [];
-        if ($planname !== null) $updateFields[] = "planName = '$planname'";
-        if ($desc !== null) $updateFields[] = "description = '$desc'";
-        if ($plantype !== null) $updateFields[] = "planType = '$plantype'";
-        if ($startdate !== null) $updateFields[] = "startDate = '$startdate'";
-        if ($enddate !== null) $updateFields[] = "endDate = '$enddate'";
-        if ($duration !== null) $updateFields[] = "duration = '$duration'";
-        if ($amount !== null) $updateFields[] = "amount = $amount";
+        // Build the update query directly
+        $update_query = "UPDATE plan SET 
+                            planName = '$planname', 
+                            description = '$desc', 
+                            planType = '$plantype', 
+                            startDate = '$startdate', 
+                            endDate = '$enddate', 
+                            duration = '$duration', 
+                            amount = '$amount' 
+                        WHERE planid = '$planid'";
 
-        if (!empty($updateFields)) {
-            $update_query = "UPDATE plan SET " . implode(", ", $updateFields) . " WHERE planid = '$planid'";
-            
-            if (!mysqli_query($con, $update_query)) {
-                throw new Exception("Failed to update plan: " . mysqli_error($con));
-            }
+        if (mysqli_query($con, $update_query)) {
+            echo "Plan updated successfully!";
+        } else {
+            echo "Error updating plan: " . mysqli_error($con);
         }
-
-
 
         // Handle image upload if provided
         if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            
+
             if (!in_array($_FILES['image']['type'], $allowedTypes)) {
                 throw new Exception("Invalid file type. Only JPG, PNG, and GIF are allowed.");
             }
-            
+
             $uploadDir = "../../uploads/plans/";
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
-            
+
             $fileName = uniqid() . '_' . basename($_FILES['image']['name']);
             $targetPath = $uploadDir . $fileName;
-            
+
             if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
                 // Check if image record exists
                 $check_image = "SELECT imageid FROM images WHERE planid = ?";
@@ -91,18 +94,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 mysqli_stmt_execute($stmt);
             }
         }
-		
+
         // Success message with both IDs
         echo "<html><head><script>alert('Plan (ID: $planid) and Timetable (ID: $tid) updated successfully!');</script></head></html>";
-        // Redirect to view_plan.php
-        echo "<meta http-equiv='refresh' content='0; url=view_plan.php'>";
+        // Redirect back to events page
+        echo "<meta http-equiv='refresh' content='0; url=../../events.php'>";
 
     } catch (Exception $e) {
         echo "<html><head><script>alert('Error: " . addslashes($e->getMessage()) . "');</script></head></html>";
-        echo "<meta http-equiv='refresh' content='2; url=view_plan.php'>";
+        echo "<meta http-equiv='refresh' content='2; url=../../events.php'>";
     }
 } else {
     echo "<html><head><script>alert('Invalid request method');</script></head></html>";
-    echo "<meta http-equiv='refresh' content='0; url=view_plan.php'>";
+    echo "<meta http-equiv='refresh' content='0; url=../../events.php'>";
 }
 ?>

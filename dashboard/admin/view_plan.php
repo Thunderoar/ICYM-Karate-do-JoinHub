@@ -246,14 +246,16 @@ $sno = 1;
 
 <div class="mb-3">
     <form method="GET" class="form-inline" id="filterForm" style="display: flex; align-items: center; gap: 10px;">
-        <label class="switch">
-            <input type="checkbox" 
-                   name="show_inactive" 
-                   value="yes" 
-                   <?php echo isset($_GET['show_inactive']) && $_GET['show_inactive'] === 'yes' ? 'checked' : ''; ?>
-                   onchange="this.form.submit()">
-            <span class="slider round"></span>
-        </label>
+<form id="filterForm" action="your_page.php" method="get">
+    <label class="switch">
+        <input type="checkbox" 
+               name="show_inactive" 
+               value="yes" 
+               <?php echo isset($_GET['show_inactive']) && $_GET['show_inactive'] === 'yes' ? 'checked' : ''; ?>
+               onchange="this.form.submit()">
+        <span class="slider round"></span>
+    </label>
+    <input type="hidden" name="toggle_state" id="toggleState" value="<?php echo isset($_GET['show_inactive']) ? '1' : '0'; ?>">
         <label>Show Inactive Plans</label>
     </form>
 </div>
@@ -272,7 +274,6 @@ $sno = 1;
 
 
 
-<!-- Table Structure -->
 <table class="table table-bordered datatable" id="table-1" border="1">
     <thead>
         <tr>
@@ -288,7 +289,6 @@ $sno = 1;
             <th onclick="sortTable(9)">Page URL</th>
             <th onclick="sortTable(10)">Status</th>
             <th onclick="sortTable(11)">Images</th>
-            <th>Timetable</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -312,7 +312,6 @@ $sno = 1;
                 echo "<td>" . $row['duration'] . "</td>";
                 echo "<td>RM" . $row['amount'] . "</td>";
 
-                // Add slug URL column with status indicator
                 if ($row['page_slug']) {
                     $url_status = $row['active'] === 'yes' ? '' : ' (Inactive)';
                     echo "<td><a href='../../plans/" . $row['page_slug'] . "' target='_blank'>" . 
@@ -321,26 +320,17 @@ $sno = 1;
                     echo "<td><span class='text-muted'>No URL yet</span></td>";
                 }
 
-                // Add status column
                 echo "<td class='" . $status_class . "'>" . $status_text . "</td>";
-
-                // Add images count column
                 echo "<td>" . $row['image_count'] . " images</td>";
 
-               // Add "View Timetable" button
                 echo "<td>";
                 if (!empty($tid)) {
-                    echo "<a href='timetable_detail.php?id=" . $tid . "' class='btn btn-primary'>View Timetable</a>";
+                    echo "<a href='timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "'>
+                            <input type='button' class='a1-btn a1-blue' style='width:100%' value='Edit Plan'>
+                          </a>";
                 } else {
                     echo "<span class='text-muted'>No Timetable</span>";
                 }
-                echo "</td>";
-
-                // Action column
-                echo "<td>";
-                echo "<a href='edit_plan.php?id=" . $row['planid'] . "'>
-                        <input type='button' class='a1-btn a1-blue' style='width:100%' value='Edit Plan'>
-                      </a>";
 
                 if ($row['active'] === 'yes') {
                     echo "<form action='del_plan.php' method='post' onSubmit='return ConfirmDeactivate();'>
@@ -353,6 +343,12 @@ $sno = 1;
                             <input type='submit' value='Mark as Active' class='a1-btn a1-green' style='width:100%'/>
                           </form>";
                 }
+
+                echo "<form action='delete_plan.php' method='post' onSubmit='return ConfirmDelete();'>
+                        <input type='hidden' name='planid' value='" . $msgid . "'/>
+                        <input type='submit' value='Delete' class='a1-btn a1-red' style='width:100%'/>
+                      </form>";
+
                 echo "</td>";
                 echo "</tr>";
 
@@ -360,10 +356,11 @@ $sno = 1;
             }
         } else {
             echo "<tr><td colspan='14' class='text-center'>No records found</td></tr>";
-        }		
-        ?>																
+        }       
+        ?>                                                              
     </tbody>
 </table>
+
 
 
 
@@ -486,11 +483,15 @@ function updateIndicator(columnIndex, direction) {
     function ConfirmActivate() {
         return confirm("Are you sure you want to activate this plan?");
     }
-	
-// Optional: Add smooth transitions when filtering
-document.querySelector('input[name="show_inactive"]').addEventListener('change', function() {
-    document.getElementById('filterForm').submit();
-});
+    document.querySelector('input[name="show_inactive"]').addEventListener('change', function() {
+        document.getElementById('toggleState').value = this.checked ? '1' : '0';
+        document.getElementById('filterForm').submit();
+    });
+
+function ConfirmDelete() {
+    return confirm('Are you sure you want to delete this plan?');
+}
+
 </script>
 
 

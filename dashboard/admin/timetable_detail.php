@@ -225,6 +225,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $currentDate->modify('+1 day');
     }
 }
+
+// Get plan ID from URL parameter
+$planId = isset($_GET['planid']) ? $_GET['planid'] : '';
+
+// Sanitize the plan ID
+$planId = mysqli_real_escape_string($con, $planId);
+
+// Fetch plan details from database
+$planQuery = "SELECT p.*, st.tid, st.tname, i.image_path 
+              FROM plan p 
+              LEFT JOIN sports_timetable st ON p.planid = st.planid 
+              LEFT JOIN images i ON p.planid = i.planid 
+              WHERE p.planid = '$planId'";
+              
+$result = mysqli_query($con, $planQuery);
+$planData = mysqli_fetch_assoc($result);
+
+// If no plan found, redirect to view plans page
+if (!$planData) {
+    header("Location: view_plan.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -304,11 +326,107 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </ul>
                 </div>
             </div>
-            
-        <h2>Timetable Detail</h2>
+			
+			            <h2>Edit Plan</h2>
+<?php
+$tid = mysqli_real_escape_string($con, $_GET['id']); // Get and sanitize tid instead of id
+
+// Modified query to join sports_timetable and plan tables
+$sql = "SELECT p.* 
+        FROM plan p 
+        INNER JOIN sports_timetable st ON p.planid = st.planid 
+        WHERE st.tid = '$tid'";
+
+$res = mysqli_query($con, $sql);
+
+if ($res && mysqli_num_rows($res) > 0) {
+    $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+} else {
+    echo "<p>Plan not found or invalid timetable ID.</p>";
+    exit; // Stop script execution if no results are found
+}
+?>
+            <hr/>
+<div class="container">
+	<form id="form1" name="form1" method="post" class="a1-container" action="updateplan.php">	
+        <div class="row" style="margin-bottom:200px">
+            <div class="col-md-6">
+<div class="form-group">
+    <label>Type of Plan:</label>
+    <select name="plantype" id="plantype" class="form-control" required onchange="updateFeeLabel()">
+        <option value="">--Please Select--</option>
+        <option value="Core" <?php echo ($row['planType'] == 'Core') ? 'selected' : ''; ?>>Core</option>
+        <option value="Event" <?php echo ($row['planType'] == 'Event') ? 'selected' : ''; ?>>Event</option>
+        <option value="Tournament" <?php echo ($row['planType'] == 'Tournament') ? 'selected' : ''; ?>>Tournament</option>
+        <option value="Collaboration" <?php echo ($row['planType'] == 'Collaboration') ? 'selected' : ''; ?>>Collaboration</option>
+    </select>
+</div>
+
+
+                <div class="form-group">
+                    <label>Event Image:</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                </div>
+	            <td height="0">
+                <input type="hidden" name="tid" id="tid" readonly value='<?php echo $id; ?>'>
+            </td>
+                <div class="form-group">
+                    <label>Plan ID:</label>
+                    <input type="text" name="planid" id="planID" class="form-control" readonly 
+                        value="<?php echo $row['planid']; ?>">
+                </div>
+
+                <input type="hidden" id="boxx" name="timetable_id" 
+                    value="<?php echo mt_rand(1, 1000000000); ?>" required/>
+
+                <div class="form-group">
+                    <label>Plan Name:</label>
+                    <input type="text" name="planname" id="planName" class="form-control" 
+                        placeholder="Enter plan name" value='<?php echo $row['planName']; ?>'>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+<div class="form-group">
+    <label>Description:</label>
+    <textarea name="desc" id="planDesc" class="form-control" placeholder="Enter plan description" rows="3"><?php echo $row['description']; ?></textarea>
+</div>
+
+
+                <div class="form-group">
+                    <label>Start Date:</label>
+                    <input type="date" name="startDate" id="startDate" class="form-control" 
+                        onchange="calculateDuration()" value='<?php echo $row['startDate']; ?>'>
+                </div>
+
+                <div class="form-group">
+                    <label>End Date:</label>
+                    <input type="date" name="endDate" id="endDate" class="form-control" 
+                        onchange="calculateDuration()" value='<?php echo $row['endDate']; ?>'>
+                </div>
+
+                <div class="form-group">
+                    <label>Duration (Days):</label>
+                    <input type="number" name="duration" id="duration" class="form-control" value='<?php echo $row['duration']; ?>' readonly>
+                </div>
+
+                <div class="form-group">
+                    <label id="feeLabel">Plan Fee:</label>
+                    <input type="text" name="amount" id="planAmnt" class="form-control" 
+                        placeholder="Enter plan amount" value='<?php echo $row['amount']; ?>'>
+                </div>
+            </div>
+			                <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE PLAN">
+                <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+        </div>
+        <h3 id="timetable-details" class="mt-4">Timetable Details</h3>
         <hr/>
+    </form>
+</div>
+
+
         
-        <div class="container">
+        <div class="container" style="margin-bottom: 200px;">
             <?php if ($dates): ?>
                 <p><strong>Timetable Name:</strong> <?= htmlspecialchars($timetableData[0]['tname'] ?? 'N/A') ?></p>
 <!-- HTML Section for Date Update Form -->
