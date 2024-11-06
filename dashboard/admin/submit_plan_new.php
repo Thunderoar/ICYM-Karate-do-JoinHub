@@ -326,6 +326,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_begin_transaction($con);
     try {
         // Retrieve and sanitize form data for plan details
+		$tid = mysqli_real_escape_string($con, $_POST['timetable_id']);
         $planid = mysqli_real_escape_string($con, $_POST['planid']);
         $name = mysqli_real_escape_string($con, $_POST['planname']);
         $desc = mysqli_real_escape_string($con, $_POST['desc']);
@@ -346,18 +347,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error creating plan: " . mysqli_error($con));
         }
 
-        // Handle the timetable submission
-        $tid = mysqli_real_escape_string($con, $_POST['timetable_id']);
-        $tname = mysqli_real_escape_string($con, $_POST['tname']);
-        $hasApproved = isset($_POST['hasApproved']) ? 1 : 0;
+// Get and sanitize data
+$tid = mysqli_real_escape_string($con, $_POST['timetable_id']);
+$tname = mysqli_real_escape_string($con, $_POST['planname']);
+$hasApproved = isset($_POST['hasApproved']) ? 1 : 0;
+$staffData = json_decode($_POST['selected_staff_data'], true);
 
-        // Insert into `sports_timetable`
-        $insertTimetable = "INSERT INTO sports_timetable (tid, planid, tname, hasApproved) 
-                            VALUES ('$tid', '$planid', '$tname', $hasApproved)";
+if ($staffData && is_array($staffData)) {
+    foreach ($staffData as $staff) {
+        $staffId = mysqli_real_escape_string($con, $staff['staffid']);
+        $staffTname = mysqli_real_escape_string($con, $staff['tname']);
+        
+        $insertTimetable = "INSERT INTO sports_timetable (tid, planid, staffid, tname, hasApproved) 
+                           VALUES ('$tid', '$planid', '$staffId', '$tname', '$hasApproved')";
         
         if (!mysqli_query($con, $insertTimetable)) {
-            throw new Exception("Error creating timetable: " . mysqli_error($con));
+            echo "Error inserting timetable: " . mysqli_error($con);
         }
+    }
+}
 
         // Preemptively add days to `timetable_days` based on duration
         $numDays = (int)((strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24)) + 1;
@@ -384,34 +392,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
-
-        // Handle image upload for the plan
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = "../../uploads/plans/";
-            
-            // Create directory if it doesn't exist
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
+            $target_dir = "uploads/";
+            if (!is_dir($target_dir)) {
+                mkdir($target_dir, 0777, true);
             }
-
-            // Process the image file
-            $file_extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $new_filename = uniqid('plan_', true) . '.' . $file_extension;
-            $target_path = $upload_dir . $new_filename;
-
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
-                $relative_path = 'uploads/plans/' . $new_filename;
-                
-                $insertImage = "INSERT INTO images (imageid, planid, image_path) 
-                                VALUES (UUID(), '$planid', '$relative_path')";
-                
-                if (!mysqli_query($con, $insertImage)) {
+            $filename = uniqid() . '_' . basename($_FILES["image"]["name"]);
+            $target_file = $target_dir . $filename;
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                $target_file = mysqli_real_escape_string($con, $target_file);
+                $sql = "INSERT INTO images (imageid, planid, image_path) VALUES (UUID(), '$planid', '$target_file')";
+                if (!mysqli_query($con, $sql)) {
                     throw new Exception("Error saving image: " . mysqli_error($con));
                 }
-            } else {
-                throw new Exception("Error uploading image");
             }
         }
+
 
         // Insert the initial page for the plan
         $page_id = uniqid('page_', true);
