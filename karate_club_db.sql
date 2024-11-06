@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 04, 2024 at 01:58 PM
+-- Generation Time: Nov 06, 2024 at 03:05 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -306,10 +306,14 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('4b9288ef-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, NULL, NULL, '2024-10-25 00:30:11'),
 ('5', NULL, '1729499689', NULL, NULL, NULL, '2024-10-21 08:35:06'),
 ('515', NULL, '1729499673', NULL, NULL, NULL, '2024-10-21 08:34:41'),
+('54a9f345-9bce-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'EHBPVK', 'uploads/672aab3bbd821_image_2.jpg', '2024-11-05 23:33:15'),
+('591e262b-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'CDZJSY', 'uploads/672ada3d264a8_event_1.jpg', '2024-11-06 02:53:49'),
 ('5e628491-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, NULL, NULL, '2024-10-21 09:39:29'),
+('611fb9ee-9bcd-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'DGEQBM', 'uploads/plans/plan_672aa9a32ccf28.10183593.jpg', '2024-11-05 15:26:27'),
 ('6aae6da4-946a-11ef-96fe-004e01ffe201', NULL, '1730037014', NULL, NULL, NULL, '2024-10-27 13:50:24'),
 ('79fe9b2e-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503605', NULL, NULL, NULL, '2024-10-21 09:40:15'),
 ('8', NULL, NULL, NULL, 'TGJIOA', 'uploads/image_2.jpg', '2024-10-18 06:23:57'),
+('85487087-9bcf-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'XZONMS', 'uploads/672aad3acda2b_image_2.jpg', '2024-11-05 23:41:46'),
 ('8983', NULL, '1729331377', NULL, NULL, NULL, '2024-10-19 09:50:14'),
 ('8984', NULL, '1729232687', NULL, NULL, NULL, '2024-10-18 06:25:15'),
 ('8985', NULL, '1729331491', NULL, NULL, NULL, '2024-10-19 09:51:46'),
@@ -320,18 +324,24 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('9327317', NULL, '1729499988', NULL, NULL, NULL, '2024-10-21 08:39:56'),
 ('97108066-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503655', NULL, NULL, NULL, '2024-10-21 09:41:04'),
 ('97673448-9469-11ef-96fe-004e01ffe201', NULL, '1730036662', NULL, NULL, NULL, '2024-10-27 13:44:30'),
+('98ea3aa6-9be9-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'UGZKDM', 'uploads/672ad8faa97ef_hero_1729843905_aaf684e335f14f2b.jpg', '2024-11-06 02:48:26'),
+('a0f12b11-9bcf-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'TQSFLR', 'uploads/672aad693c338_image_2.jpg', '2024-11-05 23:42:33'),
+('af459d21-9abc-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'WBGSAZ', 'uploads/plans/plan_6728e021a7d910.92053212.jpg', '2024-11-04 14:54:25'),
 ('af9126c9-90ec-11ef-9771-004e01ffe201', NULL, '1729653160', NULL, NULL, NULL, '2024-10-23 03:12:50'),
 ('b3fd23a2-9753-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'HAJBWP', 'uploads/67232782e6b24_image_8.jpg', '2024-10-31 06:45:22'),
 ('bca06ed8-998c-11ef-8372-004e01ffe201', NULL, '1730601491', NULL, NULL, NULL, '2024-11-03 02:38:41'),
+('c0bd6e81-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'VNWQGL', 'uploads/672adaeb01828_event_1.jpg', '2024-11-06 02:56:43'),
 ('c1a6ad2f-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503254', NULL, NULL, NULL, '2024-10-21 09:35:06'),
 ('c297f3e8-94c4-11ef-96fe-004e01ffe201', NULL, NULL, NULL, 'TGNJRZ', 'uploads/event_1_671edcb3189d6.jpg', '2024-10-28 00:37:07'),
+('c779416c-9bcc-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'KZMTED', 'uploads/plans/plan_672aa8a15f44b5.80760034.jpg', '2024-11-05 23:22:09'),
 ('d785ab4b-947a-11ef-96fe-004e01ffe201', NULL, '1730044070', NULL, NULL, NULL, '2024-10-27 15:47:59'),
 ('dc81088c-8f96-11ef-a5b9-004e01ffe201', NULL, '1729506355', NULL, NULL, NULL, '2024-10-21 10:25:58'),
 ('df9cf0f4-90ef-11ef-954f-004e01ffe201', NULL, '1729654531', NULL, NULL, NULL, '2024-10-23 03:35:39'),
 ('e823ad64-9057-11ef-a5b9-004e01ffe201', NULL, '1729589256', NULL, NULL, NULL, '2024-10-22 09:27:51'),
 ('ed943f77-97f4-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'ERQZBC', 'uploads/6724360086480_karate_main.jpg', '2024-11-01 01:59:28'),
 ('f9b54ceb-8f8e-11ef-a5b9-004e01ffe201', NULL, '1729502959', NULL, NULL, NULL, '2024-10-21 09:29:30'),
-('fa1250de-97f4-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'FLERKI', 'uploads/672436157c3d6_image_11.jpg', '2024-11-01 01:59:49');
+('fa1250de-97f4-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'FLERKI', 'uploads/672436157c3d6_image_11.jpg', '2024-11-01 01:59:49'),
+('ff430ac1-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'VXZPMY', 'uploads/672adb53dbe53_image_11.jpg', '2024-11-06 02:58:27');
 
 -- --------------------------------------------------------
 
@@ -417,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `log_users` (
 DROP TABLE IF EXISTS `plan`;
 CREATE TABLE IF NOT EXISTS `plan` (
   `planid` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `tid` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tid` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `planName` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `planType` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -439,6 +449,8 @@ CREATE TABLE IF NOT EXISTS `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `tid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
+('VNWQGL', '32727319', 'Percubaan 1', 'Percubaan 1', 'Event', '2024-10-10', '2024-10-14', 4, 'Lifetime', 123, 'yes'),
+('VXZPMY', '451453399', 'Gambar 2', 'Gambar 2', 'Event', '2024-10-20', '2024-10-24', 4, 'Lifetime', 123, 'yes'),
 ('XTWIOL', '', 'Karate Activities', 'This includes all karate activity plan', 'Core', '', '', 0, '', 20, 'yes');
 
 -- --------------------------------------------------------
@@ -470,6 +482,8 @@ CREATE TABLE IF NOT EXISTS `plan_pages` (
 INSERT INTO `plan_pages` (`page_id`, `planid`, `page_title`, `page_content`, `meta_description`, `slug`, `created_at`, `updated_at`, `published`) VALUES
 ('page_672440785b00f5.08825658', 'MTDQCH', 'hellos', 'hellos', 'hellos', 'hellos', '2024-11-01 02:44:08', '2024-11-01 02:44:08', 1),
 ('page_6725ad49a3a4f6.40544225', 'THSMAF', 'et', 'et', 'et', 'et', '2024-11-02 04:40:41', '2024-11-02 04:40:41', 1),
+('page_672adaeb01b011.33593391', 'VNWQGL', 'Percubaan 1', 'Percubaan 1', 'Percubaan 1', 'ercubaan-1', '2024-11-05 18:56:43', '2024-11-06 02:56:43', 1),
+('page_672adb53dc0743.17552309', 'VXZPMY', 'Gambar 2', 'Gambar 2', 'Gambar 2', 'ambar-2', '2024-11-05 18:58:27', '2024-11-06 02:58:27', 1),
 ('page_6726cf1974f279.76136256', 'JIFKPO', 'WOW', 'WOW', 'WOW', '', '2024-11-02 17:17:13', '2024-11-03 01:17:13', 1);
 
 -- --------------------------------------------------------
@@ -546,6 +560,8 @@ CREATE TABLE IF NOT EXISTS `sports_timetable` (
 --
 
 INSERT INTO `sports_timetable` (`tid`, `planid`, `staffid`, `tname`, `hasApproved`) VALUES
+('32727319', 'VNWQGL', 'rashid', 'Percubaan 1', '0'),
+('451453399', 'VXZPMY', 'rashid', 'Gambar 2', '0'),
 ('48a96c46-8d18-11ef-a94c-004e01ffe201', 'BJEFSY', 'Rashid', 'aaaa', 'yes'),
 ('7b00f52c-8d18-11ef-a94c-004e01ffe201', 'BJEFSY', 'rashid', 'test', 'yes'),
 ('9cfff539-90fd-11ef-954f-004e01ffe201', 'CAFXVW', 'rashid', 'test', 'yes'),
@@ -630,19 +646,48 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('6725a97bcf0d9', 'ZJOAXS', 1, 'test'),
 ('6725aa5c75593', 'PVNOCY', 1, 'test'),
 ('day_6726207ed138e4.09339605', '655468533', 1, 'test'),
-('day_6725ac0aa70fd0.75049811', '0', 1, 'test'),
+('day_672aab3bbd0ae1.33750337', '844415098', 9, NULL),
+('day_672aab3bbd1d29.53662441', '844415098', 10, NULL),
+('day_672aaa8847ec29.07070788', '934889673', 4, NULL),
+('day_672aaa8847d8d7.19964684', '934889673', 3, NULL),
+('day_672aaa8847c189.45420558', '934889673', 2, NULL),
+('day_672adb53db8f50.85758375', '451453399', 2, NULL),
+('day_672adaeb014db8.82811995', '32727319', 4, NULL),
+('day_672adaeb013dd9.32448563', '32727319', 3, NULL),
+('day_672adaeb012ce6.48905042', '32727319', 2, NULL),
+('day_672adaeb011910.37625541', '32727319', 1, NULL),
+('day_672aaa8847a183.54031519', '934889673', 1, NULL),
+('day_672aa96a184676.17455081', '800464268', 1, NULL),
+('day_672aa96a185710.20497464', '800464268', 2, NULL),
+('day_672aa96a186635.47452718', '800464268', 3, NULL),
+('day_672aa96a1873d4.64084379', '800464268', 4, NULL),
+('day_672aaa8847fd29.61720252', '934889673', 5, NULL),
+('day_672aab3bbc9857.29306277', '844415098', 1, NULL),
+('day_672aab3bbca902.82937042', '844415098', 2, NULL),
+('day_672aab3bbcb6b4.62486935', '844415098', 3, NULL),
+('day_672aab3bbcc2b5.26178271', '844415098', 4, NULL),
+('day_672aab3bbcdd02.12141019', '844415098', 1, NULL),
+('day_672aab3bbcee20.05245171', '844415098', 7, NULL),
 ('day_6726cb41902ce9.24094170', '574511568', 1, 'testtt'),
 ('day_6726cbc57af975.25485836', '149645521', 1, 'testtt'),
 ('day_6726cbd39c3bc0.74671018', '2265016', 1, 'fg'),
+('day_672aab3bbd5a35.67476964', '844415098', 14, NULL),
 ('day_6726cf1974d8d4.38236568', '92618308', 1, 'WOW'),
 ('day_6726cf28a099c1.41472425', '473138343', 1, 'WOW'),
+('day_672adb53dbb161.14492172', '451453399', 4, NULL),
+('day_672aab3bbd4a45.05343951', '844415098', 13, NULL),
+('day_672aab3bbd3ae6.47945327', '844415098', 12, NULL),
 ('day_6728cb39944e59.34765918', '174532960', 1, NULL),
 ('day_6728cb39946162.56949739', '174532960', 2, NULL),
 ('day_6728cb39947090.24752937', '174532960', 3, NULL),
+('day_672adb53dba013.53539595', '451453399', 3, NULL),
 ('day_6728cd60754817.72663183', '433860664', 1, NULL),
 ('day_6728cd60755874.33438462', '433860664', 2, NULL),
 ('day_6728cd60756517.81659827', '433860664', 3, NULL),
-('day_6728cd607574b7.87020113', '433860664', 4, NULL);
+('day_6728cd607574b7.87020113', '433860664', 4, NULL),
+('day_672adb53dbc376.99887401', '451453399', 5, NULL),
+('day_672adaeb015fb5.39506782', '32727319', 5, NULL),
+('day_672adb53db7e63.45905684', '451453399', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -673,7 +718,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `gender`, `mobile`, `email`, `dob`, `joining_date`, `hasApproved`) VALUES
 ('1729500896', 'o', 'UUID()', 'o', 'o', 'Male', '1', 'o@gmail.com', '2004-10-10', '2024-10-10', 'Yes'),
 ('1730087557', 'hello', '1768cef2-94e0-11ef-96fe-004e01ffe201', 'hello', 'hello', '', '', 'hello@gmail.com', '', '', 'Yes'),
-('1730601491', 'yeah', 'bc9fc58b-998c-11ef-8372-004e01ffe201', 'yeah', 'yeah', '', '', 'yeah@gmail.com', '', '', 'Yes');
+('1730601491', 'yeah', 'bc9fc58b-998c-11ef-8372-004e01ffe201', 'yeah', 'yeah', 'Male', '', 'yeah@gmail.com', '', '', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -684,10 +729,10 @@ INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `g
 DROP VIEW IF EXISTS `v_about_content`;
 CREATE TABLE IF NOT EXISTS `v_about_content` (
 `content_id` int
+,`section_name` varchar(50)
 ,`content_text` text
 ,`image_path` varchar(255)
 ,`last_updated` timestamp
-,`section_name` varchar(50)
 );
 
 -- --------------------------------------------------------
