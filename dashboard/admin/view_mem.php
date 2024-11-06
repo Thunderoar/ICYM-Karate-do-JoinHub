@@ -161,14 +161,6 @@ if (mysqli_num_rows($result) != 0) {
                 <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
                 <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
             </form>
-			                <form action='health_status_entry.php' method='post'>
-                    <input type='hidden' name='uid' value='" . $row['userid'] . "'/>
-                    <input type='hidden' name='uname' value='" . $row['username'] . "'/>
-                    <input type='hidden' name='udob' value='" . $row['dob'] . "'/>
-                    <input type='hidden' name='ujoin' value='" . $row['joining_date'] . "'/>
-                    <input type='hidden' name='ugender' value='" . $row['gender'] . "'/>
-                    <input type='submit' class='a1-btn a1-purple' value='Update Health'/>
-                </form>
             <form action='del_member.php' method='post' onsubmit='return ConfirmDelete()' style='display:inline-block;'>
                 <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
                 <input type='submit' class='a1-btn a1-orange btn' value='Delete'/>
