@@ -328,6 +328,10 @@ $sno = 1;
                     echo "<a href='timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "'>
                             <input type='button' class='a1-btn a1-blue' style='width:100%' value='Edit Plan'>
                           </a>";
+						      // New Edit Timetable Section button
+    echo "<a href='timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "&scroll=1#timetable-details'>
+            <input type='button' class='a1-btn a1-purple' style='width:100%' value='Edit Timetable'>
+          </a>";
                 } else {
                     echo "<span class='text-muted'>No Timetable</span>";
                 }
