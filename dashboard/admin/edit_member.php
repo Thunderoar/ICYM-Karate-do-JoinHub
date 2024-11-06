@@ -247,14 +247,20 @@ if ($stmt = mysqli_prepare($con, $query)) {
     <td height="35">
         <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE">
         <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
-        <input class="a1-btn a1-blue" type="button" value="Return" onclick="window.location.href='view_mem.php'">
+		</form>
+        <form action='viewall_detail.php' method='post' style="display:inline;">
+            <input type='hidden' name='name' value='<?php echo htmlspecialchars($memid); ?>'/>
+            <input type='submit' class='a1-btn a1-blue' value='Return'/>
+        </form>
     </td>
 </tr>
+
+
 
            </table></td>
          </tr>
          </table>
-       </form>
+
     </div>
     </div>   
 			
