@@ -1,6 +1,16 @@
 <?php
 require '../../include/db_conn.php';
 page_protect();
+
+
+if (isset($_SESSION['error_message'])) {
+    echo "<script type='text/javascript'>
+            alert('{$_SESSION['error_message']}');
+          </script>";
+    // Unset the error message after displaying it
+    unset($_SESSION['error_message']);
+}
+
 $id = $_GET['id'];
 
 // First, get the plan dates and plan ID from sports_timetable and plan tables
@@ -20,187 +30,197 @@ if ($dates) {
     $interval = $startDate->diff($endDate);
     $totalDays = $interval->days + 1;
     
-// Store scroll position before processing form submissions
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['scroll_position'] = $_POST['scroll_position'] ?? 0;
-
-    // Retrieve tid from the sports_timetable table based on the planid
-    $getTidSql = "SELECT tid FROM sports_timetable WHERE planid = '$planId'";
-    $result = mysqli_query($con, $getTidSql);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $tid = $row['tid']; // Retrieved tid to be used in further queries
+    // Store scroll position before processing form submissions
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $_SESSION['scroll_position'] = $_POST['scroll_position'] ?? 0;
 
         if (isset($_POST['update_dates'])) {
             $newStartDate = $_POST['startDate'] ?? $dates['startDate'];
             $newEndDate = $_POST['endDate'] ?? $dates['endDate'];
+            $tid = mysqli_real_escape_string($con, $_GET['id']); // Get and sanitize tid instead of id
 
-            // Check if the new end date is earlier and there are activities in timetable_days beyond this date
-            $endDateTimestamp = strtotime($newEndDate);
-            $checkActivitiesSql = "SELECT * FROM timetable_days WHERE tid = '$tid' AND day_number > (DATEDIFF('$newEndDate', '$newStartDate') + 1) AND activities IS NOT NULL";
-            $result = mysqli_query($con, $checkActivitiesSql);
+            // Calculate the total number of days between startDate and new endDate
+            $numDays = (int)((strtotime($newEndDate) - strtotime($newStartDate)) / (60 * 60 * 24)) + 1;
 
-            if (mysqli_num_rows($result) > 0) {
-                // If activities exist beyond the new end date, disallow the update and show an error as an alert
-                echo "<script>alert('Error: Cannot shorten the end date because there are activities scheduled beyond this date.');</script>";
-            } else {
-                // Update the plan dates
-                $updatePlanSql = "UPDATE plan 
-                                  SET startDate = '$newStartDate', 
-                                      endDate = '$newEndDate' 
-                                  WHERE planid = '$planId'";
-                mysqli_query($con, $updatePlanSql);
+            // Get the current number of days in timetable_days
+            $currentDaysSql = "SELECT day_id, day_number, activities FROM timetable_days WHERE tid = '$id' ORDER BY day_number";
+            $currentDaysResult = mysqli_query($con, $currentDaysSql);
+            $currentDays = mysqli_num_rows($currentDaysResult);
 
-                // Calculate the total number of days between startDate and endDate
-                $numDays = (int) ((strtotime($newEndDate) - strtotime($newStartDate)) / (60 * 60 * 24)) + 1;
-
-                // Loop through each day and insert missing days into timetable_days if they don't exist
-                for ($i = 1; $i <= $numDays; $i++) {
-                    $checkDaySql = "SELECT * FROM timetable_days WHERE tid = '$tid' AND day_number = $i";
-                    $dayResult = mysqli_query($con, $checkDaySql);
-
-                    if (mysqli_num_rows($dayResult) === 0) {
-                        // Insert missing day if it doesn't exist
-                        $insertDaySql = "INSERT INTO timetable_days (day_id, tid, day_number) VALUES (UUID(), '$tid', $i)";
-                        mysqli_query($con, $insertDaySql);
+            // Check if we are trying to shorten the timetable
+            if ($currentDays > $numDays) {
+                // Find days that would be removed
+                $daysToRemove = [];
+                mysqli_data_seek($currentDaysResult, 0); // Reset result pointer
+                while ($day = mysqli_fetch_assoc($currentDaysResult)) {
+                    if ($day['day_number'] > $numDays) {
+                        // Check if there's data in the activities for this day
+                        if (!empty($day['activities'])) {
+                            $daysToRemove[] = $day['day_number'];
+                        }
                     }
                 }
+			}
 
-                // Calculate the difference in days between the old and new start dates
-                $oldStartDateTimestamp = strtotime($dates['startDate']); // Assuming $dates holds the original dates
-                $newStartDateTimestamp = strtotime($newStartDate);
-                $dateDifference = (int)(($newStartDateTimestamp - $oldStartDateTimestamp) / (60 * 60 * 24));
+// If there are days with data in activities that would be removed, disallow the update
+if (!empty($daysToRemove)) {
+    $planid = $dates['planid'];
+    $url = 'timetable_detail.php?id=' . $tid . '&planid=' . $planid . '&scroll=' . $_SESSION['scroll_position'] . '#timetable-details';
+    
+    // Set up an error message and redirect URL
+    $errorMessage = 'Error: Cannot update. There are activities in days that would be removed. Please clear activities on days after the new end date.';
+    
+    // Store the error message in the session or a flash data mechanism
+    $_SESSION['error_message'] = $errorMessage;
+    
+    // Redirect to the appropriate URL
+    header('Location: ' . $url);
+    exit;
+}
 
-                // Now update the timetable_days based on the form data
-                foreach ($_POST['days'] as $dayId => $dayData) {
-                    $dayNumber = $dayData['day_number'] ?? null;
-                    $activities = $dayData['activities'] ?? null;
 
-                    if ($dayNumber !== null && $activities !== null) {
-                        // Adjust the day number based on the date difference
-                        $newDayNumber = $dayNumber + $dateDifference;
+            // Proceed with the update if no data exists in the days to be removed
+            $updatePlanSql = "UPDATE plan 
+                             SET startDate = '$newStartDate', 
+                                 endDate = '$newEndDate' 
+                             WHERE planid = '$planId'";
+            mysqli_query($con, $updatePlanSql);
 
-                        $updateDaySql = "UPDATE timetable_days 
-                                         SET day_number = '$newDayNumber', 
-                                             activities = '$activities' 
-                                         WHERE day_id = '$dayId' AND tid = '$tid'";
-                        mysqli_query($con, $updateDaySql);
-                    }
+            // Adjust timetable_days table based on the new date range
+            if ($currentDays < $numDays) {
+                // Add new days if needed
+                for ($i = $currentDays + 1; $i <= $numDays; $i++) {
+                    $insertDaySql = "INSERT INTO timetable_days (day_id, tid, day_number) VALUES (UUID(), '$id', $i)";
+                    mysqli_query($con, $insertDaySql);
                 }
-
-                // Redirect back to the timetable detail page
-                header("Location: timetable_detail.php?id=" . $id);
-                exit;
+            } elseif ($currentDays > $numDays) {
+                // Delete excess days if shortening
+                $deleteDaysSql = "DELETE FROM timetable_days 
+                                  WHERE tid = '$id' 
+                                  AND day_number > $numDays";
+                mysqli_query($con, $deleteDaysSql);
             }
+
+            // Redirect to timetable details page
+            header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
+            exit;
         }
-    } else {
-        echo "No timetable found for the specified plan.";
+
+
+
+    }
+
+    
+// Handle adding new day
+if (isset($_POST['add_day'])) {
+    mysqli_begin_transaction($con);
+
+    try {
+        // Get the current maximum day number
+        $maxDaySql = "SELECT COALESCE(MAX(day_number), 0) as max_day FROM timetable_days WHERE tid = '$id'";
+        $maxDayResult = mysqli_query($con, $maxDaySql);
+        $maxDay = mysqli_fetch_assoc($maxDayResult);
+        $nextDayNumber = $maxDay['max_day'] + 1;
+
+        // Insert new day with NULL activities by default
+        $insertSql = "INSERT INTO timetable_days (day_id, tid, day_number, activities) VALUES (UUID(), '$id', '$nextDayNumber', NULL)";
+        mysqli_query($con, $insertSql);
+
+        // Calculate new end date after adding the day
+        $newEndDate = clone $startDate;
+        $newEndDate->modify('+' . ($nextDayNumber - 1) . ' days');
+
+        // Update plan end date
+        $newEndDateStr = $newEndDate->format('Y-m-d');
+        $updatePlanSql = "UPDATE plan 
+                         SET endDate = '$newEndDateStr', 
+                             duration = DATEDIFF('$newEndDateStr', startDate) + 1
+                         WHERE planid = '$planId'";
+        mysqli_query($con, $updatePlanSql);
+
+        mysqli_commit($con);
+        header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
+        exit;
+
+    } catch (Exception $e) {
+        mysqli_rollback($con);
+        echo "Error: " . $e->getMessage();
+        exit;
     }
 }
 
-    
-    // Handle adding new day
-    if (isset($_POST['add_day'])) {
-        mysqli_begin_transaction($con);
-        
-        try {
-            // Get the current maximum day number
-            $maxDaySql = "SELECT COALESCE(MAX(day_number), 0) as max_day FROM timetable_days WHERE tid = '$id'";
-            $maxDayResult = mysqli_query($con, $maxDaySql);
-            $maxDay = mysqli_fetch_assoc($maxDayResult);
-            $nextDayNumber = $maxDay['max_day'] + 1;
-            
-            // Insert new day
-            $insertSql = "INSERT INTO timetable_days (day_id, tid, day_number, activities) VALUES (UUID(), '$id', '$nextDayNumber', '')";
-            mysqli_query($con, $insertSql);
-            
-            // Calculate new end date
-            $newEndDate = clone $startDate;
-            $newEndDate->modify('+' . ($nextDayNumber - 1) . ' days');
-            
-            // Update plan end date
-            $newEndDateStr = $newEndDate->format('Y-m-d');
-            $updatePlanSql = "UPDATE plan 
-                             SET endDate = '$newEndDateStr', 
-                                 duration = DATEDIFF('$newEndDateStr', startDate) + 1
-                             WHERE planid = '$planId'";
-            mysqli_query($con, $updatePlanSql);
-            
-            mysqli_commit($con);
-            header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position']);
-            exit;
-            
-        } catch (Exception $e) {
-            mysqli_rollback($con);
-            echo "Error: " . $e->getMessage();
-            exit;
-        }
-    }
+// Handle removing day
+if (isset($_POST['remove_day'])) {
+    $dayId = $_POST['day_id'];
+    $dayNumber = $_POST['day_number'];
 
-    // Handle removing day (previous code remains the same)
-    if (isset($_POST['remove_day'])) {
-        $dayId = $_POST['day_id'];
-        $dayNumber = $_POST['day_number'];
-        
-        mysqli_begin_transaction($con);
-        
-        try {
-            // Delete the day
-            $deleteSql = "DELETE FROM timetable_days WHERE day_id = '$dayId' AND tid = '$id'";
-            mysqli_query($con, $deleteSql);
-            
-            // Get all remaining days ordered by day_number
-            $getDaysSql = "SELECT day_id FROM timetable_days WHERE tid = '$id' ORDER BY day_number";
-            $daysResult = mysqli_query($con, $getDaysSql);
-            
-            // Update day numbers one by one
-            $newDayNumber = 1;
-            while ($day = mysqli_fetch_assoc($daysResult)) {
-                $updateDayNumberSql = "UPDATE timetable_days SET day_number = $newDayNumber 
-                                     WHERE day_id = '{$day['day_id']}'";
-                mysqli_query($con, $updateDayNumberSql);
-                $newDayNumber++;
-            }
-            
-            // Count remaining days
-            $remainingDaysSql = "SELECT COUNT(*) as days FROM timetable_days WHERE tid = '$id'";
-            $remainingDaysResult = mysqli_query($con, $remainingDaysSql);
-            $remainingDays = mysqli_fetch_assoc($remainingDaysResult);
-            
-            // Calculate new end date
-            $newEndDate = clone $startDate;
-            $newEndDate->modify('+' . ($remainingDays['days'] - 1) . ' days');
-            
-            // Update plan end date
-            $newEndDateStr = $newEndDate->format('Y-m-d');
-            $updatePlanSql = "UPDATE plan 
-                             SET endDate = '$newEndDateStr', 
-                                 duration = DATEDIFF('$newEndDateStr', startDate) + 1
-                             WHERE planid = '$planId'";
-            mysqli_query($con, $updatePlanSql);
-            
-            mysqli_commit($con);
-            header("Location: timetable_detail.php?id=" . $id);
-            exit;
-            
-        } catch (Exception $e) {
-            mysqli_rollback($con);
-            echo "Error: " . $e->getMessage();
-            exit;
-        }
-    }
+    mysqli_begin_transaction($con);
 
-        // Update Activities functionality with existing logic
-        if (isset($_POST['update_activities'])) {
-            foreach ($_POST['activities'] as $day_id => $activities) {
-                $activities = mysqli_real_escape_string($con, $activities);
-                $updateSql = "UPDATE timetable_days SET activities = '$activities' WHERE day_id = '$day_id' AND tid = '$id'";
-                mysqli_query($con, $updateSql);
-            }
-            header("Location: timetable_detail.php?id=" . $id);
-            exit;
+    try {
+        // Delete the day
+        $deleteSql = "DELETE FROM timetable_days WHERE day_id = '$dayId' AND tid = '$id'";
+        mysqli_query($con, $deleteSql);
+
+        // Get all remaining days ordered by day_number
+        $getDaysSql = "SELECT day_id FROM timetable_days WHERE tid = '$id' ORDER BY day_number";
+        $daysResult = mysqli_query($con, $getDaysSql);
+
+        // Update day numbers one by one
+        $newDayNumber = 1;
+        while ($day = mysqli_fetch_assoc($daysResult)) {
+            $updateDayNumberSql = "UPDATE timetable_days SET day_number = $newDayNumber 
+                                   WHERE day_id = '{$day['day_id']}'";
+            mysqli_query($con, $updateDayNumberSql);
+            $newDayNumber++;
         }
+
+        // Count remaining days
+        $remainingDaysSql = "SELECT COUNT(*) as days FROM timetable_days WHERE tid = '$id'";
+        $remainingDaysResult = mysqli_query($con, $remainingDaysSql);
+        $remainingDays = mysqli_fetch_assoc($remainingDaysResult);
+
+        // Calculate new end date after removing a day
+        $newEndDate = clone $startDate;
+        $newEndDate->modify('+' . ($remainingDays['days'] - 1) . ' days');
+
+        // Update plan end date
+        $newEndDateStr = $newEndDate->format('Y-m-d');
+        $updatePlanSql = "UPDATE plan 
+                         SET endDate = '$newEndDateStr', 
+                             duration = DATEDIFF('$newEndDateStr', startDate) + 1
+                         WHERE planid = '$planId'";
+        mysqli_query($con, $updatePlanSql);
+
+        mysqli_commit($con);
+        header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
+        exit;
+
+    } catch (Exception $e) {
+        mysqli_rollback($con);
+        echo "Error: " . $e->getMessage();
+        exit;
+    }
+}
+
+
+// Update Activities functionality with existing logic
+if (isset($_POST['update_activities'])) {
+    foreach ($_POST['activities'] as $day_id => $activities) {
+        // Check if activities is empty and set to NULL if so
+        if (trim($activities) === '') {
+            $activities = "NULL";
+        } else {
+            $activities = "'" . mysqli_real_escape_string($con, $activities) . "'";
+        }
+        
+        // Update query with activities value
+        $updateSql = "UPDATE timetable_days SET activities = $activities WHERE day_id = '$day_id' AND tid = '$id'";
+        mysqli_query($con, $updateSql);
+    }
+    header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
+    exit;
+}
+
 		
     // Fetch timetable details with dates
     $sql = "SELECT t.tname, td.day_id, td.day_number, td.activities 
@@ -226,26 +246,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get plan ID from URL parameter
-$planId = isset($_GET['planid']) ? $_GET['planid'] : '';
+$planId = isset($_GET['planid']) ? $_GET['planid'] : $dates['planid'];
 
-// Sanitize the plan ID
-$planId = mysqli_real_escape_string($con, $planId);
-
-// Fetch plan details from database
-$planQuery = "SELECT p.*, st.tid, st.tname, i.image_path 
-              FROM plan p 
-              LEFT JOIN sports_timetable st ON p.planid = st.planid 
-              LEFT JOIN images i ON p.planid = i.planid 
-              WHERE p.planid = '$planId'";
-              
-$result = mysqli_query($con, $planQuery);
-$planData = mysqli_fetch_assoc($result);
-
-// If no plan found, redirect to view plans page
-if (!$planData) {
-    header("Location: view_plan.php");
-    exit;
+// Only proceed with plan validation if we don't have a valid ID from the timetable query
+if (!$dates) {
+    // Sanitize the plan ID
+    $planId = mysqli_real_escape_string($con, $planId);
+    
+    // Fetch plan details from database
+    $planQuery = "SELECT p.*, st.tid, st.tname, i.image_path 
+                  FROM plan p 
+                  LEFT JOIN sports_timetable st ON p.planid = st.planid 
+                  LEFT JOIN images i ON p.planid = i.planid 
+                  WHERE p.planid = '$planId'";
+                  
+    $result = mysqli_query($con, $planQuery);
+    $planData = mysqli_fetch_assoc($result);
+    
+    // If no plan found, redirect to view plans page
+    if (!$planData) {
+        header("Location: view_plan.php");
+        exit;
+    }
 }
 ?>
 
@@ -261,6 +283,7 @@ if (!$planData) {
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../../css/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/dashboard/sidebar.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .day-actions {
             display: flex;
@@ -289,6 +312,22 @@ if (!$planData) {
             font-weight: bold;
             color: #007bff;
         }
+		.go-to-timetable-button {
+    display: block;
+    margin: 10px auto 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+		.go-to-timetable-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.go-to-timetable-button:hover {
+    background-color: #0c7b93; /* Optional hover effect */
+}
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -347,12 +386,13 @@ if ($res && mysqli_num_rows($res) > 0) {
 }
 ?>
             <hr/>
+<button class="btn btn-info go-to-timetable-button" onclick="scrollToTimetable()">Go to Timetable Section</button>
 <div class="container">
 	<form id="form1" name="form1" method="post" class="a1-container" action="updateplan.php">	
         <div class="row" style="margin-bottom:200px">
             <div class="col-md-6">
 <div class="form-group">
-    <label>Type of Plan:</label>
+    <label><b>Type of Plan:</b></label>
     <select name="plantype" id="plantype" class="form-control" required onchange="updateFeeLabel()">
         <option value="">--Please Select--</option>
         <option value="Core" <?php echo ($row['planType'] == 'Core') ? 'selected' : ''; ?>>Core</option>
@@ -363,15 +403,29 @@ if ($res && mysqli_num_rows($res) > 0) {
 </div>
 
 
-                <div class="form-group">
-                    <label>Event Image:</label>
-                    <input type="file" name="image" class="form-control" accept="image/*">
-                </div>
+                <!-- Plan Image -->
+<div class="form-group">
+    <label><b>Event Image:</b></label>
+    <input type="file" name="image" class="form-control" accept="image/*" onchange="previewImage(event)">
+    <img id="image-preview" src="" alt="Image Preview" style="display: none; margin-top: 10px;" width="400">
+</div>
+
+<script>
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('image-preview');
+        output.src = reader.result;
+        output.style.display = 'block';
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 	            <td height="0">
                 <input type="hidden" name="tid" id="tid" readonly value='<?php echo $id; ?>'>
             </td>
                 <div class="form-group">
-                    <label>Plan ID:</label>
+                    <label><b>Plan ID:</b></label>
                     <input type="text" name="planid" id="planID" class="form-control" readonly 
                         value="<?php echo $row['planid']; ?>">
                 </div>
@@ -380,38 +434,79 @@ if ($res && mysqli_num_rows($res) > 0) {
                     value="<?php echo mt_rand(1, 1000000000); ?>" required/>
 
                 <div class="form-group">
-                    <label>Plan Name:</label>
+                    <label><b>Plan Name:</b></label>
                     <input type="text" name="planname" id="planName" class="form-control" 
                         placeholder="Enter plan name" value='<?php echo $row['planName']; ?>'>
                 </div>
+				
+				        <h3><u>Involved Staff</u></h3>				
+    <!-- Staff Selection with Add Button -->
+    <div class="form-group">
+        <label><b>Choose Staff:</b></label>
+        <div class="input-group">
+            <select name="staff_select" id="boxx1" class="form-control" onchange="mystaffdetail(this.value)">
+                <option value="">--Please Select--</option>
+                <?php
+                // Query to select all staff
+                $query = "SELECT * FROM staff";
+                $result = mysqli_query($con, $query);
+                
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row1 = mysqli_fetch_assoc($result)) {
+                        echo "<option value='{$row1['staffid']}' 
+                              data-username='{$row1['username']}' 
+                              data-role='{$row1['role']}'>"
+                              . htmlspecialchars($row1['name']) . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success" onclick="addStaffMember()">Add Staff</button>
+            </div>
+        </div>
+	</div>
+
+	
+	    <!-- Selected Staff Members Display -->
+    <div class="form-group">
+        <label><b>Selected Staff Members:</b></label>
+    <div id="selectedStaffContainer" style="border: 1px solid #ccc; border-radius: 0.25rem; padding: 1rem !important; margin: 1rem !important; min-height: 100px;">
+            <!-- Selected staff will be displayed here -->
+        </div>
+        <!-- Hidden inputs to store staff data -->
+        <input type="hidden" name="selected_staff_data" id="selectedStaffData" value="">
+    </div>
+
+
             </div>
 
             <div class="col-md-6">
 <div class="form-group">
-    <label>Description:</label>
+    <label><b>Description:</b></label>
     <textarea name="desc" id="planDesc" class="form-control" placeholder="Enter plan description" rows="3"><?php echo $row['description']; ?></textarea>
 </div>
 
 
                 <div class="form-group">
-                    <label>Start Date:</label>
+                    <label><b>Start Date:</b></label>
                     <input type="date" name="startDate" id="startDate" class="form-control" 
                         onchange="calculateDuration()" value='<?php echo $row['startDate']; ?>'>
                 </div>
 
                 <div class="form-group">
-                    <label>End Date:</label>
+                    <label><b>End Date:</b></label>
                     <input type="date" name="endDate" id="endDate" class="form-control" 
                         onchange="calculateDuration()" value='<?php echo $row['endDate']; ?>'>
                 </div>
 
                 <div class="form-group">
-                    <label>Duration (Days):</label>
+                    <label><b>Duration (Days):</b></label>
                     <input type="number" name="duration" id="duration" class="form-control" value='<?php echo $row['duration']; ?>' readonly>
                 </div>
 
                 <div class="form-group">
-                    <label id="feeLabel">Plan Fee:</label>
+                    <label id="feeLabel"><b>Plan Fee:</b></label>
                     <input type="text" name="amount" id="planAmnt" class="form-control" 
                         placeholder="Enter plan amount" value='<?php echo $row['amount']; ?>'>
                 </div>
@@ -508,21 +603,97 @@ if ($res && mysqli_num_rows($res) > 0) {
         Return Back
     </a>
 	
-	   <script>
-        // Store scroll position before form submission
-        document.getElementById('timetableForm').addEventListener('submit', function() {
-            document.getElementById('scrollPosition').value = window.scrollY;
-        });
+<script>
+    document.getElementById('timetableForm').addEventListener('submit', function() {
+        document.getElementById('scrollPosition').value = window.scrollY;
+    });
 
-        // Restore scroll position after page load
-        function restoreScrollPosition() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const scrollPosition = urlParams.get('scroll');
-            if (scrollPosition) {
-                window.scrollTo(0, parseInt(scrollPosition));
-            }
+    function restoreScrollPosition() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const scrollPosition = urlParams.get('scroll');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
         }
-    </script>
+    }
+
+    window.onload = restoreScrollPosition;
+
+    function scrollToTimetable() {
+        document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
+    }
+	let selectedStaff = new Map(); // Using Map to store staff data
+
+function addStaffMember() {
+    const select = document.getElementById('boxx1');
+    const selectedOption = select.options[select.selectedIndex];
+    
+    if (!select.value) {
+        alert('Please select a staff member');
+        return;
+    }
+
+    // Check if staff is already added
+    if (selectedStaff.has(select.value)) {
+        alert('This staff member is already added');
+        return;
+    }
+
+    // Generate timetable name (you can modify this format)
+    const tname = `${selectedOption.text}'s Schedule`;
+
+    // Add to Map with staff data
+    selectedStaff.set(select.value, {
+        staffid: select.value,
+        name: selectedOption.text,
+        tname: tname,
+        hasApproved: 0 // Default to not approved
+    });
+
+    // Create staff member display element
+    const container = document.getElementById('selectedStaffContainer');
+    const staffElement = document.createElement('div');
+    staffElement.className = 'badge badge-primary m-1 p-2 d-inline-flex align-items-center';
+    staffElement.innerHTML = `
+        ${selectedOption.text}
+        <button type="button" class="btn btn-link p-0 ml-2" 
+                style="color: white !important; font-size: 16px !important; background: none; border: none;"
+                onclick="removeStaffMember('${select.value}', this)">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    container.appendChild(staffElement);
+
+    // Update hidden input with staff data
+    updateSelectedStaffData();
+
+    // Reset select
+    select.value = '';
+}
+
+
+
+function removeStaffMember(staffId, buttonElement) {
+    selectedStaff.delete(staffId);
+    buttonElement.closest('.badge').remove();
+    updateSelectedStaffData();
+}
+
+function updateSelectedStaffData() {
+    const staffData = Array.from(selectedStaff.values());
+    document.getElementById('selectedStaffData').value = JSON.stringify(staffData);
+}
+
+// Optional: Add validation before form submission
+document.getElementById('planForm').onsubmit = function(e) {
+    if (selectedStaff.size === 0) {
+        alert('Please select at least one staff member');
+        e.preventDefault();
+        return false;
+    }
+    return true;
+};
+</script>
+
     <?php include('footer.php'); ?>
 </body>
 </html>
