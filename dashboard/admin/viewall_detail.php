@@ -81,7 +81,7 @@ line-height:0.5cm;
             </div>
         </div>
 
-        <h3>Edit Member Details</h3>
+        <h3>Member Details</h3>
         <hr />
 
         <?php
@@ -229,13 +229,16 @@ $remarks = htmlspecialchars($row['remarks'] ?? '');
                                     <textarea readonly style="resize:none; margin: 0px; width: 230px; height: 53px;"><?php echo $remarks ?></textarea>
                                 </td>
                             </tr>
-                            <tr>
-                                <td height="35">&nbsp;</td>
-                                <td height="35">
-                                    <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="EDIT">
-                                    <a href="view_mem.php"><input class="a1-btn a1-blue" value="BACK"></a>
-                                </td>
-                            </tr>
+<tr>
+    <td height="35">&nbsp;</td>
+    <td height="35">
+        <input class="a1-btn" type="submit" name="submit" id="submit" value="EDIT" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px;"> <!-- Green color -->
+        <a href="view_mem.php"><input class="a1-btn" value="BACK" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px;"></a> <!-- Blue color -->
+    </td>
+</tr>
+
+
+
                         </tbody>
                     </table>
                 </form>
