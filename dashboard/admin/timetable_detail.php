@@ -22,129 +22,184 @@ $datesResult = mysqli_query($con, $datesSql);
 $dates = mysqli_fetch_assoc($datesResult);
 
 if ($dates) {
-    $startDate = new DateTime($dates['startDate']);
-    $endDate = new DateTime($dates['endDate']);
-    $planId = $dates['planid'];
+$startDate = new DateTime($dates['startDate']);
+$endDate = new DateTime($dates['endDate']);
+$planId = $dates['planid'];
+
+// Store scroll position before processing form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['scroll_position'] = $_POST['scroll_position'] ?? 0;
     
-    // Calculate the date difference
-    $interval = $startDate->diff($endDate);
-    $totalDays = $interval->days + 1;
-    
-    // Store scroll position before processing form submissions
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $_SESSION['scroll_position'] = $_POST['scroll_position'] ?? 0;
+    if (isset($_POST['update_dates'])) {
+        $newStartDate = $_POST['startDate'] ?? $dates['startDate'];
+        $newEndDate = $_POST['endDate'] ?? $dates['endDate'];
+        $tid = mysqli_real_escape_string($con, $_GET['id']);
 
-        if (isset($_POST['update_dates'])) {
-            $newStartDate = $_POST['startDate'] ?? $dates['startDate'];
-            $newEndDate = $_POST['endDate'] ?? $dates['endDate'];
-            $tid = mysqli_real_escape_string($con, $_GET['id']); // Get and sanitize tid instead of id
+        // First, check if the new date range would exclude any days with activities
+        $checkDatesSql = "SELECT MIN(DATE_ADD(p.startDate, INTERVAL (td.day_number - 1) DAY)) as earliest_activity,
+                                MAX(DATE_ADD(p.startDate, INTERVAL (td.day_number - 1) DAY)) as latest_activity
+                         FROM timetable_days td
+                         JOIN plan p ON p.planid = ?
+                         WHERE td.tid = ? 
+                         AND td.activities != ''";
+        
+        $stmt = mysqli_prepare($con, $checkDatesSql);
+        mysqli_stmt_bind_param($stmt, 'ss', $planId, $tid);
+        mysqli_stmt_execute($stmt);
+        $dateRange = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
-            // Calculate the total number of days between startDate and new endDate
-            $numDays = (int)((strtotime($newEndDate) - strtotime($newStartDate)) / (60 * 60 * 24)) + 1;
+        // If there are activities, validate the new date range
+        if ($dateRange['earliest_activity'] !== NULL) {
+            $earliestActivity = new DateTime($dateRange['earliest_activity']);
+            $latestActivity = new DateTime($dateRange['latest_activity']);
+            $newStart = new DateTime($newStartDate);
+            $newEnd = new DateTime($newEndDate);
 
-            // Get the current number of days in timetable_days
-            $currentDaysSql = "SELECT day_id, day_number, activities FROM timetable_days WHERE tid = '$id' ORDER BY day_number";
-            $currentDaysResult = mysqli_query($con, $currentDaysSql);
-            $currentDays = mysqli_num_rows($currentDaysResult);
-
-            // Check if we are trying to shorten the timetable
-            if ($currentDays > $numDays) {
-                // Find days that would be removed
-                $daysToRemove = [];
-                mysqli_data_seek($currentDaysResult, 0); // Reset result pointer
-                while ($day = mysqli_fetch_assoc($currentDaysResult)) {
-                    if ($day['day_number'] > $numDays) {
-                        // Check if there's data in the activities for this day
-                        if (!empty($day['activities'])) {
-                            $daysToRemove[] = $day['day_number'];
-                        }
-                    }
-                }
-			}
-
-// If there are days with data in activities that would be removed, disallow the update
-if (!empty($daysToRemove)) {
-    $planid = $dates['planid'];
-    $url = 'timetable_detail.php?id=' . $tid . '&planid=' . $planid . '&scroll=' . $_SESSION['scroll_position'] . '#timetable-details';
-    
-    // Set up an error message and redirect URL
-    $errorMessage = 'Error: Cannot update. There are activities in days that would be removed. Please clear activities on days after the new end date.';
-    
-    // Store the error message in the session or a flash data mechanism
-    $_SESSION['error_message'] = $errorMessage;
-    
-    // Redirect to the appropriate URL
-    header('Location: ' . $url);
-    exit;
-}
-
-
-            // Proceed with the update if no data exists in the days to be removed
-            $updatePlanSql = "UPDATE plan 
-                             SET startDate = '$newStartDate', 
-                                 endDate = '$newEndDate' 
-                             WHERE planid = '$planId'";
-            mysqli_query($con, $updatePlanSql);
-
-            // Adjust timetable_days table based on the new date range
-            if ($currentDays < $numDays) {
-                // Add new days if needed
-                for ($i = $currentDays + 1; $i <= $numDays; $i++) {
-                    $insertDaySql = "INSERT INTO timetable_days (day_id, tid, day_number) VALUES (UUID(), '$id', $i)";
-                    mysqli_query($con, $insertDaySql);
-                }
-            } elseif ($currentDays > $numDays) {
-                // Delete excess days if shortening
-                $deleteDaysSql = "DELETE FROM timetable_days 
-                                  WHERE tid = '$id' 
-                                  AND day_number > $numDays";
-                mysqli_query($con, $deleteDaysSql);
+            // Check if new date range would exclude any activities
+            if ($newStart > $earliestActivity || $newEnd < $latestActivity) {
+                echo "<script>alert('Cannot update dates: Days with activities would be excluded. The date range must include all days from " . 
+                     $earliestActivity->format('Y-m-d') . " to " . 
+                     $latestActivity->format('Y-m-d') . "');</script>";
+        header("Location: timetable_detail.php?id=" . $tid . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");					 
+                exit;
             }
+        }
+		
 
-            // Redirect to timetable details page
-            header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
-            exit;
+        // If validation passes, proceed with update
+        $numDays = (int)((strtotime($newEndDate) - strtotime($newStartDate)) / (60 * 60 * 24)) + 1;
+
+        // Get all existing days with activities and store them by actual date
+        $existingDaysSql = "SELECT td.day_number, td.activities, 
+                           DATE_ADD(p.startDate, INTERVAL (td.day_number - 1) DAY) as actual_date
+                           FROM timetable_days td
+                           JOIN plan p ON p.planid = ?
+                           WHERE td.tid = ? 
+                           AND td.activities != ''
+                           ORDER BY td.day_number";
+        
+        $stmt = mysqli_prepare($con, $existingDaysSql);
+        mysqli_stmt_bind_param($stmt, 'ss', $planId, $tid);
+        mysqli_stmt_execute($stmt);
+        $existingDaysResult = mysqli_stmt_get_result($stmt);
+
+        // Store activities indexed by their actual dates
+        $activitiesByDate = [];
+        while ($day = mysqli_fetch_assoc($existingDaysResult)) {
+            if (!empty($day['activities'])) {
+                $activitiesByDate[$day['actual_date']] = $day['activities'];
+            }
         }
 
+        // Clear all existing timetable days for this tid
+        $clearDaysSql = "DELETE FROM timetable_days WHERE tid = ?";
+        $stmt = mysqli_prepare($con, $clearDaysSql);
+        mysqli_stmt_bind_param($stmt, 's', $tid);
+        mysqli_stmt_execute($stmt);
 
+        // Insert days based on the new date range
+        $currentDate = new DateTime($newStartDate);
+        for ($i = 1; $i <= $numDays; $i++) {
+            $currentDateStr = $currentDate->format('Y-m-d');
+            $activities = '';
 
+            // If we have activities for this date, preserve them
+            if (isset($activitiesByDate[$currentDateStr])) {
+                $activities = $activitiesByDate[$currentDateStr];
+            }
+
+            // Insert the day with any preserved activities
+            $insertDaySql = "INSERT INTO timetable_days (day_id, tid, day_number, activities) 
+                            VALUES (UUID(), ?, ?, ?)";
+            $stmt = mysqli_prepare($con, $insertDaySql);
+            mysqli_stmt_bind_param($stmt, 'sis', $tid, $i, $activities);
+            mysqli_stmt_execute($stmt);
+
+            $currentDate->modify('+1 day');
+        }
+
+        // Update plan dates
+        $updatePlanSql = "UPDATE plan 
+                         SET startDate = ?, 
+                             endDate = ? 
+                         WHERE planid = ?";
+        $stmt = mysqli_prepare($con, $updatePlanSql);
+        mysqli_stmt_bind_param($stmt, 'sss', $newStartDate, $newEndDate, $planId);
+        mysqli_stmt_execute($stmt);
+
+        $_SESSION['success_message'] = "Dates updated successfully!";
+        header("Location: timetable_detail.php?id=" . $tid . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
+        exit;
+}
     }
 
     
-// Handle adding new day
+// At the top of your PHP file, add this function to handle date calculations
+function recalculateDates($con, $planId, $startDate, $dayCount) {
+    $endDate = clone $startDate;
+    $endDate->modify('+' . ($dayCount - 1) . ' days');
+    $endDateStr = $endDate->format('Y-m-d');
+    
+    $updatePlanSql = "UPDATE plan 
+                      SET endDate = '$endDateStr', 
+                          duration = DATEDIFF('$endDateStr', startDate) + 1
+                      WHERE planid = '$planId'";
+    mysqli_query($con, $updatePlanSql);
+}
+
 if (isset($_POST['add_day'])) {
+    $_SESSION['scroll_position'] = $_POST['scroll_position']; // Store scroll position in session
     mysqli_begin_transaction($con);
-
     try {
-        // Get the current maximum day number
-        $maxDaySql = "SELECT COALESCE(MAX(day_number), 0) as max_day FROM timetable_days WHERE tid = '$id'";
-        $maxDayResult = mysqli_query($con, $maxDaySql);
-        $maxDay = mysqli_fetch_assoc($maxDayResult);
-        $nextDayNumber = $maxDay['max_day'] + 1;
-
-        // Insert new day with NULL activities by default
-        $insertSql = "INSERT INTO timetable_days (day_id, tid, day_number, activities) VALUES (UUID(), '$id', '$nextDayNumber', NULL)";
+        // Get the current maximum and minimum day numbers
+        $daysSql = "SELECT COALESCE(MAX(day_number), 0) as max_day, 
+                           COALESCE(MIN(day_number), 1) as min_day 
+                    FROM timetable_days 
+                    WHERE tid = '$id'";
+        $daysResult = mysqli_query($con, $daysSql);
+        $days = mysqli_fetch_assoc($daysResult);
+        
+        // Determine if we're adding a previous or next day
+        $isPrevious = isset($_POST['direction']) && $_POST['direction'] === 'previous';
+        $newDayNumber = $isPrevious ? $days['min_day'] - 1 : $days['max_day'] + 1;
+        
+        if ($isPrevious) {
+            // Update all existing day numbers to make room for the new day
+            $updateSql = "UPDATE timetable_days 
+                         SET day_number = day_number + 1 
+                         WHERE tid = '$id'";
+            mysqli_query($con, $updateSql);
+            $newDayNumber = 1;
+        }
+        
+        // Insert new day
+        $insertSql = "INSERT INTO timetable_days (day_id, tid, day_number, activities) 
+                      VALUES (UUID(), '$id', '$newDayNumber', NULL)";
         mysqli_query($con, $insertSql);
-
-        // Calculate new end date after adding the day
-        $newEndDate = clone $startDate;
-        $newEndDate->modify('+' . ($nextDayNumber - 1) . ' days');
-
-        // Update plan end date
-        $newEndDateStr = $newEndDate->format('Y-m-d');
-        $updatePlanSql = "UPDATE plan 
-                         SET endDate = '$newEndDateStr', 
-                             duration = DATEDIFF('$newEndDateStr', startDate) + 1
-                         WHERE planid = '$planId'";
-        mysqli_query($con, $updatePlanSql);
-
+        
+        // Get total number of days after insertion
+        $countSql = "SELECT COUNT(*) as total FROM timetable_days WHERE tid = '$id'";
+        $countResult = mysqli_query($con, $countSql);
+        $totalDays = mysqli_fetch_assoc($countResult)['total'];
+        
+        // Update plan dates
+        if ($isPrevious) {
+            $startDate->modify('-1 day');
+            $updateStartSql = "UPDATE plan SET startDate = '" . $startDate->format('Y-m-d') . "' WHERE planid = '$planId'";
+            mysqli_query($con, $updateStartSql);
+        }
+        recalculateDates($con, $planId, $startDate, $totalDays);
+        
         mysqli_commit($con);
-        header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
+        
+        // Redirect to the appropriate form based on direction
+        $formId = $isPrevious ? 'prevDayForm' : 'nextDayForm';
+        header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#$formId");
         exit;
-
     } catch (Exception $e) {
         mysqli_rollback($con);
-        echo "Error: " . $e->getMessage();
+        // Handle error in a way other than echo
+        logError($e->getMessage());
         exit;
     }
 }
@@ -536,11 +591,15 @@ function previewImage(event) {
 </form>
                 
                 <!-- Add New Day Button at the top -->
-                <form method="POST" style="margin-bottom: 20px;">
-                    <button type="submit" name="add_day" class="btn btn-success">
-                        Add New Day
-                    </button>
-                </form>
+								<div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+<form method="POST" style="display: inline;" id="prevDayForm">
+    <input type="hidden" name="direction" value="previous">
+    <input type="hidden" name="scroll_position" id="scroll_position">
+    <button type="submit" name="add_day" class="btn btn-success" onclick="saveScrollPosition()">
+        Add Previous Day
+    </button>
+</form>
+</div>
                 
                 <form method="POST" action="">
                     <table class="table table-bordered">
@@ -584,12 +643,22 @@ function previewImage(event) {
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    
-					<button type="submit" name="add_day" class="btn btn-success">Add New Day</button>
+                   
+	<br>
                     <button type="submit" name="update_activities" class="btn btn-primary">Update Timetable</button>
 					 
                     <a href="view_plan.php" class="btn btn-secondary">Back to Plans</a>
                 </form>
+				<!-- Add Next Day Button -->
+				<div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+<form method="POST" style="display: inline;" id="nextDayForm">
+    <input type="hidden" name="direction" value="next">
+    <input type="hidden" name="scroll_position" id="scroll_position">
+    <button type="submit" name="add_day" class="btn btn-success" onclick="saveScrollPosition()">
+        Add Next Day
+    </button>
+</form>
+</div>
             <?php else: ?>
                 <div class="alert alert-warning">
                     No date range found for this timetable. Please ensure the timetable is associated with a plan that has start and end dates.
@@ -604,24 +673,26 @@ function previewImage(event) {
     </a>
 	
 <script>
-    document.getElementById('timetableForm').addEventListener('submit', function() {
-        document.getElementById('scrollPosition').value = window.scrollY;
+// Save scroll position before form submission
+document.getElementById('timetableForm').addEventListener('submit', function() {
+    document.getElementById('scrollPosition').value = window.scrollY;
+});
+
+// Scroll to timetable section
+function scrollToTimetable() {
+    document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Scroll to bottom when required
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
     });
+}
 
-    function restoreScrollPosition() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const scrollPosition = urlParams.get('scroll');
-        if (scrollPosition) {
-            window.scrollTo(0, parseInt(scrollPosition));
-        }
-    }
-
-    window.onload = restoreScrollPosition;
-
-    function scrollToTimetable() {
-        document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
-    }
-	let selectedStaff = new Map(); // Using Map to store staff data
+// Staff selection management
+let selectedStaff = new Map();
 
 function addStaffMember() {
     const select = document.getElementById('boxx1');
@@ -638,7 +709,7 @@ function addStaffMember() {
         return;
     }
 
-    // Generate timetable name (you can modify this format)
+    // Generate timetable name
     const tname = `${selectedOption.text}'s Schedule`;
 
     // Add to Map with staff data
@@ -646,7 +717,7 @@ function addStaffMember() {
         staffid: select.value,
         name: selectedOption.text,
         tname: tname,
-        hasApproved: 0 // Default to not approved
+        hasApproved: 0
     });
 
     // Create staff member display element
@@ -670,8 +741,6 @@ function addStaffMember() {
     select.value = '';
 }
 
-
-
 function removeStaffMember(staffId, buttonElement) {
     selectedStaff.delete(staffId);
     buttonElement.closest('.badge').remove();
@@ -683,7 +752,7 @@ function updateSelectedStaffData() {
     document.getElementById('selectedStaffData').value = JSON.stringify(staffData);
 }
 
-// Optional: Add validation before form submission
+// Validation before form submission
 document.getElementById('planForm').onsubmit = function(e) {
     if (selectedStaff.size === 0) {
         alert('Please select at least one staff member');
@@ -692,6 +761,28 @@ document.getElementById('planForm').onsubmit = function(e) {
     }
     return true;
 };
+    function saveScrollPosition() {
+        // Save the current scroll position of the button in the hidden input
+        const buttonPosition = document.querySelector('#nextDayForm button').getBoundingClientRect().top + window.scrollY;
+        document.getElementById('scroll_position').value = buttonPosition;
+    }
+
+    function restoreScrollPosition() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const scrollPosition = urlParams.get('scroll');
+        
+        // Scroll to saved position if available; otherwise, scroll to timetable section
+        if (scrollPosition) {
+            window.scrollTo({
+                top: parseInt(scrollPosition),
+                behavior: 'smooth'
+            });
+        } else {
+            document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    window.onload = restoreScrollPosition;
 </script>
 
     <?php include('footer.php'); ?>
