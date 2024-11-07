@@ -34,6 +34,56 @@ page_protect();
     height: 100%; /* Ensures all boxes take the same height */
 }
 
+/* Hover Effects */
+.tile-stats:hover {
+    transform: scale(1.05); /* Slightly enlarges the tile */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Adds a shadow */
+}
+.custom-tile {
+    padding: 10px 0;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    /* Smooth transition for hover effects */
+}
+
+.custom-tile.redcolor {
+    background-color: #f56954;
+}
+
+.custom-tile.greencolor {
+    background-color: #4CAF50;
+}
+
+.custom-tile.deepbluecolor {
+    background-color: #0073b7;
+}
+
+.custom-tile .num h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* Hover Effects */
+.custom-tile:hover {
+    transform: scale(1.05); /* Slightly enlarges the tile */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Adds a shadow */
+}
+
+/* Optional: Change background color slightly on hover */
+.custom-tile.redcolor:hover {
+    background-color: #e74c3c; /* Darker red */
+}
+
+.custom-tile.greencolor:hover {
+    background-color: #388e3c; /* Darker green */
+}
+
+.custom-tile.deepbluecolor:hover {
+    background-color: #005b9f; /* Darker blue */
+}
+
 	</style>
 
 </head>
@@ -129,6 +179,14 @@ page_protect();
                 </div>
             </div>
         </a>
+		<a href="payments.php">
+    <div class="custom-tile redcolor">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+            <i class="entypo-star" style="margin-right: 10px;"></i>
+            <h4>Manage Payment</h4>
+        </div>
+    </div>
+</a>
     </div>
 
 <div class="col-sm-3">
@@ -142,32 +200,46 @@ page_protect();
                 $query_total = "SELECT COUNT(*) as total_members FROM users";
                 $result_total = mysqli_query($con, $query_total);
                 $total_members = 0;
-
                 if ($result_total) {
                     $row_total = mysqli_fetch_array($result_total);
                     $total_members = $row_total['total_members'];
                 }
-
                 // Query to count unapproved users (where hasApproved is 'No')
                 $query_unapproved = "SELECT COUNT(*) as unapproved_members FROM users WHERE hasApproved = 'No'";
                 $result_unapproved = mysqli_query($con, $query_unapproved);
                 $unapproved_members = 0;
-
                 if ($result_unapproved) {
                     $row_unapproved = mysqli_fetch_array($result_unapproved);
                     $unapproved_members = $row_unapproved['unapproved_members'];
                 }
-
                 // Display total members and unapproved members in parentheses
                 echo $total_members;
-if ($unapproved_members > 0) {
-    echo " <br>($unapproved_members Unapproved)";
-}
-
+                if ($unapproved_members > 0) {
+                    echo " <br>($unapproved_members Unapproved)";
+                }
                 ?>
             </div>
         </div>
     </a>
+<a href="new_entry.php">
+    <div class="custom-tile greencolor">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+		            <i class="entypo-user-add" style="margin-right: 10px;"></i>
+            <h4>Register New Member</h4>
+        </div>
+    </div>
+</a>
+
+<a href="view_mem.php">
+    <div class="custom-tile greencolor" style="margin-top:10px;">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+            <i class="entypo-users" style="margin-right: 10px;"></i>
+            <h4>Manage Member</h4>
+        </div>
+    </div>
+</a>
+
+
 </div>
 
 
@@ -212,6 +284,22 @@ if ($unapproved_members > 0) {
                 </div>
             </div>
         </a>
+<a href="new_plan.php">
+    <div class="custom-tile deepbluecolor">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+            <i class="entypo-plus" style="margin-right: 10px;"></i>
+            <h4>Add New Planning</h4>
+        </div>
+    </div>
+</a>		
+		<a href="view_plan.php">
+    <div class="custom-tile deepbluecolor" style="margin-top:10px;">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+            <i class="entypo-quote" style="margin-right: 10px;"></i>
+            <h4>Manage Event</h4>
+        </div>
+    </div>
+</a>
     </div>
 </div>
 
