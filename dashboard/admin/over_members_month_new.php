@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require '../../include/db_conn.php';
 page_protect();
 ?>
@@ -120,69 +120,48 @@ page_protect();
                 showMember();
             });
 
-function updateMonthCounts() {
-    const year = document.getElementById("syear").value;
-    const monthSelect = document.getElementById("smonth");
-    
-    // Reset all month texts to default first
-    const months = {
-        "01": "January", "02": "February", "03": "March", "04": "April",
-        "05": "May", "06": "June", "07": "July", "08": "August",
-        "09": "September", "10": "October", "11": "November", "12": "December"
-    };
-    
-    Object.entries(months).forEach(([key, monthName]) => {
-        const option = document.getElementById('month-' + key);
-        if (option) {
-            option.textContent = monthName;  // Reset to original month name
-        }
-    });
-
-    // If no year selected, just return after resetting months
-    if (year === "0") {
-        return;
-    }
-
-    // Show loading state
-    monthSelect.disabled = true;
-
-    // Fetch the counts for the selected year
-    fetch('get_month_counts.php?year=' + year)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(counts => {
-            // Update month options with their counts
-            Object.entries(counts).forEach(([month, count]) => {
-                const option = document.getElementById('month-' + month);
-                if (option) {
-                    const monthName = months[month];
-                    option.textContent = `${monthName} (${count} members)`;
+            function updateMonthCounts() {
+                var year = document.getElementById("syear").value;
+                
+                // Only proceed if a year is selected
+                if (year == "0") {
+                    // Reset month options to default
+                    var monthSelect = document.getElementById("smonth");
+                    for (var i = 1; i <= 12; i++) {
+                        var monthNum = i.toString().padStart(2, '0');
+                        var option = document.getElementById('month-' + monthNum);
+                        if (option) {
+                            option.text = monthNames[i-1]; // Reset to original month name
+                        }
+                    }
+                    return;
                 }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching month counts:', error);
-        })
-        .finally(() => {
-            monthSelect.disabled = false;
-        });
-}
 
-// Make sure to call this when the year changes
-document.getElementById('syear').addEventListener('change', function() {
-    updateMonthCounts();
-    showMember();
-});
+                // Show loading state in month dropdown
+                var monthSelect = document.getElementById("smonth");
+                monthSelect.disabled = true;
 
-// Also call it on page load if a year is already selected
-document.addEventListener('DOMContentLoaded', function() {
-    updateMonthCounts();
-    showMember();
-});
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var counts = JSON.parse(this.responseText);
+                        
+                        // Update each month option with count
+                        Object.keys(counts).forEach(function(month) {
+                            var option = document.getElementById('month-' + month);
+                            if (option) {
+                                var monthName = monthNames[parseInt(month)-1];
+                                option.text = monthName + " (" + counts[month] + " members)";
+                            }
+                        });
+                        
+                        monthSelect.disabled = false;
+                    }
+                };
+
+                xmlhttp.open("GET", "get_month_counts.php?year=" + year, true);
+                xmlhttp.send();
+            }
 
             // Array of month names for reference
             const monthNames = [
