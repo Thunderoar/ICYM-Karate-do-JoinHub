@@ -24,7 +24,7 @@ page_protect();
     </style>
 
 </head>
-<body class="page-body  page-fade" onload="collapseSidebar(); showMember();">
+<body class="page-body page-fade" onload="collapseSidebar(); showMember(); autoloadTable();">
 
     <div class="page-container sidebar-collapsed" id="navbarcollapse">  
     
@@ -100,7 +100,18 @@ page_protect();
             <table class="table table-bordered datatable" id="memmonth" border="2" style="font-size:15px;"></table>
 
             <script>
-            // Automatically show data for current year and month
+            // Function to ensure the table loads on page load
+            function autoloadTable() {
+                // Get the current year and month from the select elements
+                var yearSelect = document.getElementById("syear");
+                var monthSelect = document.getElementById("smonth");
+                
+                // If both dropdowns have valid selections, load the table
+                if (yearSelect.value != "0" && monthSelect.value != "0") {
+                    showMember();
+                }
+            }
+
             function showMember() {
                 var year = document.getElementById("syear").value;
                 var month = document.getElementById("smonth").value;
@@ -121,9 +132,14 @@ page_protect();
                 xmlhttp.send();
             }
 
+            // Add event listener for when the DOM is fully loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                autoloadTable();
+            });
             </script>
 
             <?php include('footer.php'); ?>
         </div>
-    </body>
+    </div>
+</body>
 </html>
