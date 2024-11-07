@@ -57,9 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Check if new date range would exclude any activities
             if ($newStart > $earliestActivity || $newEnd < $latestActivity) {
-                echo "<script>alert('Cannot update dates: Days with activities would be excluded. The date range must include all days from " . 
-                     $earliestActivity->format('Y-m-d') . " to " . 
-                     $latestActivity->format('Y-m-d') . "');</script>";
+        $_SESSION['error_message'] = 'Cannot update dates: Days with activities would be excluded. The date range must include all days from ' . 
+                                   $earliestActivity->format('Y-m-d') . ' to ' . 
+                                   $latestActivity->format('Y-m-d');
+        header("Location: timetable_detail.php");
         header("Location: timetable_detail.php?id=" . $tid . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");					 
                 exit;
             }
