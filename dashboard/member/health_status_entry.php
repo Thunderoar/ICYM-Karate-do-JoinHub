@@ -213,6 +213,8 @@ else{
                <td height="35">&nbsp;</td>
                <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="SUBMIT" >
                  <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
+				 
+				 
              </tr>
            </table></td>
          </tr>
