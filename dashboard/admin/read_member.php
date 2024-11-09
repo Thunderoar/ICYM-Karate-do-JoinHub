@@ -225,7 +225,11 @@ line-height:0.5cm;
 
 
 			<?php include('footer.php'); ?>
-			<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="view_mem.php">Return Back</a>	
+<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" 
+   href="<?php echo (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'view_mem.php' : '../../dashboard/coach/view_mem.php'); ?>">
+    Return Back
+</a>
+
     	</div>
     </body>
 </html>
