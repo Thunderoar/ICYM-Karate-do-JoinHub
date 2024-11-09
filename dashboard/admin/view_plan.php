@@ -323,37 +323,40 @@ $sno = 1;
                 echo "<td class='" . $status_class . "'>" . $status_text . "</td>";
                 echo "<td>" . $row['image_count'] . " images</td>";
 
-                echo "<td>";
-                if (!empty($tid)) {
-                    echo "<a href='timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "'>
-                            <input type='button' class='a1-btn a1-blue' style='width:100%' value='Edit Plan'>
-                          </a>";
-						      // New Edit Timetable Section button
+echo "<td>";
+if (!empty($tid)) {
+    echo "<a href='timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "'>
+            <input type='button' class='a1-btn a1-blue' style='width:100%' value='Edit Plan'>
+          </a>";
     echo "<a href='timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "&scroll=1#timetable-details'>
             <input type='button' class='a1-btn a1-purple' style='width:100%' value='Edit Timetable'>
           </a>";
-                } else {
-                    echo "<span class='text-muted'>No Timetable</span>";
-                }
+} else {
+echo "<a href='add_timetable.php?planid=" . $row['planid'] . "'>
+        <input type='button' class='a1-btn a1-green' style='width:100%' value='Add Timetable'>
+      </a>";
 
-                if ($row['active'] === 'yes') {
-                    echo "<form action='del_plan.php' method='post' onSubmit='return ConfirmDeactivate();'>
-                            <input type='hidden' name='name' value='" . $msgid . "'/>
-                            <input type='submit' value='Mark as Inactive' class='a1-btn a1-orange' style='width:100%'/>
-                          </form>";
-                } else {
-                    echo "<form action='activate_plan.php' method='post' onSubmit='return ConfirmActivate();'>
-                            <input type='hidden' name='name' value='" . $msgid . "'/>
-                            <input type='submit' value='Mark as Active' class='a1-btn a1-green' style='width:100%'/>
-                          </form>";
-                }
+}
 
-                echo "<form action='delete_plan.php' method='post' onSubmit='return ConfirmDelete();'>
-                        <input type='hidden' name='planid' value='" . $msgid . "'/>
-                        <input type='submit' value='Delete' class='a1-btn a1-red' style='width:100%'/>
-                      </form>";
+if ($row['active'] === 'yes') {
+    echo "<form action='del_plan.php' method='post' onSubmit='return ConfirmDeactivate();'>
+            <input type='hidden' name='name' value='" . $msgid . "'/>
+            <input type='submit' value='Mark as Inactive' class='a1-btn a1-orange' style='width:100%'/>
+          </form>";
+} else {
+    echo "<form action='activate_plan.php' method='post' onSubmit='return ConfirmActivate();'>
+            <input type='hidden' name='name' value='" . $msgid . "'/>
+            <input type='submit' value='Mark as Active' class='a1-btn a1-green' style='width:100%'/>
+          </form>";
+}
 
-                echo "</td>";
+echo "<form action='delete_plan.php' method='post' onSubmit='return ConfirmDelete();'>
+        <input type='hidden' name='planid' value='" . $msgid . "'/>
+        <input type='submit' value='Delete' class='a1-btn a1-red' style='width:100%'/>
+      </form>";
+
+echo "</td>";
+
                 echo "</tr>";
 
                 $sno++;
