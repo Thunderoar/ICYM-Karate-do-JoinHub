@@ -182,6 +182,7 @@ if (mysqli_num_rows($result) > 0) {
                 echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
             } else {
                 echo "<p>No Receipt Available</p>";
+
             }
 
             // Button to undo approved payment
