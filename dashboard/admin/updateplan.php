@@ -51,7 +51,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        // Handle selected members data
+        if (isset($_POST['selected_members_data']) && !empty($_POST['selected_members_data'])) {
+            // Clear existing members
+            $clearMembersQuery = "DELETE FROM event_members WHERE planid = '$planid'";
+            mysqli_query($con, $clearMembersQuery);
 
+            $selectedMembers = json_decode($_POST['selected_members_data'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                foreach ($selectedMembers as $member) {
+                    $userId = mysqli_real_escape_string($con, $member['userId']);
+                    // Insert updated members
+                    $insertQuery = "INSERT INTO event_members (planid, userid, joined_at) VALUES ('$planid', '$userId', NOW())";
+                    mysqli_query($con, $insertQuery);
+                }
+            } else {
+                throw new Exception("Invalid JSON in selected members data");
+            }
+        }
+
+        // Handle selected staff data
+        if (isset($_POST['selected_staff_data']) && !empty($_POST['selected_staff_data'])) {
+            // Clear existing staff entries in event_staff
+            $clearStaffQuery = "DELETE FROM event_staff WHERE planid = '$planid'";
+            mysqli_query($con, $clearStaffQuery);
+
+            $selectedStaff = json_decode($_POST['selected_staff_data'], true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                foreach ($selectedStaff as $staff) {
+                    $staffid = mysqli_real_escape_string($con, $staff['staffid']);
+                    // Insert updated staff members into event_staff
+                    $insertQuery = "INSERT INTO event_staff (planid, staffid, joined_at) VALUES ('$planid', '$staffid', NOW())";
+                    mysqli_query($con, $insertQuery);
+                }
+            } else {
+                throw new Exception("Invalid JSON in selected staff data");
+            }
+        }
 
         // Handle image upload if provided
         if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
@@ -91,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 mysqli_stmt_execute($stmt);
             }
         }
-		
+        
         // Success message with both IDs
         echo "<html><head><script>alert('Plan (ID: $planid) and Timetable (ID: $tid) updated successfully!');</script></head></html>";
         // Redirect to view_plan.php
