@@ -322,7 +322,7 @@ $sno = 1;
                 echo "<td>";
                 if (!empty($tid)) {
                     echo "<a href='../../dashboard/admin/timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "'>
-                            <input type='button' class='a1-btn a1-blue' style='width:100%' value='View Plan'>
+                            <input type='button' class='a1-btn a1-blue' style='width:100%' value='View Event Details'>
                           </a>";
 						      // New Edit Timetable Section button
     echo "<a href='../../dashboard/admin/timetable_detail.php?id=" . $tid . "&planid=" . $row['planid'] . "&scroll=1#timetable-details'>
