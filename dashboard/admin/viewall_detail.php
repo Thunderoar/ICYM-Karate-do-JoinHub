@@ -233,7 +233,11 @@ $remarks = htmlspecialchars($row['remarks'] ?? '');
     <td height="35">&nbsp;</td>
     <td height="35">
         <input class="a1-btn" type="submit" name="submit" id="submit" value="EDIT" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px;"> <!-- Green color -->
-        <a href="view_mem.php"><input class="a1-btn" value="BACK" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px;"></a> <!-- Blue color -->
+<a href="<?php echo (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'view_mem.php' : '../../dashboard/coach/view_mem.php'); ?>">
+    <input class="a1-btn" value="BACK" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px;">
+</a>
+
+
     </td>
 </tr>
 
@@ -246,7 +250,11 @@ $remarks = htmlspecialchars($row['remarks'] ?? '');
         </div>   
 
         <?php include('footer.php'); ?>
-		<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" href="view_mem.php">Return Back</a>	
+<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" 
+   href="<?php echo (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'view_mem.php' : '../../dashboard/coach/view_mem.php'); ?>">
+    Return Back
+</a>
+
     </div>
 
 </div>
