@@ -368,21 +368,13 @@ if (!$dates) {
             font-weight: bold;
             color: #007bff;
         }
-		.go-to-timetable-button {
-    display: block;
-    margin: 10px auto 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-}
-		.go-to-timetable-button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
 
-.go-to-timetable-button:hover {
-    background-color: #0c7b93; /* Optional hover effect */
+#selectedMembersContainer {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;
+    min-height: 50px;
+    border-radius: 4px;
 }
     </style>
 </head>
@@ -422,11 +414,19 @@ if (!$dates) {
                 </div>
             </div>
 			
-			            <h2>Edit Plan</h2>
 <?php
-$tid = mysqli_real_escape_string($con, $_GET['id']); // Get and sanitize tid instead of id
+// Start the session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Modified query to join sports_timetable and plan tables
+$isAdmin = isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] === true;
+$isCoach = isset($_SESSION['is_coach_logged_in']) && $_SESSION['is_coach_logged_in'] === true;
+$returnPath = $isAdmin ? '../../dashboard/admin/view_plan.php' : ($isCoach ? '../../dashboard/coach/view_plan.php' : '../../dashboard/member/view_plan.php');
+
+
+$tid = mysqli_real_escape_string($con, $_GET['id']); 
+
 $sql = "SELECT p.* 
         FROM plan p 
         INNER JOIN sports_timetable st ON p.planid = st.planid 
@@ -438,72 +438,116 @@ if ($res && mysqli_num_rows($res) > 0) {
     $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
 } else {
     echo "<p>Plan not found or invalid timetable ID.</p>";
-    exit; // Stop script execution if no results are found
+    exit;
 }
 ?>
+<h2><?php echo $isAdmin ? 'Edit' : 'View' ?> Plan</h2>
             <hr/>
-<button class="btn btn-info go-to-timetable-button" onclick="scrollToTimetable()">Go to Timetable Section</button>
+<div class="d-flex justify-content-center">
+    <button class="btn btn-info btn-sm mx-2 go-to-timetable-button" onclick="scrollToTimetable()">Go to Timetable Section</button>
+    <button class="btn btn-info btn-sm mx-2 go-to-involvement-button" onclick="scrollToInvolvement()">Go to Involvement Section</button>
+</div>
+
+
+
+
 <div class="container">
-	<form id="form1" name="form1" method="post" class="a1-container" action="updateplan.php">	
+    <form id="form1" name="form1" method="post" class="a1-container" action="updateplan.php">    
+			<h2 id="detailss"><b>Event Detail:</b></h2>	
         <div class="row" style="margin-bottom:200px">
+
             <div class="col-md-6">
-<div class="form-group">
-    <label><b>Type of Plan:</b></label>
-    <select name="plantype" id="plantype" class="form-control" required onchange="updateFeeLabel()">
-        <option value="">--Please Select--</option>
-        <option value="Core" <?php echo ($row['planType'] == 'Core') ? 'selected' : ''; ?>>Core</option>
-        <option value="Event" <?php echo ($row['planType'] == 'Event') ? 'selected' : ''; ?>>Event</option>
-        <option value="Tournament" <?php echo ($row['planType'] == 'Tournament') ? 'selected' : ''; ?>>Tournament</option>
-        <option value="Collaboration" <?php echo ($row['planType'] == 'Collaboration') ? 'selected' : ''; ?>>Collaboration</option>
-    </select>
-</div>
+                <div class="form-group">
+                    <label><b>Type of Plan:</b></label>
+                    <select name="plantype" id="plantype" class="form-control" required onchange="updateFeeLabel()" <?php echo !$isAdmin ? 'disabled' : ''; ?>>
+                        <option value="">--Please Select--</option>
+                        <option value="Core" <?php echo ($row['planType'] == 'Core') ? 'selected' : ''; ?>>Core</option>
+                        <option value="Event" <?php echo ($row['planType'] == 'Event') ? 'selected' : ''; ?>>Event</option>
+                        <option value="Tournament" <?php echo ($row['planType'] == 'Tournament') ? 'selected' : ''; ?>>Tournament</option>
+                        <option value="Collaboration" <?php echo ($row['planType'] == 'Collaboration') ? 'selected' : ''; ?>>Collaboration</option>
+                    </select>
+                </div>
 
+                <div class="form-group">
+                    <label><b>Event Image:</b></label>
+                    <?php if ($isAdmin): ?>
+                        <input type="file" name="image" class="form-control" accept="image/*" onchange="previewImage(event)">
+                    <?php endif; ?>
+                    <img id="image-preview" src="" alt="Image Preview" style="display: none; margin-top: 10px;" width="400">
+                </div>
 
-                <!-- Plan Image -->
-<div class="form-group">
-    <label><b>Event Image:</b></label>
-    <input type="file" name="image" class="form-control" accept="image/*" onchange="previewImage(event)">
-    <img id="image-preview" src="" alt="Image Preview" style="display: none; margin-top: 10px;" width="400">
-</div>
-
-<script>
-function previewImage(event) {
-    var reader = new FileReader();
-    reader.onload = function() {
-        var output = document.getElementById('image-preview');
-        output.src = reader.result;
-        output.style.display = 'block';
-    }
-    reader.readAsDataURL(event.target.files[0]);
-}
-</script>
-	            <td height="0">
-                <input type="hidden" name="tid" id="tid" readonly value='<?php echo $id; ?>'>
-            </td>
                 <div class="form-group">
                     <label><b>Plan ID:</b></label>
                     <input type="text" name="planid" id="planID" class="form-control" readonly 
                         value="<?php echo $row['planid']; ?>">
                 </div>
-
-                <input type="hidden" id="boxx" name="timetable_id" 
-                    value="<?php echo mt_rand(1, 1000000000); ?>" required/>
+				
+				<div class="form-group">
+                    <label><b></b></label>
+                    <input type="hidden" name="tid" id="tid" class="form-control" readonly 
+                        value="<?php echo $tid ?>">
+                </div>
 
                 <div class="form-group">
                     <label><b>Plan Name:</b></label>
                     <input type="text" name="planname" id="planName" class="form-control" 
-                        placeholder="Enter plan name" value='<?php echo $row['planName']; ?>'>
+                        placeholder="Enter plan name" value='<?php echo $row['planName']; ?>' <?php echo !$isAdmin ? 'readonly' : ''; ?>>
+                </div>
+                </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label><b>Description:</b></label>
+                    <textarea name="desc" id="planDesc" class="form-control" placeholder="Enter plan description" 
+                        rows="3" <?php echo !$isAdmin ? 'readonly' : ''; ?>><?php echo $row['description']; ?></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label><b>Start Date:</b></label>
+                    <input type="date" name="startDate" id="startDate" class="form-control" 
+                        onchange="calculateDuration()" value='<?php echo $row['startDate']; ?>' <?php echo !$isAdmin ? 'readonly' : ''; ?>>
+                </div>
+
+                <div class="form-group">
+                    <label><b>End Date:</b></label>
+                    <input type="date" name="endDate" id="endDate" class="form-control" 
+                        onchange="calculateDuration()" value='<?php echo $row['endDate']; ?>' <?php echo !$isAdmin ? 'readonly' : ''; ?>>
+                </div>
+
+                <div class="form-group">
+                    <label><b>Duration (Days):</b></label>
+                    <input type="number" name="duration" id="duration" class="form-control" value='<?php echo $row['duration']; ?>' readonly>
+                </div>
+
+                <div class="form-group">
+                    <label id="feeLabel"><b>Plan Fee:</b></label>
+                    <input type="text" name="amount" id="planAmnt" class="form-control" 
+                        placeholder="Enter plan amount" value='<?php echo $row['amount']; ?>' <?php echo !$isAdmin ? 'readonly' : ''; ?>>
                 </div>
 				
-				        <h3><u>Involved Staff</u></h3>				
-    <!-- Staff Selection with Add Button -->
+				
+            </div>
+			
+<div>
+            <?php if ($isAdmin): ?>
+                <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE PLAN">
+                <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+            <?php endif; ?>
+        </div>
+
+<div class="col-md-12" style="margin-top:250px;">
+<hr>
+<h2 id="involvementid"><b>Member and Staff Involvement</b></h2>	<br><br>
+<!-- Your HTML content -->
+<h3><b>Involved Staff</b></h3>
+<?php if ($isAdmin): ?>
     <div class="form-group">
         <label><b>Choose Staff:</b></label>
         <div class="input-group">
             <select name="staff_select" id="boxx1" class="form-control" onchange="mystaffdetail(this.value)">
                 <option value="">--Please Select--</option>
                 <?php
-                // Query to select all staff
                 $query = "SELECT * FROM staff";
                 $result = mysqli_query($con, $query);
                 
@@ -521,179 +565,39 @@ function previewImage(event) {
                 <button type="button" class="btn btn-success" onclick="addStaffMember()">Add Staff</button>
             </div>
         </div>
-	</div>
-
-	
-	    <!-- Selected Staff Members Display -->
-    <div class="form-group">
-        <label><b>Selected Staff Members:</b></label>
-    <div id="selectedStaffContainer" style="border: 1px solid #ccc; border-radius: 0.25rem; padding: 1rem !important; margin: 1rem !important; min-height: 100px;">
-            <!-- Selected staff will be displayed here -->
-        </div>
-        <!-- Hidden inputs to store staff data -->
-        <input type="hidden" name="selected_staff_data" id="selectedStaffData" value="">
     </div>
+<?php endif; ?>
 
-
-            </div>
-
-            <div class="col-md-6">
 <div class="form-group">
-    <label><b>Description:</b></label>
-    <textarea name="desc" id="planDesc" class="form-control" placeholder="Enter plan description" rows="3"><?php echo $row['description']; ?></textarea>
-</div>
-
-
-                <div class="form-group">
-                    <label><b>Start Date:</b></label>
-                    <input type="date" name="startDate" id="startDate" class="form-control" 
-                        onchange="calculateDuration()" value='<?php echo $row['startDate']; ?>'>
-                </div>
-
-                <div class="form-group">
-                    <label><b>End Date:</b></label>
-                    <input type="date" name="endDate" id="endDate" class="form-control" 
-                        onchange="calculateDuration()" value='<?php echo $row['endDate']; ?>'>
-                </div>
-
-                <div class="form-group">
-                    <label><b>Duration (Days):</b></label>
-                    <input type="number" name="duration" id="duration" class="form-control" value='<?php echo $row['duration']; ?>' readonly>
-                </div>
-
-                <div class="form-group">
-                    <label id="feeLabel"><b>Plan Fee:</b></label>
-                    <input type="text" name="amount" id="planAmnt" class="form-control" 
-                        placeholder="Enter plan amount" value='<?php echo $row['amount']; ?>'>
-                </div>
-            </div>
-			                <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE PLAN">
-                <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
-        </div>
-        <h3 id="timetable-details" class="mt-4">Timetable Details</h3>
-        <hr/>
-    </form>
-</div>
-
-
-        
-        <div class="container" style="margin-bottom: 200px;">
-            <?php if ($dates): ?>
-                <p><strong>Timetable Name:</strong> <?= htmlspecialchars($timetableData[0]['tname'] ?? 'N/A') ?></p>
-<!-- HTML Section for Date Update Form -->
-<form method="POST" style="margin-bottom: 20px;">
-    <label>Start Date:</label>
-    <input type="date" name="startDate" value="<?= $startDate->format('Y-m-d') ?>" required>
-    
-    <label>End Date:</label>
-    <input type="date" name="endDate" value="<?= $endDate->format('Y-m-d') ?>" required>
-    
-    <button type="submit" name="update_dates" class="btn btn-primary">Update Dates</button>
-</form>
-                
-                <!-- Add New Day Button at the top -->
-								<div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
-<form method="POST" style="display: inline;" id="prevDayForm">
-    <input type="hidden" name="direction" value="previous">
-    <input type="hidden" name="scroll_position" id="scroll_position">
-    <button type="submit" name="add_day" class="btn btn-success" onclick="saveScrollPosition()">
-        Add Previous Day
-    </button>
-</form>
-</div>
-                
-                <form method="POST" action="">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Day</th>
-                                <th>Date</th>
-                                <th>Activities</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($dateArray as $index => $date): ?>
-                                <tr>
-                                    <td>Day <?= $index + 1 ?></td>
-                                    <td><?= $date['date'] ?> (<?= $date['day'] ?>)</td>
-                                    <td>
-                                        <?php
-                                        $dayData = array_filter($timetableData, function($item) use ($index) {
-                                            return ($item['day_number'] ?? 0) == ($index + 1);
-                                        });
-                                        $dayData = reset($dayData);
-                                        ?>
-                                        <textarea name="activities[<?= $dayData['day_id'] ?? '' ?>]" 
-                                                  class="form-control" 
-                                                  rows="3"><?= htmlspecialchars($dayData['activities'] ?? '') ?></textarea>
-                                    </td>
-                                    <td>
-                                        <?php if (!empty($dayData['day_id'])): ?>
-                                            <form method="POST" style="display: inline;">
-                                                <input type="hidden" name="day_id" value="<?= $dayData['day_id'] ?>">
-                                                <input type="hidden" name="day_number" value="<?= $index + 1 ?>">
-                                                <button type="submit" name="remove_day" class="btn btn-danger btn-sm" 
-                                                        onclick="return confirm('Are you sure you want to remove this day? This will update the plan end date.')">
-                                                    Remove Day
-                                                </button>
-                                            </form>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                   
-	<br>
-                    <button type="submit" name="update_activities" class="btn btn-primary">Update Timetable</button>
-					 
-                    <a href="view_plan.php" class="btn btn-secondary">Back to Plans</a>
-                </form>
-				<!-- Add Next Day Button -->
-				<div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
-<form method="POST" style="display: inline;" id="nextDayForm">
-    <input type="hidden" name="direction" value="next">
-    <input type="hidden" name="scroll_position" id="scroll_position">
-    <button type="submit" name="add_day" class="btn btn-success" onclick="saveScrollPosition()">
-        Add Next Day
-    </button>
-</form>
-</div>
-            <?php else: ?>
-                <div class="alert alert-warning">
-                    No date range found for this timetable. Please ensure the timetable is associated with a plan that has start and end dates.
-                </div>
-                <a href="view_plan.php" class="btn btn-secondary">Back to Plans</a>
-            <?php endif; ?>
-        </div>
+    <label><b>Selected Staff Members:</b></label>
+    <div id="selectedStaffContainer" style="border: 1px solid #ccc; border-radius: 0.25rem; padding: 1rem !important; margin: 1rem !important; min-height: 100px;">
+        <!-- Selected staff will be displayed here -->
     </div>
-    
-    <a class="btn-sm px-4 py-3 d-flex home-button return" style="background-color:#2a2e32" href="view_plan.php">
-        Return Back
-    </a>
-	
+    <input type="hidden" name="selected_staff_data" id="selectedStaffData" value="">
+</div>
+</div>
+
+<?php
+$selectedStaffQuery = "SELECT staff.staffid, staff.name 
+                       FROM event_staff 
+                       JOIN staff ON event_staff.staffid = staff.staffid 
+                       WHERE event_staff.planid = '$planId'";
+$selectedStaffResult = mysqli_query($con, $selectedStaffQuery);
+$selectedStaff = [];
+
+if (mysqli_num_rows($selectedStaffResult) > 0) {
+    while ($staff = mysqli_fetch_assoc($selectedStaffResult)) {
+        $selectedStaff[] = $staff;
+    }
+}
+?>
+
+<?php $isAdmin = isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] === true; ?>
+
+
 <script>
-// Save scroll position before form submission
-document.getElementById('timetableForm').addEventListener('submit', function() {
-    document.getElementById('scrollPosition').value = window.scrollY;
-});
+const selectedStaff = new Map();
 
-// Scroll to timetable section
-function scrollToTimetable() {
-    document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
-}
-
-// Scroll to bottom when required
-function scrollToBottom() {
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-    });
-}
-
-// Staff selection management
-let selectedStaff = new Map();
 
 function addStaffMember() {
     const select = document.getElementById('boxx1');
@@ -710,15 +614,10 @@ function addStaffMember() {
         return;
     }
 
-    // Generate timetable name
-    const tname = `${selectedOption.text}'s Schedule`;
-
     // Add to Map with staff data
     selectedStaff.set(select.value, {
         staffid: select.value,
-        name: selectedOption.text,
-        tname: tname,
-        hasApproved: 0
+        name: selectedOption.text
     });
 
     // Create staff member display element
@@ -727,11 +626,12 @@ function addStaffMember() {
     staffElement.className = 'badge badge-primary m-1 p-2 d-inline-flex align-items-center';
     staffElement.innerHTML = `
         ${selectedOption.text}
+        ${isAdmin ? `
         <button type="button" class="btn btn-link p-0 ml-2" 
                 style="color: white !important; font-size: 16px !important; background: none; border: none;"
                 onclick="removeStaffMember('${select.value}', this)">
             <i class="fas fa-times"></i>
-        </button>
+        </button>` : ''}
     `;
     container.appendChild(staffElement);
 
@@ -742,16 +642,371 @@ function addStaffMember() {
     select.value = '';
 }
 
-function removeStaffMember(staffId, buttonElement) {
+function removeStaffMember(staffId, button) {
     selectedStaff.delete(staffId);
-    buttonElement.closest('.badge').remove();
+    button.parentElement.remove();
     updateSelectedStaffData();
 }
 
 function updateSelectedStaffData() {
-    const staffData = Array.from(selectedStaff.values());
-    document.getElementById('selectedStaffData').value = JSON.stringify(staffData);
+    const selectedStaffData = document.getElementById('selectedStaffData');
+    selectedStaffData.value = JSON.stringify(Array.from(selectedStaff.values()));
 }
+
+// Render pre-selected staff on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const preSelectedStaff = <?php echo json_encode($selectedStaff); ?>;
+    if (preSelectedStaff.length > 0) {
+        preSelectedStaff.forEach(staff => {
+            selectedStaff.set(staff.staffid, {
+                staffid: staff.staffid,
+                name: staff.name
+            });
+
+// Create staff member display element
+const container = document.getElementById('selectedStaffContainer');
+const staffElement = document.createElement('div');
+staffElement.className = 'badge badge-primary m-1 p-2 d-inline-flex align-items-center';
+
+// Check if user is admin based on the session variable
+const isAdmin = <?php echo isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'true' : 'false'; ?>;
+
+// Generate button HTML only if the user is admin
+const buttonHtml = isAdmin ? `
+    <button type="button" class="btn btn-link p-0 ml-2" 
+            style="color: white !important; font-size: 16px !important; background: none; border: none;"
+            onclick="removeStaffMember('${staff.staffid}', this)">
+        <i class="fas fa-times"></i>
+    </button>
+` : '';
+
+staffElement.innerHTML = `
+    ${staff.name}
+    ${buttonHtml}
+`;
+container.appendChild(staffElement);
+
+        });
+        updateSelectedStaffData();
+    }
+});
+
+
+</script>
+
+<div class="col-md-12" style="margin-top:50px;">
+
+    <h3><b>Involved Members</b></h3>
+	<?php if ($isAdmin): ?>
+    <div class="form-group">
+        <label><b>Choose Member:</b></label>
+        <div class="input-group">
+            <select name="member_select" id="memberBox" class="form-control">
+                <option value="">--Please Select--</option>
+                <?php
+                $query = "SELECT userid, username, fullName, email FROM users";
+                $result = mysqli_query($con, $query);
+                
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<option value='" . htmlspecialchars($row['userid']) . "'>" 
+                             . htmlspecialchars($row['fullName']) 
+                             . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success" onclick="addEventMember()">Add Member</button>
+            </div>
+        </div>
+    </div>
+	<?php endif; ?>
+
+    <div class="form-group">
+        <label><b>Selected Karate Members:</b></label>
+        <div id="selectedMembersContainer">
+            <!-- Selected members will appear here -->
+        </div>
+        <input type="hidden" name="selected_members_data" id="selectedMembersData" value="">
+    </div>
+</div>
+
+<?php
+$selectedMembersQuery = "SELECT users.userid, users.fullName 
+                         FROM event_members 
+                         JOIN users ON event_members.userid = users.userid 
+                         WHERE event_members.planid = '$planId'";
+$selectedMembersResult = mysqli_query($con, $selectedMembersQuery);
+$selectedMembers = [];
+
+if (mysqli_num_rows($selectedMembersResult) > 0) {
+    while ($member = mysqli_fetch_assoc($selectedMembersResult)) {
+        $selectedMembers[] = $member;
+    }
+}
+?>
+
+
+
+<script>
+const eventMembers = new Map();
+
+function addEventMember() {
+    const select = document.getElementById('memberBox');
+    const selectedOption = select.options[select.selectedIndex];
+    
+    if (!select.value) {
+        alert('Please select a member');
+        return;
+    }
+
+    // Check if member is already added
+    if (eventMembers.has(select.value)) {
+        alert('This member is already added');
+        return;
+    }
+
+    // Add to Map with member data
+    eventMembers.set(select.value, {
+        userId: select.value,
+        fullName: selectedOption.text
+    });
+
+    // Create member display element
+    const container = document.getElementById('selectedMembersContainer');
+    const memberElement = document.createElement('div');
+    memberElement.className = 'badge badge-primary m-1 p-2 d-inline-flex align-items-center';
+    memberElement.innerHTML = `
+        ${selectedOption.text}
+        <button type="button" class="btn btn-link p-0 ml-2" 
+                style="color: white !important; font-size: 16px !important; background: none; border: none;"
+                onclick="removeEventMember('${select.value}', this)">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    container.appendChild(memberElement);
+
+    // Update hidden input with member data
+    updateEventMemberData();
+
+    // Reset select
+    select.value = '';
+}
+
+function removeEventMember(userId, button) {
+    eventMembers.delete(userId);
+    button.parentElement.remove();
+    updateEventMemberData();
+}
+
+function updateEventMemberData() {
+    const selectedMembersData = document.getElementById('selectedMembersData');
+    selectedMembersData.value = JSON.stringify(Array.from(eventMembers.values()));
+}
+
+// Render pre-selected members on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const preSelectedMembers = <?php echo json_encode($selectedMembers); ?>;
+    if (preSelectedMembers.length > 0) {
+        preSelectedMembers.forEach(member => {
+            eventMembers.set(member.userid, {
+                userId: member.userid,
+                fullName: member.fullName
+            });
+
+// Create member display element
+const container = document.getElementById('selectedMembersContainer');
+const memberElement = document.createElement('div');
+memberElement.className = 'badge badge-primary m-1 p-2 d-inline-flex align-items-center';
+
+// Check if user is admin based on the session variable
+const isAdmin = <?php echo isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'true' : 'false'; ?>;
+
+// Generate button HTML only if the user is admin
+const buttonHtml = isAdmin ? `
+    <button type="button" class="btn btn-link p-0 ml-2" 
+            style="color: white !important; font-size: 16px !important; background: none; border: none;"
+            onclick="removeEventMember('${member.userid}', this)">
+        <i class="fas fa-times"></i>
+    </button>
+` : '';
+
+memberElement.innerHTML = `
+    ${member.fullName}
+    ${buttonHtml}
+`;
+container.appendChild(memberElement);
+
+        });
+        updateEventMemberData();
+    }
+});
+
+</script>
+
+
+<div>
+            <?php if ($isAdmin): ?>
+                <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE PLAN">
+                <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+            <?php endif; ?>
+        </div>
+        <hr/>
+    </form>
+</div>
+
+<hr>
+         <h3 id="timetable-details" class="mt-4"><b>Timetable Details</b></h3>       
+<div class="container" style="margin-bottom: 200px;">
+    <?php if ($dates): ?>
+        <p><strong>Timetable Name:</strong> <?= htmlspecialchars($timetableData[0]['tname'] ?? 'N/A') ?></p>
+        
+        <?php if ($isAdmin): ?>
+            <!-- HTML Section for Date Update Form - Only visible to admins -->
+            <form method="POST" style="margin-bottom: 20px;">
+                <label>Start Date:</label>
+                <input type="date" name="startDate" value="<?= $startDate->format('Y-m-d') ?>" required>
+                
+                <label>End Date:</label>
+                <input type="date" name="endDate" value="<?= $endDate->format('Y-m-d') ?>" required>
+                
+                <button type="submit" name="update_dates" class="btn btn-primary">Update Dates</button>
+            </form>
+
+            <!-- Add Previous Day Button - Only visible to admins -->
+            <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+                <form method="POST" style="display: inline;" id="prevDayForm">
+                    <input type="hidden" name="direction" value="previous">
+                    <input type="hidden" name="scroll_position" id="scroll_position">
+                    <button type="submit" name="add_day" class="btn btn-success" onclick="saveScrollPosition()">
+                        Add Previous Day
+                    </button>
+                </form>
+            </div>
+        <?php else: ?>
+            <!-- Read-only date display for non-admins -->
+            <div class="mb-3">
+                <p><strong>Start Date:</strong> <?= $startDate->format('Y-m-d') ?></p>
+                <p><strong>End Date:</strong> <?= $endDate->format('Y-m-d') ?></p>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($isAdmin): ?>
+            <form method="POST" action="">
+        <?php endif; ?>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Date</th>
+                        <th>Activities</th>
+                        <?php if ($isAdmin): ?>
+                            <th>Actions</th>
+                        <?php endif; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($dateArray as $index => $date): ?>
+                        <tr>
+                            <td>Day <?= $index + 1 ?></td>
+                            <td><?= $date['date'] ?> (<?= $date['day'] ?>)</td>
+                            <td>
+                                <?php
+                                $dayData = array_filter($timetableData, function($item) use ($index) {
+                                    return ($item['day_number'] ?? 0) == ($index + 1);
+                                });
+                                $dayData = reset($dayData);
+
+                                if ($isAdmin):
+                                ?>
+                                    <textarea name="activities[<?= $dayData['day_id'] ?? '' ?>]" 
+                                              class="form-control" 
+                                              rows="3"><?= htmlspecialchars($dayData['activities'] ?? '') ?></textarea>
+                                <?php else: ?>
+                                    <div class="form-control" style="height: auto; min-height: 74px; background-color: #f8f9fa;">
+                                        <?= nl2br(htmlspecialchars($dayData['activities'] ?? '')) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                            <?php if ($isAdmin): ?>
+                                <td>
+                                    <?php if (!empty($dayData['day_id'])): ?>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="day_id" value="<?= $dayData['day_id'] ?>">
+                                            <input type="hidden" name="day_number" value="<?= $index + 1 ?>">
+                                            <button type="submit" name="remove_day" class="btn btn-danger btn-sm" 
+                                                    onclick="return confirm('Are you sure you want to remove this day? This will update the plan end date.')">
+                                                Remove Day
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+   
+            <?php if ($isAdmin): ?>
+                <br>
+                <button type="submit" name="update_activities" class="btn btn-primary">Update Timetable</button>
+            <?php endif; ?>
+            
+<a href="<?php echo $returnPath; ?>" class="btn btn-secondary">Back to Plans</a>
+
+        <?php if ($isAdmin): ?>
+            </form>
+
+            <!-- Add Next Day Button - Only visible to admins -->
+            <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+                <form method="POST" style="display: inline;" id="nextDayForm">
+                    <input type="hidden" name="direction" value="next">
+                    <input type="hidden" name="scroll_position" id="scroll_position">
+                    <button type="submit" name="add_day" class="btn btn-success" onclick="saveScrollPosition()">
+                        Add Next Day
+                    </button>
+                </form>
+            </div>
+        <?php endif; ?>
+            
+    <?php else: ?>
+        <div class="alert alert-warning">
+            No date range found for this timetable. Please ensure the timetable is associated with a plan that has start and end dates.
+        </div>
+    <?php endif; ?>
+</div>
+    
+<a class="btn-sm px-4 py-3 d-flex home-button return" style="background-color:#2a2e32" href="<?php echo $returnPath; ?>">
+    Return Back
+</a>
+	
+<script>
+// Save scroll position before form submission
+document.getElementById('timetableForm').addEventListener('submit', function() {
+    document.getElementById('scrollPosition').value = window.scrollY;
+});
+
+// Scroll to timetable section
+function scrollToTimetable() {
+    document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Scroll to timetable section
+function scrollToInvolvement() {
+    document.getElementById('involvementid').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Scroll to bottom when required
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
+
+
 
 // Validation before form submission
 document.getElementById('planForm').onsubmit = function(e) {
@@ -782,6 +1037,7 @@ document.getElementById('planForm').onsubmit = function(e) {
             document.getElementById('timetable-details').scrollIntoView({ behavior: 'smooth' });
         }
     }
+
 
     window.onload = restoreScrollPosition;
 </script>
