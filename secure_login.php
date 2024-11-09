@@ -75,6 +75,7 @@ $sql = "
             $_SESSION['is_admin_logged_in'] = true; // Set the session variable for admin
         } elseif ($is_coach_login) {
             $_SESSION['staffid'] = $row['staffid']; // Store coach's staff ID
+			$_SESSION['is_coach_logged_in'] = true; // Set the session variable for coach
         } else {
             $_SESSION['userid']   = $row['userid'];   // Store logged-in user's ID
             $_SESSION['planid']   = $row['planid'];   // Store the user's planid from enrolls_to
