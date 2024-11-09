@@ -16,30 +16,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (mysqli_num_rows($check_result) == 0) {
             // If not already enrolled, insert the enrollment record
-            $insert_query = "INSERT INTO enrolls_to (userid, planid, expire, hasPaid) 
-            VALUES ('$userid', '$planid', DATE_ADD(NOW(), INTERVAL 1 MONTH), 'no')";
+            $insert_query = "INSERT INTO enrolls_to (userid, planid, expire, hasPaid, hasApproved) 
+            VALUES ('$userid', '$planid', DATE_ADD(NOW(), INTERVAL 1 MONTH), 'no', 'no')";
             if (mysqli_query($con, $insert_query)) {
                 // Redirect on successful enrollment
-                header("Location: payments.php?msg=Enrollment successful!");
+                header("Location: view_plan.php?msg=Enrollment successful!");
                 exit();
             } else {
                 // Redirect on error
-                header("Location: payments.php?msg=Error enrolling user: " . mysqli_error($con));
+                header("Location: view_plan.php?msg=Error enrolling user: " . mysqli_error($con));
                 exit();
             }
         } else {
             // Redirect if user is already enrolled
-            header("Location: payments.php?msg=User is already enrolled in this plan.");
+            header("Location: view_plan.php?msg=User is already enrolled in this plan.");
             exit();
         }
     } else {
         // Redirect if invalid input
-        header("Location: payments.php?msg=Invalid input. Please try again.");
+        header("Location: view_plan.php?msg=Invalid input. Please try again.");
         exit();
     }
 } else {
     // Redirect for invalid request
-    header("Location: payments.php?msg=Invalid request.");
+    header("Location: view_plan.php?msg=Invalid request.");
     exit();
 }
 ?>
