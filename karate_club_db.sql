@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 09, 2024 at 01:24 PM
+-- Generation Time: Nov 12, 2024 at 01:37 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
   `hasApproved` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `receiptIMG` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`et_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=143 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
@@ -156,10 +156,10 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
 INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
 (89, 'UGZVJQ', '1730087557', '', '2024-11-28 11:54:08', 'no', '', ''),
 (90, 'TGNJRZ', '1730087557', '', '2024-11-28 11:54:13', 'no', '', ''),
-(91, 'XTWIOL', '1730601491', '2024-11-03 10:41:32', '9999-12-31', 'yes', 'yes', ''),
+(91, 'XTWIOL', '1730601491', '2024-11-11 19:18:05', '9999-12-31', 'no', 'no', ''),
 (92, 'XTWIOL', '1730942013', '2024-11-09 14:39:20', '9999-12-31', 'yes', 'yes', ''),
-(133, 'VXZPMY', '1730087557', '2024-11-09 15:26:56', '9999-12-31', 'yes', 'no', ''),
-(141, 'XTWIOL', '1730087557', '', '2024-12-09 16:46:15', 'no', 'no', '');
+(133, 'VXZPMY', '1730087557', '2024-11-11 19:14:36', '9999-12-31', 'yes', 'no', ''),
+(141, 'XTWIOL', '1730087557', '2024-11-11 18:54:07', '9999-12-31', 'yes', 'yes', '');
 
 -- --------------------------------------------------------
 
@@ -170,21 +170,24 @@ INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `h
 DROP TABLE IF EXISTS `event_members`;
 CREATE TABLE IF NOT EXISTS `event_members` (
   `em_id` int NOT NULL AUTO_INCREMENT,
-  `planid` int DEFAULT NULL,
+  `planid` varchar(8) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `userid` int DEFAULT NULL,
   `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`em_id`),
   KEY `planid` (`planid`),
   KEY `userid` (`userid`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_members`
 --
 
 INSERT INTO `event_members` (`em_id`, `planid`, `userid`, `joined_at`) VALUES
-(19, 0, 1730087557, '2024-11-09 12:32:33'),
-(18, 0, 1729500896, '2024-11-09 12:32:33');
+(25, '0', 1730601491, '2024-11-11 09:30:44'),
+(29, 'VXZPMY', 1730087557, '2024-11-11 11:26:31'),
+(30, 'VXZPMY', 1729500896, '2024-11-11 11:26:31'),
+(31, 'VXZPMY', 1730601491, '2024-11-11 11:26:31'),
+(32, 'VXZPMY', 1730942013, '2024-11-11 11:26:31');
 
 -- --------------------------------------------------------
 
@@ -195,18 +198,18 @@ INSERT INTO `event_members` (`em_id`, `planid`, `userid`, `joined_at`) VALUES
 DROP TABLE IF EXISTS `event_staff`;
 CREATE TABLE IF NOT EXISTS `event_staff` (
   `es_id` int NOT NULL AUTO_INCREMENT,
-  `planid` int NOT NULL,
-  `staffid` int NOT NULL,
+  `planid` varchar(8) COLLATE utf8mb4_general_ci NOT NULL,
+  `staffid` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
   `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`es_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_staff`
 --
 
 INSERT INTO `event_staff` (`es_id`, `planid`, `staffid`, `joined_at`) VALUES
-(10, 0, 0, '2024-11-09 12:32:33');
+(12, 'VXZPMY', 'rashid', '2024-11-11 11:26:31');
 
 -- --------------------------------------------------------
 
@@ -391,7 +394,7 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('8983', NULL, '1729331377', NULL, NULL, NULL, '2024-10-19 09:50:14'),
 ('8984', NULL, '1729232687', NULL, NULL, NULL, '2024-10-18 06:25:15'),
 ('8985', NULL, '1729331491', NULL, NULL, NULL, '2024-10-19 09:51:46'),
-('8989', 'admintest', NULL, NULL, NULL, 'uploads/default_plan_image.jpg', '2024-10-19 11:03:43'),
+('8989', 'admintest', NULL, NULL, NULL, 'uploads/cat-sleepy.gif', '2024-10-19 11:03:43'),
 ('8990', NULL, '1729499036', NULL, NULL, NULL, '2024-10-21 08:24:04'),
 ('8991', NULL, '1729499109', NULL, NULL, NULL, '2024-10-21 08:25:15'),
 ('9327316', NULL, '1729499715', NULL, NULL, NULL, '2024-10-21 08:36:32'),
