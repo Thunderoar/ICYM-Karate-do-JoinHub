@@ -3,17 +3,28 @@ require '../../include/db_conn.php';
 page_protect();
 
 if (isset($_POST['submit'])) {
-    $usrname = $_POST['login_id'];
-    $fulname = $_POST['full_name'];
+    $username = mysqli_real_escape_string($con, $_POST['username']);
+    $fullname = mysqli_real_escape_string($con, $_POST['full_name']);
+    $securekey = mysqli_real_escape_string($con, $_POST['securekey']);
     $adminid = $_SESSION['adminid'];
 
-    // Update username and full name
-    $query = "UPDATE admin SET username='$usrname', Full_name='$fulname' WHERE adminid='$adminid'";
+    // Update admin information
+    $query = "UPDATE admin SET 
+              username = '$username',
+              Full_name = '$fullname',
+              securekey = '$securekey'
+              WHERE adminid = '$adminid'";
 
-    if (isset($_FILES['image'])) {
+    // Also update the login table to keep username in sync
+    $login_query = "UPDATE login SET 
+                    username = '$username',
+                    securekey = '$securekey'
+                    WHERE adminid = '$adminid'";
+    // Check if a file was actually uploaded (not empty)
+    if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
         $target_dir = "uploads/";
         if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true); // Create the uploads directory if it doesn't exist
+            mkdir($target_dir, 0777, true);
         }
 
         $target_file = $target_dir . basename($_FILES["image"]["name"]);
@@ -45,82 +56,103 @@ if (isset($_POST['submit'])) {
             $uploadOk = 0;
         }
 
-        // Step 1: Check if an image already exists for the admin
+        // Check if an image already exists for the admin
         $sql_check = "SELECT image_path FROM images WHERE adminid = '$adminid'";
         $result_check = mysqli_query($con, $sql_check);
 
-        if (mysqli_num_rows($result_check) > 0) {
-            // Step 2: If an image exists, delete the old image file
-            $row = mysqli_fetch_assoc($result_check);
-            $existing_image_path = $row['image_path'];
+        if ($uploadOk == 1) {  // Only proceed if all checks passed
+            if (mysqli_num_rows($result_check) > 0) {
+                // Update existing image
+                $row = mysqli_fetch_assoc($result_check);
+                $existing_image_path = $row['image_path'];
 
-            // Delete the old image
-            if (file_exists($existing_image_path)) {
-                unlink($existing_image_path); // Delete the old image
-            }
+                // Delete old image if it exists
+                if (file_exists($existing_image_path)) {
+                    unlink($existing_image_path);
+                }
 
-            // Step 3: Proceed with uploading the new image
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
-            } else {
-                // Attempt to move the uploaded file to the target location
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
-
-                    // Change file permissions to 0777
                     chmod($target_file, 0777);
-
-                    // Update the image path in the database for the current admin
                     $sql_update_image = "UPDATE images SET image_path='$target_file' WHERE adminid='$adminid'";
                     if (mysqli_query($con, $sql_update_image)) {
-                        echo "Image updated successfully!";
-                        $_SESSION['profile_pic'] = $target_file; // Update session with new image
-                    } else {
-                        echo "Error updating image: " . mysqli_error($con);
+                        $_SESSION['profile_pic'] = $target_file;
                     }
-                } else {
-                    echo "Sorry, there was an error uploading your file.";
                 }
-            }
-        } else {
-            // No previous image exists, insert the new image
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
             } else {
-                // Attempt to move the uploaded file to the target location
+                // Insert new image
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
-
-                    // Change file permissions to 0777
                     chmod($target_file, 0777);
-
-                    // Insert the new image path into the database
-                    $sql_insert = "INSERT INTO images (imageid, adminid, image_path) VALUES (UUID(), '$adminid', '$target_file')";
+                    $sql_insert = "INSERT INTO images (imageid, adminid, image_path) 
+                                 VALUES (UUID(), '$adminid', '$target_file')";
                     if (mysqli_query($con, $sql_insert)) {
-                        echo "New image inserted successfully!";
-                        $_SESSION['profile_pic'] = $target_file; // Update session with new image
-                    } else {
-                        echo "Error inserting image: " . mysqli_error($con);
+                        $_SESSION['profile_pic'] = $target_file;
                     }
-                } else {
-                    echo "Sorry, there was an error uploading your file.";
                 }
             }
         }
-    } else {
-        echo "No file uploaded.";
     }
 
-    // Execute profile update query
-    if (mysqli_query($con, $query)) {
-        echo "<head><script>alert('Profile Change Successful');</script></head></html>";
-        echo "<meta http-equiv='refresh' content='0; url=logout.php'>";
+
+    // Execute the profile update queries
+    $success = true;
+    if (!mysqli_query($con, $query)) {
+        $success = false;
+        echo "Error updating admin table: " . mysqli_error($con);
+    }
+    
+    if (!mysqli_query($con, $login_query)) {
+        $success = false;
+        echo "Error updating login table: " . mysqli_error($con);
+    }
+
+    if ($success) {
+        // Update session variables
+        $_SESSION['user_data'] = $username;
+        $_SESSION['username'] = $fullname;
+        $_SESSION['securekey'] = $securekey;
+
+        echo "<head><script>alert('Profile Updated Successfully');</script></head></html>";
+        echo "<meta http-equiv='refresh' content='0; url=more-userprofile.php'>";
     } else {
-        echo "<head><script>alert('NOT SUCCESSFUL, Check Again');</script></head></html>";
-        echo "error: " . mysqli_error($con);
+        echo "<head><script>alert('Update Failed, Please Check The Information');</script></head></html>";
     }
 }
 ?>
+
+<?php
+require '../../include/db_conn.php';
+
+$admin_username = $_SESSION['username']; // Adjust based on your session variable name
+
+// Fetch the admin password from the database (hashed or encrypted for security)
+$sql = "SELECT pass_key FROM admin WHERE username = '$admin_username'";
+$result = mysqli_query($con, $sql);
+
+if ($result && mysqli_num_rows($result) == 1) {
+    $row = mysqli_fetch_assoc($result);
+    $admin_password = $row['pass_key'];
+} else {
+    $admin_password = "********"; // Default display if password is not found or query fails
+}
+?>
+
+<?php
+// Assuming you have already started the session and connected to the database as $conn
+
+// Retrieve the admin's secure key
+$admin_id = $_SESSION['adminid']; // Assuming this session variable holds the admin's ID
+$sql = "SELECT securekey FROM admin WHERE adminid = '$admin_id'";
+$result = mysqli_query($con, $sql);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+    $_SESSION['securekey'] = $row['securekey'];
+} else {
+    echo "Unable to retrieve secure key.";
+}
+?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -183,24 +215,148 @@ if (isset($_POST['submit'])) {
                             <tr>
                                 <td height="35">
                                     <table width="100%" border="0" align="center">
-                                        <tr>
-                                            <td height="35">Profile Image: </td>
-                                            <td height="35">
-                                                <input type="file" name="image" accept="image/*">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td height="35">ID:</td>
-                                            <td height="35"><input type="text" name="login_id" value="<?php echo $_SESSION['user_data']; ?>" class="form-control" required/></td>
-                                        </tr>
-                                        <tr>
-                                            <td height="35">Full Name:</td>
-                                            <td height="35"><input class="form-control" type="text" name="full_name" value="<?php echo $_SESSION['username']; ?>" maxlength="25" required></td>
-                                        </tr>
-                                        <tr>
-                                            <td height="35">Password:</td>
-                                            <td height="35"><span class="form-control">*********</span> <a href="change_pwd.php" class="a1-btn a1-orange">Change password</a></td>
-                                        </tr>
+<tr>
+    <td height="35">Profile Image: </td>
+    <td height="35">
+        <input type="file" name="image" accept="image/*" onchange="previewImage(this);">
+        <div id="imagePreview" style="margin-top: 10px;">
+            <img id="preview" 
+                 src="<?php echo isset($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : ''; ?>" 
+                 alt="Preview" 
+                 style="max-width: 200px; max-height: 200px; <?php echo isset($_SESSION['profile_pic']) ? '' : 'display: none;'; ?>">
+        </div>
+    </td>
+</tr>
+<tr>
+    <td height="35">Username:</td>
+    <td height="35">
+        <input type="text" name="username" value="<?php echo $_SESSION['user_data']; ?>" 
+               class="form-control" required/>
+    </td>
+</tr>
+<tr>
+    <td height="35">Full Name:</td>
+    <td height="35">
+        <input class="form-control" type="text" name="full_name" 
+               value="<?php echo $_SESSION['username']; ?>" maxlength="50" required>
+    </td>
+</tr>
+<tr>
+    <td height="35">Secure Key:</td>
+    <td height="35">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <input type="password" id="secureKey" name="securekey" 
+                   value="<?php echo isset($_SESSION['securekey']) ? $_SESSION['securekey'] : ''; ?>" 
+                   class="form-control" style="flex: 1; max-width: 60%; margin-right: 5px;" readonly required/>
+            <button type="button" onclick="handleSecureKeyVisibility()" class="btn btn-primary" style="white-space: nowrap;">Show Key</button>
+        </div>
+        <!-- Success message container for secure key 
+        <div id="secureKeySuccessMessage" style="color: green; margin-top: 5px; display: none;">
+            Key verified successfully! ✓
+        </div>-->
+        <small style="display: block; margin-top: 5px;">This key is used for additional security verification</small>
+    </td>
+</tr>
+
+<script>
+function handleSecureKeyVisibility() {
+    var secureKeyField = document.getElementById("secureKey");
+    var button = event.target;
+    var successMsg = document.getElementById("secureKeySuccessMessage");
+    
+    // If key is currently visible, hide it without verification
+    if (secureKeyField.type === "text") {
+        secureKeyField.type = "password";
+        button.innerText = "Show Key";
+        successMsg.style.display = "none"; // Hide success message when hiding key
+        return;
+    }
+    
+    // For showing key, require verification
+    const userInput = prompt("Please enter your current password for verification:");
+    
+    // If user cancels the prompt or enters nothing, return early
+    if (!userInput) {
+        return;
+    }
+
+    // Verify password (replace with secure server-side verification in production)
+    if (userInput === '<?php echo htmlspecialchars($admin_password); ?>') {
+        secureKeyField.type = "text";
+        button.innerText = "Hide Key";
+        
+        // Show success message
+        successMsg.style.display = "block";
+        
+        // Hide the success message after 3 seconds
+        setTimeout(() => {
+            successMsg.style.display = "none";
+        }, 3000);
+    } else {
+        alert("Incorrect password. Access denied.");
+    }
+}
+</script>
+<tr>
+    <td height="35">Authority Level:</td>
+    <td height="35">
+        <input type="text" name="authority" 
+               value="<?php echo isset($_SESSION['authority']) ? $_SESSION['authority'] : ''; ?>" 
+               class="form-control" readonly/>
+        <small>Authority level cannot be changed directly</small>
+    </td>
+</tr>
+<tr>
+    <td height="35">Last Login:</td>
+    <td height="35">
+        <span class="form-control" style="background-color: #f5f5f5;">
+            <?php echo isset($_SESSION['last_login']) ? $_SESSION['last_login'] : 'N/A'; ?>
+        </span>
+    </td>
+</tr>
+<tr>
+    <td height="35">Password:</td>
+    <td height="35">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <!-- Hidden password input -->
+            <input type="password" id="userPassword" class="form-control" value="<?php echo htmlspecialchars($admin_password); ?>" style="flex: 1; max-width: 60%; margin-right: 5px;" readonly>
+            <button type="button" onclick="handlePasswordVisibility()" class="btn btn-primary" style="white-space: nowrap;">Show Password</button>
+            <a href="change_pwd.php" class="a1-btn a1-orange" style="white-space: nowrap;">Change password</a>
+        </div>
+    </td>
+</tr>
+
+<script>
+function handlePasswordVisibility() {
+    var passwordField = document.getElementById("userPassword");
+    var button = event.target;
+    
+    // If password is currently visible, hide it without verification
+    if (passwordField.type === "text") {
+        passwordField.type = "password";
+        button.innerText = "Show Password";
+        return;
+    }
+    
+    // For showing password, require verification
+    const userInput = prompt("Please enter your current password for verification:");
+    
+    // If user cancels the prompt or enters nothing, return early
+    if (!userInput) {
+        return;
+    }
+
+    // Verify password (replace with secure server-side verification in production)
+    if (userInput === '<?php echo htmlspecialchars($admin_password); ?>') {
+        passwordField.type = "text";
+        button.innerText = "Hide Password";
+    } else {
+        alert("Incorrect password. Access denied.");
+    }
+}
+</script>
+
+
                                         <tr>
                                             <td height="35">&nbsp;</td>
                                             <td height="35">
