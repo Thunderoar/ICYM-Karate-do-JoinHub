@@ -598,7 +598,7 @@ if (mysqli_num_rows($selectedStaffResult) > 0) {
 <script>
 const selectedStaff = new Map();
 
-
+const isAdmin = <?php echo isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'true' : 'false'; ?>;
 function addStaffMember() {
     const select = document.getElementById('boxx1');
     const selectedOption = select.options[select.selectedIndex];
