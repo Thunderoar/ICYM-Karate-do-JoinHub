@@ -118,7 +118,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 		<div class="a1-container a1-dark-gray a1-center">
         	<h6>MAKE PAYMENT</h6>
         </div>
-       <form id="form1" name="form1" method="post" class="a1-container" action="submit_payments.php">
+       <form id="form1" name="form1" method="post" class="a1-container" action="submit_payments.php"  enctype="multipart/form-data">
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
@@ -137,6 +137,20 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
                <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
 			   <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td></td>
              </tr>
+			                             <tr>
+                                <!-- File input for payment receipt with preview -->
+                                <td height="35">Upload Receipt:</td>
+                                <td height="35">
+                                    <input type="file" name="receiptIMG" id="receiptIMG" accept="image/*" onchange="previewImage();"/>
+                                </td>
+                            </tr>
+                            <!-- Image preview -->
+                            <tr>
+                                <td colspan="2" style="text-align: center;">
+                                    <img id="receiptPreview" src="#" alt="Receipt Preview" style="display: none; max-width: 100%; height: auto; border: 1px solid #ccc; margin-top: 10px;">
+                                </td>
+                            </tr>
+
 			 <tr>
         </select>
     </td>
@@ -198,6 +212,25 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
         		}
         		
         	}
+			
+			// JavaScript function to preview the uploaded image
+function previewImage() {
+    var preview = document.getElementById('receiptPreview');
+    var file = document.getElementById('receiptIMG').files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.style.display = 'block'; // Show the image preview
+    };
+
+    if (file) {
+        reader.readAsDataURL(file); // Convert file to base64 string
+    } else {
+        preview.src = "";
+        preview.style.display = 'none'; // Hide preview if no file
+    }
+}
         </script>
 
 <?php
