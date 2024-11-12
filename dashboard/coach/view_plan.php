@@ -110,11 +110,11 @@ input:checked + .slider:before {
 			?>
 			
 					<!-- logo collapse icon -->
-					<div class="sidebar-collapse" onclick="collapseSidebar()">
-				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-					<i class="entypo-menu"></i>
-				</a>
-			</div>
+					<!--div class="sidebar-collapse" onclick="collapseSidebar()">
+                    <a href="#" class="sidebar-collapse-icon with-animation">
+                        <i class="entypo-menu"></i>
+                    </a>
+                </div-->
 							
 			
 		

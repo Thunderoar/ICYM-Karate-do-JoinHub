@@ -225,7 +225,7 @@ if (isset($_SESSION['user_data']) && isset($_SESSION['logged'])) {
       $dashboard_link = 'dashboard/member/';
       $logout_link = 'dashboard/member/logout.php';
   } elseif ($_SESSION['authority'] == 'staff') {
-      // If the user is a member, use the member dashboard and logout links
+      // If the user is a coach, use the coach dashboard and logout links
       $dashboard_link = 'dashboard/coach/';
       $logout_link = 'dashboard/coach/logout.php';
   }

@@ -88,6 +88,42 @@
     background-color: #fff !important;
     color: #000 !important;
 	}
+	
+	/* Add a green text color and a checkmark when the requirements are right */
+	.valid {
+	color: green;
+	}
+
+	.valid:before {
+	position: relative;
+	left: -35px;
+	content: "✔";
+	}
+
+	/* Add a red text color and an "x" when the requirements are wrong */
+	.invalid {
+	color: red;
+	}
+
+	.invalid:before {
+	position: relative;
+	left: -35px;
+	content: "✖";
+	}
+	/* The message box is shown when the user clicks on the password field */
+	#message {
+	display:none;
+	background: #f1f1f1;
+	color: #000;
+	position: relative;
+	padding: 10px;
+	margin-top: 5px;
+	}
+
+	#message p {
+	padding: 10px 35px;
+	font-size: 15px;
+	}
   </style>
   </head>
   <body>
@@ -132,7 +168,12 @@
             </div>
             <div class="form-group">
               <label for="pass_key">Password</label>
-              <input type="password" class="form-control" name="pass_key" id="pass_key" placeholder="Password" autocomplete="off" required>
+              <input class="form-control" name="pass_key" id="pass_key" placeholder="Password" pattern="(?=.*\d).{8,}" autocomplete="off" required>
+			  <div id="message">
+				<h4>Password must contain the following:</h4>
+				<p id="number" class="invalid">A <b>number</b></p>
+				<p id="length" class="invalid">Minimum <b>8 characters</b></p>
+			  </div>
             </div>
             <!-- <legend>Account Details</legend> -->
             <input type="hidden" class="form-control" name="hasApproved" id="textfield" value="No">
@@ -149,13 +190,13 @@
               <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign Up</button>
             </div>
             <div class="form-group text-center">
-              <p>Already have an account? <a href="#" id="show-sign-in">Sign In</a></p>
+              <p>Already have an account? <a href="#" id="show-sign-in">Login</a></p>
             </div>
           </form>
         </div>
 
         <div id="sign-in-section" style="display:none;">
-          <h3 class="mb-4">Sign In</h3>
+          <h3 class="mb-4">Login</h3>
           <form action="secure_login.php" class="signin-form" method='post' id="bb">
             <!--<legend>Login Information</legend>-->
             <div class="form-group">
@@ -167,7 +208,7 @@
               <input type="password" name="pass_key" id="pwfield" class="form-control" data-rule-required="true" data-rule-minlength="6" placeholder="Password" required>
             </div>
             <div class="form-group">
-              <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+              <button type="submit" class="form-control btn btn-primary rounded submit px-3">Login</button>
             </div>
             <div class="form-group d-md-flex">
               <div class="form-check w-50">
@@ -217,5 +258,43 @@
     });
   });
 </script>
-  </body>
+<script>
+var myInput = document.getElementById("pass_key");
+var number = document.getElementById("number");
+var length = document.getElementById("length");
+
+// When the user clicks on the password field, show the message box
+myInput.onfocus = function() {
+  document.getElementById("message").style.display = "block";
+}
+
+// When the user clicks outside of the password field, hide the message box
+myInput.onblur = function() {
+  document.getElementById("message").style.display = "none";
+}
+
+// When the user starts to type something inside the password field
+myInput.onkeyup = function() {
+
+  // Validate numbers
+  var numbers = /[0-9]/g;
+  if(myInput.value.match(numbers)) {  
+    number.classList.remove("invalid");
+    number.classList.add("valid");
+  } else {
+    number.classList.remove("valid");
+    number.classList.add("invalid");
+  }
+  
+  // Validate length
+  if(myInput.value.length >= 8) {
+    length.classList.remove("invalid");
+    length.classList.add("valid");
+  } else {
+    length.classList.remove("valid");
+    length.classList.add("invalid");
+  }
+}
+</script>
+</body>
 </html>

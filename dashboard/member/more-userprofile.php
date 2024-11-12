@@ -145,11 +145,11 @@ if (isset($_POST['submit'])) {
         <div class="sidebar-menu">
             <header class="logo-env">
                 <?php require('../../element/loggedin-logo.html'); ?>
-                <div class="sidebar-collapse" onclick="collapseSidebar()">
+                <!--div class="sidebar-collapse" onclick="collapseSidebar()">
                     <a href="#" class="sidebar-collapse-icon with-animation">
                         <i class="entypo-menu"></i>
                     </a>
-                </div>
+                </div-->
             </header>
             <?php include('nav.php'); ?>
         </div>

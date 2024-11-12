@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sports Team &mdash; Colorlib Website Template</title>
+    <title>ICYM Karate-Do &mdash; Colorlib Website Template</title>
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,700,900|Oswald:400,700"> 
@@ -41,6 +41,7 @@
   
     
   
+  <div>
   <div>
 
 
@@ -82,6 +83,31 @@ require('header.php');
   <div class="container">
     <div class="row">
       <div class="col-md-12 col-lg-7 mb-5">
+        <div class="col-md-12 mb-3 mb-md-0">
+			<h3 class="h5 text-black mb-3">Contact Info</h3>
+			<br>
+			<p style="color: #000000!important" class="mb-0 font-weight-bold text-black">Address</p>
+			<p>Kolej Antarabangsa Yayasan Melaka, No 1, Jalan Bukir Sebukor</p>
+			<br>
+			<p style="color: #000000!important" class="mb-0 font-weight-bold text-black">Phone</p>
+			<p>Contact Advisor: (+60) 18-271 6266</p>
+			<p>Contact Couch: (+60) 11-1198 2924</p>
+		</div>
+	 </div>
+	 <div class="col-lg-4 ml-auto">
+		<br><br><br>
+        <div class="p-4 mb-3 bg-white">
+          <h3 class="h5 text-black mb-3">Please contact one of the numbers if you have any inquiry.</h3>
+        </div>
+     </div>
+	</div>
+   </div>
+</div>
+
+<!--<div class="site-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-7 mb-5">
         <form id="contactForm" class="contact-form">
           <div class="row form-group">
             <div class="col-md-12 mb-3 mb-md-0">
@@ -115,9 +141,9 @@ require('header.php');
           </div>
           <div id="formMessage" class="alert" style="display: none;"></div>
         </form>
-      </div>
+      </div-->
 
-      <div class="col-lg-4 ml-auto">
+      <!--div class="col-lg-4 ml-auto">
         <div class="p-4 mb-3 bg-white">
           <h3 class="h5 text-black mb-3">Contact Info</h3>
           <p class="mb-0 font-weight-bold text-black">Address</p>
@@ -129,10 +155,8 @@ require('header.php');
           <p class="mb-0 font-weight-bold text-black">Email Address</p>
           <p class="mb-0"><a href="#" id="contactEmail"></a></p>
         </div>
-      </div>
+      </div-->
     </div>
-  </div>
-</div>
 
 
 <?php
@@ -281,5 +305,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </html>
 <?php
 require 'important_include.php';
-?>   hp';
-?>   
+?>

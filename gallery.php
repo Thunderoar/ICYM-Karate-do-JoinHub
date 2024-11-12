@@ -18,7 +18,7 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sports Team &mdash; Colorlib Website Template</title>
+    <title>ICYM Karate-Do &mdash; Colorlib Website Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -132,7 +132,8 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="newSectionModalLabel">Add New Section to Gallery</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <!--button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"-->
+				<button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

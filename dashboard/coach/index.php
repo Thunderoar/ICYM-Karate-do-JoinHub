@@ -74,12 +74,12 @@ page_protect();
 				</a>
 			</div>
 			
-					<!-- logo collapse icon -->
+					<!-- logo collapse icon>
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
-				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+				<a href="#" class="sidebar-collapse-icon with-animation">< add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition>
 					<i class="entypo-menu"></i>
 				</a>
-			</div>
+			</div-->
 							
 			
 		
@@ -117,73 +117,94 @@ page_protect();
 
 				</div>
 
-			<h2>SPORTS CLUB </h2>
+			<h2>ICYM Karate-Do Hub</h2>
 
 			<hr>
 
 <div class="row">
     <div class="col-sm-3">
-        <a href="payments.php">
+        <a href="revenue_month.php">
             <div class="tile-stats tile-red">
                 <div class="icon"><i class="entypo-users"></i></div>
                 <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>You have paid</h2><br>
+                    <h2>Paid Income This Month</h2><br>
                     <?php
                     date_default_timezone_set("Asia/Kuala_Lumpur");
                     $date = date('Y-m');
-                    $query = "SELECT * FROM enrolls_to WHERE paid_date LIKE '$date%'";
+                    // Modified query to include hasPaid and hasApproved conditions
+                    $query = "SELECT enrolls_to.* FROM enrolls_to 
+                             WHERE paid_date LIKE '$date%' 
+                             AND hasPaid = 'yes' 
+                             AND hasApproved = 'yes'";
                     $result = mysqli_query($con, $query);
                     $revenue = 0;
-                    if (mysqli_affected_rows($con) != 0) {
-                        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                            $query1 = "SELECT * FROM plan WHERE planid='" . $row['planid'] . "'";
+                    if (mysqli_num_rows($result) != 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $query1 = "SELECT amount FROM plan WHERE planid='" . $row['planid'] . "'";
                             $result1 = mysqli_query($con, $query1);
                             if ($result1) {
-                                $value = mysqli_fetch_row($result1);
-                                $revenue += floatval($value[4]); // Summing up the revenue
+                                $plan = mysqli_fetch_assoc($result1);
+                                $revenue += floatval($plan['amount']);
                             }
                         }
                     }
-                    echo "RM" . number_format($revenue, 2); // Format the revenue
+                    echo "RM" . number_format($revenue, 2); // Format to 2 decimal places
                     ?>
                 </div>
             </div>
         </a>
     </div>
 
-    <div class="col-sm-3">
-        <a href="new_health_status.php">
-            <div class="tile-stats tile-green">
-                <div class="icon"><i class="entypo-chart-bar"></i></div>
-                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Healthy!<br></h2><br>
-                    <?php
-                    $query = "SELECT COUNT(*) FROM users";
-                    $result = mysqli_query($con, $query);
-                    if ($result) {
-                        $row = mysqli_fetch_array($result);
-                        echo $row['COUNT(*)'];
-                    }
-                    ?>
-                </div>
+<div class="col-sm-3">
+    <a href="view_mem.php">
+        <div class="tile-stats tile-green">
+            <div class="icon"><i class="entypo-chart-bar"></i></div>
+            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2>Total <br>Members</h2><br>
+                <?php
+                // Query to count all users
+                $query_total = "SELECT COUNT(*) as total_members FROM users";
+                $result_total = mysqli_query($con, $query_total);
+                $total_members = 0;
+                if ($result_total) {
+                    $row_total = mysqli_fetch_array($result_total);
+                    $total_members = $row_total['total_members'];
+                }
+                // Query to count unapproved users (where hasApproved is 'No')
+                $query_unapproved = "SELECT COUNT(*) as unapproved_members FROM users WHERE hasApproved = 'No'";
+                $result_unapproved = mysqli_query($con, $query_unapproved);
+                $unapproved_members = 0;
+                if ($result_unapproved) {
+                    $row_unapproved = mysqli_fetch_array($result_unapproved);
+                    $unapproved_members = $row_unapproved['unapproved_members'];
+                }
+                // Display total members and unapproved members in parentheses
+                echo $total_members;
+                if ($unapproved_members > 0) {
+                    echo " <br>($unapproved_members Unapproved)";
+                }
+                ?>
             </div>
-        </a>
-    </div>
+        </div>
+    </a>
+</div>
 
     <div class="col-sm-3">
-        <a href="viewroutine.php">
+        <a href="over_members_month.php">
             <div class="tile-stats tile-aqua">
                 <div class="icon"><i class="entypo-mail"></i></div>
                 <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Today's activity</h2><br>
+                    <h2>Joined This Month</h2><br>
                     <?php
                     date_default_timezone_set("Asia/Kuala_Lumpur");
                     $date = date('Y-m');
-                    $query = "SELECT COUNT(*) FROM users WHERE joining_date LIKE '$date%'";
+                    $query = "SELECT COUNT(*) as total FROM users WHERE joining_date LIKE '$date%'";
                     $result = mysqli_query($con, $query);
                     if ($result) {
-                        $row = mysqli_fetch_array($result);
-                        echo $row['COUNT(*)'];
+                        $row = mysqli_fetch_assoc($result);
+                        echo $row['total'];
+                    } else {
+                        echo "Error: " . mysqli_error($con);
                     }
                     ?>
                 </div>
@@ -196,7 +217,7 @@ page_protect();
             <div class="tile-stats tile-blue">
                 <div class="icon"><i class="entypo-rss"></i></div>
                 <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Joined Activity</h2><br>
+                    <h2>Total Active Event</h2><br>
                     <?php
                     $query = "SELECT COUNT(*) FROM plan WHERE active='yes'";
                     $result = mysqli_query($con, $query);
@@ -208,7 +229,6 @@ page_protect();
                 </div>
             </div>
         </a>
-		<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#303641" href="../../">Go to Homepage</a>  
     </div>
 </div>
 

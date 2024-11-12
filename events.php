@@ -59,7 +59,7 @@ mysqli_close($con);
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Sports Team &mdash; Colorlib Website Template</title>
+    <title>ICYM Karate-Do &mdash; Colorlib Website Template</title>
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,700,900|Oswald:400,700"> 
