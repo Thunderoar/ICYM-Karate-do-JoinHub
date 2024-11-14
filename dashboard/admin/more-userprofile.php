@@ -1,6 +1,8 @@
 <?php
 require '../../include/db_conn.php';
 page_protect();
+include('checkAccess.php');
+check_access('admin', 'more-userprofile.php');
 
 if (isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($con, $_POST['username']);
