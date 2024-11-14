@@ -1,6 +1,8 @@
 ﻿<?php
 require '../../include/db_conn.php';
 page_protect();
+include('checkAccess.php');
+check_access('admin', 'view_mem.php');
 ?>
 
 <!DOCTYPE html>
@@ -141,14 +143,15 @@ if (mysqli_num_rows($result) != 0) {
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $uid = $row['userid'];
 
-        echo "<tr><td>".$sno."</td>";
-        echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['joining_date']) ."</td>";
-        echo "<td>" . htmlspecialchars($row['hasApproved']) . "</td>";
+echo "<tr><td>".$sno."</td>";
+echo "<td>" . htmlspecialchars($row['userid'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['username'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['mobile'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['email'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['gender'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['joining_date'] ?? '') ."</td>";
+echo "<td>" . htmlspecialchars($row['hasApproved'] ?? '') . "</td>";
+
 
         // Action buttons
         echo "<td>

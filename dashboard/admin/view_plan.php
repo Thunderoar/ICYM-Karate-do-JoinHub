@@ -2,6 +2,8 @@
 <?php
 require '../../include/db_conn.php';
 page_protect();
+include('checkAccess.php');
+check_access('admin', 'view_plan.php');
 ?>
 
 <!DOCTYPE html>
