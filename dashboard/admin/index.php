@@ -1,6 +1,8 @@
 ﻿<?php
 require '../../include/db_conn.php';
 page_protect();
+include('checkAccess.php');
+check_access('admin', 'index.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
