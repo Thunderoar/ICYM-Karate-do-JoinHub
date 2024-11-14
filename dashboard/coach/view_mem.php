@@ -48,12 +48,12 @@ page_protect();
 			 require('../../element/loggedin-logo.html');
 			?>
 			
-					<!-- logo collapse icon -->
-					<!--div class="sidebar-collapse" onclick="collapseSidebar()">
-                    <a href="#" class="sidebar-collapse-icon with-animation">
-                        <i class="entypo-menu"></i>
-                    </a>
-                </div-->
+					<!-- logo collapse icon 
+					<div class="sidebar-collapse" onclick="collapseSidebar()">
+				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition
+					<i class="entypo-menu"></i>
+				</a>
+			</div>-->
 							
 			
 		
@@ -108,6 +108,8 @@ page_protect();
             <th>Gender</th>
             <th>Joining Date</th>
             <th>Approval Status</th>
+            <th>Joined Event</th>
+            <th>Event Date</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -120,62 +122,87 @@ $limit = 10;  // Number of members per page
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
-// Modified query for pagination
-$query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, u.hasApproved, u.dob
-           FROM users u
-           LEFT JOIN enrolls_to e ON u.userid = e.userid
-           ORDER BY u.joining_date 
-           LIMIT ? OFFSET ?";
-$stmt = mysqli_prepare($con, $query);
-mysqli_stmt_bind_param($stmt, 'ii', $limit, $offset);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+if ($_SESSION['is_coach_logged_in']) {
+    $coachId = $_SESSION['staffid']; // Assuming you have coach's ID stored in session
 
-$sno = $offset + 1; // Update to reflect correct serial number
+    // Modified query for pagination
+    $query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, e.hasApproved, u.dob,
+                p.planName AS event_name, p.startDate AS event_date
+FROM enrolls_to e
+INNER JOIN users u ON e.userid = u.userid
+INNER JOIN event_members em ON u.userid = em.userid
+INNER JOIN event_staff es ON em.planid = es.planid
+INNER JOIN plan p ON em.planid = p.planid
+WHERE e.hasPaid = 'yes' AND e.hasApproved = 'yes' AND es.staffid = ?
+ORDER BY u.joining_date
+LIMIT ? OFFSET ?";
+    $stmt = mysqli_prepare($con, $query);
+    mysqli_stmt_bind_param($stmt, 'iii', $coachId, $limit, $offset);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-if (mysqli_num_rows($result) != 0) {
-    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        $uid = $row['userid'];
+    $sno = $offset + 1; // Update to reflect correct serial number
 
-        echo "<tr><td>".$sno."</td>";
-        echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['joining_date']) ."</td>";
-        echo "<td>" . htmlspecialchars($row['hasApproved']) . "</td>";
+    if (mysqli_num_rows($result) != 0) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+            $uid = $row['userid'];
 
-        // Action buttons
-        echo "<td>
-        <div class='btn-group' role='group'>
-		<form action='../../dashboard/admin/viewall_detail.php' method='post'>
-                        <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                        <input type='submit' class='a1-btn a1-green btn' value='More Info'/>
-                    </form>
-            <form action='../../dashboard/admin/read_member.php' method='post' style='display:inline-block;'>
-                <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
-            </form>";
-			
+            echo "<tr><td>".$sno."</td>";
+            echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['joining_date']) ."</td>";
+            echo "<td>" . htmlspecialchars($row['hasApproved']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['event_name']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['event_date']) . "</td>";
 
-        // Show Approve button if not approved yet
-        if ($row['hasApproved'] == 'Not Yet' || $row['hasApproved'] == 'No') {
-            echo "<form action='approve_member.php' method='post' style='display:inline-block;'>
-                <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
-                <input type='submit' class='a1-btn a1-yellow btn' value='Approve'/>
-            </form>";
+            // Action buttons
+            echo "<td>
+            <div class='btn-group' role='group'>
+            <form action='../../dashboard/admin/viewall_detail.php' method='post'>
+                            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+                            <input type='submit' class='a1-btn a1-green btn' value='More Info'/>
+                        </form>
+                <form action='../../dashboard/admin/read_member.php' method='post' style='display:inline-block;'>
+                    <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+                    <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
+                </form>";
+
+
+            // Show Approve button if not approved yet
+            if ($row['hasApproved'] == 'Not Yet' || $row['hasApproved'] == 'No') {
+                echo "<form action='approve_member.php' method='post' style='display:inline-block;'>
+                    <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
+                    <input type='submit' class='a1-btn a1-yellow btn' value='Approve'/>
+                </form>";
+            }
+
+            // Show Disapprove button if already approved
+            if ($row['hasApproved'] == 'Yes') {
+                echo "<form action='disapprove_member.php' method='post' style='display:inline-block;'>
+                    <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
+                    <input type='submit' class='a1-btn a1-red btn' value='Disapprove'/>
+                </form>";
+            }
+
+            echo "</div></td></tr>";
+            $sno++;
         }
-
-        echo "</div></td></tr>";
-        $sno++;
+    } else {
+        echo "<tr><td colspan='11'>No records found</td></tr>"; // Updated colspan to match the number of columns
     }
-} else {
-    echo "<tr><td colspan='9'>No records found</td></tr>";
 }
 ?>
     </tbody>
 </table>
+
+
+
+
+
+
 
 <?php
 // Get the total number of members for pagination

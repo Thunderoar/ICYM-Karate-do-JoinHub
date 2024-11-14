@@ -44,12 +44,12 @@ page_protect();
 			 require('../../element/loggedin-logo.html');
 			?>
 			
-					<!-- logo collapse icon -->
-					<!--div class="sidebar-collapse" onclick="collapseSidebar()">
-                    <a href="#" class="sidebar-collapse-icon with-animation">
-                        <i class="entypo-menu"></i>
-                    </a>
-                </div-->
+					<!-- logo collapse icon 
+					<div class="sidebar-collapse" onclick="collapseSidebar()">
+				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition
+					<i class="entypo-menu"></i>
+				</a>
+			</div>-->
 							
 			
 		
@@ -106,12 +106,28 @@ page_protect();
     <tbody>
 
 <?php
+// Assuming the coach's staffid is stored in the session after login
+if (!isset($_SESSION['staffid'])) {
+    die("Please login first");
+}
+$staffid = $_SESSION['staffid'];
+
+// Modified query to only show payments for events where the coach is assigned
 $query = "SELECT e.*, u.username, u.mobile, u.email, p.planName 
           FROM enrolls_to e
           JOIN users u ON e.userid = u.userid
           JOIN plan p ON e.planid = p.planid
+          JOIN event_staff es ON e.planid = es.planid
+          WHERE es.staffid = ? 
+          AND p.planType = 'event'  -- Assuming there's a planType column to distinguish events
           ORDER BY e.expire";
-$result = mysqli_query($con, $query);
+
+// Using prepared statement for security
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, "i", $staffid);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
 $sno = 1;
 
 if (mysqli_num_rows($result) > 0) {
@@ -130,15 +146,14 @@ if (mysqli_num_rows($result) > 0) {
         echo "<td>" . htmlspecialchars($row['username']) . "</td>";
         echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
         echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-        echo "<td>" . htmlspecialchars($planName) . "</td>"; 
+        echo "<td>" . htmlspecialchars($planName) . "</td>";
 
         $sno++;
 
         // Action based on payment and approval status
         if ($hasPaid === 'no') {
-            // Payment not made
             echo "<td>
-                    <form action='make_payments.php' method='post'>
+                    <form action='../../dashboard/admin/make_payments.php' method='post'>
                         <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                         <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
                         <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
@@ -147,46 +162,40 @@ if (mysqli_num_rows($result) > 0) {
                     <p>Payment ID: $et_id</p>
                   </td>";
         } elseif ($hasPaid === 'yes' && $hasApproved === 'no') {
-            // Payment made but not approved
             echo "<td>
-                    <form action='make_payments.php' method='post' style='display:inline;'>
+                    <form action='../../dashboard/admin/approve_payment.php' method='post' style='display:inline;'>
                         <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                         <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
                         <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
                         <input type='submit' class='a1-btn a1-green' value='Approve Payment'/>
                     </form>
-                    <form action='cancel_payment.php' method='post' style='display:inline;'>
+                    <form action='../../dashboard/admin/cancel_payment.php' method='post' style='display:inline;'>
                         <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
                         <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                         <input type='submit' class='a1-btn a1-yellow' value='Cancel Payment' onclick='return confirm(\"Are you sure you want to cancel this payment?\");'/>
                     </form>";
-					
-			 // Check if receipt is available
+            
             if (!empty($receiptIMG)) {
                 echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
             } else {
                 echo "<p>No Receipt Available</p>";
             }
-					
-			echo"<p>Payment Pending Approval</p>
+            
+            echo "<p>Payment Pending Approval</p>
                     <p>Payment ID: $et_id</p>
                   </td>";
         } elseif ($hasPaid === 'yes' && $hasApproved === 'yes') {
-            // Payment made and approved
             echo "<td>
                     <p>Payment Approved</p>
                     <p>Payment ID: $et_id</p>";
 
-			// Check if receipt is available
             if (!empty($receiptIMG)) {
                 echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
             } else {
                 echo "<p>No Receipt Available</p>";
-
             }
 
-            // Button to undo approved payment
-            echo "<form action='undo_payment.php' method='post' style='display:inline;'>
+            echo "<form action='../../dashboard/admin/undo_payment.php' method='post' style='display:inline;'>
                     <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
                     <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
                     <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
@@ -195,7 +204,6 @@ if (mysqli_num_rows($result) > 0) {
 
             echo "</td>";
         } else {
-            // Default fallback if neither condition applies
             echo "<td>No Action Needed</td>";
         }
         echo "</tr>";
@@ -203,6 +211,9 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     echo "<tr><td colspan='7'>No records found</td></tr>";
 }
+
+// Clean up
+mysqli_stmt_close($stmt);
 ?>
     </tbody>
 </table>
