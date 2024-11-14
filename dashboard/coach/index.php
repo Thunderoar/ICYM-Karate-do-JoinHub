@@ -74,12 +74,12 @@ page_protect();
 				</a>
 			</div>
 			
-					<!-- logo collapse icon>
+					<!-- logo collapse icon
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
-				<a href="#" class="sidebar-collapse-icon with-animation">< add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition>
+				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition 
 					<i class="entypo-menu"></i>
 				</a>
-			</div-->
+			</div>-->
 							
 			
 		
@@ -117,7 +117,7 @@ page_protect();
 
 				</div>
 
-			<h2>ICYM Karate-Do Hub</h2>
+			<h2>SPORTS CLUB </h2>
 
 			<hr>
 
@@ -229,6 +229,7 @@ page_protect();
                 </div>
             </div>
         </a>
+		<a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#303641" href="../../">Go to Homepage</a>  
     </div>
 </div>
 
