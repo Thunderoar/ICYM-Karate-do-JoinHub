@@ -1,5 +1,4 @@
 <?php
-// Assume you have already established a database connection in $con
 require '../../include/db_conn.php';
 page_protect();
 
@@ -13,19 +12,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updateQuery = "UPDATE enrolls_to SET hasPaid='no' WHERE et_id='$et_id' AND userid='$userID'";
         
         if (mysqli_query($con, $updateQuery)) {
-            // Redirect to a success page or back to the previous page
-            header("Location: payments.php?message=Payment canceled successfully.");
-            exit(); // Make sure to call exit after header to prevent further script execution
+            // Redirect to the appropriate directory with a success message
+            if (isset($_SESSION['is_admin_logged_in'])) {
+                header("Location: ../../dashboard/admin/payments.php?message=Payment canceled successfully.");
+            } elseif (isset($_SESSION['is_coach_logged_in'])) {
+                header("Location: ../../dashboard/coach/payments.php?message=Payment canceled successfully.");
+            }
+            exit();
         } else {
-			header("Location: payments.php?message=Error canceling payment.");
-			exit(); // Make sure to call exit after header to prevent further script execution
+            // Redirect to the appropriate directory with an error message
+            if (isset($_SESSION['is_admin_logged_in'])) {
+                header("Location: ../../dashboard/admin/payments.php?message=Error canceling payment.");
+            } elseif (isset($_SESSION['is_coach_logged_in'])) {
+                header("Location: ../../dashboard/coach/payments.php?message=Error canceling payment.");
+            }
+            exit();
         }
     } else {
-		header("Location: payments.php?message=Required data is missing.");
-		exit(); // Make sure to call exit after header to prevent further script execution
+        // Redirect to the appropriate directory with a missing data message
+        if (isset($_SESSION['is_admin_logged_in'])) {
+            header("Location: ../../dashboard/admin/payments.php?message=Required data is missing.");
+        } elseif (isset($_SESSION['is_coach_logged_in'])) {
+            header("Location: ../../dashboard/coach/payments.php?message=Required data is missing.");
+        }
+        exit();
     }
 } else {
-	header("Location: payments.php?message=Invalid request method.");
-	exit(); // Make sure to call exit after header to prevent further script execution
+    // Redirect to the appropriate directory with an invalid request message
+    if (isset($_SESSION['is_admin_logged_in'])) {
+        header("Location: ../../dashboard/admin/payments.php?message=Invalid request method.");
+    } elseif (isset($_SESSION['is_coach_logged_in'])) {
+        header("Location: ../../dashboard/coach/payments.php?message=Invalid request method.");
+    }
+    exit();
 }
 ?>
