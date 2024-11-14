@@ -2,26 +2,93 @@
 require 'include/db_conn.php';
 
 // Retrieve form data
-$memID = $_POST['m_id'];
-$healthID = $_POST['h_id'];
+$fullName = $_POST['full_name'];
+$matrixNumber = $_POST['matrix_number'];
+$courseQuery = $_POST['course_query'];
+$phoneNo = $_POST['phone_no'];
+$passKey = $_POST['pass_key'];
+$hasApproved = $_POST['hasApproved'];
 $addressID = $_POST['address_id'];
+$healthID = $_POST['h_id'];
+$no_ic = $_POST['no_ic'];
+$memID = $_POST['m_id'];
+// Retrieve form data
+
+
+
 $uname = $_POST['u_name'];
-$stname = $_POST['street_name'];
-$city = $_POST['city'];
-$zipCODE = $_POST['zipcode'];
-$state = $_POST['state'];
-$gender = $_POST['gender'];
-$dob = $_POST['dob'];
-$phn = $_POST['mobile'];
-$email = $_POST['email'];
-$jdate = $_POST['jdate'];
 $plan = 'XTWIOL';
 
-$pass_key = $_POST['pass_key'];
+// Handling image upload outside the final if condition
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $target_dir = "uploads/user_profile/";
+
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+
+    $uploadOk = 1;
+    $target_file = "";
+
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $target_file = $target_dir . basename($_FILES["image"]["name"]);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        $check = getimagesize($_FILES["image"]["tmp_name"]);
+        if ($check === false) {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+
+        if (file_exists($target_file)) {
+            echo "Sorry, file already exists.";
+            $uploadOk = 0;
+        }
+
+        if ($_FILES["image"]["size"] > 5000000) {
+            echo "Sorry, your file is too large.";
+            $uploadOk = 0;
+        }
+
+        if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+    } else {
+        echo "No file uploaded. Proceeding without an image.";
+    }
+
+    if ($uploadOk == 1) {
+        if (!empty($target_file)) {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                chmod($target_file, 0777);
+                $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', '$target_file')";
+                if (mysqli_query($con, $sql)) {
+                    echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
+                } else {
+                    echo "Error inserting image data into database.";
+                }
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        } else {
+            $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', NULL)";
+            if (mysqli_query($con, $sql)) {
+                echo "Record inserted without an image.";
+            } else {
+                echo "Error inserting data into database.";
+            }
+        }
+    } else {
+        echo "Sorry, your file was not uploaded.";
+    }
+} else {
+    echo "No file uploaded.";
+}
 
 // Insert into users table
-$query = "INSERT INTO users(username, fullName, gender, mobile, email, dob, joining_date, imageid, userid, pass_key, hasApproved) 
-          VALUES ('$uname', '$uname', '$gender', '$phn', '$email', '$dob', '$jdate', 'UUID()', '$memID', '$pass_key', 'No')";
+$query = "INSERT INTO users(userid, fullName, username, matrixNumber, courseName, mobile, pass_key, hasApproved, no_ic) 
+          VALUES ('$memID', '$fullName', '$uname', '$matrixNumber', '$courseQuery', '$phoneNo', '$passKey', '$hasApproved', '$no_ic')";
 if (mysqli_query($con, $query)) {
     
     // Retrieve information about the selected plan
@@ -54,76 +121,8 @@ if (mysqli_query($con, $query)) {
 
                     // Insert into login table
                     $query6 = "INSERT INTO login(loginid, userid, username, pass_key, securekey, authority) 
-                               VALUES (UUID(), '$memID', '$uname', '$pass_key', UUID(), 'member')";
+                               VALUES (UUID(), '$memID', '$uname', '$passKey', UUID(), 'member')";
                     if (mysqli_query($con, $query6)) {
-
-                        // Handling image upload outside the final if condition
-                        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                            $target_dir = "uploads/user_profile/";
-
-                            if (!is_dir($target_dir)) {
-                                mkdir($target_dir, 0777, true);
-                            }
-
-                            $uploadOk = 1;
-                            $target_file = "";
-
-                            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                                $target_file = $target_dir . basename($_FILES["image"]["name"]);
-                                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-                                $check = getimagesize($_FILES["image"]["tmp_name"]);
-                                if ($check === false) {
-                                    echo "File is not an image.";
-                                    $uploadOk = 0;
-                                }
-
-                                if (file_exists($target_file)) {
-                                    echo "Sorry, file already exists.";
-                                    $uploadOk = 0;
-                                }
-
-                                if ($_FILES["image"]["size"] > 5000000) {
-                                    echo "Sorry, your file is too large.";
-                                    $uploadOk = 0;
-                                }
-
-                                if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                                    $uploadOk = 0;
-                                }
-                            } else {
-                                echo "No file uploaded. Proceeding without an image.";
-                            }
-
-                            if ($uploadOk == 1) {
-                                if (!empty($target_file)) {
-                                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                        chmod($target_file, 0777);
-                                        $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', '$target_file')";
-                                        if (mysqli_query($con, $sql)) {
-                                            echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
-                                        } else {
-                                            echo "Error inserting image data into database.";
-                                        }
-                                    } else {
-                                        echo "Sorry, there was an error uploading your file.";
-                                    }
-                                } else {
-                                    $sql = "INSERT INTO images (imageid, userid, image_path) VALUES (UUID(), '$memID', NULL)";
-                                    if (mysqli_query($con, $sql)) {
-                                        echo "Record inserted without an image.";
-                                    } else {
-                                        echo "Error inserting data into database.";
-                                    }
-                                }
-                            } else {
-                                echo "Sorry, your file was not uploaded.";
-                            }
-                        } else {
-                            echo "No file uploaded.";
-                        }
-
                         echo "<head><script>alert('Member Added');</script></head>";
                         echo "<meta http-equiv='refresh' content='0; url=index.php'>";
                     } else {
