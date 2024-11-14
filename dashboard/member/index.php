@@ -11,6 +11,30 @@ $result = mysqli_query($con, $query);
 $row = mysqli_fetch_assoc($result);
 $isApproved = $row['hasApproved'];
 
+// Get the logged-in user's ID from the session
+$user_id = $_SESSION['userid'];
+
+// Fetch the user profile
+$sql = "SELECT * FROM users WHERE userid = $user_id";
+$result = $con->query($sql);
+
+if ($result->num_rows > 0) {
+    $userProfile = $result->fetch_assoc();
+
+    // Check if the profile is complete
+    $isProfileComplete = true;
+    foreach ($userProfile as $key => $value) {
+        if ($value === null) {
+            $isProfileComplete = false;
+            break;
+        }
+    }
+} else {
+    // Handle case where user is not found
+    $isProfileComplete = false;
+}
+
+$con->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +69,27 @@ $isApproved = $row['hasApproved'];
             text-align: center;
             margin: 20px 0; /* Add some spacing around the message */
         }
+
+
+.profile-button {
+  display: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  margin: 0 auto; /* Center the button horizontally */
+  display: block; /* Needed to use margin auto */
+  text-align: center; /* Center the text inside the button */
+}
+.profile-button:hover {
+  background-color: #218838;
+}
+
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -82,7 +127,27 @@ $isApproved = $row['hasApproved'];
 
             <?php if ($isApproved == 'No'): ?>
                 <div class="approval-message">You have not been approved yet.</div>
-				<div class="approval-message">Please wait for approval by the Club Manager.</div><br>
+<div class="approval-message complete-profile">Please do complete your profile.</div><br>
+<div class="approval-message wait-approval" style="display: none;">You have completed your profile. <br>Please wait for approval by the Club Manager <br> which might take up to 3 days.</div>
+<button class="profile-button" style="display: none;" onclick="window.location.href='more-userprofile.php'">Complete Your Profile</button>
+
+<script>
+  // Custom function to display appropriate message or button based on profile completion
+  function showProfileStatus() {
+    <?php if ($isProfileComplete): ?>
+      document.querySelector('.complete-profile').style.display = 'none';
+      document.querySelector('.wait-approval').style.display = 'block';
+    <?php else: ?>
+      document.querySelector('.complete-profile').style.display = 'block';
+      document.querySelector('.profile-button').style.display = 'block';
+    <?php endif; ?>
+  }
+
+  // Call the custom function on window load
+  window.addEventListener('load', showProfileStatus);
+</script>
+
+
             <?php else: ?>
                 <div class="row">
 <div class="col-sm-3"><a href="payments.php">
@@ -208,7 +273,7 @@ if (!isset($tileClass)) {
 ?>
 
 <div class="col-sm-3">
-    <a href="new_health_status.php">
+    <a href="more-userprofile.php">
         <div class="tile-stats <?php echo htmlspecialchars($tileClass); ?>">
             <div class="icon"><i class="entypo-chart-bar"></i></div>
             <div class="num" data-postfix="" data-duration="1500" data-delay="0">
