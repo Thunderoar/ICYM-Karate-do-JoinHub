@@ -58,12 +58,12 @@ if(isset($_POST['submit'])){
 			 require('../../element/loggedin-logo.html');
 			?>
 			
-					<!-- logo collapse icon -->
-					<!--div class="sidebar-collapse" onclick="collapseSidebar()">
-                    <a href="#" class="sidebar-collapse-icon with-animation">
-                        <i class="entypo-menu"></i>
-                    </a>
-                </div-->
+					<!-- logo collapse icon 
+					<div class="sidebar-collapse" onclick="collapseSidebar()">
+				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition
+					<i class="entypo-menu"></i>
+				</a>
+			</div>-->
 							
 			
 		
