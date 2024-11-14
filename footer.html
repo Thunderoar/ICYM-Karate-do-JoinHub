@@ -36,6 +36,26 @@ while ($row = $aboutUsResult->fetch_assoc()) {
 
     <link rel="stylesheet" href="css/homepagestyle.css">
     
+	
+<style>
+<style>
+    .custom-theme .widget p {
+        color: white !important;
+    }
+
+    .custom-theme .widget p:hover {
+        color: white !important;
+    }
+    .custom-theme .widget h3 {
+        color: white !important;
+    }
+
+    .custom-theme .widget h3:hover {
+        color: white !important;
+    }
+</style>
+
+
   </head>
   
   <body>
@@ -43,12 +63,14 @@ while ($row = $aboutUsResult->fetch_assoc()) {
     <div class="footer">
       <div>
         <div class="row footer-inner" style="background-color: #00003c" >
-<div class="col-lg-3">
+<div class="col-lg-3 custom-theme">
     <div class="widget mb-4">
-        <h3 style="color: white!important;">About Us</h3>
-                        <p style="color: #a9c9fc!important"><?php echo nl2br(htmlspecialchars($aboutUsContent['about_column_1']['content_text'])); ?></p>
+        <h3>About Us</h3>
+        <p><?php echo nl2br(htmlspecialchars($aboutUsContent['about_column_1']['content_text'])); ?></p>
     </div>
 </div>
+
+
           <div class="col-lg-3">
 <?php
 // Assuming database connection is already established
@@ -78,7 +100,7 @@ if(mysqli_num_rows($result) > 0) {
     echo '</ul>';
     echo '</div>';
 } else {
-    echo '<p style="color: #a9c9fc!important">No upcoming matches found.</p>';
+    echo '<p style="color:white!important">No upcoming matches found.</p>';
 }
 ?>
 
