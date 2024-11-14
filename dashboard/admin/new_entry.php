@@ -64,12 +64,12 @@ line-height:0.5cm;
 			 require('../../element/loggedin-logo.html');
 			?>
 			
-					<!-- logo collapse icon>
-					<div class="sidebar-collapse" onclick="collapseSidebar()">
-				<a href="#" class="sidebar-collapse-icon with-animation"><add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition>
+					<!-- logo collapse icon -->
+					<!-- <div class="sidebar-collapse" onclick="collapseSidebar()">
+				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition 
 					<i class="entypo-menu"></i>
 				</a>
-			</div-->
+			</div>-->
 							
 			
 		
@@ -143,23 +143,23 @@ line-height:0.5cm;
              </tr>
              <tr>
                <td height="35">Street Name:</td>
-               <td height="35"><input  name="street_name" id="boxx"   required/></td>
+               <td height="35"><input  name="street_name" id="boxx"></td>
              </tr>
              <tr>
                <td height="35">City:</td>
-               <td height="35"><input type="text" name="city" id="boxx" required/></td>
+               <td height="35"><input type="text" name="city" id="boxx"></td>
              </tr>
              <tr>
                <td height="35">Zipcode:</td>
-               <td height="35"><input type="number" name="zipcode" id="boxx" maxlength="5" required /></td>
+               <td height="35"><input type="number" name="zipcode" id="boxx" maxlength="5"></td>
              </tr>
             <tr>
                <td height="35">State:</td>
-               <td height="35"><input type="text" name="state" id="boxx" required/ size="30"></td>
+               <td height="35"><input type="text" name="state" id="boxx" size="30"></td>
              </tr>
             <tr>
                <td height="35">Gender:</td>
-               <td height="35"><select name="gender" id="boxx" required>
+               <td height="35"><select name="gender" id="boxx">
 
 					<option value="">--Please Select--</option>
 					<option value="Male">Male</option>
@@ -168,11 +168,11 @@ line-height:0.5cm;
              </tr>
             <tr>
                <td height="35">Date Of Birth:</td>
-               <td height="35"><input type="date" name="dob" id="boxx" required/ size="30"></td>
+               <td height="35"><input type="date" name="dob" id="boxx"size="30"></td>
              </tr>
 			 <tr>
                <td height="35">Phone No:</td>
-               <td height="35"><input type="number" name="mobile" id="boxx" maxlength="10" required/ size="30"></td>
+               <td height="35"><input type="number" name="mobile" id="boxx" maxlength="10" size="30"></td>
              </tr>
 			  <tr>
                <td height="35">Email ID:</td>
@@ -180,7 +180,7 @@ line-height:0.5cm;
              </tr>
 			 <tr>
                <td height="35">Joining Date:</td>
-               <td height="35"><input type="date" name="jdate" id="boxx" required size="30"></td>
+               <td height="35"><input type="date" name="jdate" id="boxx" size="30"></td>
              </tr>
              <tr>
 			<!-- <td height="35">YOUR HEALTH ID:</td> -->
