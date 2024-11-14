@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 12, 2024 at 01:37 PM
+-- Generation Time: Nov 14, 2024 at 05:30 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -29,15 +29,15 @@ SET time_zone = "+00:00";
 --
 DROP VIEW IF EXISTS `active_plans`;
 CREATE TABLE IF NOT EXISTS `active_plans` (
-`planid` varchar(8)
-,`planName` varchar(20)
+`active` varchar(255)
+,`amount` int
 ,`description` varchar(200)
+,`duration` int
+,`endDate` varchar(50)
+,`planid` varchar(8)
+,`planName` varchar(20)
 ,`planType` varchar(50)
 ,`startDate` varchar(50)
-,`endDate` varchar(50)
-,`duration` int
-,`amount` int
-,`active` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -49,11 +49,13 @@ CREATE TABLE IF NOT EXISTS `active_plans` (
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE IF NOT EXISTS `address` (
   `addressid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `staffid` varchar(40) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `adminid` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `streetName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `state` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `city` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `zipcode` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `streetName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `state` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `city` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `zipcode` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`addressid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -61,33 +63,46 @@ CREATE TABLE IF NOT EXISTS `address` (
 -- Dumping data for table `address`
 --
 
-INSERT INTO `address` (`addressid`, `userid`, `streetName`, `state`, `city`, `zipcode`) VALUES
-('159297509', '1729589256', '', '', '', ''),
-('178160492', '1729503048', '', '', '', ''),
-('233879111', '1729503254', '', '', '', ''),
-('244071432', '1730037014', '', '', '', ''),
-('259825696', '1730044070', '', '', '', ''),
-('398226207', '1729503605', '', '', '', ''),
-('443957638', '1729499689', '', '', '', ''),
-('445117942', '1729500525', '', '', '', ''),
-('474709767', '1729653160', '', '', '', ''),
-('541188054', '1729503562', '', '', '', ''),
-('603347436', '1730942013', '', '', '', ''),
-('651796491', '1729501754', '', '', '', ''),
-('664647014', '1730036662', '', '', '', ''),
-('672538767', '1729500022', '', '', '', ''),
-('696159057', '1729654531', '', '', '', ''),
-('737416117', '1730035207', '', '', '', ''),
-('749610901', '1730601491', '', '', '', ''),
-('762966398', '1729502982', '', '', '', ''),
-('769730378', '1729499715', '', '', '', ''),
-('791246783', '1729816197', '', '', '', ''),
-('889334180', '1729506355', '', '', '', ''),
-('935899936', '1729499109', '', '', '', ''),
-('948864454', '1729503655', '', '', '', ''),
-('965810506', '1729503504', '', '', '', ''),
-('982014755', '1730087557', '', '', '', ''),
-('995837925', '1729502959', '', '', '', '');
+INSERT INTO `address` (`addressid`, `staffid`, `adminid`, `userid`, `streetName`, `state`, `city`, `zipcode`) VALUES
+('145149316', NULL, NULL, '1731460556', '', '', '', ''),
+('159297509', NULL, NULL, '1729589256', '', '', '', ''),
+('178160492', NULL, NULL, '1729503048', '', '', '', ''),
+('233879111', NULL, NULL, '1729503254', '', '', '', ''),
+('238769188', NULL, NULL, '1731460567', '', '', '', ''),
+('244071432', NULL, NULL, '1730037014', '', '', '', ''),
+('259825696', NULL, NULL, '1730044070', '', '', '', ''),
+('260450272', NULL, NULL, '1731458124', NULL, NULL, NULL, NULL),
+('263868116', NULL, NULL, '1731462834', '', '', '', ''),
+('28643920', NULL, NULL, '1731458693', NULL, NULL, NULL, NULL),
+('398226207', NULL, NULL, '1729503605', '', '', '', ''),
+('439216695', NULL, NULL, '1731425542', '', '', '', ''),
+('443957638', NULL, NULL, '1729499689', '', '', '', ''),
+('445117942', NULL, NULL, '1729500525', '', '', '', ''),
+('474709767', NULL, NULL, '1729653160', '', '', '', ''),
+('541188054', NULL, NULL, '1729503562', '', '', '', ''),
+('560851705', NULL, NULL, '1731462741', '', '', '', ''),
+('603347436', NULL, NULL, '1730942013', '', '', '', ''),
+('612212550', NULL, NULL, '1731454171', '', '', '', ''),
+('651796491', NULL, NULL, '1729501754', '', '', '', ''),
+('664647014', NULL, NULL, '1730036662', '', '', '', ''),
+('672538767', NULL, NULL, '1729500022', '', '', '', ''),
+('696159057', NULL, NULL, '1729654531', '', '', '', ''),
+('721240106', NULL, NULL, '1731457462', '', '', '', ''),
+('737416117', NULL, NULL, '1730035207', '', '', '', ''),
+('749610901', NULL, NULL, '1730601491', '', '', '', ''),
+('762966398', NULL, NULL, '1729502982', '', '', '', ''),
+('76893169', NULL, NULL, '1731459785', '', '', '', ''),
+('769730378', NULL, NULL, '1729499715', '', '', '', ''),
+('791246783', NULL, NULL, '1729816197', '', '', '', ''),
+('808845610', NULL, NULL, '1731455101', '', '', '', ''),
+('889334180', NULL, NULL, '1729506355', '', '', '', ''),
+('903907441', NULL, NULL, '1731457659', '', '', '', ''),
+('935899936', NULL, NULL, '1729499109', '', '', '', ''),
+('948864454', NULL, NULL, '1729503655', '', '', '', ''),
+('965810506', NULL, NULL, '1729503504', '', '', '', ''),
+('982014755', NULL, NULL, '1730087557', '', '', '', ''),
+('99440050', NULL, NULL, '1731460836', '', '', '', ''),
+('995837925', NULL, NULL, '1729502959', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -115,20 +130,63 @@ INSERT INTO `admin` (`adminid`, `username`, `pass_key`, `securekey`, `Full_name`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contactinfo`
+--
+
+DROP TABLE IF EXISTS `contactinfo`;
+CREATE TABLE IF NOT EXISTS `contactinfo` (
+  `contactinfoid` int NOT NULL AUTO_INCREMENT,
+  `contactAddress` text COLLATE utf8mb4_general_ci NOT NULL,
+  `contactPhone` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `contactEmail` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`contactinfoid`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contactinfo`
+--
+
+INSERT INTO `contactinfo` (`contactinfoid`, `contactAddress`, `contactPhone`, `contactEmail`) VALUES
+(1, 'Kolej Antarabangsa Yayasan Melaka, No 1, Jalan Bukit Sebukor', '(+60) 18-271 62', '');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `contact_messages`
 --
 
 DROP TABLE IF EXISTS `contact_messages`;
 CREATE TABLE IF NOT EXISTS `contact_messages` (
   `message_id` int NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `subject` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `fullname` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `message` text COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('new','read','replied') COLLATE utf8mb4_general_ci DEFAULT 'new',
+  `read_status` varchar(8) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `archive_status` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`message_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contact_messages`
+--
+
+INSERT INTO `contact_messages` (`message_id`, `fullname`, `email`, `subject`, `message`, `created_at`, `read_status`, `archive_status`) VALUES
+(1, 'a', 'a@gmail.com', 'a', 'a', '2024-11-14 00:27:58', '1', 0),
+(10, 'testing1', 'testing1@gmail.com', 'testing', 'testing karate', '2024-11-14 01:42:27', NULL, 0),
+(11, 'wow!', 'ww@gmail.com', 'ww@gmail.com', 'ww', '2024-11-14 01:46:32', NULL, 0),
+(12, 'again', 'again@gmail.com', 'again@gmail.com', 'again', '2024-11-14 01:48:13', NULL, 0),
+(3, 'Azlan', 'azlan@gmail.com', 'saya berminat untuk memasuki kelab karate ini', 'dari dahulu sy suka menendang, sy ingin mengasah bakat menendang sy dengan lebih mantap, dengan itu sy ingin di register masuk', '2024-11-14 00:33:12', '1', 1),
+(4, 'wow', 'wow@gmail.com', 'wow', 'wow', '2024-11-14 00:33:26', '1', 1),
+(13, 'a', 'a@gmail.com', 'a', 'a', '2024-11-14 01:51:40', NULL, 0),
+(6, 'test', 'test@gmail.com', 'test', 'test', '2024-11-14 00:33:51', '1', 1),
+(9, 'kereta', 'kereta@gmail.com', 'kereta', 'kereta', '2024-11-14 01:25:19', NULL, 0),
+(14, 'wo', 'wow@gmail.com', 'wow', 'wow', '2024-11-14 01:51:59', NULL, 0),
+(29, 'asd', 'sdf@gmail.com', 'sdf', 'sdf', '2024-11-14 02:03:13', NULL, 0),
+(30, 'asd', 'sdf@gmail.com', 'sdf', 'sdf', '2024-11-14 02:03:18', NULL, 0),
+(31, 'asd', 'sdf@gmail.com', 'asd', 'asd', '2024-11-14 02:03:25', NULL, 0),
+(32, 'sdf', 'sdf@gmail.com', 'sdf', 'sdf', '2024-11-14 02:03:34', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -147,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
   `hasApproved` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `receiptIMG` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`et_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
@@ -156,10 +214,37 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
 INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
 (89, 'UGZVJQ', '1730087557', '', '2024-11-28 11:54:08', 'no', '', ''),
 (90, 'TGNJRZ', '1730087557', '', '2024-11-28 11:54:13', 'no', '', ''),
-(91, 'XTWIOL', '1730601491', '2024-11-11 19:18:05', '9999-12-31', 'no', 'no', ''),
-(92, 'XTWIOL', '1730942013', '2024-11-09 14:39:20', '9999-12-31', 'yes', 'yes', ''),
-(133, 'VXZPMY', '1730087557', '2024-11-11 19:14:36', '9999-12-31', 'yes', 'no', ''),
-(141, 'XTWIOL', '1730087557', '2024-11-11 18:54:07', '9999-12-31', 'yes', 'yes', '');
+(92, 'XTWIOL', '1730942013', '2024-11-12 23:30:50', '9999-12-31', 'yes', 'yes', ''),
+(133, 'VXZPMY', '1730087557', '2024-11-13 15:26:05', '9999-12-31', 'yes', 'yes', ''),
+(141, 'XTWIOL', '1730087557', '2024-11-12 22:28:12', '9999-12-31', 'yes', 'yes', ''),
+(150, 'XTWIOL', '1730601491', '2024-11-12 22:13:22', '9999-12-31', 'yes', 'yes', ''),
+(151, 'ZHXPSA', '1730601491', '2024-11-13 15:25:55', '9999-12-31', 'yes', 'yes', ''),
+(152, 'XTWIOL', '1731425542', '2024-11-12', '1970-01-01', 'no', '', ''),
+(153, 'VXZPMY', '1731425542', '2024-11-12 23:34:59', '9999-12-31', 'yes', 'yes', ''),
+(154, 'XTWIOL', '1731454171', '2024-11-13 07:33:06', '9999-12-31', 'yes', 'yes', ''),
+(155, 'VXZPMY', '1731454171', '2024-11-13 07:33:42', '9999-12-31', 'yes', 'yes', ''),
+(156, 'XTWIOL', '1731455101', '2024-11-13', '1970-01-01', 'no', '', ''),
+(157, 'VXZPMY', '1731455101', '2024-11-13 07:46:13', '9999-12-31', 'yes', 'yes', ''),
+(160, 'XTWIOL', '1731457462', '2024-11-13', '1970-01-01', 'no', '', ''),
+(161, 'XTWIOL', '1731457659', '2024-11-13', '1970-01-01', 'no', '', ''),
+(162, 'VXZPMY', '1731457659', '2024-11-13 08:29:20', '9999-12-31', 'yes', 'yes', ''),
+(165, 'XTWIOL', '1731458124', '2024-11-13', '1970-01-01', 'no', '', ''),
+(166, 'VXZPMY', '1731458124', '2024-11-13 08:37:17', '9999-12-31', 'yes', 'yes', ''),
+(167, 'XTWIOL', '1731458565', '2024-11-13', '1970-01-01', 'no', '', ''),
+(168, 'XTWIOL', '1731458693', '2024-11-13', '1970-01-01', 'no', '', ''),
+(169, 'VXZPMY', '1731458693', '2024-11-13 08:45:53', '9999-12-31', 'yes', 'no', ''),
+(170, 'XTWIOL', '1731459785', '2024-11-13 09:04:22', '9999-12-31', 'yes', 'yes', ''),
+(171, 'VXZPMY', '1731459785', '2024-11-13 09:04:51', '9999-12-31', 'yes', 'yes', ''),
+(172, 'XTWIOL', '1731460346', '2024-11-13', '1970-01-01', 'no', '', ''),
+(173, 'XTWIOL', '1731460556', '2024-11-13', '1970-01-01', 'no', '', ''),
+(174, 'XTWIOL', '1731460567', '2024-11-13', '1970-01-01', 'no', '', ''),
+(175, 'VXZPMY', '1731460567', '2024-11-13 09:17:57', '9999-12-31', 'yes', 'yes', ''),
+(176, 'XTWIOL', '1731460836', '2024-11-13', '1970-01-01', 'no', '', ''),
+(177, 'VXZPMY', '1731460836', '2024-11-13 09:22:21', '9999-12-31', 'yes', 'yes', ''),
+(178, 'XTWIOL', '1731462741', '2024-11-13', '1970-01-01', 'no', '', ''),
+(179, 'VXZPMY', '1731462741', '2024-11-13 09:53:30', '9999-12-31', 'yes', 'yes', ''),
+(180, 'XTWIOL', '1731462834', '2024-11-13 09:54:39', '9999-12-31', 'yes', 'yes', ''),
+(185, 'VXZPMY', '1730601491', '2024-11-14 12:23:19', '9999-12-31', 'no', 'no', '');
 
 -- --------------------------------------------------------
 
@@ -176,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `event_members` (
   PRIMARY KEY (`em_id`),
   KEY `planid` (`planid`),
   KEY `userid` (`userid`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_members`
@@ -184,10 +269,25 @@ CREATE TABLE IF NOT EXISTS `event_members` (
 
 INSERT INTO `event_members` (`em_id`, `planid`, `userid`, `joined_at`) VALUES
 (25, '0', 1730601491, '2024-11-11 09:30:44'),
-(29, 'VXZPMY', 1730087557, '2024-11-11 11:26:31'),
-(30, 'VXZPMY', 1729500896, '2024-11-11 11:26:31'),
-(31, 'VXZPMY', 1730601491, '2024-11-11 11:26:31'),
-(32, 'VXZPMY', 1730942013, '2024-11-11 11:26:31');
+(71, 'VXZPMY', 1730087557, '2024-11-13 07:26:05'),
+(49, 'XTWIOL', 1730942013, '2024-11-12 15:30:50'),
+(47, 'ZHXPSA', 1730087557, '2024-11-12 15:13:32'),
+(33, 'XTWIOL', 1730601491, '2024-11-12 14:13:22'),
+(34, 'XTWIOL', 1730087557, '2024-11-12 14:28:12'),
+(53, 'VXZPMY', 1730942013, '2024-11-12 15:31:40'),
+(55, 'VXZPMY', 1731425542, '2024-11-12 15:34:59'),
+(56, 'XTWIOL', 1731454171, '2024-11-12 23:33:06'),
+(57, 'VXZPMY', 1731454171, '2024-11-12 23:33:42'),
+(58, 'VXZPMY', 1731455101, '2024-11-12 23:46:13'),
+(59, 'VXZPMY', 1731457659, '2024-11-13 00:29:20'),
+(60, 'VXZPMY', 1731458124, '2024-11-13 00:37:17'),
+(61, 'XTWIOL', 1731459785, '2024-11-13 01:04:22'),
+(62, 'VXZPMY', 1731459785, '2024-11-13 01:04:51'),
+(63, 'VXZPMY', 1731460567, '2024-11-13 01:17:57'),
+(64, 'VXZPMY', 1731460836, '2024-11-13 01:22:21'),
+(65, 'VXZPMY', 1731462741, '2024-11-13 01:53:30'),
+(66, 'XTWIOL', 1731462834, '2024-11-13 01:54:39'),
+(70, 'ZHXPSA', 1730601491, '2024-11-13 07:25:55');
 
 -- --------------------------------------------------------
 
@@ -202,14 +302,15 @@ CREATE TABLE IF NOT EXISTS `event_staff` (
   `staffid` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
   `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`es_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_staff`
 --
 
 INSERT INTO `event_staff` (`es_id`, `planid`, `staffid`, `joined_at`) VALUES
-(12, 'VXZPMY', 'rashid', '2024-11-11 11:26:31');
+(21, 'VXZPMY', 'rashid', '2024-11-12 15:31:40'),
+(16, 'ZHXPSA', 'rashid', '2024-11-12 15:13:32');
 
 -- --------------------------------------------------------
 
@@ -302,12 +403,15 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('159244038', '', '', '', '', '', '1729326958'),
 ('161958492', '', '', '', '', '', '1729232687'),
 ('17580962', '', '', '', '', '', '1728485531'),
+('194967109', '', NULL, NULL, '', '', '1731459785'),
 ('198765922', '', '', '', '', '', '1729499988'),
 ('204334593', '', '', '', '', '', '1729589256'),
 ('205571730', '', '', '', '', '', '1729503562'),
 ('206420275', '', '', '', '', '', '1729816197'),
+('235920854', '', NULL, NULL, '', '', '1731460567'),
 ('277790349', '', '', '', '', '', '1729499001'),
 ('297159777', '', '', '', '', '', '1729500022'),
+('316322884', '0', '0', '0', '0', '', '1731457659'),
 ('319821461', '', '', '', '', '', '1729331377'),
 ('338833368', '', '', '', '', '', '1729653160'),
 ('353479103', '', '160', '48', '', '', '1730087557'),
@@ -318,25 +422,37 @@ INSERT INTO `health_status` (`healthid`, `calorie`, `height`, `weight`, `fat`, `
 ('38888806', '', '', '', '', '', '1728384510'),
 ('398395806', '', '', '', '', '', '1729499109'),
 ('400263278', '', '', '', '', '', '1729506355'),
+('404242844', '', NULL, NULL, '', '', '1731460346'),
 ('409696460', '', '', '', '', '', '1729654531'),
+('42304840', '', NULL, NULL, '', '', '1731460556'),
 ('46800272', '', '', '', '', '', '1728433989'),
+('502087201', '', NULL, NULL, '', '', '1731425542'),
+('502374538', '', NULL, NULL, '', '', '1731462741'),
 ('506048860', '', '', '', '', '', '1729499673'),
 ('513408577', '', '', '', '', '', '1729499715'),
 ('529626955', '', '', '', '', '', '1730601491'),
 ('561523138', '', '', '', '', '', '1729503254'),
 ('575478311', '', '', '', '', 'test', '1728486893'),
+('601341539', '', NULL, NULL, '', '', '1731458565'),
+('622422499', '0', '0', '0', '0', '', '1731458693'),
+('633040238', '0', '0', '0', '0', '', '1731458124'),
+('654097819', '', NULL, NULL, '', '', '1731455101'),
 ('675436545', '', '', '', '', '', '1729503605'),
 ('69760681', '', '', '', '', '', '1729503504'),
+('720563994', '', NULL, NULL, '', '', '1731460836'),
 ('770322812', '', '', '', '', '', '1729499689'),
+('782002307', '', NULL, NULL, '', '', '1731462834'),
 ('80936596', '', '', '', '', '', '1729499036'),
 ('826633186', '', '', '', '', '', '1728383471'),
 ('826677281', '', '', '', '', '', '1728384120'),
 ('8333733', '', NULL, NULL, '', '', '1730942013'),
+('859482983', '', NULL, NULL, '', '', '1731457462'),
 ('860622780', '', '', '', '', '', '1730036662'),
 ('872369437', '', '', '', '', '', '1729502959'),
 ('874529438', '', '', '', '', '', '1729331491'),
 ('88203510', '', '', '', '', '', '1729500525'),
 ('918803354', '', '', '', '', '', '1730044070'),
+('953569586', '', NULL, NULL, '', '', '1731454171'),
 ('955419055', '', '', '', '', '', '1729500896'),
 ('95897886', '', '', '', '', '', '1729501754');
 
@@ -364,33 +480,43 @@ CREATE TABLE IF NOT EXISTS `images` (
 
 INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `image_path`, `uploaded_at`) VALUES
 ('04d46f48-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729502982', NULL, NULL, NULL, '2024-10-21 09:29:49'),
+('0d6d5679-a15b-11ef-be02-004e01ffe201', NULL, '1731459785', NULL, NULL, NULL, '2024-11-13 01:03:11'),
 ('16e092c9-9689-11ef-aaee-004e01ffe201', NULL, NULL, NULL, 'KYDZOV', 'uploads/6721d39503ce1_event_1.jpg', '2024-10-30 06:35:01'),
 ('1769271a-94e0-11ef-96fe-004e01ffe201', NULL, '1730087557', NULL, NULL, NULL, '2024-10-28 03:52:45'),
 ('1cd5fd45-9e86-11ef-b592-004e01ffe201', NULL, NULL, NULL, 'ZHXPSA', 'uploads/672f3a8fcc171_hero_1729843905_aaf684e335f14f2b.jpg', '2024-11-09 10:33:51'),
+('1e056ed2-a156-11ef-be02-004e01ffe201', NULL, '1731457659', NULL, NULL, NULL, '2024-11-13 00:27:51'),
 ('1f44babb-94d2-11ef-96fe-004e01ffe201', NULL, NULL, NULL, 'UGZVJQ', 'uploads/image_2_671ef31e09eec.jpg', '2024-10-28 02:12:46'),
 ('20af0194-9754-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'WDCFUK', 'uploads/672328394cfbc_karate_main.jpg', '2024-10-31 06:48:25'),
 ('2147483647', NULL, '1729500022', NULL, NULL, NULL, '2024-10-21 08:41:08'),
 ('262d799d-8f8a-11ef-a5b9-004e01ffe201', NULL, '1729500896', NULL, NULL, NULL, '2024-10-21 08:54:57'),
+('2aa3cf84-a150-11ef-be02-004e01ffe201', NULL, '1731455101', NULL, NULL, NULL, '2024-11-12 23:45:15'),
+('2abf9125-a162-11ef-be02-004e01ffe201', NULL, '1731462834', NULL, NULL, NULL, '2024-11-13 01:54:06'),
 ('2ea50c7f-8f8c-11ef-a5b9-004e01ffe201', NULL, '1729501754', NULL, NULL, NULL, '2024-10-21 09:09:31'),
 ('2f0b7fa6-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503048', NULL, NULL, NULL, '2024-10-21 09:31:00'),
 ('3', NULL, '1729326958', NULL, NULL, NULL, '2024-10-19 08:36:30'),
 ('311fa78d-975e-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'KTQNRL', 'uploads/6723391bd3126_karate_main.jpg', '2024-10-31 08:00:27'),
+('316b02ef-a157-11ef-be02-004e01ffe201', NULL, '1731458124', NULL, NULL, NULL, '2024-11-13 00:35:33'),
 ('38067411-9466-11ef-96fe-004e01ffe201', NULL, '1730035207', NULL, NULL, NULL, '2024-10-27 13:20:21'),
 ('3fc07e44-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503504', NULL, NULL, NULL, '2024-10-21 09:38:37'),
 ('4', NULL, '1729500525', NULL, NULL, NULL, '2024-10-21 08:48:55'),
 ('4b9288ef-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, NULL, NULL, '2024-10-25 00:30:11'),
+('4f29ea2f-a158-11ef-be02-004e01ffe201', NULL, '1731458565', NULL, NULL, NULL, '2024-11-13 00:43:32'),
 ('5', NULL, '1729499689', NULL, NULL, NULL, '2024-10-21 08:35:06'),
 ('515', NULL, '1729499673', NULL, NULL, NULL, '2024-10-21 08:34:41'),
 ('54a9f345-9bce-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'EHBPVK', 'uploads/672aab3bbd821_image_2.jpg', '2024-11-05 23:33:15'),
+('5639b75c-a10b-11ef-be02-004e01ffe201', NULL, '1731425542', NULL, NULL, NULL, '2024-11-12 15:32:33'),
 ('591e262b-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'CDZJSY', 'uploads/672ada3d264a8_event_1.jpg', '2024-11-06 02:53:49'),
 ('5e628491-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, NULL, NULL, '2024-10-21 09:39:29'),
+('5fbdf482-a15c-11ef-be02-004e01ffe201', NULL, '1731460346', NULL, NULL, NULL, '2024-11-13 01:12:38'),
 ('611fb9ee-9bcd-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'DGEQBM', 'uploads/plans/plan_672aa9a32ccf28.10183593.jpg', '2024-11-05 15:26:27'),
 ('6aae6da4-946a-11ef-96fe-004e01ffe201', NULL, '1730037014', NULL, NULL, NULL, '2024-10-27 13:50:24'),
 ('79fe9b2e-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503605', NULL, NULL, NULL, '2024-10-21 09:40:15'),
 ('7acf25b0-9bec-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'LOXGHP', 'uploads/672addd0a4e38_event_1.jpg', '2024-11-06 03:09:04'),
 ('8', NULL, NULL, NULL, 'TGJIOA', 'uploads/image_2.jpg', '2024-10-18 06:23:57'),
 ('85487087-9bcf-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'XZONMS', 'uploads/672aad3acda2b_image_2.jpg', '2024-11-05 23:41:46'),
-('87ad5a79-9ca5-11ef-a493-004e01ffe201', NULL, '1730942013', NULL, NULL, NULL, '2024-11-07 01:13:43'),
+('8623dcee-a158-11ef-be02-004e01ffe201', NULL, '1731458693', NULL, NULL, NULL, '2024-11-13 00:45:05'),
+('87ad5a79-9ca5-11ef-a493-004e01ffe201', NULL, '1730942013', NULL, NULL, 'uploads/hero_1729843905_aaf684e335f14f2b.jpg', '2024-11-07 01:13:43'),
+('87e56531-a15d-11ef-be02-004e01ffe201', NULL, '1731460836', NULL, NULL, NULL, '2024-11-13 01:20:55'),
 ('8983', NULL, '1729331377', NULL, NULL, NULL, '2024-10-19 09:50:14'),
 ('8984', NULL, '1729232687', NULL, NULL, NULL, '2024-10-18 06:25:15'),
 ('8985', NULL, '1729331491', NULL, NULL, NULL, '2024-10-19 09:51:46'),
@@ -403,6 +529,7 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('97673448-9469-11ef-96fe-004e01ffe201', NULL, '1730036662', NULL, NULL, NULL, '2024-10-27 13:44:30'),
 ('98ea3aa6-9be9-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'UGZKDM', 'uploads/672ad8faa97ef_hero_1729843905_aaf684e335f14f2b.jpg', '2024-11-06 02:48:26'),
 ('a0f12b11-9bcf-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'TQSFLR', 'uploads/672aad693c338_image_2.jpg', '2024-11-05 23:42:33'),
+('a86fba5f-a155-11ef-be02-004e01ffe201', NULL, '1731457462', NULL, NULL, NULL, '2024-11-13 00:24:34'),
 ('af459d21-9abc-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'WBGSAZ', 'uploads/plans/plan_6728e021a7d910.92053212.jpg', '2024-11-04 14:54:25'),
 ('af9126c9-90ec-11ef-9771-004e01ffe201', NULL, '1729653160', NULL, NULL, NULL, '2024-10-23 03:12:50'),
 ('b3fd23a2-9753-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'HAJBWP', 'uploads/67232782e6b24_image_8.jpg', '2024-10-31 06:45:22'),
@@ -412,13 +539,17 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('c297f3e8-94c4-11ef-96fe-004e01ffe201', NULL, NULL, NULL, 'TGNJRZ', 'uploads/event_1_671edcb3189d6.jpg', '2024-10-28 00:37:07'),
 ('c779416c-9bcc-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'KZMTED', 'uploads/plans/plan_672aa8a15f44b5.80760034.jpg', '2024-11-05 23:22:09'),
 ('d785ab4b-947a-11ef-96fe-004e01ffe201', NULL, '1730044070', NULL, NULL, NULL, '2024-10-27 15:47:59'),
+('dbc0ce59-a15c-11ef-be02-004e01ffe201', NULL, '1731460556', NULL, NULL, NULL, '2024-11-13 01:16:06'),
 ('dc81088c-8f96-11ef-a5b9-004e01ffe201', NULL, '1729506355', NULL, NULL, NULL, '2024-10-21 10:25:58'),
 ('df9cf0f4-90ef-11ef-954f-004e01ffe201', NULL, '1729654531', NULL, NULL, NULL, '2024-10-23 03:35:39'),
 ('e823ad64-9057-11ef-a5b9-004e01ffe201', NULL, '1729589256', NULL, NULL, NULL, '2024-10-22 09:27:51'),
 ('ed943f77-97f4-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'ERQZBC', 'uploads/6724360086480_karate_main.jpg', '2024-11-01 01:59:28'),
+('f3bbb8c8-a15c-11ef-be02-004e01ffe201', NULL, '1731460567', NULL, NULL, NULL, '2024-11-13 01:16:47'),
+('f7c907a6-a161-11ef-be02-004e01ffe201', NULL, '1731462741', NULL, NULL, NULL, '2024-11-13 01:52:41'),
 ('f9b54ceb-8f8e-11ef-a5b9-004e01ffe201', NULL, '1729502959', NULL, NULL, NULL, '2024-10-21 09:29:30'),
 ('fa1250de-97f4-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'FLERKI', 'uploads/672436157c3d6_image_11.jpg', '2024-11-01 01:59:49'),
-('ff430ac1-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'VXZPMY', 'uploads/672adb53dbe53_image_11.jpg', '2024-11-06 02:58:27');
+('ff430ac1-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'VXZPMY', 'uploads/672adb53dbe53_image_11.jpg', '2024-11-06 02:58:27'),
+('ffb8592d-a14d-11ef-be02-004e01ffe201', NULL, '1731454171', NULL, NULL, NULL, '2024-11-12 23:29:44');
 
 -- --------------------------------------------------------
 
@@ -428,15 +559,15 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 --
 DROP VIEW IF EXISTS `inactive_plans`;
 CREATE TABLE IF NOT EXISTS `inactive_plans` (
-`planid` varchar(8)
-,`planName` varchar(20)
+`active` varchar(255)
+,`amount` int
 ,`description` varchar(200)
+,`duration` int
+,`endDate` varchar(50)
+,`planid` varchar(8)
+,`planName` varchar(20)
 ,`planType` varchar(50)
 ,`startDate` varchar(50)
-,`endDate` varchar(50)
-,`duration` int
-,`amount` int
-,`active` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -465,39 +596,54 @@ CREATE TABLE IF NOT EXISTS `login` (
 INSERT INTO `login` (`loginid`, `adminid`, `userid`, `staffid`, `username`, `pass_key`, `securekey`, `authority`) VALUES
 ('0110b27d-8562-11ef-b414-3ca067e52da9', NULL, '1728384120', NULL, 'b', 'test1', '0110b2d2-8562-11ef-b414-3ca067e52da9', 'member'),
 ('04d45ea8-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729502982', NULL, '123', '', '04d45eb9-8f8f-11ef-a5b9-004e01ffe201', 'member'),
+('0d6d3247-a15b-11ef-be02-004e01ffe201', NULL, '1731459785', NULL, 'm1', 'm1', '0d6d3265-a15b-11ef-be02-004e01ffe201', 'member'),
 ('10d89236-8499-11ef-83d3-3ca067e52da9', NULL, '1728297797', NULL, 'test', 'test', '10d89278-8499-11ef-83d3-3ca067e52da9', 'member'),
 ('123', '123', '123', NULL, '123', '123', '123', 'admin'),
 ('12345', '1234', 'admintest', NULL, 'admintest', 'admintest', 'admintest', 'admin'),
 ('12345678', NULL, NULL, 'rashid', 'rashid', 'rashid', 'rashid', 'staff'),
 ('17690dc6-94e0-11ef-96fe-004e01ffe201', NULL, '1730087557', NULL, 'hello', 'hello', '17690ddc-94e0-11ef-96fe-004e01ffe201', 'member'),
 ('1c5aa59d-85d6-11ef-bb7d-e9097018277d', NULL, '1728433989', NULL, 'q', 'q', '1c5aa65f-85d6-11ef-bb7d-e9097018277d', 'member'),
+('1e0558d5-a156-11ef-be02-004e01ffe201', NULL, '1731457659', NULL, 'member6', 'member6', '1e0558ea-a156-11ef-be02-004e01ffe201', 'member'),
 ('23a7f823-864e-11ef-a918-3ca067e52da9', NULL, '1728485531', NULL, 'h', 'h', '23a7f891-864e-11ef-a918-3ca067e52da9', 'member'),
 ('262d5d4c-8f8a-11ef-a5b9-004e01ffe201', NULL, '1729500896', NULL, 'o', 'o', '262d5d5b-8f8a-11ef-a5b9-004e01ffe201', 'member'),
+('2aa3ad9e-a150-11ef-be02-004e01ffe201', NULL, '1731455101', NULL, 'member3', 'member3', '2aa3adb8-a150-11ef-be02-004e01ffe201', 'member'),
+('2abf78e6-a162-11ef-be02-004e01ffe201', NULL, '1731462834', NULL, 'm2', 'm2', '2abf78ff-a162-11ef-be02-004e01ffe201', 'member'),
 ('2ea4f5e5-8f8c-11ef-a5b9-004e01ffe201', NULL, '1729501754', NULL, 'yy', 'yy', '2ea4f5fa-8f8c-11ef-a5b9-004e01ffe201', 'member'),
 ('2f0b6ebb-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503048', NULL, 'noo', 'noo', '2f0b6ecb-8f8f-11ef-a5b9-004e01ffe201', 'member'),
+('316ae160-a157-11ef-be02-004e01ffe201', NULL, '1731458124', NULL, 'member7', 'member7', '316ae195-a157-11ef-be02-004e01ffe201', 'member'),
 ('38065f55-9466-11ef-96fe-004e01ffe201', NULL, '1730035207', NULL, 'hey', 'hey', '38065f69-9466-11ef-96fe-004e01ffe201', 'member'),
 ('3cfe7084-8df5-11ef-9394-004e01ffe201', NULL, '1729326958', NULL, 'b', 'b', '3cfe70c0-8df5-11ef-9394-004e01ffe201', 'member'),
 ('3fc06360-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503504', NULL, 'e', 'e', '3fc06373-8f90-11ef-a5b9-004e01ffe201', 'member'),
 ('4b927727-9268-11ef-8788-004e01ffe201', NULL, '1729816197', NULL, 'u', 'u', '4b927736-9268-11ef-8788-004e01ffe201', 'member'),
 ('4dd8cffc-8f89-11ef-a5b9-004e01ffe201', NULL, '1729500525', NULL, 'a', 'a', '4dd8d00b-8f89-11ef-a5b9-004e01ffe201', 'member'),
+('4f29c34b-a158-11ef-be02-004e01ffe201', NULL, '1731458565', NULL, 'registest', 'registest', '4f29c366-a158-11ef-be02-004e01ffe201', 'member'),
 ('54f7108e-8651-11ef-a918-3ca067e52da9', NULL, '1728486893', NULL, 'a', 'a', '54f7114d-8651-11ef-a918-3ca067e52da9', 'member'),
+('56399260-a10b-11ef-be02-004e01ffe201', NULL, '1731425542', NULL, 'member1', 'member1', '56399287-a10b-11ef-be02-004e01ffe201', 'member'),
 ('5e626f5f-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503562', NULL, 'h', 'h', '5e626f6e-8f90-11ef-a5b9-004e01ffe201', 'member'),
+('5fbdd22b-a15c-11ef-be02-004e01ffe201', NULL, '1731460346', NULL, 'm2', 'm2', '5fbdd246-a15c-11ef-be02-004e01ffe201', 'member'),
 ('6aae584a-946a-11ef-96fe-004e01ffe201', NULL, '1730037014', NULL, 'k', 'k', '6aae585f-946a-11ef-96fe-004e01ffe201', 'member'),
 ('7979b578-8560-11ef-b414-3ca067e52da9', NULL, '1728383471', NULL, 'c', 'c', '7979b628-8560-11ef-b414-3ca067e52da9', 'member'),
 ('79fe8f8e-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503605', NULL, 'mm', 'mm', '79fe8f9f-8f90-11ef-a5b9-004e01ffe201', 'member'),
+('8623cdd9-a158-11ef-be02-004e01ffe201', NULL, '1731458693', NULL, 'member8', 'member8', '8623cdee-a158-11ef-be02-004e01ffe201', 'member'),
 ('87ad26bd-9ca5-11ef-a493-004e01ffe201', NULL, '1730942013', NULL, 'test', 'test', '87ad26e7-9ca5-11ef-a493-004e01ffe201', 'member'),
+('87e545d2-a15d-11ef-be02-004e01ffe201', NULL, '1731460836', NULL, 'final1', 'final1', '87e545ed-a15d-11ef-be02-004e01ffe201', 'member'),
 ('8983b975-8dff-11ef-9394-004e01ffe201', NULL, '1729331377', NULL, 'c', 'c', '8983b988-8dff-11ef-9394-004e01ffe201', 'member'),
 ('9710727c-8f90-11ef-a5b9-004e01ffe201', NULL, '1729503655', NULL, 'tt', 'tt', '9710728f-8f90-11ef-a5b9-004e01ffe201', 'member'),
 ('976721ba-9469-11ef-96fe-004e01ffe201', NULL, '1730036662', NULL, 'hey', 'hey', '976721ca-9469-11ef-96fe-004e01ffe201', 'member'),
+('a86fa420-a155-11ef-be02-004e01ffe201', NULL, '1731457462', NULL, 'member5', 'member5', 'a86fa440-a155-11ef-be02-004e01ffe201', 'member'),
 ('af9112e6-90ec-11ef-9771-004e01ffe201', NULL, '1729653160', NULL, 'a', 'a', 'af9112f6-90ec-11ef-9771-004e01ffe201', 'member'),
 ('bca05358-998c-11ef-8372-004e01ffe201', NULL, '1730601491', NULL, 'yeah', 'yeah', 'bca05374-998c-11ef-8372-004e01ffe201', 'member'),
 ('bd0c10a7-8d19-11ef-a94c-004e01ffe201', NULL, '1729232687', NULL, 'hello', 'hello', 'bd0c10d1-8d19-11ef-a94c-004e01ffe201', 'member'),
 ('c08b4665-8dff-11ef-9394-004e01ffe201', NULL, '1729331491', NULL, 'c', 'c', 'c08b467b-8dff-11ef-9394-004e01ffe201', 'member'),
 ('c1a68d18-8f8f-11ef-a5b9-004e01ffe201', NULL, '1729503254', NULL, 'aa', 'aa', 'c1a68d29-8f8f-11ef-a5b9-004e01ffe201', 'member'),
 ('d785919d-947a-11ef-96fe-004e01ffe201', NULL, '1730044070', NULL, 'y', 'y', 'd78591b1-947a-11ef-96fe-004e01ffe201', 'member'),
+('dbc0aaed-a15c-11ef-be02-004e01ffe201', NULL, '1731460556', NULL, 'm2', 'm2', 'dbc0ab0e-a15c-11ef-be02-004e01ffe201', 'member'),
 ('dd2cca64-8562-11ef-b414-3ca067e52da9', NULL, '1728384510', NULL, 'a', 'a', 'dd2ccab9-8562-11ef-b414-3ca067e52da9', 'member'),
 ('df9cd6b5-90ef-11ef-954f-004e01ffe201', NULL, '1729654531', NULL, 'a', 'a', 'df9cd6f1-90ef-11ef-954f-004e01ffe201', 'member'),
 ('e8238a14-9057-11ef-a5b9-004e01ffe201', NULL, '1729589256', NULL, 'hello', 'hello', 'e8238a2e-9057-11ef-a5b9-004e01ffe201', 'member'),
+('f3bb99b5-a15c-11ef-be02-004e01ffe201', NULL, '1731460567', NULL, 'final', 'final', 'f3bb99ce-a15c-11ef-be02-004e01ffe201', 'member'),
+('f7c8e1a8-a161-11ef-be02-004e01ffe201', NULL, '1731462741', NULL, 'm1', 'm1', 'f7c8e1c7-a161-11ef-be02-004e01ffe201', 'member'),
+('ffb83aa5-a14d-11ef-be02-004e01ffe201', NULL, '1731454171', NULL, 'member2', 'member2', 'ffb83ac9-a14d-11ef-be02-004e01ffe201', 'member'),
 ('test', 'test', '1728121956', NULL, '1728121956', 'test', 'test', 'member'),
 ('ww', NULL, NULL, '1', 'Rashid', 'rashid', 'rashid', 'coach');
 
@@ -548,7 +694,7 @@ CREATE TABLE IF NOT EXISTS `plan` (
 INSERT INTO `plan` (`planid`, `tid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
 ('LOXGHP', '874489422', 'gambar 3', 'gambar 3', 'Event', '2024-10-14', '2024-10-16', 2, 'Lifetime', 123, 'no'),
 ('VNWQGL', '32727319', 'Percubaan 1', 'Percubaan 1', 'Event', '2024-10-10', '2024-10-14', 4, 'Lifetime', 123, 'no'),
-('VXZPMY', '451453399', 'Gambar 2', 'Gambar 22', 'Event', '2024-09-07', '2024-09-08', 2, 'Lifetime', 123, 'yes'),
+('VXZPMY', '451453399', 'Gambar 2', 'Gambar 22', 'Event', '2024-09-04', '2024-09-05', 8, 'Lifetime', 123, 'yes'),
 ('XTWIOL', '', 'Karate Activities', 'This includes all karate activity plan', 'Core', '2024-11-09', '2024-11-28', 0, '', 20, 'yes'),
 ('ZHXPSA', '443967826', 'pintu', 'pintu', 'Event', '2024-10-10', '2024-10-14', 4, 'Lifetime', 123, 'yes');
 
@@ -722,7 +868,7 @@ CREATE TABLE IF NOT EXISTS `team_members` (
 
 INSERT INTO `team_members` (`member_id`, `full_name`, `position`, `image_path`, `display_order`, `active`, `created_at`, `updated_at`, `featured`, `jersey_number`) VALUES
 (1, 'Member 1', 'Black Belt', 'uploads/team_members/event_3.jpg', 1, 1, '2024-10-25 01:42:54', '2024-11-03 13:24:11', 1, NULL),
-(2, 'Member 2', 'Black Belt', 'uploads/team_members/image_4.jpg', 2, 1, '2024-10-25 01:42:54', '2024-11-03 13:28:52', 1, NULL),
+(2, 'Member 2', 'Black Belt', 'uploads/team_members/image_4.jpg', 2, 1, '2024-10-25 01:42:54', '2024-11-14 04:38:25', 1, NULL),
 (3, 'Member 3', 'Black Belt', 'images/team_1_1729827128.jpg', 3, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL),
 (4, 'Member 4', 'Black Belt', 'images/team_1_1729827128.jpg', 4, 1, '2024-10-25 01:42:54', '2024-10-27 15:36:36', 1, NULL);
 
@@ -819,7 +965,9 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('day_672f3a71848469.85494086', '914393930', 1, NULL),
 ('1a310e47-9c9c-11ef-a493-004e01ffe201', '451453399', 2, ''),
 ('1a310309-9c9c-11ef-a493-004e01ffe201', '451453399', 1, 'ew'),
-('day_672f3a71849ab0.66530509', '914393930', 2, NULL);
+('day_672f3a71849ab0.66530509', '914393930', 2, NULL),
+('abe8c2c1-a104-11ef-be02-004e01ffe201', '851246383', 2, ''),
+('abe8b535-a104-11ef-be02-004e01ffe201', '851246383', 1, '');
 
 -- --------------------------------------------------------
 
@@ -831,14 +979,14 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `userid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `pass_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `imageid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `imageid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `username` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `fullName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `gender` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `fullName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `gender` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `dob` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `joining_date` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `dob` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `joining_date` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `hasApproved` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -851,7 +999,8 @@ INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `g
 ('1729500896', 'o', 'UUID()', 'o', 'o', 'Male', '1', 'o@gmail.com', '2004-10-10', '2024-10-10', 'Yes'),
 ('1730087557', 'hello', '1768cef2-94e0-11ef-96fe-004e01ffe201', 'hello', 'hello', '', '', 'hello@gmail.com', '', '', 'Yes'),
 ('1730601491', 'yeah', 'bc9fc58b-998c-11ef-8372-004e01ffe201', 'yeah', 'yeah', 'Male', '', 'yeah@gmail.com', '', '', 'Yes'),
-('1730942013', 'test', '87ab09aa-9ca5-11ef-a493-004e01ffe201', 'test', 'test', '', '', 'test@gmail.com', '', '', 'Yes');
+('1731462741', 'm1', 'UUID()', 'm1', 'm1', '', '', 'm1@gmail.com', '', '', 'Yes'),
+('1731462834', 'm2', 'UUID()', 'm2', 'm2', '', '', 'm2@gmail.com', '', '', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -862,10 +1011,10 @@ INSERT INTO `users` (`userid`, `pass_key`, `imageid`, `username`, `fullName`, `g
 DROP VIEW IF EXISTS `v_about_content`;
 CREATE TABLE IF NOT EXISTS `v_about_content` (
 `content_id` int
-,`section_name` varchar(50)
 ,`content_text` text
 ,`image_path` varchar(255)
 ,`last_updated` timestamp
+,`section_name` varchar(50)
 );
 
 -- --------------------------------------------------------
