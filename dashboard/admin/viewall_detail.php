@@ -23,27 +23,26 @@ if (isset($_POST['name'])) {
         .page-container .sidebar-menu #main-menu li#hassubopen > a {
             background-color: #2b303a; color: #ffffff;
         }
-		 #space
-{
-line-height:0.5cm;
-}
-.home-button {
-    position: fixed; /* Fixed positioning */
-    bottom: 20px; /* Distance from the bottom of the viewport */
-    right: 20px; /* Distance from the right of the viewport */
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white; /* Text color */
-    padding: 20px 25px; /* Padding around the button */
-    border-radius: 5px; /* Rounded corners */
-    text-decoration: none; /* No underline */
-    font-size: 16px; /* Font size */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
-    transition: background-color 0.3s; /* Transition effect */
-}
+        #space {
+            line-height:0.5cm;
+        }
+        .home-button {
+            position: fixed; /* Fixed positioning */
+            bottom: 20px; /* Distance from the bottom of the viewport */
+            right: 20px; /* Distance from the right of the viewport */
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white; /* Text color */
+            padding: 20px 25px; /* Padding around the button */
+            border-radius: 5px; /* Rounded corners */
+            text-decoration: none; /* No underline */
+            font-size: 16px; /* Font size */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            transition: background-color 0.3s; /* Transition effect */
+        }
 
-.home-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
+        .home-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -51,10 +50,10 @@ line-height:0.5cm;
 <div class="page-container sidebar-collapsed" id="navbarcollapse">    
     <div class="sidebar-menu">
         <header class="logo-env">
-			<!-- logo -->
-			<?php
-			 require('../../element/loggedin-logo.html');
-			?>
+            <!-- logo -->
+            <?php
+             require('../../element/loggedin-logo.html');
+            ?>
             <div class="sidebar-collapse" onclick="collapseSidebar()">
                 <a href="#" class="sidebar-collapse-icon with-animation">
                     <i class="entypo-menu"></i>
@@ -70,8 +69,8 @@ line-height:0.5cm;
             <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                 <ul class="list-inline links-list pull-right">
                 <?php
-						require('../../element/loggedin-welcome.html');
-					?>
+                        require('../../element/loggedin-welcome.html');
+                    ?>
                     <li>
                         <a href="logout.php">
                             Log Out <i class="entypo-logout right"></i>
@@ -85,6 +84,8 @@ line-height:0.5cm;
         <hr />
 
         <?php
+
+// Fetch member details
 $query = "SELECT * FROM users u
 LEFT JOIN address a ON u.userid = a.userid
 LEFT JOIN health_status h ON u.userid = h.userid
@@ -92,44 +93,45 @@ LEFT JOIN enrolls_to e ON u.userid = e.userid
 LEFT JOIN plan p ON e.planid = p.planid
 WHERE u.userid = ?";
 
-            if ($stmt = mysqli_prepare($con, $query)) {
-                mysqli_stmt_bind_param($stmt, "s", $memid);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                
-                if (mysqli_num_rows($result) == 1) {
-                    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                    // Assign values
-$name = htmlspecialchars($row['username'] ?? '');
-$gender = htmlspecialchars($row['gender'] ?? '');
-$mobile = htmlspecialchars($row['mobile'] ?? '');
-$email = htmlspecialchars($row['email'] ?? '');
-$dob = htmlspecialchars($row['dob'] ?? '');         
-$jdate = htmlspecialchars($row['joining_date'] ?? '');
-$streetname = htmlspecialchars($row['streetName'] ?? '');
-$state = htmlspecialchars($row['state'] ?? '');
-$city = htmlspecialchars($row['city'] ?? '');  
-$zipcode = htmlspecialchars($row['zipcode'] ?? '');
-$calorie = htmlspecialchars($row['calorie'] ?? '');
-$height = htmlspecialchars($row['height'] ?? '');
-$weight = htmlspecialchars($row['weight'] ?? '');
-$fat = htmlspecialchars($row['fat'] ?? '');
-$planname = htmlspecialchars($row['planName'] ?? '');
-$pamount = htmlspecialchars($row['amount'] ?? '');
-$pvalidity = htmlspecialchars($row['validity'] ?? '');
-$pdescription = htmlspecialchars($row['description'] ?? '');
-$paiddate = htmlspecialchars($row['paid_date'] ?? '');
-$expire = htmlspecialchars($row['expire'] ?? '');
-$remarks = htmlspecialchars($row['remarks'] ?? '');
+if ($stmt = mysqli_prepare($con, $query)) {
+    mysqli_stmt_bind_param($stmt, "s", $memid);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-                } else {
-                    echo "<script>alert('No records found for the selected user.');</script>";
-                }
-                mysqli_stmt_close($stmt);
-            } else {
-                echo "<script>alert('Database query failed.');</script>";
-            }
-        ?>
+    if (mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        // Assign values
+        $name = htmlspecialchars($row['username'] ?? '');
+        $gender = htmlspecialchars($row['gender'] ?? '');
+        $mobile = htmlspecialchars($row['mobile'] ?? '');
+        $email = htmlspecialchars($row['email'] ?? '');
+        $dob = htmlspecialchars($row['dob'] ?? '');
+        $jdate = htmlspecialchars($row['joining_date'] ?? '');
+        $streetname = htmlspecialchars($row['streetName'] ?? '');
+        $state = htmlspecialchars($row['state'] ?? '');
+        $city = htmlspecialchars($row['city'] ?? '');
+        $zipcode = htmlspecialchars($row['zipcode'] ?? '');
+        $calorie = htmlspecialchars($row['calorie'] ?? '');
+        $height = htmlspecialchars($row['height'] ?? '');
+        $weight = htmlspecialchars($row['weight'] ?? '');
+        $fat = htmlspecialchars($row['fat'] ?? '');
+        $planname = htmlspecialchars($row['planName'] ?? '');
+        $pamount = htmlspecialchars($row['amount'] ?? '');
+        $pvalidity = htmlspecialchars($row['validity'] ?? '');
+        $pdescription = htmlspecialchars($row['description'] ?? '');
+        $paiddate = htmlspecialchars($row['paid_date'] ?? '');
+        $expire = htmlspecialchars($row['expire'] ?? '');
+        $remarks = htmlspecialchars($row['remarks'] ?? '');
+    } else {
+        echo "<script>alert('No records found for the selected user.');</script>";
+    }
+    mysqli_stmt_close($stmt);
+} else {
+    echo "<script>alert('Database query failed.');</script>";
+}
+?>
+
+
 
         <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
             <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">

@@ -2,11 +2,18 @@
 require '../../include/db_conn.php';
 page_protect();
 
+// Check if the user is an admin or a coach
+if (!isset($_SESSION['is_admin_logged_in']) && !isset($_SESSION['is_coach_logged_in'])) {
+    echo "<head><script>alert('Access denied.');</script></head></html>";
+    echo "<meta http-equiv='refresh' content='0; url=../../index.php'>"; // Redirect to login page
+    exit();
+}
+
 $memID = $_POST['m_id'];
 $plan = $_POST['plan'];
 
-// Default expire date for all plans.
-$expire_date = '9999-12-31'; // Arbitrary future date for lifetime plans.
+// Default expire date for all plans
+$expire_date = '9999-12-31'; // Arbitrary future date for lifetime plans
 
 $target_dir = "../../dashboard/admin/uploads/payment/";
 $uploadOk = 1;
@@ -14,7 +21,6 @@ $receiptIMG = "";
 
 // Check if a file was uploaded
 if (isset($_FILES['receiptIMG']) && $_FILES['receiptIMG']['error'] === UPLOAD_ERR_OK) {
-    // Set the target file path
     $target_file = $target_dir . basename($_FILES["receiptIMG"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -46,8 +52,8 @@ if (isset($_FILES['receiptIMG']) && $_FILES['receiptIMG']['error'] === UPLOAD_ER
     // Attempt to move the file to the target directory
     if ($uploadOk == 1) {
         if (move_uploaded_file($_FILES["receiptIMG"]["tmp_name"], $target_file)) {
-            chmod($target_file, 0777); // Set permissions for the file
-            $receiptIMG = $target_file; // Store the file path
+            chmod($target_file, 0777);
+            $receiptIMG = $target_file;
         } else {
             echo "<head><script>alert('Sorry, there was an error uploading your file.');</script></head></html>";
             $uploadOk = 0;
@@ -59,7 +65,7 @@ if (isset($_FILES['receiptIMG']) && $_FILES['receiptIMG']['error'] === UPLOAD_ER
 
 // Proceed with the update query if the file upload was successful or no file was uploaded
 if ($uploadOk == 1) {
-    $receiptIMG = !empty($receiptIMG) ? $receiptIMG : NULL; // Use NULL if no image was uploaded
+    $receiptIMG = !empty($receiptIMG) ? $receiptIMG : NULL;
 
     $query = "UPDATE enrolls_to 
               SET hasPaid='yes', paid_date=NOW(), expire='$expire_date', hasApproved='no', receiptIMG='$receiptIMG'
@@ -67,7 +73,13 @@ if ($uploadOk == 1) {
 
     if (mysqli_query($con, $query)) {
         echo "<head><script>alert('Payment successfully updated.');</script></head></html>";
-        echo "<meta http-equiv='refresh' content='0; url=payments.php'>";
+
+        // Redirect to the appropriate dashboard based on session
+        if (isset($_SESSION['is_admin_logged_in'])) {
+            echo "<meta http-equiv='refresh' content='0; url=../../dashboard/admin/payments.php'>";
+        } elseif (isset($_SESSION['is_coach_logged_in'])) {
+            echo "<meta http-equiv='refresh' content='0; url=../../dashboard/coach/payments.php'>";
+        }
     } else {
         echo "<head><script>alert('Payment update failed: " . mysqli_error($con) . "');</script></head></html>";
     }

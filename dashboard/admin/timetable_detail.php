@@ -699,21 +699,28 @@ container.appendChild(staffElement);
     <h3><b>Involved Members</b></h3>
 	<?php if ($isAdmin): ?>
     <div class="form-group">
-        <label><b>Choose Member:</b></label>
+        <label><b>Choose Eligible Member:</b></label>
         <div class="input-group">
             <select name="member_select" id="memberBox" class="form-control">
                 <option value="">--Please Select--</option>
                 <?php
-                $query = "SELECT userid, username, fullName, email FROM users";
-                $result = mysqli_query($con, $query);
-                
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<option value='" . htmlspecialchars($row['userid']) . "'>" 
-                             . htmlspecialchars($row['fullName']) 
-                             . "</option>";
-                    }
-                }
+$query = "SELECT DISTINCT u.userid, u.username, u.fullName, u.email 
+          FROM users u
+          INNER JOIN event_members em ON u.userid = em.userid
+          INNER JOIN enrolls_to et ON u.userid = et.userid
+          WHERE et.hasPaid = 'yes' AND et.hasApproved = 'yes' 
+          AND et.planid = em.planid";
+$result = mysqli_query($con, $query);
+
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<option value='" . htmlspecialchars($row['userid']) . "'>" 
+             . htmlspecialchars($row['fullName']) 
+             . "</option>";
+    }
+}
+
+
                 ?>
             </select>
             <div class="input-group-append">
