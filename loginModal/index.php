@@ -88,23 +88,20 @@
     background-color: #fff !important;
     color: #000 !important;
 	}
-	
+		
 	/* Add a green text color and a checkmark when the requirements are right */
 	.valid {
 	color: green;
 	}
-
 	.valid:before {
 	position: relative;
 	left: -35px;
 	content: "✔";
 	}
-
 	/* Add a red text color and an "x" when the requirements are wrong */
 	.invalid {
 	color: red;
 	}
-
 	.invalid:before {
 	position: relative;
 	left: -35px;
@@ -119,7 +116,6 @@
 	padding: 10px;
 	margin-top: 5px;
 	}
-
 	#message p {
 	padding: 10px 35px;
 	font-size: 15px;
@@ -177,12 +173,16 @@
             </div>
             <!-- <legend>Account Details</legend> -->
             <input type="hidden" class="form-control" name="hasApproved" id="textfield" value="No">
-            <div class="form-group">
-              <input type="hidden" class="form-control" name="address_id" id="address_id" placeholder="Address ID" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" readonly required/>
-            </div>
-            <div class="form-group">
-              <input type="hidden" class="form-control" name="h_id" id="h_id" placeholder="Health ID" value="<?php $randomNumber = mt_rand(1, 1000000000); echo $randomNumber;?>" readonly required/>
-            </div>
+<div class="form-group">
+  <?php $addressId = mt_rand(1, 1000000000); ?>
+  <?php do { $healthId = mt_rand(1, 1000000000); } while ($healthId == $addressId); ?>
+  
+  <input type="hidden" class="form-control" name="address_id" id="address_id" placeholder="Address ID" value="<?php echo $addressId; ?>" readonly required/>
+</div>
+<div class="form-group">
+  <input type="hidden" class="form-control" name="h_id" id="h_id" placeholder="Health ID" value="<?php echo $healthId; ?>" readonly required/>
+</div>
+
             <div class="form-group">
               <input type="hidden" class="form-control" name="m_id" id="m_id" placeholder="Membership ID" value="<?php echo time(); ?>" readonly required/>
             </div>
@@ -262,20 +262,16 @@
 var myInput = document.getElementById("pass_key");
 var number = document.getElementById("number");
 var length = document.getElementById("length");
-
 // When the user clicks on the password field, show the message box
 myInput.onfocus = function() {
   document.getElementById("message").style.display = "block";
 }
-
 // When the user clicks outside of the password field, hide the message box
 myInput.onblur = function() {
   document.getElementById("message").style.display = "none";
 }
-
 // When the user starts to type something inside the password field
 myInput.onkeyup = function() {
-
   // Validate numbers
   var numbers = /[0-9]/g;
   if(myInput.value.match(numbers)) {  
