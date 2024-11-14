@@ -74,7 +74,7 @@ line-height:0.5cm;
 							
 <table id =space width="760" height="397" border="0" align="center">
   <tr>
-    <td width="222" height="198"><img src="logo1.png" width="114" height="115"  alt=""/></td>
+    <td width="222" height="198"><img src="../../images/logok.png" width="114" height="115"  alt=""/></td>
     <td width="317"><p><strong>ICYM Karate-Do</strong></p>
       <p>Manager of ICYM Karate-Do,</p>
       <p></p></td>
