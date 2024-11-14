@@ -9,6 +9,8 @@
 	
 		<link rel="stylesheet" href="css/ionicons.min.css">
 		<link rel="stylesheet" href="css/modalstyle.css">
+		<link rel="stylesheet" href="../font/flaticon/font/flaticon.css">
+
 		
   <style>
     /* Override and enhance styles */
@@ -154,14 +156,70 @@
           <form action="secure_signup.php" class="signup-form" method='post' autocomplete="off">
 		  
 		    <!-- <legend>Personal Information</legend> -->
-            <div class="form-group">
+			<div class="form-group">
+              <label for="full_name">Full Name</label>
+              <input type="text" class="form-control" name="full_name" id="full_name" placeholder="" autocomplete="off" required>
+            </div>
+			<div class="form-group">
               <label for="u_name">Username</label>
-              <input type="text" class="form-control" name="u_name" id="u_name" placeholder="Username" autocomplete="off" required>
+              <input type="text" class="form-control" name="u_name" id="u_name" placeholder="" autocomplete="off" required>
             </div>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" class="form-control" name="email" id="email" placeholder="Email address" autocomplete="off" required>
+			<div class="form-group">
+              <label for="matrix_number">Matrix Number</label>
+              <input type="text" class="form-control" name="matrix_number" id="matrix_number" placeholder="" autocomplete="off" required>
+			</div>
+			<div class="form-group">
+              <label for="no_ic">IC Number</label>
+              <input type="text" class="form-control" name="no_ic" id="no_ic" placeholder="" autocomplete="off" required>
             </div>
+<div class="form-group">
+  <label for="course_query">Select your current Major(not valid list yet)</label>
+  <select class="form-control custom-dropdown" name="course_query" id="course_query" required>
+    <!-- Options will be populated here -->
+  </select>
+</div>
+
+<style>
+  .custom-dropdown {
+    background-color: #333 !important; /* Dark background with important flag */
+    color: #fff !important; /* White text for contrast with important flag */
+    border: 1px solid #555 !important; /* Border color with important flag */
+  }
+  .custom-dropdown option {
+    background-color: #333 !important; /* Same dark background for options with important flag */
+    color: #fff !important; /* Consistent white text for readability with important flag */
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const select = document.getElementById('course_query');
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/ICYMK/loginModal/course_suggestions.php', true);
+    
+    xhr.onload = function() {
+      if (this.status == 200) {
+        const suggestions = JSON.parse(this.responseText);
+        let optionsList = '';
+        suggestions.forEach(course => {
+          optionsList += `<option value="${course}">${course}</option>`;
+        });
+        select.innerHTML = optionsList;
+      }
+    }
+    xhr.send();
+  });
+</script>
+
+
+
+
+
+			<div class="form-group">
+              <label for="phone_no">Phone Number</label>
+              <input type="text" class="form-control" name="phone_no" id="phone_no" placeholder="" autocomplete="off" required>
+            </div>
+
             <div class="form-group">
               <label for="pass_key">Password</label>
               <input class="form-control" name="pass_key" id="pass_key" placeholder="Password" pattern="(?=.*\d).{8,}" autocomplete="off" required>
@@ -240,6 +298,7 @@
 
 
 <script src="js/jquery.min.js"></script>
+
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/main.js"></script>
