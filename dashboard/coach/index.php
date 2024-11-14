@@ -117,7 +117,7 @@ page_protect();
 
 				</div>
 
-			<h2>SPORTS CLUB </h2>
+			<h2>ICYM Karate-Do</h2>
 
 			<hr>
 
