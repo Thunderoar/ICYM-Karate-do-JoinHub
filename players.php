@@ -463,7 +463,7 @@ const cardWidth = cards[0].offsetWidth + 20; // Including margin
 let maxPosition = cards.length - 4; // Show 4 cards at once
 
 // Add edit mode state
-let isEditMode = false;
+let isEditMode = true;
 
 // Edit mode toggle function
 function toggleEditMode() {
@@ -475,20 +475,20 @@ function toggleEditMode() {
     isEditMode = !isEditMode;
     
     if (isEditMode) {
-        editButton.textContent = 'Exit Edit Mode';
-        editableElements.forEach(el => el.style.display = 'block');
-        viewElements.forEach(el => el.style.display = 'none');
-        if (saveButton) saveButton.style.display = 'block';
+        editButton.textContent = 'Enter Edit Mode';
+        editableElements.forEach(el => el.style.display = 'none');
+        viewElements.forEach(el => el.style.display = 'block');
+        if (saveButton) saveButton.style.display = 'none';
         
         // Disable card click events in edit mode
         playerCards.forEach(card => {
             card.style.pointerEvents = 'none';
         });
     } else {
-        editButton.textContent = 'Enter Edit Mode';
-        editableElements.forEach(el => el.style.display = 'none');
-        viewElements.forEach(el => el.style.display = 'block');
-        if (saveButton) saveButton.style.display = 'none';
+        editButton.textContent = 'Exit Edit Mode';
+        editableElements.forEach(el => el.style.display = 'block');
+        viewElements.forEach(el => el.style.display = 'none');
+        if (saveButton) saveButton.style.display = 'block';
         
         // Re-enable card click events
         playerCards.forEach(card => {
