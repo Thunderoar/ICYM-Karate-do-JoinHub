@@ -119,6 +119,46 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     .p-4 {
       padding: 0.5rem !important;
     }
+	        .site-section {
+            background-color: #f8f9fa;
+            padding: 40px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 2rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* Creates a square aspect ratio */
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gallery-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Makes images cover the square container */
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
 </style>
   </head>
   <body>
