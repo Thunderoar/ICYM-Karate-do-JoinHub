@@ -85,43 +85,50 @@ if (isset($_POST['name'])) {
 
         <?php
 
-// Fetch member details
-$query = "SELECT * FROM users u
+$query = "
+SELECT u.username, u.gender, u.mobile, u.email, u.dob, u.joining_date,
+       a.streetName, a.state, a.city, a.zipcode,
+       h.calorie, h.height, h.weight, h.fat, h.remarks,
+       e.planid, e.paid_date, e.expire,
+       p.planName, p.amount, p.validity, p.description
+FROM users u
 LEFT JOIN address a ON u.userid = a.userid
 LEFT JOIN health_status h ON u.userid = h.userid
 LEFT JOIN enrolls_to e ON u.userid = e.userid
 LEFT JOIN plan p ON e.planid = p.planid
 WHERE u.userid = ?";
 
+// Fetch and bind the parameters.
 if ($stmt = mysqli_prepare($con, $query)) {
     mysqli_stmt_bind_param($stmt, "s", $memid);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-    if (mysqli_num_rows($result) == 1) {
+    // Check if at least one record is found.
+    if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        // Assign values
-        $name = htmlspecialchars($row['username'] ?? '');
-        $gender = htmlspecialchars($row['gender'] ?? '');
-        $mobile = htmlspecialchars($row['mobile'] ?? '');
-        $email = htmlspecialchars($row['email'] ?? '');
-        $dob = htmlspecialchars($row['dob'] ?? '');
-        $jdate = htmlspecialchars($row['joining_date'] ?? '');
-        $streetname = htmlspecialchars($row['streetName'] ?? '');
-        $state = htmlspecialchars($row['state'] ?? '');
-        $city = htmlspecialchars($row['city'] ?? '');
-        $zipcode = htmlspecialchars($row['zipcode'] ?? '');
-        $calorie = htmlspecialchars($row['calorie'] ?? '');
-        $height = htmlspecialchars($row['height'] ?? '');
-        $weight = htmlspecialchars($row['weight'] ?? '');
-        $fat = htmlspecialchars($row['fat'] ?? '');
-        $planname = htmlspecialchars($row['planName'] ?? '');
-        $pamount = htmlspecialchars($row['amount'] ?? '');
-        $pvalidity = htmlspecialchars($row['validity'] ?? '');
-        $pdescription = htmlspecialchars($row['description'] ?? '');
-        $paiddate = htmlspecialchars($row['paid_date'] ?? '');
-        $expire = htmlspecialchars($row['expire'] ?? '');
-        $remarks = htmlspecialchars($row['remarks'] ?? '');
+        // Safely assign values or set defaults for nulls.
+        $name = htmlspecialchars($row['username'] ?? 'No name available');
+        $gender = htmlspecialchars($row['gender'] ?? 'Not specified');
+        $mobile = htmlspecialchars($row['mobile'] ?? 'No phone number');
+        $email = htmlspecialchars($row['email'] ?? 'No email provided');
+        $dob = htmlspecialchars($row['dob'] ?? 'Unknown');
+        $jdate = htmlspecialchars($row['joining_date'] ?? 'Not available');
+        $streetname = htmlspecialchars($row['streetName'] ?? 'No street provided');
+        $state = htmlspecialchars($row['state'] ?? 'Unknown state');
+        $city = htmlspecialchars($row['city'] ?? 'Unknown city');
+        $zipcode = htmlspecialchars($row['zipcode'] ?? 'No ZIP');
+        $calorie = htmlspecialchars($row['calorie'] ?? 'Not measured');
+        $height = htmlspecialchars($row['height'] ?? 'Not measured');
+        $weight = htmlspecialchars($row['weight'] ?? 'Not measured');
+        $fat = htmlspecialchars($row['fat'] ?? 'Not measured');
+        $remarks = htmlspecialchars($row['remarks'] ?? 'No remarks');
+        $planname = htmlspecialchars($row['planName'] ?? 'No plan assigned');
+        $pamount = htmlspecialchars($row['amount'] ?? '0.00');
+        $pvalidity = htmlspecialchars($row['validity'] ?? 'Unknown');
+        $pdescription = htmlspecialchars($row['description'] ?? 'No description');
+        $paiddate = htmlspecialchars($row['paid_date'] ?? 'Not paid');
+        $expire = htmlspecialchars($row['expire'] ?? 'N/A');
     } else {
         echo "<script>alert('No records found for the selected user.');</script>";
     }
