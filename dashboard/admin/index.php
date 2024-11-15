@@ -195,7 +195,9 @@ if (isset($_GET['message_id'])) {
 					<div class="col-md-6 col-sm-4 clearfix hidden-xs">
 
 						<ul class="list-inline links-list pull-right">
-
+					<?php
+						require('../../element/notification.php');
+					?>
 					<?php
 						require('../../element/loggedin-welcome.html');
 					?>
