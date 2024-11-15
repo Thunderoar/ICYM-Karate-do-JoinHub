@@ -142,8 +142,15 @@ $user_authority = $_SESSION['authority'] ?? '';
 
 if (mysqli_num_rows($result) > 0):
 ?>
-<div class="site-section">
-    <div class="container pb-0">
+
+<?php if (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in']): ?>
+    <div class="text-center mb-3">
+        <button id="toggleEditMode" class="btn btn-warning">Enter Edit Mode</button>
+    </div>
+<?php endif; ?>
+
+<div class="site-section" style="background-color:white;">
+    <div class="p-5">
         <div class="row mb-5">
             <div class="col-12 text-center">
                 <h2 class="section-title">Events</h2>
@@ -152,6 +159,11 @@ if (mysqli_num_rows($result) > 0):
             <?php while ($plan = mysqli_fetch_assoc($result)):
                 $planid = mysqli_real_escape_string($con, $plan['planid']);
                 
+                // Fetch tid from sports_timetable table based on planid
+                $tid_query = "SELECT tid FROM sports_timetable WHERE planid = '$planid' LIMIT 1";
+                $tid_result = mysqli_query($con, $tid_query);
+                $tid = ($tid_result && mysqli_num_rows($tid_result) > 0) ? mysqli_fetch_assoc($tid_result)['tid'] : null;
+
                 // Fetch plan images
                 $image_query = "SELECT image_path FROM images WHERE planid = '$planid' LIMIT 1";
                 $image_result = mysqli_query($con, $image_query);
@@ -175,9 +187,9 @@ if (mysqli_num_rows($result) > 0):
                         
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="text-primary">
-                                    RM<?php echo number_format($plan['amount'], 2); ?>
-                                </span>
+                                <!--<span class="text-primary">
+                                    RM<?php //echo number_format($plan['amount'], 2); ?>
+                                </span> -->
                                 <?php if ($plan['slug']): ?>
                                     <a href="plans/<?php echo htmlspecialchars($plan['slug']); ?>" 
                                        class="btn btn-primary">Read More...</a>
@@ -186,32 +198,26 @@ if (mysqli_num_rows($result) > 0):
                                 <?php endif; ?>
                             </div>
                             
-                            <?php if ($user_authority === 'admin'): ?>
-                                <div class="admin-controls mt-2">
-                                    <button type="button" 
-                                            class="btn btn-primary btn-sm" 
-                                            data-toggle="modal" 
-                                            data-target="#editPlanModal"
-                                            data-planid="<?php echo htmlspecialchars($planid); ?>"
-                                            data-planname="<?php echo htmlspecialchars($plan['planName']); ?>"
-                                            data-description="<?php echo htmlspecialchars($plan['description']); ?>"
-                                            data-validity="<?php echo htmlspecialchars($plan['validity']); ?>"
-                                            data-amount="<?php echo htmlspecialchars($plan['amount']); ?>">
-                                        Edit
-                                    </button>
-                                    <form method="POST" action="" style="display:inline;">
-                                        <input type="hidden" 
-                                               name="planid" 
-                                               value="<?php echo htmlspecialchars($planid); ?>">
-                                        <button type="submit" 
-                                                name="deletePlan" 
-                                                class="btn btn-danger btn-sm" 
-                                                onclick="return confirm('Are you sure you want to delete this plan?');">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            <?php endif; ?>
+<?php if ($user_authority === 'admin'): ?>
+    <div class="admin-controls mt-2">
+        <a href="dashboard/admin/timetable_detail.php?id=<?php echo htmlspecialchars($tid); ?>&planid=<?php echo htmlspecialchars($planid); ?>" 
+           class="btn btn-primary btn-sm">
+            Edit
+        </a>
+        <form method="POST" action="" style="display:inline;">
+            <input type="hidden" 
+                   name="planid" 
+                   value="<?php echo htmlspecialchars($planid); ?>">
+            <button type="submit" 
+                    name="deletePlan" 
+                    class="btn btn-danger btn-sm" 
+                    onclick="return confirm('Are you sure you want to delete this plan?');">
+                Delete
+            </button>
+        </form>
+    </div>
+<?php endif; ?>
+
                         </div>
                     </div>
                 </div>
@@ -223,6 +229,7 @@ if (mysqli_num_rows($result) > 0):
 <?php else: ?>
     <p>No plans available at the moment.</p>
 <?php endif; ?>
+
 
 <!-- Edit Plan Modal -->
 <div class="modal fade" id="editPlanModal" tabindex="-1" role="dialog" aria-labelledby="editPlanModalLabel" aria-hidden="true">
@@ -337,6 +344,41 @@ $(document).ready(function() {
   });
 });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const adminControls = document.querySelectorAll('.admin-controls');
+        const editButton = document.getElementById('toggleEditMode');
+        
+        // Initially hide admin controls and set button to "Enter Edit Mode"
+        adminControls.forEach(control => {
+            control.classList.add('d-none');
+        });
+
+        editButton.classList.remove('btn-danger');
+        editButton.classList.add('btn-warning');
+        editButton.textContent = 'Enter Edit Mode';
+
+        editButton.addEventListener('click', function() {
+            adminControls.forEach(control => {
+                control.classList.toggle('d-none');
+            });
+
+            if (editButton.classList.contains('btn-warning')) {
+                editButton.classList.remove('btn-warning');
+                editButton.classList.add('btn-danger');
+                editButton.textContent = 'Exit Edit Mode';
+            } else {
+                editButton.classList.remove('btn-danger');
+                editButton.classList.add('btn-warning');
+                editButton.textContent = 'Enter Edit Mode';
+            }
+        });
+    });
+</script>
+
+
+
+
 
 </html>
 <?php
