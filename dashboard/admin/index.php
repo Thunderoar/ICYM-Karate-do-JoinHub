@@ -3,6 +3,15 @@ require '../../include/db_conn.php';
 page_protect();
 include('checkAccess.php');
 check_access('admin', 'index.php');
+
+
+if (isset($_GET['message_id'])) {
+    $messageId = intval($_GET['message_id']);
+    $updateQuery = "UPDATE contact_messages SET read_status = 1 WHERE message_id = $messageId";
+    mysqli_query($conn, $updateQuery);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,9 +94,66 @@ check_access('admin', 'index.php');
 .custom-tile.deepbluecolor:hover {
     background-color: #005b9f; /* Darker blue */
 }
-
+        .notification {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .icon {
+            font-size: 24px;
+        }
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+        }
+        .popup {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup-header {
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+        }
+        .popup-message {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .popup-message:last-child {
+            border-bottom: none;
+        }
+        .popup-message a {
+            text-decoration: none;
+            color: black;
+        }
+        .popup-message a:hover {
+            text-decoration: underline;
+        }
 	</style>
 
+    <script>
+        function togglePopup() {
+            var popup = document.getElementById("popup");
+            if (popup.style.display === "none" || popup.style.display === "") {
+                popup.style.display = "block";
+            } else {
+                popup.style.display = "none";
+            }
+        }
+    </script>
+	
 </head>
     <body class="page-body  page-fade" onload="collapseSidebar()">
 
@@ -96,7 +162,7 @@ check_access('admin', 'index.php');
 		<div class="sidebar-menu">
 	
 			<header class="logo-env">
-			
+
 			<!-- logo -->
 			<?php
 			 require('../../element/loggedin-logo.html');
@@ -150,46 +216,57 @@ check_access('admin', 'index.php');
 			<hr>
 
 <div class="row">
-    <div class="col-sm-3">
-        <a href="revenue_month.php">
-            <div class="tile-stats tile-red">
-                <div class="icon"><i class="entypo-users"></i></div>
-                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Paid Income This Month</h2><br>
-                    <?php
-                    date_default_timezone_set("Asia/Kuala_Lumpur");
-                    $date = date('Y-m');
-                    // Modified query to include hasPaid and hasApproved conditions
-                    $query = "SELECT enrolls_to.* FROM enrolls_to 
-                             WHERE paid_date LIKE '$date%' 
-                             AND hasPaid = 'yes' 
-                             AND hasApproved = 'yes'";
-                    $result = mysqli_query($con, $query);
-                    $revenue = 0;
-                    if (mysqli_num_rows($result) != 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $query1 = "SELECT amount FROM plan WHERE planid='" . $row['planid'] . "'";
-                            $result1 = mysqli_query($con, $query1);
-                            if ($result1) {
-                                $plan = mysqli_fetch_assoc($result1);
-                                $revenue += floatval($plan['amount']);
-                            }
-                        }
-                    }
-                    echo "RM" . number_format($revenue, 2); // Format to 2 decimal places
-                    ?>
-                </div>
+<div class="col-sm-3">
+    <a href="revenue_month.php">
+        <div class="tile-stats tile-red">
+            <div class="icon"><i class="entypo-users"></i></div>
+            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2>Paid Income This Month</h2><br>
+                <?php
+                date_default_timezone_set("Asia/Kuala_Lumpur");
+                $date = date('Y-m');
+                
+                // Fetch the paid amount
+                $query_paid = "SELECT SUM(p.amount) as total_paid FROM enrolls_to e
+                               JOIN plan p ON e.planid = p.planid
+                               WHERE e.paid_date LIKE '$date%' 
+                               AND e.hasPaid = 'yes' 
+                               AND e.hasApproved = 'yes'";
+                $result_paid = mysqli_query($con, $query_paid);
+                $revenue = 0;
+                if ($result_paid) {
+                    $row = mysqli_fetch_assoc($result_paid);
+                    $revenue = floatval($row['total_paid']);
+                }
+
+                // Fetch the unpaid amount
+                $query_unpaid = "SELECT SUM(p.amount) as total_unpaid FROM enrolls_to e
+                                 JOIN plan p ON e.planid = p.planid
+                                 WHERE e.hasPaid = 'yes' 
+                                 AND e.hasApproved != 'yes'";
+                $result_unpaid = mysqli_query($con, $query_unpaid);
+                $unpaid_amount = 0;
+                if ($result_unpaid) {
+                    $row = mysqli_fetch_assoc($result_unpaid);
+                    $unpaid_amount = floatval($row['total_unpaid']);
+                }
+
+                echo "RM" . number_format($revenue, 2) . " (Unpaid: RM" . number_format($unpaid_amount, 2) . ")";
+                ?>
             </div>
-        </a>
-		<a href="payments.php">
-    <div class="custom-tile redcolor">
-        <div class="num" style="display: flex; align-items: center; justify-content: center;">
-            <i class="entypo-star" style="margin-right: 10px;"></i>
-            <h4>Manage Payment</h4>
         </div>
-    </div>
-</a>
-    </div>
+    </a>
+    <a href="payments.php">
+        <div class="custom-tile redcolor">
+            <div class="num" style="display: flex; align-items: center; justify-content: center;">
+                <i class="entypo-star" style="margin-right: 10px;"></i>
+                <h4>Manage Payment</h4>
+            </div>
+        </div>
+    </a>
+</div>
+
+
 
 <div class="col-sm-3">
     <a href="view_mem.php">
@@ -311,6 +388,7 @@ check_access('admin', 'index.php');
 
 <a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#303641" href="../../">Go to Homepage</a>
     	<?php include('footer.php'); ?>
+</div>
 </div>
 
 
