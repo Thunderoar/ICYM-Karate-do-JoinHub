@@ -194,23 +194,33 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
     <?php
     $is_admin_logged_in = isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'];
 
-    // Fetch sections and their images from the database
-    $query = "SELECT gs.section_id, gs.section_name, gs.section_description, gi.image_id, gi.image_path
-              FROM gallery_sections gs
-              LEFT JOIN gallery_images gi ON gs.section_id = gi.section_id";
-    $sections_result = mysqli_query($con, $query);
-    $sections = [];
-    while ($row = mysqli_fetch_assoc($sections_result)) {
-        $section_id = $row['section_id'];
-        $sections[$section_id]['name'] = $row['section_name'];
-        $sections[$section_id]['description'] = $row['section_description'];
-        if ($row['image_id']) {
-            $sections[$section_id]['images'][] = [
-                'id' => $row['image_id'],
-                'path' => 'dashboard/admin/' . $row['image_path']
-            ];
-        }
+// Fetch sections from the database
+$section_query = "SELECT section_id, section_name, section_description FROM gallery_sections";
+$section_result = mysqli_query($con, $section_query);
+$sections = [];
+
+while ($section = mysqli_fetch_assoc($section_result)) {
+    $section_id = $section['section_id'];
+    $sections[$section_id] = [
+        'name' => $section['section_name'],
+        'description' => $section['section_description'],
+        'images' => []
+    ];
+
+    // Fetch images for the current section, limit to 6
+    $image_query = "SELECT image_id, image_path FROM gallery_images WHERE section_id = $section_id LIMIT 6";
+    $image_result = mysqli_query($con, $image_query);
+
+    while ($image = mysqli_fetch_assoc($image_result)) {
+        $sections[$section_id]['images'][] = [
+            'id' => $image['image_id'],
+            'path' => 'dashboard/admin/' . $image['image_path']
+        ];
     }
+}
+
+// Now $sections contains the sections with up to 6 images each
+
 
     // Track the count of sections to control row breaks
     $count = 0;
@@ -220,7 +230,7 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
         }
         $count++; ?>
 
-        <div class="col-12 col-md-4 mb-4 position-relative">
+        <div class="col-12 col-md-4 mb-4 position-relative" style="padding:50px;">
             <div class="section-header mb-2">
                 <h3 class="d-inline-block"><?= htmlspecialchars($section['name']) ?></h3>
                 <div class="button-container gap-2" style="display: none;" id="buttons-<?= $section_id ?>">
@@ -232,18 +242,27 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
             <div class="row">
                 <?php if (!empty($section['images'])): ?>
                     <?php foreach ($section['images'] as $image): ?>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-4">
-                            <div class="image-container position-relative">
-                                <a href="<?= htmlspecialchars($image['path']) ?>" data-fancybox="gal" class="flex-grow-1">
-                                    <img src="<?= htmlspecialchars($image['path']) ?>" alt="Image" class="img-fluid rounded shadow">
-                                </a>
-                                <div class="delete-button-container" style="display: none;">
-                                    <?php if ($is_admin_logged_in): ?>
-                                        <button class="btn btn-danger btn-sm delete-image-btn position-absolute" style="top: 10px; right: 10px;" data-image-id="<?= $image['id'] ?>">-</button>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
+<div class="col-lg-6 p-3"> <!-- Added padding -->
+    <div class="image-container position-relative mb-4"> <!-- Added margin bottom -->
+        <a href="<?= htmlspecialchars($image['path']) ?>" 
+           data-fancybox="gal" 
+           class="flex-grow-1 d-block"> <!-- Added d-block for better spacing -->
+            <img src="<?= htmlspecialchars($image['path']) ?>" 
+                 alt="Image" 
+                 class="img-fluid rounded shadow w-100" 
+                 style="object-fit: cover; height: 300px"> <!-- Fixed aspect ratio -->
+        </a>
+        <div class="delete-button-container" style="display: none;">
+            <?php if ($is_admin_logged_in): ?>
+                <button class="btn btn-danger btn-sm delete-image-btn position-absolute" 
+                        style="top: 15px; right: 15px; z-index: 10;" <!-- Adjusted positioning -->
+                        data-image-id="<?= $image['id'] ?>">
+                    <i class="fas fa-times"></i> <!-- Added icon instead of minus -->
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
@@ -270,9 +289,7 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
     <?php
     require('footer.html');
     ?>
-  
 
-  </div>
 
   <!-- Include JS scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -286,113 +303,113 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
   <script src="js/aos.js"></script>
   <script src="js/main.js"></script>
 
-<script>
-$(document).ready(function() {
-    // Ensure the button containers are hidden on page load
-    $('.button-container').hide();
+    <script>
+        $(document).ready(function() {
+            // Ensure the button containers are hidden on page load
+            $('.button-container').hide();
 
-    // Button to trigger the form for adding a new section
-    $('#addSectionBtn').on('click', function() {
-        $('#imageUploadModal').modal('hide');
-        $('#newSectionModal').modal('show');
-    });
-
-    // Add image button logic
-    $(document).on('click', '.add-image-btn', function() {
-        const sectionId = $(this).data('section-id');
-        $('#section_id').val(sectionId);
-        $('#newSectionModal').modal('hide');
-        $('#imageUploadModal').modal('show');
-    });
-
-    // Edit button logic - show buttons for the clicked section, hide for others
-    $(document).on('click', '.edit-btn', function() {
-        const sectionId = $(this).data('section-id');
-        $('.button-container').not(`#buttons-${sectionId}`).hide(); // Hide all except the clicked one
-        $(`#buttons-${sectionId}`).toggle(); // Toggle the clicked one
-    });
-
-    // Show delete button on hover
-    $(document).on('mouseenter', '.image-container', function() {
-        $(this).find('.delete-button-container').show(); // Show delete button
-    }).on('mouseleave', '.image-container', function() {
-        $(this).find('.delete-button-container').hide(); // Hide delete button
-    });
-
-    // Delete image logic
-    $(document).on('click', '.delete-image-btn', function() {
-        const imageId = $(this).data('image-id');
-        if (confirm("Are you sure you want to delete this image?")) {
-            fetch('dashboard/admin/delete_image.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ image_id: imageId }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    $(this).closest('.col-6').remove();
-                } else {
-                    alert("Failed to delete the image.");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the image.');
+            // Button to trigger the form for adding a new section
+            $('#addSectionBtn').on('click', function() {
+                $('#imageUploadModal').modal('hide');
+                $('#newSectionModal').modal('show');
             });
-        }
-    });
 
-    // Delete section logic
-    $(document).on('click', '.delete-section-btn', function() {
-        const section_id = $(this).data('section-id');
-        if (confirm('Are you sure you want to delete this section?')) {
-            $.ajax({
-                type: 'POST',
-                url: 'dashboard/admin/delete_section.php',
-                data: { delete_section_id: section_id },
-                success: function(response) {
-                    alert(response);
-                    location.reload(); // Refresh the page to reflect changes
-                },
-                error: function() {
-                    alert('An error occurred while deleting the section.');
+            // Add image button logic
+            $(document).on('click', '.add-image-btn', function() {
+                const sectionId = $(this).data('section-id');
+                $('#section_id').val(sectionId);
+                $('#newSectionModal').modal('hide');
+                $('#imageUploadModal').modal('show');
+            });
+
+            // Edit button logic - show buttons for the clicked section, hide for others
+            $(document).on('click', '.edit-btn', function() {
+                const sectionId = $(this).data('section-id');
+                $('.button-container').not(`#buttons-${sectionId}`).hide(); // Hide all except the clicked one
+                $(`#buttons-${sectionId}`).toggle(); // Toggle the clicked one
+            });
+
+            // Show delete button on hover
+            $(document).on('mouseenter', '.image-container', function() {
+                $(this).find('.delete-button-container').show(); // Show delete button
+            }).on('mouseleave', '.image-container', function() {
+                $(this).find('.delete-button-container').hide(); // Hide delete button
+            });
+
+            // Delete image logic
+            $(document).on('click', '.delete-image-btn', function() {
+                const imageId = $(this).data('image-id');
+                if (confirm("Are you sure you want to delete this image?")) {
+                    fetch('dashboard/admin/delete_image.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ image_id: imageId }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            $(this).closest('.col-6').remove();
+                        } else {
+                            alert("Failed to delete the image.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the image.');
+                    });
                 }
             });
-        }
-    });
-});
 
-    let isEditing = false; // Track editing state
-
-    document.getElementById('globalEditBtn').addEventListener('click', function() {
-        // Toggle editing state
-        isEditing = !isEditing;
-
-        // Show or hide the Add New Section button
-        const addSectionContainer = document.querySelector('.add-section-container');
-        addSectionContainer.style.display = isEditing ? 'block' : 'none'; // Show below Edit Mode button
-
-        // Show or hide all button containers in sections
-        const buttonContainers = document.querySelectorAll('.button-container');
-        buttonContainers.forEach(container => {
-            container.style.display = isEditing ? 'flex' : 'none'; // Change 'flex' or 'none' based on layout
+            // Delete section logic
+            $(document).on('click', '.delete-section-btn', function() {
+                const section_id = $(this).data('section-id');
+                if (confirm('Are you sure you want to delete this section?')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'dashboard/admin/delete_section.php',
+                        data: { delete_section_id: section_id },
+                        success: function(response) {
+                            alert(response);
+                            location.reload(); // Refresh the page to reflect changes
+                        },
+                        error: function() {
+                            alert('An error occurred while deleting the section.');
+                        }
+                    });
+                }
+            });
         });
 
-        // Change the button text and color based on the editing state
-        if (isEditing) {
-            this.textContent = 'Exit Edit Mode';
-            this.classList.remove('btn-warning');
-            this.classList.add('btn-danger'); // Change to red when in edit mode
-        } else {
-            this.textContent = 'Enter Edit Mode';
-            this.classList.remove('btn-danger');
-            this.classList.add('btn-warning'); // Change back to original color
-        }
-    });
-</script>
+        let isEditing = false; // Track editing state
+
+        document.getElementById('globalEditBtn').addEventListener('click', function() {
+            // Toggle editing state
+            isEditing = !isEditing;
+
+            // Show or hide the Add New Section button
+            const addSectionContainer = document.querySelector('.add-section-container');
+            addSectionContainer.style.display = isEditing ? 'block' : 'none'; // Show below Edit Mode button
+
+            // Show or hide all button containers in sections
+            const buttonContainers = document.querySelectorAll('.button-container');
+            buttonContainers.forEach(container => {
+                container.style.display = isEditing ? 'flex' : 'none'; // Change 'flex' or 'none' based on layout
+            });
+
+            // Change the button text and color based on the editing state
+            if (isEditing) {
+                this.textContent = 'Exit Edit Mode';
+                this.classList.remove('btn-warning');
+                this.classList.add('btn-danger'); // Change to red when in edit mode
+            } else {
+                this.textContent = 'Enter Edit Mode';
+                this.classList.remove('btn-danger');
+                this.classList.add('btn-warning'); // Change back to original color
+            }
+        });
+    </script>
 
 
 
