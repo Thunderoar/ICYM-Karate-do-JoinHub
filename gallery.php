@@ -219,6 +219,7 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
             echo "<div class='row'>";
         }
         $count++; ?>
+
         <div class="col-12 col-md-4 mb-4 position-relative">
             <div class="section-header mb-2">
                 <h3 class="d-inline-block"><?= htmlspecialchars($section['name']) ?></h3>
