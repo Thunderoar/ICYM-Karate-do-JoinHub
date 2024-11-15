@@ -127,6 +127,17 @@ if (mysqli_stmt_execute($stmt)) {
     transition: opacity 1s ease-out;
     opacity: 0;
 }
+.custom-textarea {
+    display: block !important; /* Ensure the textarea is displayed */
+    width: 100% !important; /* Make the textarea full width */
+    height: auto !important; /* Adjust the height as needed */
+    padding: 10px !important; /* Add some padding for better appearance */
+    border: 1px solid #ccc !important; /* Add a border */
+    border-radius: 4px !important; /* Optional: Add rounded corners */
+    background-color: #fff !important; /* Ensure a consistent background color */
+    font-size: 16px !important; /* Ensure consistent font size */
+}
+
 
 </style>
   </head>
@@ -172,7 +183,6 @@ require('header.php');
   </section>
 </div>
 
-<body>
     <div class="site-section" style="background-color:white;">
         <div class="container p-5">
             <div class="row">
@@ -214,13 +224,15 @@ require('header.php');
                     value="<?php echo isset($subject) ? htmlspecialchars($subject) : ''; ?>">
             </div>
         </div>
-        <div class="row form-group">
-            <div class="col-md-12">
-                <label class="font-weight-bold" for="message">Message</label>
-                <textarea name="message" id="message" cols="30" rows="5" class="form-control"
-                    placeholder="Say hello to us" required><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
-            </div>
-        </div>
+<div class="row form-group">
+    <div class="col-md-12">
+        <label class="font-weight-bold" for="message">Message</label>
+        <textarea name="message" id="message" cols="30" rows="5" class="form-control custom-textarea"
+            placeholder="Say hello to us" required><?php echo isset($message) ? htmlspecialchars($message) : ''; ?></textarea>
+    </div>
+</div>
+
+
         <div class="row form-group">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary py-2 px-4">Send Message</button>
