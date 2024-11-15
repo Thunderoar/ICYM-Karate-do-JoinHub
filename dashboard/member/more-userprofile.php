@@ -470,37 +470,6 @@ $con->close();
     <label for="zip_code">Zip Code:</label>
     <input type="text" name="zip_code" value="<?php echo htmlspecialchars($address_data['zipcode'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="10" required pattern="\d{5,10}" title="Only digits are allowed, between 5 to 10 characters.">
 </div>
-
-
-
-
-
-
-
-
-<!-- Health Status Section -->
-<h4>Health Status:</h4>
-<!--<div class="form-group">
-    <label for="calorie">Calorie:</label>
-    <input type="text" name="calorie" value="<?php echo htmlspecialchars($health_data['calorie'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="10" required pattern="\d{1,10}" title="Only digits are allowed, up to 10 characters.">
-</div>-->
-<div class="form-group">
-    <label for="height">Height:</label>
-    <input type="text" name="height" value="<?php echo htmlspecialchars($health_data['height'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="5" required pattern="\d{1,5}" title="Only digits are allowed, up to 5 characters.">
-</div>
-<div class="form-group">
-    <label for="weight">Weight:</label>
-    <input type="text" name="weight" value="<?php echo htmlspecialchars($health_data['weight'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="5" required pattern="\d{1,5}" title="Only digits are allowed, up to 5 characters.">
-</div>
-<!--<div class="form-group">
-    <label for="fat">Fat:</label>
-    <input type="text" name="fat" value="<?php echo htmlspecialchars($health_data['fat'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="5" required pattern="\d{1,5}" title="Only digits are allowed, up to 5 characters.">
-</div>-->
-<div class="form-group">
-    <label for="remarks">Remarks:</label>
-    <textarea name="remarks" maxlength="255"><?php echo htmlspecialchars($health_data['remarks'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
-</div> 
-
 <?php
 // Securely retrieve the secure key from the login table
 $query = "SELECT securekey FROM login WHERE userid = ?";
@@ -518,7 +487,6 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $con->close();
 ?>
-
 <tr>
     <td height="35">Secure Key:</td>
     <td height="35">
@@ -619,6 +587,38 @@ function handlePasswordVisibility(event) {
     }
 }
 </script>
+
+
+
+
+
+
+<!-- Health Status Section -->
+<h4>Health Status:</h4>
+<!--<div class="form-group">
+    <label for="calorie">Calorie:</label>
+    <input type="text" name="calorie" value="<?php echo htmlspecialchars($health_data['calorie'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="10" required pattern="\d{1,10}" title="Only digits are allowed, up to 10 characters.">
+</div>-->
+<div class="form-group">
+    <label for="height">Height:</label>
+    <input type="text" name="height" value="<?php echo htmlspecialchars($health_data['height'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="5" required pattern="\d{1,5}" title="Only digits are allowed, up to 5 characters.">
+</div>
+<div class="form-group">
+    <label for="weight">Weight:</label>
+    <input type="text" name="weight" value="<?php echo htmlspecialchars($health_data['weight'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="5" required pattern="\d{1,5}" title="Only digits are allowed, up to 5 characters.">
+</div>
+<!--<div class="form-group">
+    <label for="fat">Fat:</label>
+    <input type="text" name="fat" value="<?php echo htmlspecialchars($health_data['fat'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="5" required pattern="\d{1,5}" title="Only digits are allowed, up to 5 characters.">
+</div>-->
+<div class="form-group">
+    <label for="remarks">Remarks:</label>
+    <textarea name="remarks" maxlength="255"><?php echo htmlspecialchars($health_data['remarks'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+</div> 
+
+
+
+
 
 
 
