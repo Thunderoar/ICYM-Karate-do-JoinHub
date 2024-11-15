@@ -235,8 +235,8 @@ require('header.php');
   </section>
 </div>
 
-<div class="site-section">
-    <div class="container">
+<div class="site-section" style="background: white;">
+    <div class="container p-0">
 	    <?php if (isAdminLoggedIn()): ?>
     <div class="edit-mode-controls mb-4">
         <button id="toggleEditMode" class="btn btn-secondary">
