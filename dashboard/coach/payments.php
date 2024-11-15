@@ -140,13 +140,14 @@ if (mysqli_num_rows($result) > 0) {
         $et_id = $row['et_id'];
         $receiptIMG = $row['receiptIMG'];
 
-        echo "<tr>";
-        echo "<td>" . $sno . "</td>";
-        echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-        echo "<td>" . htmlspecialchars($planName) . "</td>";
+echo "<tr>";
+echo "<td>" . ($sno ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['userid'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['username'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['mobile'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($row['email'] ?? '') . "</td>";
+echo "<td>" . htmlspecialchars($planName ?? '') . "</td>";
+
 
         $sno++;
 
