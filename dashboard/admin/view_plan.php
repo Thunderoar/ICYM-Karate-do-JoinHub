@@ -280,9 +280,9 @@ $sno = 1;
     <thead>
         <tr>
             <th onclick="sortTable(0)">No</th>
-            <th onclick="sortTable(1)">Sports Plan ID</th>
-            <th onclick="sortTable(2)">Sports Plan Name</th>
-            <th onclick="sortTable(3)">Sports Plan Details</th>
+            <th onclick="sortTable(1)">Plan ID</th>
+            <th onclick="sortTable(2)">Plan Name</th>
+            <th onclick="sortTable(3)">Plan Details</th>
             <th onclick="sortTable(4)">Plan Type</th>
             <th onclick="sortTable(5)">Start Date</th>
             <th onclick="sortTable(6)">End Date</th>
