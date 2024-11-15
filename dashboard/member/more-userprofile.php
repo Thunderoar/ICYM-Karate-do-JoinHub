@@ -211,6 +211,17 @@ $stmt->execute();
 $result = $stmt->get_result();
 $image_data = $result->fetch_assoc();
 
+
+// Fetch the password for the logged-in user
+$query = "SELECT pass_key FROM users WHERE userid = ?";
+$stmt = $con->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($user_password);
+$stmt->fetch();
+
+
+
 $stmt->close();
 $con->close();
 ?>
@@ -489,6 +500,127 @@ $con->close();
     <label for="remarks">Remarks:</label>
     <textarea name="remarks" maxlength="255"><?php echo htmlspecialchars($health_data['remarks'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
 </div> 
+
+<?php
+// Securely retrieve the secure key from the login table
+$query = "SELECT securekey FROM login WHERE userid = ?";
+$stmt = $con->prepare($query);
+$stmt->bind_param("i", $userid);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$securekey = "";
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $securekey = $row['securekey'];
+}
+
+$stmt->close();
+$con->close();
+?>
+
+<tr>
+    <td height="35">Secure Key:</td>
+    <td height="35">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <input type="password" id="secureKey" name="securekey" 
+                   value="<?php echo htmlspecialchars($securekey); ?>" 
+                   class="form-control" style="flex: 1; max-width: 60%; margin-right: 5px;" readonly required/>
+            <button type="button" onclick="handleSecureKeyVisibility(event)" class="btn btn-primary" style="white-space: nowrap;">Show Key</button>
+        </div>
+        <!-- Success message container for secure key -->
+        <div id="secureKeySuccessMessage" style="color: green; margin-top: 5px; display: none;">
+            Key verified successfully! ✓
+        </div>
+        <small style="display: block; margin-top: 5px;">This key is used for additional security verification</small>
+    </td>
+</tr>
+
+<tr>
+    <td height="35">Password:</td>
+    <td height="35">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            <input type="password" id="userPassword" class="form-control" value="<?php echo htmlspecialchars($user_password); ?>" style="flex: 1; max-width: 60%; margin-right: 5px;" readonly>
+            <button type="button" onclick="handlePasswordVisibility(event)" class="btn btn-primary" style="white-space: nowrap;">Show Password</button>
+            <a href="change_pwd.php" class="a1-btn a1-orange" style="white-space: nowrap;">Change password</a>
+        </div>
+    </td>
+</tr>
+
+
+
+<script>
+function handleSecureKeyVisibility(event) {
+    var secureKeyField = document.getElementById("secureKey");
+    var button = event.target;
+    var successMsg = document.getElementById("secureKeySuccessMessage");
+    
+    // If key is currently visible, hide it without verification
+    if (secureKeyField.type === "text") {
+        secureKeyField.type = "password";
+        button.innerText = "Show Key";
+        successMsg.style.display = "none"; // Hide success message when hiding key
+        return;
+    }
+    
+    // For showing key, require verification
+    const userInput = prompt("Please enter your current password for verification:");
+    
+    // If user cancels the prompt or enters nothing, return early
+    if (!userInput) {
+        return;
+    }
+
+    // Verify password (replace with secure server-side verification in production)
+    if (userInput === '<?php echo htmlspecialchars($coach_password); ?>') {
+        secureKeyField.type = "text";
+        button.innerText = "Hide Key";
+        
+        // Show success message
+        successMsg.style.display = "block";
+        
+        // Hide the success message after 3 seconds
+        setTimeout(() => {
+            successMsg.style.display = "none";
+        }, 3000);
+    } else {
+        alert("Incorrect password. Access denied.");
+    }
+}
+</script>
+
+
+<script>
+function handlePasswordVisibility(event) {
+    var passwordField = document.getElementById("userPassword");
+    var button = event.target;
+    
+    // If password is currently visible, hide it without verification
+    if (passwordField.type === "text") {
+        passwordField.type = "password";
+        button.innerText = "Show Password";
+        return;
+    }
+    
+    // For showing password, require verification
+    const userInput = prompt("Please enter your current password for verification:");
+    
+    // If user cancels the prompt or enters nothing, return early
+    if (!userInput) {
+        return;
+    }
+
+    // Verify password (replace with secure server-side verification in production)
+    if (userInput === '<?php echo htmlspecialchars($user_password); ?>') {
+        passwordField.type = "text";
+        button.innerText = "Hide Password";
+    } else {
+        alert("Incorrect password. Access denied.");
+    }
+}
+</script>
+
+
 
 <div class="form-group">
     <input type="submit" name="submit" value="SUBMIT" class="btn btn-primary" style="margin-right: 10px;">
