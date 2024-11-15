@@ -274,6 +274,7 @@ $con->close();
 .carousel-card.editing {
     pointer-events: none;
 }
+
     </style>
 	
   </head>
@@ -367,7 +368,7 @@ require('header.php');
                             <!-- Display Only for Guests -->
                             <h3><?php echo htmlspecialchars($player['full_name']); ?></h3>
                             <p><?php echo htmlspecialchars($player['position']); ?></p>
-                            <p class="login-prompt">Log in to see more details!</p>
+                            <!-- <p class="login-prompt">Log in to see more details!</p> -->
                         <?php endif; ?>
                     </div>
                 </div>
