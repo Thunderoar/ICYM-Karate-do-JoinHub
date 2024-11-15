@@ -199,9 +199,9 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
                                 </li>
                             </ul>
                         </li>-->
-                        <li><a href="players.php">Members</a>
                         </li>
                         <li><a href="events.php">Events</a></li>
+						<!-- <li><a href="players.php">Members</a>-->
                         <li><a href="about.php">About</a></li>
                         <li><a href="contact.php">Contact</a></li>
 
