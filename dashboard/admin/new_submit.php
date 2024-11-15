@@ -18,6 +18,9 @@ $email = $_POST['email'];
 $jdate = $_POST['jdate'];
 $plan = $_POST['plan'];
 $pass_key = $_POST['pass_key'];
+$fullName = $_POST['fullName'];
+$matrix_number = $_POST['matrix_number'];
+
 
 // Insert into users table
 $query = "INSERT INTO users(username, fullName, gender, mobile, email, dob, joining_date, imageid, userid, pass_key, hasApproved) 
