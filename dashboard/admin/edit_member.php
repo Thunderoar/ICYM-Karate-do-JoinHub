@@ -121,27 +121,27 @@ if ($stmt = mysqli_prepare($con, $query)) {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         
         // Assign values using htmlspecialchars to sanitize
-        $name        = htmlspecialchars($row['username']);
-        $gender      = htmlspecialchars($row['gender']);
-        $mobile      = htmlspecialchars($row['mobile']);
-        $email       = htmlspecialchars($row['email']);
-        $dob         = htmlspecialchars($row['dob']);         
-        $jdate       = htmlspecialchars($row['joining_date']);
-        $streetname  = htmlspecialchars($row['streetName'] ?? 'N/A');  // Handle nulls with 'N/A'
-        $state       = htmlspecialchars($row['state'] ?? 'N/A');
-        $city        = htmlspecialchars($row['city'] ?? 'N/A');
-        $zipcode     = htmlspecialchars($row['zipcode'] ?? 'N/A');
-        $calorie     = htmlspecialchars($row['calorie'] ?? 'N/A');
-        $height      = htmlspecialchars($row['height'] ?? 'N/A');
-        $weight      = htmlspecialchars($row['weight'] ?? 'N/A');
-        $fat         = htmlspecialchars($row['fat'] ?? 'N/A');
-        $planname    = htmlspecialchars($row['planName'] ?? 'No Plan');
-        $pamount     = htmlspecialchars($row['amount'] ?? 'N/A');
-        $pvalidity   = htmlspecialchars($row['validity'] ?? 'N/A');
-        $pdescription= htmlspecialchars($row['description'] ?? 'N/A');
-        $paiddate    = htmlspecialchars($row['paid_date'] ?? 'N/A');
-        $expire      = htmlspecialchars($row['expire'] ?? 'N/A');
-        $remarks     = htmlspecialchars($row['remarks'] ?? 'No remarks');
+        $name = htmlspecialchars($row['username'] ?? 'No name available');
+        $gender = htmlspecialchars($row['gender'] ?? 'Not specified');
+        $mobile = htmlspecialchars($row['mobile'] ?? 'No phone number');
+        $email = htmlspecialchars($row['email'] ?? 'No email provided');
+        $dob = htmlspecialchars($row['dob'] ?? 'Unknown');
+        $jdate = htmlspecialchars($row['joining_date'] ?? 'Not available');
+        $streetname = htmlspecialchars($row['streetName'] ?? 'No street provided');
+        $state = htmlspecialchars($row['state'] ?? 'Unknown state');
+        $city = htmlspecialchars($row['city'] ?? 'Unknown city');
+        $zipcode = htmlspecialchars($row['zipcode'] ?? 'No ZIP');
+        $calorie = htmlspecialchars($row['calorie'] ?? 'Not measured');
+        $height = htmlspecialchars($row['height'] ?? 'Not measured');
+        $weight = htmlspecialchars($row['weight'] ?? 'Not measured');
+        $fat = htmlspecialchars($row['fat'] ?? 'Not measured');
+        $remarks = htmlspecialchars($row['remarks'] ?? 'No remarks');
+        $planname = htmlspecialchars($row['planName'] ?? 'No plan assigned');
+        $pamount = htmlspecialchars($row['amount'] ?? '0.00');
+        $pvalidity = htmlspecialchars($row['validity'] ?? 'Unknown');
+        $pdescription = htmlspecialchars($row['description'] ?? 'No description');
+        $paiddate = htmlspecialchars($row['paid_date'] ?? 'Not paid');
+        $expire = htmlspecialchars($row['expire'] ?? 'N/A');
     } else {
         echo "<script>alert('No records found for the selected user.');</script>";
     }
