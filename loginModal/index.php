@@ -173,7 +173,7 @@
               <input type="text" class="form-control" name="no_ic" id="no_ic" placeholder="" autocomplete="off" required>
             </div>
 <div class="form-group">
-  <label for="course_query">Select your current Major(not valid list yet)</label>
+  <label for="course_query">Select your current Major</label>
   <select class="form-control custom-dropdown" name="course_query" id="course_query" required>
     <!-- Options will be populated here -->
   </select>
