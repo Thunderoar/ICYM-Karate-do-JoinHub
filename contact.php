@@ -173,8 +173,8 @@ require('header.php');
 </div>
 
 <body>
-    <div class="site-section">
-        <div class="container">
+    <div class="site-section" style="background-color:white;">
+        <div class="container p-5">
             <div class="row">
 <div class="col-md-12 col-lg-7 mb-5">
     <?php if ($success_message): ?>
