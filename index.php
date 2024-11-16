@@ -292,7 +292,7 @@ if (mysqli_num_rows($result) > 0):
                         <p class="card-text flex-grow-1"><?php echo substr($plan['description'], 0, 100) . '...'; ?></p>
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-primary">RM<?php echo number_format($plan['amount'], 2); ?></span>
+                                <!--<span class="text-primary">RM<?php //echo number_format($plan['amount'], 2); ?></span> -->
                                 <?php if ($plan['slug']): ?>
                                     <a href="plans/<?php echo $plan['slug']; ?>" class="btn btn-primary">Read More...</a>
                                 <?php else: ?>
