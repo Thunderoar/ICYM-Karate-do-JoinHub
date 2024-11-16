@@ -82,6 +82,13 @@ mysqli_close($con);
 
     <link rel="stylesheet" href="css/homepagestyle.css">
     
+	<style>
+	.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adjust the gap as needed */
+}
+</style>
   </head>
   <body>
   
@@ -145,9 +152,14 @@ if (mysqli_num_rows($result) > 0):
 
 <?php if (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in']): ?>
     <div class="text-center mb-3">
-        <button id="toggleEditMode" class="btn btn-warning">Enter Edit Mode</button>
+        <div class="btn-group">
+            <button id="toggleEditMode" class="btn btn-warning">Enter Edit Mode</button>
+            <button onclick="location.href='dashboard/admin/new_plan.php';" class="btn" style="background-color: #28A745; color: white;">Add New Plan</button>
+        </div>
     </div>
 <?php endif; ?>
+
+
 
 <div class="site-section" style="background-color:white;">
     <div class="p-5">
