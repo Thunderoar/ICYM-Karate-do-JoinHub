@@ -1,9 +1,6 @@
 ﻿<?php
 require '../../include/db_conn.php';
 page_protect();
-
-if (isset($_POST['name'])) {
-    $memid = $_POST['name'];
 ?>
 
 <!DOCTYPE html>
@@ -90,31 +87,34 @@ if (isset($_POST['name'])) {
 			<h3>Edit Member Details</h3>
 			
 			<hr/>
-			<?php
-// SQL query to retrieve user, address, health, enrolls, and plan data using LEFT JOIN
-$query = "SELECT u.username, u.gender, u.mobile, u.email, u.dob, u.joining_date, 
-                 a.streetName, a.state, a.city, a.zipcode, 
-                 h.calorie, h.height, h.weight, h.fat, h.remarks, 
-                 p.planName, p.description, p.planType, p.validity, p.amount, 
-                 e.paid_date, e.expire, e.hasPaid
-          FROM users u
-          LEFT JOIN address a ON u.userid = a.userid
-          LEFT JOIN health_status h ON u.userid = h.userid
-          LEFT JOIN enrolls_to e ON u.userid = e.userid
-          LEFT JOIN plan p ON e.planid = p.planid
-          WHERE u.userid = ?";
+<?php
+// Initialize variables with default values
+$name = $gender = $mobile = $email = $dob = $jdate = '';
+$streetname = $state = $city = $zipcode = '';
+$calorie = $height = $weight = $fat = $remarks = '';
+$planname = $pamount = $pvalidity = $pdescription = '';
+$paiddate = $expire = '';
 
-// Prepare the SQL statement
-if ($stmt = mysqli_prepare($con, $query)) {
-    // Bind the user ID to the query (the "s" indicates string type)
-    mysqli_stmt_bind_param($stmt, "s", $memid);
+// Retrieve the memid from the POST request
+if (isset($_POST['memid'])) {
+    $memid = mysqli_real_escape_string($con, $_POST['memid']);
+
+    // SQL query to retrieve user, address, health, enrolls, and plan data using LEFT JOIN
+    $query = "SELECT u.username, u.gender, u.mobile, u.email, u.dob, u.joining_date, 
+                     a.streetName, a.state, a.city, a.zipcode, 
+                     h.calorie, h.height, h.weight, h.fat, h.remarks, 
+                     p.planName, p.description, p.planType, p.validity, p.amount, 
+                     e.paid_date, e.expire, e.hasPaid
+              FROM users u
+              LEFT JOIN address a ON u.userid = a.userid
+              LEFT JOIN health_status h ON u.userid = h.userid
+              LEFT JOIN enrolls_to e ON u.userid = e.userid
+              LEFT JOIN plan p ON e.planid = p.planid
+              WHERE u.userid = '$memid'";
 
     // Execute the query
-    mysqli_stmt_execute($stmt);
+    $result = mysqli_query($con, $query);
 
-    // Get the result set from the executed statement
-    $result = mysqli_stmt_get_result($stmt);
-    
     // Check if a row is returned
     if (mysqli_num_rows($result) == 1) {
         // Fetch the row as an associative array
@@ -146,123 +146,135 @@ if ($stmt = mysqli_prepare($con, $query)) {
         echo "<script>alert('No records found for the selected user.');</script>";
     }
 
-    // Close the statement
-    mysqli_stmt_close($stmt);
+    // Close the connection
+    mysqli_close($con);
 } else {
-    // Error handling if the query fails
-    echo "<script>alert('Database query failed: " . mysqli_error($con) . "');</script>";
+    echo "<script>alert('User ID not provided.');</script>";
 }
 ?>
 
 
+
+
 			
 			
-			<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">
-		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>EDIT MEMBER PROFILE</h6>
+<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
+    <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">
+        <div class="a1-container a1-dark-gray a1-center">
+            <h6>EDIT MEMBER PROFILE</h6>
         </div>
-       <form id="form1" name="form1" method="post" class="a1-container" action="edit_mem_submit.php">
-         <table width="100%" border="0" align="center">
-         <tr>
-           <td height="35"><table width="100%" border="0" align="center">
-           	 <tr>
-           	   <td height="35">User ID:</td>
-           	   <td height="35"><input id="boxxe" type="text" name="uid" readonly required value=<?php echo $memid?>></td>
-         	   </tr>
-             <tr>
-               <td height="35">NAME:</td>
-               <td height="35"><input id="boxxe" type="text" name="uname" value='<?php echo $name?>'></td>
-             </tr>
-             <tr>
-               <td height="35">GENDER:</td>
-               <td height="35"><select id="boxxe" name="gender" id="gender" required>
-
-						<option <?php if($gender == 'Male'){echo("selected");}?> value="Male">Male</option>
-						<option <?php if($gender == 'Female'){echo("selected");}?> value="Female">Female</option>
-						</select></td><br>
-             </tr>
-			  <tr>
-               <td height="35">MOBILE:</td>
-               <td height="35"><input id="boxxe" type="number" name="phone" maxlength="10" value=<?php echo $mobile?>></td>
-             </tr>
-             <tr>
-               <td height="35">EMAIL:</td>
-               <td height="35"><input id="boxxe" type="email" name="email" required value=<?php echo $email?>></td>
-             </tr>
-			 <tr>
-               <td height="35">DATE OF BIRTH:</td>
-               <td height="35"><input type="date" id="boxxe" name="dob" value=<?php echo $dob?>></td>
-             </tr>
-			 <tr>
-               <td height="35">JOINING DATE:</td>
-               <td height="35"><input type="date" id="boxxe" name="jdate" value=<?php echo $jdate?>></td>
-             </tr>
-
-			<tr>
-               <td height="35">STREET NAME:</td>
-               <td height="35"><input type="text" id="boxxe" name="stname" value='<?php echo $streetname?>'></td>
-             </tr>
-
-			 <tr>
-               <td height="35">STATE:</td>
-               <td height="35"><input type="text" id="boxxe" name="state" value='<?php echo $state?>'></td>
-             </tr>
-			 <tr>
-               <td height="35">CITY:</td>
-               <td height="35"><input type="text" id="boxxe" name="city" value='<?php echo $city?>'></td>
-             </tr>
-             <tr>
-               <td height="35">ZIPCODE:</td>
-               <td height="35"><input type="text" id="boxxe" name="zipcode" value='<?php echo $zipcode?>'></td>
-             </tr>
-			 <tr>
-               <td height="35">CALORIE:</td>
-               <td height="35"><input type="text" id="boxxe" name="calorie" value=<?php echo $calorie?>></td>
-             </tr>
-			 <tr>
-               <td height="35">HEIGHT:</td>
-               <td height="35"><input type="text" id="boxxe" name="height" value=<?php echo $height?>></td>
-             </tr>
-			 <tr>
-               <td height="35">WEIGHT:</td>
-               <td height="35"><input type="text" id="boxxe" name="weight" value=<?php echo $weight?>></td>
-             </tr>
-			 <tr>
-               <td height="35">FAT:</td>
-               <td height="35"><input type="text" id="boxxe" name="fat" value=<?php echo $fat?>></td>
-             </tr>
-			 <tr>
-               <td height="35">REMARKS:</td>
-               <td height="35"><textarea style="resize:none; margin: 0px; width: 230px; height: 53px;" name="remarks" id="boxxe" ><?php echo $remarks?></textarea></td>
-             </tr>
-			 
-			 
-			 
-             <br>
-            
-             <tr>
-<tr>
-    <td height="35">&nbsp;</td>
-    <td height="35">
-        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE">
-        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
-		</form>
-        <form action='viewall_detail.php' method='post' style="display:inline;">
-            <input type='hidden' name='name' value='<?php echo htmlspecialchars($memid); ?>'/>
-            <input type='submit' class='a1-btn a1-blue' value='Return'/>
+        <form id="form1" name="form1" method="post" class="a1-container" action="edit_mem_submit.php">
+            <table width="100%" border="0" align="center">
+                <!-- Personal Details Section -->
+                <tr>
+                    <td colspan="2" class="a1-dark-gray a1-center"><strong>Personal Details</strong></td>
+                </tr>
+                <tr>
+                    <td>User ID:</td>
+                    <td><input id="boxxe" type="text" name="uid" readonly required value=<?php echo $memid ?>></td>
+                </tr>
+                <tr>
+                    <td>NAME:</td>
+                    <td><input id="boxxe" type="text" name="uname" value='<?php echo $name ?>'></td>
+                </tr>
+                <tr>
+                    <td>GENDER:</td>
+                    <td>
+                        <select id="boxxe" name="gender" required>
+                            <option <?php if($gender == 'Male'){echo("selected");}?> value="Male">Male</option>
+                            <option <?php if($gender == 'Female'){echo("selected");}?> value="Female">Female</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>DATE OF BIRTH:</td>
+                    <td><input type="date" id="boxxe" name="dob" value=<?php echo $dob ?>></td>
+                </tr>
+                <!-- Contact Details Section -->
+                <tr>
+                    <td colspan="2" class="a1-dark-gray a1-center"><strong>Contact Details</strong></td>
+                </tr>
+                <tr>
+                    <td>MOBILE:</td>
+                    <td><input id="boxxe" type="number" name="phone" maxlength="10" value=<?php echo $mobile ?>></td>
+                </tr>
+                <tr>
+                    <td>EMAIL:</td>
+                    <td><input id="boxxe" type="email" name="email" required value=<?php echo $email ?>></td>
+                </tr>
+                <!-- Address Details Section -->
+                <tr>
+                    <td colspan="2" class="a1-dark-gray a1-center"><strong>Address Details</strong></td>
+                </tr>
+                <tr>
+                    <td>STREET NAME:</td>
+                    <td><input type="text" id="boxxe" name="stname" value='<?php echo $streetname ?>'></td>
+                </tr>
+                <tr>
+                    <td>STATE:</td>
+                    <td><input type="text" id="boxxe" name="state" value='<?php echo $state ?>'></td>
+                </tr>
+                <tr>
+                    <td>CITY:</td>
+                    <td><input type="text" id="boxxe" name="city" value='<?php echo $city ?>'></td>
+                </tr>
+                <tr>
+                    <td>ZIPCODE:</td>
+                    <td><input type="text" id="boxxe" name="zipcode" value='<?php echo $zipcode ?>'></td>
+                </tr>
+                <!-- Membership Details Section -->
+                <tr>
+                    <td colspan="2" class="a1-dark-gray a1-center"><strong>Membership Details</strong></td>
+                </tr>
+                <tr>
+                    <td>JOINING DATE:</td>
+                    <td><input type="date" id="boxxe" name="jdate" value=<?php echo $jdate ?>></td>
+                </tr>
+                <!-- Health Metrics Section -->
+                <tr>
+                    <td colspan="2" class="a1-dark-gray a1-center"><strong>Health Metrics</strong></td>
+                </tr>
+                <tr>
+                    <td>CALORIE:</td>
+                    <td><input type="text" id="boxxe" name="calorie" value=<?php echo $calorie ?>></td>
+                </tr>
+                <tr>
+                    <td>HEIGHT:</td>
+                    <td><input type="text" id="boxxe" name="height" value=<?php echo $height ?>></td>
+                </tr>
+                <tr>
+                    <td>WEIGHT:</td>
+                    <td><input type="text" id="boxxe" name="weight" value=<?php echo $weight ?>></td>
+                </tr>
+                <tr>
+                    <td>FAT:</td>
+                    <td><input type="text" id="boxxe" name="fat" value=<?php echo $fat ?>></td>
+                </tr>
+                <!-- Additional Section -->
+                <tr>
+                    <td colspan="2" class="a1-dark-gray a1-center"><strong>Additional Details</strong></td>
+                </tr>
+                <tr>
+                    <td>REMARKS:</td>
+                    <td><textarea style="resize:none; margin: 0px; width: 230px; height: 53px;" name="remarks" id="boxxe"><?php echo $remarks ?></textarea></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="UPDATE">
+                        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset">
+                    </form>
+                    <form action='viewall_detail.php' method='post' style="display:inline;">
+                        <input type='hidden' name='name' value='<?php echo htmlspecialchars($memid); ?>'/>
+                        <input type='submit' class='a1-btn a1-blue' value='Return'/>
+                    </form>
+                </td>
+            </tr>
+            </table>
         </form>
-    </td>
-</tr>
-
-
-
-           </table></td>
-         </tr>
-         </table>
-
     </div>
-    </div>   
+</div>
+
 			
 			
 			
@@ -275,9 +287,3 @@ if ($stmt = mysqli_prepare($con, $query)) {
   
 </body>
 </html>	
-
-<?php
-} else {
-    
-}
-?>
