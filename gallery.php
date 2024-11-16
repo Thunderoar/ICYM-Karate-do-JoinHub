@@ -132,7 +132,6 @@ while ($row = mysqli_fetch_assoc($sections_result)) {
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="newSectionModalLabel">Add New Section to Gallery</h5>
-                <!--button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"-->
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
