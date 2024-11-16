@@ -293,10 +293,31 @@ table tr td label {
       <label>Matrix No.:</label>
       <input type="text" name="matrix_number" required style="width: 100%;" />
     </div>
-    <div style="margin-bottom: 10px;">
-      <label>Current Member Education Course:</label>
-      <input type="text" name="selectedCourse" required style="width: 100%;" />
-    </div>
+<div style="margin-bottom: 10px;">
+  <label>Current Member Education Course:</label>
+  <select name="selectedCourse" required style="width: 100%;">
+<?php
+  // Fetch courses from the table
+  $sql = "SELECT id, course_name FROM courses";
+  $result = $con->query($sql);
+
+  // Check if there are any results
+  if ($result->num_rows > 0) {
+    // Output data of each row
+    while($row = $result->fetch_assoc()) {
+      echo "<option value='" . $row['id'] . "'>" . $row['course_name'] . "</option>";
+    }
+  } else {
+    echo "<option value=''>No courses available</option>";
+  }
+
+  // Close the connection
+  $con->close();
+?>
+
+  </select>
+</div>
+
     <div style="margin-bottom: 10px;">
       <label>User Password:</label>
       <input type="password" name="pass_key" required style="width: 100%;">
