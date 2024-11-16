@@ -182,26 +182,8 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
                     <ul class="site-menu js-clone-nav d-none d-lg-block">
                         <li><a href="index.php">Home</a></li>
                         <li><a href="gallery.php">Gallery</a></li>
-                        <!--<li class="has-children">
-                            <a href="players.php">Coach</a>
-                            <ul class="dropdown arrow-top">
-                                <li><p>Jakub Bates</p></li>
-                                <li><p>Russell Vance</p></li>
-                                <li><p>Carson Hodgson</p></li>
-                                <li class="has-children">
-                                    <p href="#">Sub Menu  ></p>
-                                    <ul class="dropdown">
-                                        <li><p>Joshua Fugueroa</p></li>
-                                        <li><p>Jakub Bates</p></li>
-                                        <li><p>Russell Vance</p></li>
-                                        <li><p>Carson Hodgson</p></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>-->
                         </li>
                         <li><a href="events.php">Events</a></li>
-						<!-- <li><a href="players.php">Members</a>-->
                         <li><a href="about.php">About</a></li>
                         <li><a href="contact.php">Contact</a></li>
 
