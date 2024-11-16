@@ -127,7 +127,7 @@ check_access('admin', 'payments.php');
             </thead>
             <tbody>
 <?php
-$query = "SELECT e.*, u.username, u.mobile, u.email, p.planName 
+$query = "SELECT e.*, u.username, u.mobile, u.email, p.planName, p.amount 
           FROM enrolls_to e
           JOIN users u ON e.userid = u.userid
           JOIN plan p ON e.planid = p.planid
@@ -140,6 +140,7 @@ if (mysqli_num_rows($result) > 0) {
         $uid = $row['userid'];
         $planid = $row['planid'];
         $planName = $row['planName'];
+        $amount = $row['amount'] ?? 0;
         $hasPaid = $row['hasPaid'];
         $hasApproved = $row['hasApproved'];
         $et_id = $row['et_id'];
@@ -151,8 +152,7 @@ echo "<td>" . htmlspecialchars($row['userid'] ?? '') . "</td>";
 echo "<td>" . htmlspecialchars($row['username'] ?? '') . "</td>";
 echo "<td>" . htmlspecialchars($row['mobile'] ?? '') . "</td>";
 echo "<td>" . htmlspecialchars($row['email'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($planName ?? '') . "</td>";
-
+echo "<td>" . htmlspecialchars($planName ?? '') . ($amount > 0 ? " <b>(Fee: RM" . number_format($amount, 2) . ")" : "") . "</b></td>";
 
         $sno++;
 
