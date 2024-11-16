@@ -491,9 +491,7 @@ $con->close();
     <td height="35">Secure Key:</td>
     <td height="35">
         <div style="display: flex; align-items: center; gap: 5px;">
-            <input type="password" id="secureKey" name="securekey" 
-                   value="<?php echo htmlspecialchars($securekey); ?>" 
-                   class="form-control" style="flex: 1; max-width: 60%; margin-right: 5px;" readonly required/>
+            <input type="password" id="secureKey" name="securekey" value="<?php echo htmlspecialchars($securekey); ?>" class="form-control" style="flex: 1; max-width: 60%; margin-right: 5px;" readonly required/>
             <button type="button" onclick="handleSecureKeyVisibility(event)" class="btn btn-primary" style="white-space: nowrap;">Show Key</button>
         </div>
         <!-- Success message container for secure key -->
@@ -540,7 +538,7 @@ function handleSecureKeyVisibility(event) {
     }
 
     // Verify password (replace with secure server-side verification in production)
-    if (userInput === '<?php echo htmlspecialchars($coach_password); ?>') {
+    if (userInput === '<?php echo htmlspecialchars($user_password); ?>') {
         secureKeyField.type = "text";
         button.innerText = "Hide Key";
         
@@ -594,7 +592,7 @@ function handlePasswordVisibility(event) {
 
 
 <!-- Health Status Section -->
-<h4>Health Status:</h4>
+<h4 id="health_status_section">Health Status:</h4>
 <!--<div class="form-group">
     <label for="calorie">Calorie:</label>
     <input type="text" name="calorie" value="<?php echo htmlspecialchars($health_data['calorie'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="10" required pattern="\d{1,10}" title="Only digits are allowed, up to 10 characters.">
