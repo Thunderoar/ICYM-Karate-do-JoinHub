@@ -223,7 +223,7 @@ if (isset($_GET['message_id'])) {
         <div class="tile-stats tile-red">
             <div class="icon"><i class="entypo-users"></i></div>
             <div style="font-size:30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
-                <h2>Income This Month</h2><br>
+                <h2>Paid Income This Month</h2><br>
                 <?php
                 date_default_timezone_set("Asia/Kuala_Lumpur");
                 $date = date('Y-m');
