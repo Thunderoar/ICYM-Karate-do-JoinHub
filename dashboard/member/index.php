@@ -90,6 +90,63 @@ $con->close();
   background-color: #218838;
 }
 
+.tile-stats {
+    display: flex;
+    flex-direction: column; /* Stacks elements vertically */
+    justify-content: space-between; /* Makes sure contents fill the height */
+    height: 100%; /* Ensures all boxes take the same height */
+}
+
+/* Hover Effects */
+.tile-stats:hover {
+    transform: scale(1.05); /* Slightly enlarges the tile */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Adds a shadow */
+}
+.custom-tile {
+    padding: 10px 0;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    /* Smooth transition for hover effects */
+}
+
+.custom-tile.redcolor {
+    background-color: #f56954;
+}
+
+.custom-tile.greencolor {
+    background-color: #4CAF50;
+}
+
+.custom-tile.deepbluecolor {
+    background-color: #0073b7;
+}
+
+.custom-tile .num h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+/* Hover Effects */
+.custom-tile:hover {
+    transform: scale(1.05); /* Slightly enlarges the tile */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Adds a shadow */
+}
+
+/* Optional: Change background color slightly on hover */
+.custom-tile.redcolor:hover {
+    background-color: #e74c3c; /* Darker red */
+}
+
+.custom-tile.greencolor:hover {
+    background-color: #388e3c; /* Darker green */
+}
+
+.custom-tile.deepbluecolor:hover {
+    background-color: #005b9f; /* Darker blue */
+}
+
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -150,6 +207,53 @@ $con->close();
 
             <?php else: ?>
                 <div class="row">
+<div class="col-sm-3">
+        <div class="tile-stats tile-aqua">
+            <div class="icon"><i class="entypo-calendar"></i></div>
+            <div class="num">
+                <h2>Upcoming Events</h2><br>
+                <?php
+                date_default_timezone_set("Asia/Kuala_Lumpur");
+                $currentDate = date('Y-m-d'); // Get the current date
+                
+                // Query to fetch upcoming events
+                $query = "
+                    SELECT planName, startDate, description, planid, tid
+                    FROM plan 
+                    WHERE startDate > '$currentDate' 
+                    ORDER BY startDate ASC 
+                    LIMIT 5"; // Limit to 5 upcoming events
+                
+                $result = mysqli_query($con, $query);
+                
+                if (mysqli_affected_rows($con) > 0) {
+                    echo '<ul>';
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $description = htmlspecialchars($row['description']);
+                        // Truncate description to 50 characters
+                        if (strlen($description) > 50) {
+                            $description = substr($description, 0, 50) . '...';
+                        }
+
+                        echo '<li style="font-size: 20px; line-height: 1.4;">';
+                        echo '<strong>' . htmlspecialchars($row['planName']) . '</strong><br>';
+                        echo 'Date: ' . htmlspecialchars($row['startDate']) . '<br>';
+                        echo 'Description: ' . $description . '<br>';
+                        echo '<a href="../../dashboard/admin/timetable_detail.php?planid=' . htmlspecialchars($row['planid']) . '&id=' . htmlspecialchars($row['tid']) . '">';
+                        echo '<button style="font-size: 14px; padding: 10px 20px; background-color: #e67e22; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Event Detail</button>';
+                        echo '</a></li>';
+                    }
+                    echo '</ul>';
+                } else {
+                    echo '<p style="font-size: 12px;">No upcoming events.</p>';
+                }
+                ?>
+            </div>
+        </div>
+</div>
+
+
+
 <div class="col-sm-3"><a href="payments.php">
 <div class="tile-stats tile-red">
     <div class="icon"><i class="entypo-users"></i></div>
@@ -200,7 +304,15 @@ $con->close();
     </div>
 </div>
 
-</a></div>
+</a>
+		    <a href="payments.php">
+        <div class="custom-tile redcolor">
+            <div class="num" style="display: flex; align-items: center; justify-content: center;">
+                <i class="entypo-star" style="margin-right: 10px;"></i>
+                <h4>Make Payments</h4>
+            </div>
+        </div>
+    </a></div>
 
 <?php
 // Start session if not already started
@@ -281,31 +393,22 @@ if (!isset($tileClass)) {
             </div>
         </div>
     </a>
+<a href="more-userprofile.php#health_status_section">
+    <div class="custom-tile greencolor" style="margin-top:10px;">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+            <i class="entypo-users" style="margin-right: 10px;"></i>
+            <h4>Edit Your Health Status</h4>
+        </div>
+    </div>
+</a>
+
 </div>
 
 
-			<div class="col-sm-3"><a href="viewroutine.php">
-				<div class="tile-stats tile-aqua">
-					<div class="icon"><i class="entypo-mail"></i></div>
-						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
-						<h2>Today's activity</h2><br>
-							<?php
-							date_default_timezone_set("Asia/Kuala_Lumpur");
-							$date  = date('Y-m');
-							$query = "select COUNT(*) from users WHERE joining_date LIKE '$date%'";
-							//echo $query;
-							$result = mysqli_query($con, $query);
-							$i      = 1;
-							if (mysqli_affected_rows($con) != 0) {
-							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							        echo $row['COUNT(*)'];
-							    }
-							}
-							$i = 1;
-							?>
-						</div>
-				</div></a>
-			</div>
+
+
+
+
 <div class="col-sm-3">
     <a href="view_plan.php">
         <div class="tile-stats tile-blue">
@@ -339,6 +442,14 @@ if (!isset($tileClass)) {
             </div>
         </div>
     </a>
+					<a href="view_plan.php">
+    <div class="custom-tile deepbluecolor" style="margin-top:10px;">
+        <div class="num" style="display: flex; align-items: center; justify-content: center;">
+            <i class="entypo-quote" style="margin-right: 10px;"></i>
+            <h4>See Active Event</h4>
+        </div>
+    </div>
+</a>
 </div>
                 </div>
             <?php endif; ?>
