@@ -1,46 +1,86 @@
 <?php
 require '../../include/db_conn.php';
 page_protect();
-    
-    
-   $uid=$_POST['uid'];
-   $uname=$_POST['uname'];
-   $gender=$_POST['gender'];
-   $mobile=$_POST['phone'];
-   $email=$_POST['email'];
-   $dob=$_POST['dob'];
-   $jdate=$_POST['jdate'];
-   $stname=$_POST['stname'];
-   $state=$_POST['state'];
-   $city=$_POST['city'];
-   $zipcode=$_POST['zipcode'];
-   $calorie=$_POST['calorie'];
-   $height=$_POST['height'];
-   $weight=$_POST['weight'];
-   $fat=$_POST['fat'];
-   $remarks=$_POST['remarks'];
-    
-    $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."' where userid='".$uid."'";
 
-   if(mysqli_query($con,$query1)){
-     $query2="update address set streetName='".$stname."',state='".$state."',city='".$city."',zipcode='".$zipcode."' where userid='".$uid."'";
-     if(mysqli_query($con,$query2)){
-        $query3="update health_status set calorie='".$calorie."',height='".$height."',weight='".$weight."',fat='".$fat."',remarks='".$remarks."' where userid='".$uid."'";
-        if(mysqli_query($con,$query3)){
-            echo "<html><head><script>alert('Member Update Successfully');</script></head></html>";
+// Capture form data
+$uid = $_POST['uid'];
+$uname = $_POST['uname'];
+$gender = $_POST['gender'];
+$mobile = $_POST['phone'];
+$email = $_POST['email'];
+$dob = $_POST['dob'];
+$jdate = $_POST['jdate'];
+$stname = $_POST['stname'];
+$state = $_POST['state'];
+$city = $_POST['city'];
+$zipcode = $_POST['zipcode'];
+$calorie = $_POST['calorie'];
+$height = $_POST['height'];
+$weight = $_POST['weight'];
+$fat = $_POST['fat'];
+$remarks = $_POST['remarks'];
+
+// Update users table
+$query1 = "
+    UPDATE users 
+    SET username = '$uname',
+        gender = '$gender',
+        mobile = '$mobile',
+        email = '$email',
+        dob = '$dob',
+        joining_date = '$jdate' 
+    WHERE userid = '$uid'
+";
+
+if (mysqli_query($con, $query1)) {
+    // Update address table
+    $query2 = "
+        UPDATE address 
+        SET streetName = '$stname',
+            state = '$state',
+            city = '$city',
+            zipcode = '$zipcode' 
+        WHERE userid = '$uid'
+    ";
+
+    if (mysqli_query($con, $query2)) {
+        // Update health_status table
+        $query3 = "
+            UPDATE health_status 
+            SET calorie = '$calorie',
+                height = '$height',
+                weight = '$weight',
+                fat = '$fat',
+                remarks = '$remarks' 
+            WHERE userid = '$uid'
+        ";
+
+        if (mysqli_query($con, $query3)) {
+            // Success: Redirect with a success message
+            echo "<html><head><script>alert('Member updated successfully');</script></head></html>";
             echo "<meta http-equiv='refresh' content='0; url=view_mem.php'>";
-        }else{
-             echo "<html><head><script>alert('ERROR! Update Opertaion Unsucessfull');</script></head></html>";
-             echo "error".mysqli_error($con);
+        } else {
+            // Error in health_status update
+            logError(mysqli_error($con));
+            echo "<html><head><script>alert('ERROR! Health metrics update failed');</script></head></html>";
         }
-     }else{
-        echo "<html><head><script>alert('ERROR! Update Opertaion Unsucessfull');</script></head></html>";
-         echo "error".mysqli_error($con);
-     }
-   }else{
-    echo "<html><head><script>alert('ERROR! Update Opertaion Unsucessfull');</script></head></html>";
-    echo "error".mysqli_error($con);
-   }
-    
+    } else {
+        // Error in address update
+        logError(mysqli_error($con));
+        echo "<html><head><script>alert('ERROR! Address update failed');</script></head></html>";
+    }
+} else {
+    // Error in users update
+    logError(mysqli_error($con));
+    echo "<html><head><script>alert('ERROR! User details update failed');</script></head></html>";
+}
 
+// Function to log errors
+function logError($errorMessage)
+{
+    $logFile = '../../logs/error_log.txt';
+    $currentDateTime = date('Y-m-d H:i:s');
+    $logMessage = "[$currentDateTime] $errorMessage" . PHP_EOL;
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+}
 ?>
