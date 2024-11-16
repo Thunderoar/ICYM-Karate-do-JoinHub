@@ -110,8 +110,8 @@ if (mysqli_query($con, $query)) {
         if (mysqli_query($con, $query2)) {
             
             // Insert into health_status table
-            $query4 = "INSERT INTO health_status(healthid, userid) 
-                       VALUES ('$healthID', '$memID')";
+            $query4 = "INSERT INTO health_status(healthid, userid, calorie, fat) 
+                       VALUES ('$healthID', '$memID', '1', '1')";
             if (mysqli_query($con, $query4)) {
                 
                 // Insert into address table
