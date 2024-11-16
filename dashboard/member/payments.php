@@ -83,9 +83,10 @@ $current_user_id = $_SESSION['userid'];
         </tr>
     </thead>
     <tbody>
-    <?php
-    // Update query to show only the current user's enrollments along with the plan name
-    $query  = "SELECT enrolls_to.*, users.username, users.mobile, users.email, plan.planName 
+<?php
+    // Update query to include plan.amount
+    $query  = "SELECT enrolls_to.*, users.username, users.mobile, users.email, 
+               plan.planName, plan.amount 
                FROM enrolls_to 
                JOIN users ON enrolls_to.userid = users.userid 
                JOIN plan ON enrolls_to.planid = plan.planid 
@@ -93,60 +94,56 @@ $current_user_id = $_SESSION['userid'];
                ORDER BY enrolls_to.expire";
     $result = mysqli_query($con, $query);
     $sno    = 1;
-
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            $et_id = $row['et_id'];  // Get the enrollment ID for payment reference
-            $uid = $row['userid'];
-            $planid = $row['planid'];
-            $hasPaid = $row['hasPaid'];         // Check if the user has already paid
-            $hasApproved = $row['hasApproved']; // Check if the payment is approved
-            $planName = $row['planName'];       // Retrieve the plan name
-
-            echo "<tr><td>" . $sno . "</td>";
-            echo "<td>" . $row['username'] . "</td>";
-            echo "<td>" . $row['userid'] . "</td>";
-            echo "<td>" . $row['mobile'] . "</td>";
-            echo "<td>" . $row['email'] . "</td>";
-            echo "<td>" . $planName . "</td>"; // Display the plan name
-
-            $sno++;
-
-            // Display different actions based on payment and approval status
-            if ($hasPaid === 'no') {
-                // If the payment has not been made
-                echo "<td>
-                        <form action='make_payments.php' method='post'>
-                            <input type='hidden' name='userID' value='" . $uid . "'/>
-                            <input type='hidden' name='planID' value='" . $planid . "'/>
-                            <input type='hidden' name='et_id' value='" . $et_id . "'/>
-                            <input type='submit' class='a1-btn a1-blue' value='Add Payment'/>
-                        </form>
-                        <p>Payment ID: $et_id</p>
-                      </td>";
-            } elseif ($hasPaid === 'yes' && $hasApproved === 'no') {
-                // If the payment has been made but not approved
-                echo "<td>
-                        <p>Payment Pending Approval</p>
-                        <p>Payment ID: $et_id</p>
-                      </td>";
-            } elseif ($hasPaid === 'yes' && $hasApproved === 'yes') {
-                // If the payment has been made and approved
-                echo "<td>
-                        <p>Payment Approved</p>
-                        <p>Payment ID: $et_id</p>
-                      </td>";
-            } else {
-                // Default case if something goes wrong
-                echo "<td>No Action Needed</td>";
-            }
-
-            echo "</tr>";
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        $et_id = $row['et_id'];  // Get the enrollment ID for payment reference
+        $uid = $row['userid'];
+        $planid = $row['planid'];
+        $hasPaid = $row['hasPaid'];         // Check if the user has already paid
+        $hasApproved = $row['hasApproved']; // Check if the payment is approved
+        $planName = $row['planName'];       // Retrieve the plan name
+        $amount = $row['amount'] ?? 0;      // Get the amount from plan table with null check
+        echo "<tr><td>" . $sno . "</td>";
+        echo "<td>" . $row['username'] . "</td>";
+        echo "<td>" . $row['userid'] . "</td>";
+        echo "<td>" . $row['mobile'] . "</td>";
+        echo "<td>" . $row['email'] . "</td>";
+        echo "<td>" . $planName . ($amount > 0 ? " <b>(Fee: RM" . number_format($amount, 2) . ")" : "") . "</b></td>";
+        $sno++;
+        // Display different actions based on payment and approval status
+        if ($hasPaid === 'no') {
+            // If the payment has not been made
+            echo "<td>
+                    <form action='make_payments.php' method='post'>
+                        <input type='hidden' name='userID' value='" . $uid . "'/>
+                        <input type='hidden' name='planID' value='" . $planid . "'/>
+                        <input type='hidden' name='et_id' value='" . $et_id . "'/>
+                        <input type='submit' class='a1-btn a1-blue' value='Add Payment'/>
+                    </form>
+                    <p>Payment ID: $et_id</p>
+                  </td>";
+        } elseif ($hasPaid === 'yes' && $hasApproved === 'no') {
+            // If the payment has been made but not approved
+            echo "<td>
+                    <p>Payment Pending Approval</p>
+                    <p>Payment ID: $et_id</p>
+                  </td>";
+        } elseif ($hasPaid === 'yes' && $hasApproved === 'yes') {
+            // If the payment has been made and approved
+            echo "<td>
+                    <p>Payment Approved</p>
+                    <p>Payment ID: $et_id</p>
+                  </td>";
+        } else {
+            // Default case if something goes wrong
+            echo "<td>No Action Needed</td>";
         }
-    } else {
-        echo "<tr><td colspan='7'>No payment records found.</td></tr>"; // Adjust colspan to match the number of columns
+        echo "</tr>";
     }
-    ?>
+} else {
+    echo "<tr><td colspan='7'>No payment records found.</td></tr>"; // Adjust colspan to match the number of columns
+}
+?>
     </tbody>
 </table>
 
