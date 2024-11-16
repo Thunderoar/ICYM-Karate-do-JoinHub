@@ -222,17 +222,17 @@ if (isset($_GET['message_id'])) {
     <a href="revenue_month.php">
         <div class="tile-stats tile-red">
             <div class="icon"><i class="entypo-users"></i></div>
-            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
-                <h2>Paid Income This Month</h2><br>
+            <div style="font-size:30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <h2>Income This Month</h2><br>
                 <?php
                 date_default_timezone_set("Asia/Kuala_Lumpur");
                 $date = date('Y-m');
-                
+
                 // Fetch the paid amount
                 $query_paid = "SELECT SUM(p.amount) as total_paid FROM enrolls_to e
                                JOIN plan p ON e.planid = p.planid
-                               WHERE e.paid_date LIKE '$date%' 
-                               AND e.hasPaid = 'yes' 
+                               WHERE e.paid_date LIKE '$date%'
+                               AND e.hasPaid = 'yes'
                                AND e.hasApproved = 'yes'";
                 $result_paid = mysqli_query($con, $query_paid);
                 $revenue = 0;
@@ -244,7 +244,7 @@ if (isset($_GET['message_id'])) {
                 // Fetch the unpaid amount
                 $query_unpaid = "SELECT SUM(p.amount) as total_unpaid FROM enrolls_to e
                                  JOIN plan p ON e.planid = p.planid
-                                 WHERE e.hasPaid = 'yes' 
+                                 WHERE e.hasPaid = 'yes'
                                  AND e.hasApproved != 'yes'";
                 $result_unpaid = mysqli_query($con, $query_unpaid);
                 $unpaid_amount = 0;
@@ -270,11 +270,13 @@ if (isset($_GET['message_id'])) {
 
 
 
+
+
 <div class="col-sm-3">
     <a href="view_mem.php">
         <div class="tile-stats tile-green">
             <div class="icon"><i class="entypo-chart-bar"></i></div>
-            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+            <div style="font-size:30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
                 <h2>Total <br>Members</h2><br>
                 <?php
                 // Query to count all users
