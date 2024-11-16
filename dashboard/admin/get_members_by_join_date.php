@@ -38,14 +38,18 @@ try {
         $sl = 1;
         while ($row = $result->fetch_assoc()) {
             // Function to safely display values
-            function safe_display($value) {
-                return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
-            }
+if (!function_exists('safe_display')) {
+    function safe_display($value) {
+        return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
 
-            // Function to safely format date
-            function safe_date($date) {
-                return $date ? date('d-m-Y', strtotime($date)) : '';
-            }
+if (!function_exists('safe_date')) {
+    function safe_date($date) {
+        return $date ? date('d-m-Y', strtotime($date)) : '';
+    }
+}
+
 
             echo "<tr>";
             echo "<td>" . $sl . "</td>";
