@@ -125,17 +125,20 @@ $offset = ($page - 1) * $limit;
 if ($_SESSION['is_coach_logged_in']) {
     $coachId = $_SESSION['staffid']; // Assuming you have coach's ID stored in session
 
-    // Modified query for pagination
-    $query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, e.hasApproved, u.dob,
-                p.planName AS event_name, p.startDate AS event_date
-FROM enrolls_to e
-INNER JOIN users u ON e.userid = u.userid
-INNER JOIN event_members em ON u.userid = em.userid
-INNER JOIN event_staff es ON em.planid = es.planid
-INNER JOIN plan p ON em.planid = p.planid
-WHERE e.hasPaid = 'yes' AND e.hasApproved = 'yes' AND es.staffid = ?
-ORDER BY u.joining_date
-LIMIT ? OFFSET ?";
+    // Modified query with DISTINCT on all selected columns
+    $query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, 
+                e.hasApproved, u.dob, p.planName AS event_name, p.startDate AS event_date
+               FROM enrolls_to e
+               INNER JOIN users u ON e.userid = u.userid
+               INNER JOIN event_members em ON u.userid = em.userid
+               INNER JOIN event_staff es ON em.planid = es.planid
+               INNER JOIN plan p ON em.planid = p.planid
+               WHERE e.hasPaid = 'yes' 
+               AND e.hasApproved = 'yes' 
+               AND es.staffid = ?
+               ORDER BY u.joining_date
+               LIMIT ? OFFSET ?";
+               
     $stmt = mysqli_prepare($con, $query);
     mysqli_stmt_bind_param($stmt, 'iii', $coachId, $limit, $offset);
     mysqli_stmt_execute($stmt);
