@@ -208,48 +208,50 @@ $con->close();
             <?php else: ?>
                 <div class="row">
 <div class="col-sm-3">
-        <div class="tile-stats tile-aqua">
-            <div class="icon"><i class="entypo-calendar"></i></div>
-            <div class="num">
-                <h2>Upcoming Events</h2><br>
-                <?php
-                date_default_timezone_set("Asia/Kuala_Lumpur");
-                $currentDate = date('Y-m-d'); // Get the current date
-                
-                // Query to fetch upcoming events
-                $query = "
-                    SELECT planName, startDate, description, planid, tid
-                    FROM plan 
-                    WHERE startDate > '$currentDate' 
-                    ORDER BY startDate ASC 
-                    LIMIT 5"; // Limit to 5 upcoming events
-                
-                $result = mysqli_query($con, $query);
-                
-                if (mysqli_affected_rows($con) > 0) {
-                    echo '<ul>';
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $description = htmlspecialchars($row['description']);
-                        // Truncate description to 50 characters
-                        if (strlen($description) > 50) {
-                            $description = substr($description, 0, 50) . '...';
-                        }
-
-                        echo '<li style="font-size: 20px; line-height: 1.4;">';
-                        echo '<strong>' . htmlspecialchars($row['planName']) . '</strong><br>';
-                        echo 'Date: ' . htmlspecialchars($row['startDate']) . '<br>';
-                        echo 'Description: ' . $description . '<br>';
-                        echo '<a href="../../dashboard/admin/timetable_detail.php?planid=' . htmlspecialchars($row['planid']) . '&id=' . htmlspecialchars($row['tid']) . '">';
-                        echo '<button style="font-size: 14px; padding: 10px 20px; background-color: #e67e22; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Event Detail</button>';
-                        echo '</a></li>';
-                    }
-                    echo '</ul>';
-                } else {
-                    echo '<p style="font-size: 12px;">No upcoming events.</p>';
+<div class="tile-stats tile-aqua">
+    <div class="icon"><i class="entypo-calendar"></i></div>
+    <div class="num">
+        <h2>Upcoming Events</h2><br>
+        <?php
+        date_default_timezone_set("Asia/Kuala_Lumpur");
+        $currentDate = date('Y-m-d'); // Get the current date
+        
+        // Query to fetch upcoming active events
+        $query = "
+            SELECT planName, startDate, description, planid, tid
+            FROM plan 
+            WHERE startDate > '$currentDate' 
+              AND active = 1 
+            ORDER BY startDate ASC 
+            LIMIT 5"; // Limit to 5 upcoming events
+        
+        $result = mysqli_query($con, $query);
+        
+        if (mysqli_affected_rows($con) > 0) {
+            echo '<ul>';
+            while ($row = mysqli_fetch_assoc($result)) {
+                $description = htmlspecialchars($row['description']);
+                // Truncate description to 50 characters
+                if (strlen($description) > 50) {
+                    $description = substr($description, 0, 50) . '...';
                 }
-                ?>
-            </div>
-        </div>
+
+                echo '<li style="font-size: 20px; line-height: 1.4;">';
+                echo '<strong>' . htmlspecialchars($row['planName']) . '</strong><br>';
+                echo 'Date: ' . htmlspecialchars($row['startDate']) . '<br>';
+                echo 'Description: ' . $description . '<br>';
+                echo '<a href="../../dashboard/admin/timetable_detail.php?planid=' . htmlspecialchars($row['planid']) . '&id=' . htmlspecialchars($row['tid']) . '">';
+                echo '<button style="font-size: 14px; padding: 10px 20px; background-color: #e67e22; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Event Detail</button>';
+                echo '</a></li>';
+            }
+            echo '</ul>';
+        } else {
+            echo '<p style="font-size: 12px;">No upcoming events.</p>';
+        }
+        ?>
+    </div>
+</div>
+
 </div>
 
 
