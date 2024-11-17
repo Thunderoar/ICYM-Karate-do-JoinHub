@@ -178,21 +178,12 @@ page_protect();
 			<hr>
 
 <div class="row">
-<<<<<<< HEAD
-    <div class="col-sm-3">
-        <a href="revenue_month.php">
-            <div class="tile-stats tile-red">
-                <div class="icon"><i class="entypo-users"></i></div>
-                <div style="font-size: 30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
-                    <h2>Income This Month</h2><br>
-=======
 <div class="col-sm-3">
     <a href="revenue_month.php">
         <div class="tile-stats tile-red">
             <div class="icon"><i class="entypo-users"></i></div>
             <div class="num" data-postfix="" data-duration="1500" data-delay="0">
                 <h2>Income This Month</h2><br>
->>>>>>> 31aa2ff6280f08a6e13a4bb730013ebf96d0f2b6
 <?php
 date_default_timezone_set("Asia/Kuala_Lumpur");
 $date = date('Y-m');
@@ -255,19 +246,8 @@ echo "RM" . number_format($revenue, 2) . " (Unpaid: RM" . number_format($unpaid_
 
 
 <div class="col-sm-3">
-<<<<<<< HEAD
-    <a href="view_mem.php">
-        <div class="tile-stats tile-green">
-            <div class="icon"><i class="entypo-chart-bar"></i></div>
-            <div style="font-size: 30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
-                <h2>Your <br>Students</h2><br>
-                <?php
-                // Assuming this is set upon login
-                $staffid = $_SESSION['staffid'];
-=======
 <?php
 $staffid = $_SESSION['staffid']; // Get logged-in staff ID
->>>>>>> 31aa2ff6280f08a6e13a4bb730013ebf96d0f2b6
 
 // Query to get all members and their approval status for events assigned to the logged-in coach
 $query = "SELECT 

@@ -9,7 +9,7 @@ if (isset($_POST['name'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ICYM Karate-Do | Edit Member</title>
+    <title>SPORTS CLUB | Edit Member</title>
     <link rel="stylesheet" href="../../css/style.css" id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -54,11 +54,11 @@ if (isset($_POST['name'])) {
             <?php
              require('../../element/loggedin-logo.html');
             ?>
-            <!--div class="sidebar-collapse" onclick="collapseSidebar()">
+            <div class="sidebar-collapse" onclick="collapseSidebar()">
                 <a href="#" class="sidebar-collapse-icon with-animation">
                     <i class="entypo-menu"></i>
                 </a>
-            </div-->
+            </div>
         </header>
         <?php include('nav.php'); ?>
     </div>
