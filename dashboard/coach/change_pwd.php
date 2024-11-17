@@ -8,7 +8,7 @@ page_protect();
 <html lang="en">
 <head>
 
-    <title>SPORTS CLUB | Reset</title>
+    <title>ICYM Karate-Do | Reset</title>
      <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -42,12 +42,12 @@ page_protect();
 			 require('../../element/loggedin-logo.html');
 			?>
 			
-					<!-- logo collapse icon -->
+					<!-- logo collapse icon>
 					<div class="sidebar-collapse" onclick="collapseSidebar()">
-				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+				<a href="#" class="sidebar-collapse-icon with-animation">< add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition>
 					<i class="entypo-menu"></i>
 				</a>
-			</div>
+			</div-->
 							
 			
 		
