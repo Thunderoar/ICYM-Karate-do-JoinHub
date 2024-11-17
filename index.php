@@ -30,6 +30,7 @@ if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+	
     
   
     <link rel="stylesheet" href="css/aos.css">
