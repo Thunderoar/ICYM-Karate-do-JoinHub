@@ -31,26 +31,14 @@ if (session_status() == PHP_SESSION_NONE) {
 <script>
 let originalData = {};
 
-document.addEventListener("DOMContentLoaded", function() {
-    const formElements = document.querySelectorAll("#form1 input, #form1 textarea, #form1 select");
-    formElements.forEach(element => {
-        if (element.type !== "hidden") {
-            originalData[element.name] = element.value;
-        }
-    });
-    
-    // Add event listener to warn before reloading the page
-    window.addEventListener("beforeunload", function(event) {
-        if (isFormChanged()) {
-            event.preventDefault();
-            event.returnValue = '';
-        }
-    });
-});
-
 function isFormChanged() {
-    const formElements = document.querySelectorAll("#form1 input, #form1 textarea, #form1 select");
-    return [...formElements].some(element => element.type !== "hidden" && originalData[element.name] !== element.value);
+    // Check all form elements except the register button
+    const formElements = document.querySelectorAll("#form1 input:not([type='submit']), #form1 textarea, #form1 select");
+    return [...formElements].some(element => {
+        return element.type !== "hidden" && 
+               !element.classList.contains("register-btn") && 
+               originalData[element.name] !== element.value;
+    });
 }
 
 function handleFormChanges(event, message, callback) {
@@ -77,5 +65,4 @@ function checkForChangesAndRedirect(event, url) {
 function checkForChangesAndNavigate(event, url) {
     checkForChangesAndRedirect(event, url);
 }
-
 </script>

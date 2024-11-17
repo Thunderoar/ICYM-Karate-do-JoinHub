@@ -359,21 +359,20 @@ table tr td label {
     </div>
 <div style="margin-bottom: 10px;">
   <label>Current Member Education Course:</label>
-<select name="plan" required style="width: 100%;" onchange="myplandetail(this.value)">
-  <option value="">--Please Select--</option>
-  <?php
-    $query = "SELECT planid, planName FROM plan WHERE active='yes'";
-    $result = mysqli_query($con, $query);
-
-    if (mysqli_num_rows($result) > 0) {
-      while ($row = mysqli_fetch_assoc($result)) {
-        $planid = htmlspecialchars($row['planid'], ENT_QUOTES, 'UTF-8');
-        $planName = htmlspecialchars($row['planName'], ENT_QUOTES, 'UTF-8');
-        echo "<option value=\"$planid\">$planName</option>";
+  <select name="course" required style="width: 100%;" onchange="mycoursedetail(this.value)">
+    <option value="">--Please Select--</option>
+    <?php
+      $query = "SELECT id, course_name FROM courses";
+      $result = mysqli_query($con, $query);
+      if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+          $courseId = htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8');
+          $courseName = htmlspecialchars($row['course_name'], ENT_QUOTES, 'UTF-8');
+          echo "<option value=\"$courseId\">$courseName</option>";
+        }
       }
-    }
-  ?>
-</select>
+    ?>
+  </select>
 </div>
 
             <div class="form-group">
@@ -415,7 +414,7 @@ table tr td label {
   <legend style="font-size: 20px; color: #333; font-weight: bold;">Membership Details</legend>
   <div>
     <div style="margin-bottom: 10px;">
-      <label>Choose Plan:</label>
+      <label>Choose Training Plan:</label>
       <select name="plan" required style="width: 100%;" onchange="myplandetail(this.value)">
         <option value="">--Please Select--</option>
         <?php

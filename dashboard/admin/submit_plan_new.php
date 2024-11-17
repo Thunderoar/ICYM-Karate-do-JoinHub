@@ -356,16 +356,25 @@ $staffData = json_decode($_POST['selected_staff_data'], true);
 if ($staffData && is_array($staffData)) {
     foreach ($staffData as $staff) {
         $staffId = mysqli_real_escape_string($con, $staff['staffid']);
-        $staffTname = mysqli_real_escape_string($con, $staff['tname']);
         
+        // Insert data into sports_timetable
         $insertTimetable = "INSERT INTO sports_timetable (tid, planid, staffid, tname, hasApproved) 
                            VALUES ('$tid', '$planid', '$staffId', '$tname', '$hasApproved')";
         
         if (!mysqli_query($con, $insertTimetable)) {
             echo "Error inserting timetable: " . mysqli_error($con);
         }
+        
+        // Insert data into event_staff
+        $insertEventStaff = "INSERT INTO event_staff (es_id, planid, staffid, joined_at) 
+                            VALUES (NULL, '$planid', '$staffId', NOW())";
+        
+        if (!mysqli_query($con, $insertEventStaff)) {
+            echo "Error inserting event staff: " . mysqli_error($con);
+        }
     }
 }
+
 
         // Preemptively add days to `timetable_days` based on duration
         $numDays = (int)((strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24)) + 1;
@@ -417,6 +426,37 @@ if ($staffData && is_array($staffData)) {
                        VALUES ('$page_id', '$planid', '$name', '$desc', '$desc', '$slug', '$current_time', 1)";
         
         if (!mysqli_query($con, $insertPage)) {
+            throw new Exception("Error creating plan page: " . mysqli_error($con));
+        }
+        
+        // Call function to create plan directory if it exists
+        if (function_exists('createPlanDirectory')) {
+            createPlanDirectory($con, $slug);
+        }
+
+        // Commit the transaction if everything is successful
+        mysqli_commit($con);
+        
+        // Display success message
+echo "<script>
+        alert('Plan created successfully!');
+        window.location.href = 'timetable_detail.php?id=" . $tid . "&planid=" . $planid . "#timetable-details';
+      </script>";
+
+        
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        mysqli_rollback($con);
+        
+        // Display error message
+        echo "<script>
+                alert('Error: " . mysqli_real_escape_string($con, $e->getMessage()) . "');
+                window.location.href = 'new_plan.php';
+              </script>";
+    }
+}
+?>
+uery($con, $insertPage)) {
             throw new Exception("Error creating plan page: " . mysqli_error($con));
         }
         

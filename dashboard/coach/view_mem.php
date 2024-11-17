@@ -123,82 +123,86 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 if ($_SESSION['is_coach_logged_in']) {
-    $coachId = $_SESSION['staffid']; // Assuming you have coach's ID stored in session
-
-    // Modified query with DISTINCT on all selected columns
-    $query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, 
-                e.hasApproved, u.dob, p.planName AS event_name, p.startDate AS event_date
-               FROM enrolls_to e
-               INNER JOIN users u ON e.userid = u.userid
-               INNER JOIN event_members em ON u.userid = em.userid
-               INNER JOIN event_staff es ON em.planid = es.planid
-               INNER JOIN plan p ON em.planid = p.planid
-               WHERE e.hasPaid = 'yes' 
-               AND e.hasApproved = 'yes' 
-               AND es.staffid = ?
-               ORDER BY u.joining_date
-               LIMIT ? OFFSET ?";
-               
+    $coachId = $_SESSION['staffid'];
+    
+    // Modified query to only show members from events where the coach is assigned
+    $query = "SELECT DISTINCT 
+                u.userid,
+                u.username,
+                u.mobile,
+                u.email,
+                u.gender,
+                u.joining_date,
+                e.hasApproved,
+                u.dob,
+                p.planName AS event_name,
+                p.startDate AS event_date
+            FROM event_staff es
+            INNER JOIN plan p ON es.planid = p.planid
+            INNER JOIN event_members em ON p.planid = em.planid
+            INNER JOIN users u ON em.userid = u.userid
+            INNER JOIN enrolls_to e ON (u.userid = e.userid AND e.planid = p.planid)
+            WHERE es.staffid = ?
+            AND e.hasPaid = 'yes'
+            AND e.hasApproved = 'yes'
+            ORDER BY u.joining_date
+            LIMIT ? OFFSET ?";
+            
     $stmt = mysqli_prepare($con, $query);
     mysqli_stmt_bind_param($stmt, 'iii', $coachId, $limit, $offset);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+    $sno = $offset + 1;
 
-    $sno = $offset + 1; // Update to reflect correct serial number
-
-    if (mysqli_num_rows($result) != 0) {
+    if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
             $uid = $row['userid'];
-
-            echo "<tr><td>".$sno."</td>";
-            echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['joining_date']) ."</td>";
-            echo "<td>" . htmlspecialchars($row['hasApproved']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['event_name']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['event_date']) . "</td>";
-
-            // Action buttons
-            echo "<td>
-            <div class='btn-group' role='group'>
-            <form action='../../dashboard/admin/viewall_detail.php' method='post'>
-                            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+            ?>
+            <tr>
+                <td><?php echo $sno; ?></td>
+                <td><?php echo htmlspecialchars($row['userid']); ?></td>
+                <td><?php echo htmlspecialchars($row['username']); ?></td>
+                <td><?php echo htmlspecialchars($row['mobile']); ?></td>
+                <td><?php echo htmlspecialchars($row['email']); ?></td>
+                <td><?php echo htmlspecialchars($row['gender']); ?></td>
+                <td><?php echo htmlspecialchars($row['joining_date']); ?></td>
+                <td><?php echo htmlspecialchars($row['hasApproved']); ?></td>
+                <td><?php echo htmlspecialchars($row['event_name']); ?></td>
+                <td><?php echo htmlspecialchars($row['event_date']); ?></td>
+                <td>
+                    <div class='btn-group' role='group'>
+                        <form action='../../dashboard/admin/viewall_detail.php' method='post'>
+                            <input type='hidden' name='name' value='<?php echo htmlspecialchars($uid); ?>'/>
                             <input type='submit' class='a1-btn a1-green btn' value='More Info'/>
                         </form>
-                <form action='../../dashboard/admin/read_member.php' method='post' style='display:inline-block;'>
-                    <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                    <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
-                </form>";
-
-
-            // Show Approve button if not approved yet
-            if ($row['hasApproved'] == 'Not Yet' || $row['hasApproved'] == 'No') {
-                echo "<form action='approve_member.php' method='post' style='display:inline-block;'>
-                    <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
-                    <input type='submit' class='a1-btn a1-yellow btn' value='Approve'/>
-                </form>";
-            }
-
-            // Show Disapprove button if already approved
-            if ($row['hasApproved'] == 'Yes') {
-                echo "<form action='disapprove_member.php' method='post' style='display:inline-block;'>
-                    <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
-                    <input type='submit' class='a1-btn a1-red btn' value='Disapprove'/>
-                </form>";
-            }
-
-            echo "</div></td></tr>";
+                        <form action='../../dashboard/admin/read_member.php' method='post' style='display:inline-block;'>
+                            <input type='hidden' name='name' value='<?php echo htmlspecialchars($uid); ?>'/>
+                            <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
+                        </form>
+                        <?php if ($row['hasApproved'] == 'Not Yet' || $row['hasApproved'] == 'No'): ?>
+                            <form action='approve_member.php' method='post' style='display:inline-block;'>
+                                <input type='hidden' name='userid' value='<?php echo htmlspecialchars($uid); ?>'/>
+                                <input type='submit' class='a1-btn a1-yellow btn' value='Approve'/>
+                            </form>
+                        <?php endif; ?>
+                        <?php if ($row['hasApproved'] == 'Yes'): ?>
+                            <form action='disapprove_member.php' method='post' style='display:inline-block;'>
+                                <input type='hidden' name='userid' value='<?php echo htmlspecialchars($uid); ?>'/>
+                                <input type='submit' class='a1-btn a1-red btn' value='Disapprove'/>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <?php
             $sno++;
         }
     } else {
-        echo "<tr><td colspan='11'>No records found</td></tr>"; // Updated colspan to match the number of columns
+        echo "<tr><td colspan='11'>No records found</td></tr>";
     }
 }
 ?>
-    </tbody>
+</tbody>
 </table>
 
 

@@ -156,7 +156,7 @@ page_protect();
            	   </tr>
 			</tr>
              <tr>
-               <td height="35">SPORTS PLAN:</td>
+               <td height="35">Trainig Plan:</td>
                <td height="35"><select name="plan" id="boxx" required onchange="myplandetail(this.value)">
 					<option value="">--Please Select--</option>
 					<?php

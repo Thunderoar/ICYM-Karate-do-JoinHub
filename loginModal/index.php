@@ -404,13 +404,13 @@ if (isset($_POST['check_username'])) {
       <button type="submit" class="form-control btn btn-primary rounded submit px-3">Login</button>
     </div>
     <div class="form-group d-md-flex">
-      <div class="form-check w-50">
+      <!--<div class="form-check w-50">
         <label class="custom-control fill-checkbox">
           <input type="checkbox" class="fill-control-input" id="rememberMe">
           <span class="fill-control-indicator"></span>
           <span class="fill-control-description">Remember Me</span>
         </label>
-      </div>
+      </div>-->
       <div class="w-50 text-md-right">
         <a href="forgot_password.php" style="color: #FFFFFF!important">Forgot Password</a>
       </div>

@@ -91,6 +91,41 @@ page_protect();
 				<h2>Payments</h2>
 <hr />
 
+<?php
+if (!isset($_SESSION['staffid'])) {
+    die("Please login first");
+}
+$staffid = $_SESSION['staffid'];
+
+// Modified query to get payment status for coach's assigned events
+$query = "SELECT 
+            e.et_id,
+            e.userid,
+            e.planid,
+            e.hasPaid,
+            e.hasApproved,
+            e.receiptIMG,
+            u.username,
+            u.mobile,
+            u.email,
+            p.planName,
+            p.amount,
+            p.planType
+          FROM event_staff es
+          INNER JOIN plan p ON es.planid = p.planid
+          INNER JOIN enrolls_to e ON p.planid = e.planid
+          INNER JOIN users u ON e.userid = u.userid
+          WHERE es.staffid = ? 
+          AND p.planType = 'event'
+          ORDER BY e.expire";
+
+$stmt = mysqli_prepare($con, $query);
+mysqli_stmt_bind_param($stmt, "i", $staffid);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$sno = 1;
+?>
+
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -104,118 +139,96 @@ page_protect();
         </tr>
     </thead>
     <tbody>
+    <?php
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+            $uid = $row['userid'];
+            $planid = $row['planid'];
+            $planName = $row['planName'];
+            $amount = $row['amount'] ?? 0;
+            $hasPaid = $row['hasPaid'];
+            $hasApproved = $row['hasApproved'];
+            $et_id = $row['et_id'];
+            $receiptIMG = $row['receiptIMG'];
+            ?>
+            <tr>
+                <td><?php echo $sno; ?></td>
+                <td><?php echo htmlspecialchars($row['userid']); ?></td>
+                <td><?php echo htmlspecialchars($row['username']); ?></td>
+                <td><?php echo htmlspecialchars($row['mobile']); ?></td>
+                <td><?php echo htmlspecialchars($row['email']); ?></td>
+                <td>
+                    <?php 
+                    echo htmlspecialchars($planName);
+                    if ($amount > 0) {
+                        echo " <b>(Fee: RM" . number_format($amount, 2) . ")</b>";
+                    }
+                    ?>
+                </td>
+                <td>
+                    <?php if ($hasPaid === 'no'): ?>
+                        <form action='../../dashboard/admin/make_payments.php' method='post'>
+                            <input type='hidden' name='userID' value='<?php echo htmlspecialchars($uid); ?>'/>
+                            <input type='hidden' name='planID' value='<?php echo htmlspecialchars($planid); ?>'/>
+                            <input type='hidden' name='et_id' value='<?php echo htmlspecialchars($et_id); ?>'/>
+                            <input type='submit' class='a1-btn a1-blue' value='Confirm Payment'/>
+                        </form>
+                        <p>Payment ID: <?php echo $et_id; ?></p>
 
-<?php
-// Assuming the coach's staffid is stored in the session after login
-if (!isset($_SESSION['staffid'])) {
-    die("Please login first");
-}
-$staffid = $_SESSION['staffid'];
+                    <?php elseif ($hasPaid === 'yes' && $hasApproved === 'no'): ?>
+                        <form action='../../dashboard/admin/approve_payment.php' method='post' style='display:inline;'>
+                            <input type='hidden' name='userID' value='<?php echo htmlspecialchars($uid); ?>'/>
+                            <input type='hidden' name='planID' value='<?php echo htmlspecialchars($planid); ?>'/>
+                            <input type='hidden' name='et_id' value='<?php echo htmlspecialchars($et_id); ?>'/>
+                            <input type='submit' class='a1-btn a1-green' value='Approve Payment'/>
+                        </form>
+                        <form action='../../dashboard/admin/cancel_payment.php' method='post' style='display:inline;'>
+                            <input type='hidden' name='et_id' value='<?php echo htmlspecialchars($et_id); ?>'/>
+                            <input type='hidden' name='userID' value='<?php echo htmlspecialchars($uid); ?>'/>
+                            <input type='submit' class='a1-btn a1-yellow' value='Cancel Payment' 
+                                   onclick='return confirm("Are you sure you want to cancel this payment?");'/>
+                        </form>
+                        
+                        <?php if (!empty($receiptIMG)): ?>
+                            <a href='<?php echo htmlspecialchars($receiptIMG); ?>' class='a1-btn a1-orange' target='_blank'>View Receipt</a>
+                        <?php else: ?>
+                            <p>No Receipt Available</p>
+                        <?php endif; ?>
+                        
+                        <p>Payment Pending Approval</p>
+                        <p>Payment ID: <?php echo $et_id; ?></p>
 
-// Modified query to include plan amount
-$query = "SELECT e.*, u.username, u.mobile, u.email, p.planName, p.amount 
-          FROM enrolls_to e
-          JOIN users u ON e.userid = u.userid
-          JOIN plan p ON e.planid = p.planid
-          JOIN event_staff es ON e.planid = es.planid
-          WHERE es.staffid = ? 
-          AND p.planType = 'event'  -- Assuming there's a planType column to distinguish events
-          ORDER BY e.expire";
+                    <?php elseif ($hasPaid === 'yes' && $hasApproved === 'yes'): ?>
+                        <p>Payment Approved</p>
+                        <p>Payment ID: <?php echo $et_id; ?></p>
+                        
+                        <?php if (!empty($receiptIMG)): ?>
+                            <a href='<?php echo htmlspecialchars($receiptIMG); ?>' class='a1-btn a1-orange' target='_blank'>View Receipt</a>
+                        <?php else: ?>
+                            <p>No Receipt Available</p>
+                        <?php endif; ?>
 
-// Using prepared statement for security
-$stmt = mysqli_prepare($con, $query);
-mysqli_stmt_bind_param($stmt, "i", $staffid);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+                        <form action='../../dashboard/admin/undo_payment.php' method='post' style='display:inline;'>
+                            <input type='hidden' name='et_id' value='<?php echo htmlspecialchars($et_id); ?>'/>
+                            <input type='hidden' name='userID' value='<?php echo htmlspecialchars($uid); ?>'/>
+                            <input type='hidden' name='planID' value='<?php echo htmlspecialchars($planid); ?>'/>
+                            <input type='submit' class='a1-btn a1-red' value='Undo Approved Payment' 
+                                   onclick='return confirm("Are you sure you want to undo this payment?");'/>
+                        </form>
 
-$sno = 1;
-
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        $uid = $row['userid'];
-        $planid = $row['planid'];
-        $planName = $row['planName'];
-        $amount = $row['amount'] ?? 0;
-        $hasPaid = $row['hasPaid'];
-        $hasApproved = $row['hasApproved'];
-        $et_id = $row['et_id'];
-        $receiptIMG = $row['receiptIMG'];
-
-echo "<tr>";
-echo "<td>" . ($sno ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['userid'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['username'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['mobile'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['email'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($planName ?? '') . ($amount > 0 ? " <b>(Fee: RM" . number_format($amount, 2) . ")" : "") . "</b></td>";
-
-        $sno++;
-
-        // Action based on payment and approval status
-        if ($hasPaid === 'no') {
-            echo "<td>
-                    <form action='../../dashboard/admin/make_payments.php' method='post'>
-                        <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
-                        <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
-                        <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
-                        <input type='submit' class='a1-btn a1-blue' value='Confirm Payment'/>
-                    </form>
-                    <p>Payment ID: $et_id</p>
-                  </td>";
-        } elseif ($hasPaid === 'yes' && $hasApproved === 'no') {
-            echo "<td>
-                    <form action='../../dashboard/admin/approve_payment.php' method='post' style='display:inline;'>
-                        <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
-                        <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
-                        <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
-                        <input type='submit' class='a1-btn a1-green' value='Approve Payment'/>
-                    </form>
-                    <form action='../../dashboard/admin/cancel_payment.php' method='post' style='display:inline;'>
-                        <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
-                        <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
-                        <input type='submit' class='a1-btn a1-yellow' value='Cancel Payment' onclick='return confirm(\"Are you sure you want to cancel this payment?\");'/>
-                    </form>";
-            
-            if (!empty($receiptIMG)) {
-                echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
-            } else {
-                echo "<p>No Receipt Available</p>";
-            }
-            
-            echo "<p>Payment Pending Approval</p>
-                    <p>Payment ID: $et_id</p>
-                  </td>";
-        } elseif ($hasPaid === 'yes' && $hasApproved === 'yes') {
-            echo "<td>
-                    <p>Payment Approved</p>
-                    <p>Payment ID: $et_id</p>";
-
-            if (!empty($receiptIMG)) {
-                echo "<a href='$receiptIMG' class='a1-btn a1-orange' target='_blank'>View Receipt</a>";
-            } else {
-                echo "<p>No Receipt Available</p>";
-            }
-
-            echo "<form action='../../dashboard/admin/undo_payment.php' method='post' style='display:inline;'>
-                    <input type='hidden' name='et_id' value='" . htmlspecialchars($et_id) . "'/>
-                    <input type='hidden' name='userID' value='" . htmlspecialchars($uid) . "'/>
-                    <input type='hidden' name='planID' value='" . htmlspecialchars($planid) . "'/>
-                    <input type='submit' class='a1-btn a1-red' value='Undo Approved Payment' onclick='return confirm(\"Are you sure you want to undo this payment?\");'/>
-                  </form>";
-
-            echo "</td>";
-        } else {
-            echo "<td>No Action Needed</td>";
+                    <?php else: ?>
+                        <p>No Action Needed</p>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <?php
+            $sno++;
         }
-        echo "</tr>";
+    } else {
+        echo "<tr><td colspan='7'>No records found</td></tr>";
     }
-} else {
-    echo "<tr><td colspan='7'>No records found</td></tr>";
-}
-
-// Clean up
-mysqli_stmt_close($stmt);
-?>
+    mysqli_stmt_close($stmt);
+    ?>
     </tbody>
 </table>
 
