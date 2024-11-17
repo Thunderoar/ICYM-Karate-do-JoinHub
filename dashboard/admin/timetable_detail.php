@@ -208,52 +208,71 @@ if (isset($_POST['add_day'])) {
 // Handle removing day
 if (isset($_POST['remove_day'])) {
     $dayId = $_POST['day_id'];
-    $dayNumber = $_POST['day_number'];
-
+    $dayNumber = (int)$_POST['day_number'];
+    
     mysqli_begin_transaction($con);
-
     try {
-        // Delete the day
-        $deleteSql = "DELETE FROM timetable_days WHERE day_id = '$dayId' AND tid = '$id'";
-        mysqli_query($con, $deleteSql);
+        // Get total number of days before deletion
+        $totalDaysSql = "SELECT COUNT(*) as total FROM timetable_days WHERE tid = ?";
+        $stmt = mysqli_prepare($con, $totalDaysSql);
+        mysqli_stmt_bind_param($stmt, "s", $id);
+        mysqli_stmt_execute($stmt);
+        $totalResult = mysqli_stmt_get_result($stmt);
+        $totalDays = mysqli_fetch_assoc($totalResult)['total'];
 
-        // Get all remaining days ordered by day_number
-        $getDaysSql = "SELECT day_id FROM timetable_days WHERE tid = '$id' ORDER BY day_number";
-        $daysResult = mysqli_query($con, $getDaysSql);
+        // Delete the specific day
+        $deleteSql = "DELETE FROM timetable_days WHERE day_id = ? AND tid = ?";
+        $stmt = mysqli_prepare($con, $deleteSql);
+        mysqli_stmt_bind_param($stmt, "ss", $dayId, $id);
+        mysqli_stmt_execute($stmt);
 
-        // Update day numbers one by one
-        $newDayNumber = 1;
-        while ($day = mysqli_fetch_assoc($daysResult)) {
-            $updateDayNumberSql = "UPDATE timetable_days SET day_number = $newDayNumber 
-                                   WHERE day_id = '{$day['day_id']}'";
-            mysqli_query($con, $updateDayNumberSql);
-            $newDayNumber++;
+        // Update day numbers for subsequent days
+        $updateDaysSql = "UPDATE timetable_days 
+                         SET day_number = day_number - 1 
+                         WHERE tid = ? AND day_number > ?";
+        $stmt = mysqli_prepare($con, $updateDaysSql);
+        mysqli_stmt_bind_param($stmt, "si", $id, $dayNumber);
+        mysqli_stmt_execute($stmt);
+
+        // If first day was removed, adjust start date
+        if ($dayNumber === 1) {
+            $newStartDate = clone $startDate;
+            $newStartDate->modify('+1 day');
+            $newStartDateStr = $newStartDate->format('Y-m-d');
+            
+            $updateStartSql = "UPDATE plan SET startDate = ? WHERE planid = ?";
+            $stmt = mysqli_prepare($con, $updateStartSql);
+            mysqli_stmt_bind_param($stmt, "ss", $newStartDateStr, $planId);
+            mysqli_stmt_execute($stmt);
+        }
+        // If last day was removed, adjust end date
+        else if ($dayNumber === $totalDays) {
+            $newEndDate = clone $endDate;
+            $newEndDate->modify('-1 day');
+            $newEndDateStr = $newEndDate->format('Y-m-d');
+            
+            $updateEndSql = "UPDATE plan SET endDate = ? WHERE planid = ?";
+            $stmt = mysqli_prepare($con, $updateEndSql);
+            mysqli_stmt_bind_param($stmt, "ss", $newEndDateStr, $planId);
+            mysqli_stmt_execute($stmt);
         }
 
-        // Count remaining days
-        $remainingDaysSql = "SELECT COUNT(*) as days FROM timetable_days WHERE tid = '$id'";
-        $remainingDaysResult = mysqli_query($con, $remainingDaysSql);
-        $remainingDays = mysqli_fetch_assoc($remainingDaysResult);
-
-        // Calculate new end date after removing a day
-        $newEndDate = clone $startDate;
-        $newEndDate->modify('+' . ($remainingDays['days'] - 1) . ' days');
-
-        // Update plan end date
-        $newEndDateStr = $newEndDate->format('Y-m-d');
-        $updatePlanSql = "UPDATE plan 
-                         SET endDate = '$newEndDateStr', 
-                             duration = DATEDIFF('$newEndDateStr', startDate) + 1
-                         WHERE planid = '$planId'";
-        mysqli_query($con, $updatePlanSql);
+        // Update plan duration
+        $updateDurationSql = "UPDATE plan 
+                            SET duration = DATEDIFF(endDate, startDate) + 1 
+                            WHERE planid = ?";
+        $stmt = mysqli_prepare($con, $updateDurationSql);
+        mysqli_stmt_bind_param($stmt, "s", $planId);
+        mysqli_stmt_execute($stmt);
 
         mysqli_commit($con);
         header("Location: timetable_detail.php?id=" . $id . "&scroll=" . $_SESSION['scroll_position'] . "#timetable-details");
         exit;
-
     } catch (Exception $e) {
         mysqli_rollback($con);
-        echo "Error: " . $e->getMessage();
+        error_log("Error removing day: " . $e->getMessage());
+        $_SESSION['error_message'] = "Error removing day. Please try again.";
+        header("Location: timetable_detail.php?id=" . $id);
         exit;
     }
 }
@@ -902,58 +921,57 @@ container.appendChild(memberElement);
         <?php if ($isAdmin): ?>
             <form method="POST" action="">
         <?php endif; ?>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Day</th>
-                        <th>Date</th>
-                        <th>Activities</th>
-                        <?php if ($isAdmin): ?>
-                            <th>Actions</th>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Activities</th>
+            <?php if ($isAdmin): ?>
+                <th>Actions</th>
+            <?php endif; ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($dateArray as $index => $date): ?>
+            <tr>
+                <td>Day <?= $index + 1 ?></td>
+                <td><?= $date['date'] ?> (<?= $date['day'] ?>)</td>
+                <td>
+                    <?php
+                    $dayData = array_filter($timetableData, function($item) use ($index) {
+                        return ($item['day_number'] ?? 0) == ($index + 1);
+                    });
+                    $dayData = reset($dayData);
+                    if ($isAdmin):
+                    ?>
+                        <textarea name="activities[<?= $dayData['day_id'] ?? '' ?>]" 
+                                  class="form-control" 
+                                  rows="3"><?= htmlspecialchars($dayData['activities'] ?? '') ?></textarea>
+                    <?php else: ?>
+                        <div class="form-control" style="height: auto; min-height: 74px; background-color: #f8f9fa;">
+                            <?= nl2br(htmlspecialchars($dayData['activities'] ?? '')) ?>
+                        </div>
+                    <?php endif; ?>
+                </td>
+                <?php if ($isAdmin): ?>
+                    <td>
+                        <?php if (!empty($dayData['day_id'])): ?>
+<form method="POST" style="display: inline;">
+    <input type="hidden" name="day_id" value="<?= $dayData['day_id'] ?>">
+    <input type="hidden" name="day_number" value="<?= $index + 1 ?>">
+    <button type="submit" name="remove_day" class="btn btn-danger btn-sm" 
+            onclick="return confirm('Are you sure you want to remove this day?')">
+        Remove Day
+    </button>
+</form>
                         <?php endif; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($dateArray as $index => $date): ?>
-                        <tr>
-                            <td>Day <?= $index + 1 ?></td>
-                            <td><?= $date['date'] ?> (<?= $date['day'] ?>)</td>
-                            <td>
-                                <?php
-                                $dayData = array_filter($timetableData, function($item) use ($index) {
-                                    return ($item['day_number'] ?? 0) == ($index + 1);
-                                });
-                                $dayData = reset($dayData);
-
-                                if ($isAdmin):
-                                ?>
-                                    <textarea name="activities[<?= $dayData['day_id'] ?? '' ?>]" 
-                                              class="form-control" 
-                                              rows="3"><?= htmlspecialchars($dayData['activities'] ?? '') ?></textarea>
-                                <?php else: ?>
-                                    <div class="form-control" style="height: auto; min-height: 74px; background-color: #f8f9fa;">
-                                        <?= nl2br(htmlspecialchars($dayData['activities'] ?? '')) ?>
-                                    </div>
-                                <?php endif; ?>
-                            </td>
-                            <?php if ($isAdmin): ?>
-                                <td>
-                                    <?php if (!empty($dayData['day_id'])): ?>
-                                        <form method="POST" style="display: inline;">
-                                            <input type="hidden" name="day_id" value="<?= $dayData['day_id'] ?>">
-                                            <input type="hidden" name="day_number" value="<?= $index + 1 ?>">
-                                            <button type="submit" name="remove_day" class="btn btn-danger btn-sm" 
-                                                    onclick="return confirm('Are you sure you want to remove this day? This will update the plan end date.')">
-                                                Remove Day
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
-                                </td>
-                            <?php endif; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
    
             <?php if ($isAdmin): ?>
                 <br>
