@@ -182,7 +182,7 @@ page_protect();
         <a href="revenue_month.php">
             <div class="tile-stats tile-red">
                 <div class="icon"><i class="entypo-users"></i></div>
-                <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+                <div style="font-size: 30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
                     <h2>Income This Month</h2><br>
 <?php
 date_default_timezone_set("Asia/Kuala_Lumpur");
@@ -249,7 +249,7 @@ echo "RM" . number_format($revenue, 2) . " (Unpaid: RM" . number_format($unpaid_
     <a href="view_mem.php">
         <div class="tile-stats tile-green">
             <div class="icon"><i class="entypo-chart-bar"></i></div>
-            <div class="num" data-postfix="" data-duration="1500" data-delay="0">
+            <div style="font-size: 30px" class="num" data-postfix="" data-duration="1500" data-delay="0">
                 <h2>Your <br>Students</h2><br>
                 <?php
                 // Assuming this is set upon login
