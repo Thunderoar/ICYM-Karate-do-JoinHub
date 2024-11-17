@@ -168,7 +168,31 @@ table tr td label {
   margin-bottom: 5px;
   color: #444;
 }
+.text-danger {
+    color: red;
+}
 
+.text-success {
+    color: green;
+}
+	/* Add a green text color and a checkmark when the requirements are right */
+	.valid {
+	color: green;
+	}
+	.valid:before {
+	position: relative;
+	left: -35px;
+	content: "";
+	}
+	/* Add a red text color and an "x" when the requirements are wrong */
+	.invalid {
+	color: red;
+	}
+	.invalid:before {
+	position: relative;
+	left: -35px;
+	content: "";
+	}
 	</style>
 
 </head>
@@ -265,10 +289,10 @@ table tr td label {
       <label>Full Name:</label>
       <input type="text" name="fullName" required style="width: 100%;" />
     </div>
-    <div style="margin-bottom: 10px;">
-      <label>Username:</label>
-      <input type="text" name="u_name" required style="width: 100%;" />
-    </div>
+			<div class="form-group">
+              <label for="u_name">Username</label>
+              <input type="text" class="form-control" name="u_name" id="u_name" placeholder="" autocomplete="off" required>
+            </div>
     <div style="margin-bottom: 10px;">
       <label>Gender:</label>
       <select name="gender" required style="width: 100%;">
@@ -281,13 +305,53 @@ table tr td label {
       <label>Date of Birth:</label>
       <input type="date" name="dob" required style="width: 100%;">
     </div>
-    <div style="margin-bottom: 10px;">
-      <label>Phone No:</label>
-      <input type="number" name="mobile" maxlength="10" required style="width: 100%;">
-    </div>
+<div class="form-group">
+    <label for="phone_no">Phone Number</label>
+    <input 
+        type="text" 
+        class="form-control" 
+        name="phone_no" 
+        id="phone_no" 
+        placeholder="###-########" 
+        maxlength="12"
+        autocomplete="off" 
+        required>
+</div>
+<script>
+    const phoneInput = document.getElementById('phone_no');
+    
+    phoneInput.addEventListener('input', function(e) {
+        // Remove all non-digits
+        let value = e.target.value.replace(/\D/g, '');
+        
+        // Format the number
+        if (value.length > 0) {
+            if (value.length <= 3) {
+                value = value;
+            } else {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            }
+        }
+        
+        // Update input value
+        e.target.value = value;
+        
+        // Validation (optional)
+        const isComplete = value.replace(/-/g, '').length === 11;
+        e.target.style.borderColor = isComplete ? 'green' : '';
+    });
+
+    // Prevent non-numeric input (optional)
+    phoneInput.addEventListener('keypress', function(e) {
+        if (!/^\d$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+            e.preventDefault();
+        }
+    });
+</script>
+  
     <div style="margin-bottom: 10px;">
       <label>Email ID:</label>
-      <input type="email" name="email" required style="width: 100%;">
+      <input type="email" name="email" placeholder="example@gmail.com" required style="width: 100%;">
     </div>
 	    <div style="margin-bottom: 10px;">
       <label>Matrix No.:</label>
@@ -295,33 +359,32 @@ table tr td label {
     </div>
 <div style="margin-bottom: 10px;">
   <label>Current Member Education Course:</label>
-  <select name="selectedCourse" required style="width: 100%;">
-<?php
-  // Fetch courses from the table
-  $sql = "SELECT id, course_name FROM courses";
-  $result = $con->query($sql);
+<select name="plan" required style="width: 100%;" onchange="myplandetail(this.value)">
+  <option value="">--Please Select--</option>
+  <?php
+    $query = "SELECT planid, planName FROM plan WHERE active='yes'";
+    $result = mysqli_query($con, $query);
 
-  // Check if there are any results
-  if ($result->num_rows > 0) {
-    // Output data of each row
-    while($row = $result->fetch_assoc()) {
-      echo "<option value='" . $row['id'] . "'>" . $row['course_name'] . "</option>";
+    if (mysqli_num_rows($result) > 0) {
+      while ($row = mysqli_fetch_assoc($result)) {
+        $planid = htmlspecialchars($row['planid'], ENT_QUOTES, 'UTF-8');
+        $planName = htmlspecialchars($row['planName'], ENT_QUOTES, 'UTF-8');
+        echo "<option value=\"$planid\">$planName</option>";
+      }
     }
-  } else {
-    echo "<option value=''>No courses available</option>";
-  }
-
-  // Close the connection
-  $con->close();
-?>
-
-  </select>
+  ?>
+</select>
 </div>
 
-    <div style="margin-bottom: 10px;">
-      <label>User Password:</label>
-      <input type="password" name="pass_key" required style="width: 100%;">
-    </div>
+            <div class="form-group">
+              <label for="pass_key">Password</label>
+              <input class="form-control" name="pass_key" id="pass_key" placeholder="Password" pattern="(?=.*\d).{8,}" autocomplete="off" required>
+			  <div id="message">
+				<h4>Password must contain the following:</h4>
+				<p id="number" class="invalid">A <b>number</b></p>
+				<p id="length" class="invalid">Minimum <b>8 characters</b></p>
+			  </div>
+            </div>
   </div>
 </fieldset>
 
@@ -337,10 +400,10 @@ table tr td label {
       <label>City:</label>
       <input type="text" name="city" style="width: 100%;">
     </div>
-    <div style="margin-bottom: 10px;">
-      <label>Zipcode:</label>
-      <input type="number" name="zipcode" maxlength="5" style="width: 100%;">
-    </div>
+<div style="margin-bottom: 10px;">
+  <label>Zipcode:</label>
+  <input type="text" name="zipcode" maxlength="5" pattern="\d{5}" style="width: 100%;" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+</div>
     <div style="margin-bottom: 10px;">
       <label>State:</label>
       <input type="text" name="state" style="width: 100%;">
@@ -348,7 +411,6 @@ table tr td label {
   </div>
 </fieldset>
 
-<!-- Membership Details Section -->
 <fieldset style="margin-bottom: 20px; padding: 20px; border-radius: 8px; border: 1px solid #ccc;">
   <legend style="font-size: 20px; color: #333; font-weight: bold;">Membership Details</legend>
   <div>
@@ -357,11 +419,14 @@ table tr td label {
       <select name="plan" required style="width: 100%;" onchange="myplandetail(this.value)">
         <option value="">--Please Select--</option>
         <?php
-          $query = "select * from plan where active='yes'";
+          $query = "SELECT planid, planName FROM plan WHERE active='yes'";
           $result = mysqli_query($con, $query);
-          if (mysqli_affected_rows($con) != 0) {
-            while ($row = mysqli_fetch_row($result)) {
-              echo "<option value=" . $row[0] . ">" . $row[2] . "</option>";
+
+          if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+              $planid = htmlspecialchars($row['planid'], ENT_QUOTES, 'UTF-8');
+              $planName = htmlspecialchars($row['planName'], ENT_QUOTES, 'UTF-8');
+              echo "<option value=\"$planid\">$planName</option>";
             }
           }
         ?>
@@ -372,11 +437,13 @@ table tr td label {
 </fieldset>
 
 
+
     <!-- Form Actions -->
     <div style="text-align: center; margin-top: 20px;">
       <button type="submit" class="a1-btn a1-blue">Register</button>
-      <button type="reset" class="a1-btn a1-blue">Reset</button>
-      <button type="button" class="a1-btn a1-blue" onclick="window.location.href='view_mem.php'">Return</button>
+    <button type="reset" class="a1-btn a1-blue" onclick="checkForChanges(event)">Reset</button>
+<button type="button" class="a1-btn a1-blue" onclick="checkForChangesAndRedirect(event, 'view_mem.php')">Return</button>
+
     </div>
   </form>
 </div>
@@ -421,6 +488,129 @@ table tr td label {
         		}
         		
         	}
+			// Namespace for username validation functionality
+const UsernameValidator = {
+    // Debounce function to limit API calls
+    debounce: function(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+
+    // Function to handle username validation
+    checkUsername: function(username, feedbackDiv, input) {
+        if (username.length > 0) {
+            feedbackDiv.innerHTML = '<small class="text-muted">Checking availability...</small>';
+            
+            fetch('../../loginModal/check_username_availability.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'check_username=1&username=' + encodeURIComponent(username)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    feedbackDiv.innerHTML = `<small class="text-danger">${data.error}</small>`;
+                    input.setCustomValidity(data.error);
+                } else if (data.available) {
+                    feedbackDiv.innerHTML = '<small class="text-success">Username is available!</small>';
+                    input.setCustomValidity('');
+                } else {
+                    feedbackDiv.innerHTML = '<small class="text-danger">Username is already taken</small>';
+                    input.setCustomValidity('Username is already taken');
+                }
+            })
+            .catch(error => {
+                feedbackDiv.innerHTML = '<small class="text-danger">Error checking username</small>';
+                input.setCustomValidity('Error checking username');
+            });
+        } else {
+            feedbackDiv.innerHTML = '';
+            input.setCustomValidity('');
+        }
+    },
+
+    // Initialize the validator
+    init: function() {
+        const usernameInput = document.getElementById('u_name');
+        if (!usernameInput) return; // Exit if element doesn't exist
+
+        // Create feedback div once
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.id = 'username-feedback';
+        usernameInput.parentNode.appendChild(feedbackDiv);
+
+        // Create debounced version of check function
+        const debouncedCheck = this.debounce((e) => {
+            const username = e.target.value.trim();
+            
+            // Remove any existing feedback
+            const existingFeedback = document.getElementById('username-feedback');
+            if (existingFeedback) {
+                existingFeedback.innerHTML = '';
+            }
+            
+            this.checkUsername(username, feedbackDiv, e.target);
+        }, 500); // Wait 500ms after last input before checking
+
+        // Remove any existing listeners (if any)
+        const newInput = usernameInput.cloneNode(true);
+        usernameInput.parentNode.replaceChild(newInput, usernameInput);
+
+        // Add new listener
+        newInput.addEventListener('input', debouncedCheck);
+    }
+};
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    UsernameValidator.init();
+});
+
+// Reinitialize when needed (e.g., after AJAX content loads)
+function reinitializeUsernameValidator() {
+    UsernameValidator.init();
+}
+var myInput = document.getElementById("pass_key");
+var number = document.getElementById("number");
+var length = document.getElementById("length");
+// When the user clicks on the password field, show the message box
+myInput.onfocus = function() {
+  document.getElementById("message").style.display = "block";
+}
+// When the user clicks outside of the password field, hide the message box
+myInput.onblur = function() {
+  document.getElementById("message").style.display = "none";
+}
+// When the user starts to type something inside the password field
+myInput.onkeyup = function() {
+  // Validate numbers
+  var numbers = /[0-9]/g;
+  if(myInput.value.match(numbers)) {  
+    number.classList.remove("invalid");
+    number.classList.add("valid");
+  } else {
+    number.classList.remove("valid");
+    number.classList.add("invalid");
+  }
+  
+  // Validate length
+  if(myInput.value.length >= 8) {
+    length.classList.remove("invalid");
+    length.classList.add("valid");
+  } else {
+    length.classList.remove("valid");
+    length.classList.add("invalid");
+  }
+}
         </script>
         
         

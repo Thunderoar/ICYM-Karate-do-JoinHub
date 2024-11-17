@@ -5,6 +5,8 @@ page_protect();
 // Capture form data
 $uid = $_POST['uid'];
 $uname = $_POST['uname'];
+$no_ic = $_POST['no_ic'];
+$matrixNumber = $_POST['matrixNumber'];
 $gender = $_POST['gender'];
 $mobile = $_POST['phone'];
 $email = $_POST['email'];
@@ -14,10 +16,10 @@ $stname = $_POST['stname'];
 $state = $_POST['state'];
 $city = $_POST['city'];
 $zipcode = $_POST['zipcode'];
-$calorie = $_POST['calorie'];
+// $calorie = $_POST['calorie'];
 $height = $_POST['height'];
 $weight = $_POST['weight'];
-$fat = $_POST['fat'];
+// $fat = $_POST['fat'];
 $remarks = $_POST['remarks'];
 
 // Update users table
@@ -26,6 +28,8 @@ $query1 = "
     SET username = '$uname',
         gender = '$gender',
         mobile = '$mobile',
+        no_ic = '$no_ic',
+        matrixNumber = '$matrixNumber',
         email = '$email',
         dob = '$dob',
         joining_date = '$jdate' 
@@ -47,10 +51,10 @@ if (mysqli_query($con, $query1)) {
         // Update health_status table
         $query3 = "
             UPDATE health_status 
-            SET calorie = '$calorie',
+            SET calorie = '1',
                 height = '$height',
                 weight = '$weight',
-                fat = '$fat',
+                fat = '1',
                 remarks = '$remarks' 
             WHERE userid = '$uid'
         ";

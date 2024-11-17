@@ -18,6 +18,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
             if($result2){
                $planValue=mysqli_fetch_array($result2,MYSQLI_ASSOC);
                $planName=$planValue['planName'];
+			   $amount=$planValue['amount'];
             }
         }
     }
@@ -44,6 +45,9 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 	{
 		width:220px;
 	}
+	.bold-input {
+    font-weight: bold;
+}
    </style>
 </head>
    <body class="page-body  page-fade" onload="collapseSidebar()">
@@ -137,6 +141,14 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
                <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
 			   <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td></td>
              </tr>
+			<tr>
+               <td height="35">FEE:</td>
+<td height="35">
+    <input type="text" name="curFee" id="boxx" class="bold-input" value="RM <?php echo $amount; ?>" readonly>
+</td>
+
+
+             </tr>
 			                             <tr>
                                 <!-- File input for payment receipt with preview -->
                                 <td height="35">Upload Receipt:</td>
@@ -150,6 +162,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
                                     <img id="receiptPreview" src="#" alt="Receipt Preview" style="display: none; max-width: 100%; height: auto; border: 1px solid #ccc; margin-top: 10px;">
                                 </td>
                             </tr>
+							
 
 			 <tr>
         </select>
