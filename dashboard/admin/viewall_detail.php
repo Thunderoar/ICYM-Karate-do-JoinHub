@@ -93,7 +93,7 @@ $paiddate = $expire = '';
 
 // SQL query to retrieve user, address, health, enrolls, and plan data using LEFT JOIN
 $query = "
-SELECT u.username, u.gender, u.mobile, u.email, u.dob, u.joining_date, u.matrixNumber, courseName,
+SELECT u.username, u.gender, u.mobile, u.email, u.dob, u.joining_date, u.matrixNumber, courseName, no_ic,
        a.streetName, a.state, a.city, a.zipcode,
        h.calorie, h.height, h.weight, h.fat, h.remarks,
        e.planid, e.paid_date, e.expire,
@@ -157,6 +157,7 @@ $expire = htmlspecialchars($row['expire'] ?? 'N/A');
         var inputs = document.querySelectorAll('#form1 input');
         var editButton = document.getElementById('editButton');
         var updateButton = document.getElementById('updateButton');
+        var exitButton = document.getElementById('exitButton');
         
         inputs.forEach(input => {
             if (input.readOnly) {
@@ -167,169 +168,258 @@ $expire = htmlspecialchars($row['expire'] ?? 'N/A');
         });
         
         if (updateButton.style.display === 'none') {
+            // Entering edit mode
             updateButton.style.display = 'inline-block';
+            exitButton.style.display = 'inline-block';
             editButton.style.display = 'none';
         } else {
+            // Exiting edit mode
             updateButton.style.display = 'none';
+            exitButton.style.display = 'none';
             editButton.style.display = 'inline-block';
         }
     }
 </script>
-
 <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
     <div class="a1-card-8 a1-light-gray" style="width:600px; margin:0 auto;">
         <div class="a1-container a1-dark-gray a1-center">
-            <h6>Edit Member Details</h3>
+            <h6>Edit Member Details</h6>
+        </div>
+        <!-- Mode Indicator -->
+        <div id="modeIndicator" class="a1-center" style="margin: 10px; font-weight: bold; color: #ff0000;">
+            Currently in View Mode
         </div>
         <form id="form1" name="form1" method="post" class="a1-container" action="edit_mem_submit.php">
             <table width="100%" border="0" align="center">
                 <tbody>
                     <!-- Personal Details Section -->
                     <tr>
-                        <td colspan="2" class="a1-dark-gray a1-center"><strong>Personal Details</strong></td>
+                        <td colspan="2" class="a1-dark-gray a1-center" style="font-weight: bold; padding: 8px; background-color: #f1f1f1; border-radius: 5px;">Personal Details</td>
                     </tr>
                     <tr>
-                        <td>USER ID:</td>
-                        <td><input type="text" name="uid" id="boxxe" readonly value='<?php echo $memid ?>'></td>
+                        <td style="padding: 5px 0;">User ID:</td>
+                        <td><input type="text" name="uid" readonly value='<?php echo $memid; ?>' class="form-control"></td>
                     </tr>
                     <tr>
-                        <td>NAME:</td>
-                        <td><input type="text" name="uname" id="boxxe" readonly value='<?php echo $name ?>'></td>
+                        <td>Name:</td>
+                        <td><input type="text" name="uname" readonly value='<?php echo $name; ?>' class="form-control"></td>
                     </tr>
                     <tr>
-                        <td>MATRIX NUMBER:</td>
-                        <td><input type="text" id="boxxe" readonly value='<?php echo $matrixNumber ?>'></td>
+                        <td>Matrix Number:</td>
+                        <td><input type="text" name="matrixNumber" readonly value='<?php echo $matrixNumber; ?>' class="form-control"></td>
                     </tr>
-                    <tr>
-                        <td>GENDER:</td>
-                        <td><input type="text" name="gender"id="boxxe" readonly value='<?php echo $gender ?>'></td>
+					<tr>
+                        <td>IC Number:</td>
+                        <td><input type="text" name="no_ic" readonly value='<?php echo $no_ic; ?>' class="form-control"></td>
                     </tr>
+<tr>
+    <td>Gender:</td>
+    <td>
+        <select name="gender" class="form-control" disabled>
+            <option value="male" <?php if ($gender == 'male') echo 'selected'; ?>>Male</option>
+            <option value="female" <?php if ($gender == 'female') echo 'selected'; ?>>Female</option>
+            <option value="other" <?php if ($gender == 'other') echo 'selected'; ?>>Other</option>
+        </select>
+    </td>
+</tr>
+
+
+<tr>
+    <td>Date of Birth:</td>
+    <td>
+        <input type="date" value='<?php echo $dob; ?>' class="form-control" disabled>
+        <input type="hidden" name="dob" value='<?php echo $dob; ?>'>
+    </td>
+</tr>
+
+
+					<!-- Address Details Section -->
                     <tr>
-                        <td>DATE OF BIRTH:</td>
-                        <td><input type="text" name="dob"id="boxxe" readonly value='<?php echo $dob ?>'></td>
+                        <td colspan="2" class="a1-dark-gray a1-center" style="font-weight: bold; padding: 8px; background-color: #f1f1f1; border-radius: 5px;">Address  Details</td>
                     </tr>
                     <tr>
                         <td>STREET NAME:</td>
-                        <td><input type="text" name="stname" id="boxxe" readonly value='<?php echo $streetname ?>'></td>
+                        <td><input type="text" name="stname"  readonly value='<?php echo $streetname ?>'  class="form-control"></td>
                     </tr>
                     <tr>
                         <td>STATE:</td>
-                        <td><input type="text" name="state" id="boxxe" readonly name="state" value='<?php echo $state ?>'></td>
+                        <td><input type="text" name="state" readonly name="state" value='<?php echo $state ?>'  class="form-control"></td>
                     </tr>
                     <tr>
                         <td>CITY:</td>
-                        <td><input type="text" name="city" id="boxxe" readonly value='<?php echo $city ?>'></td>
+                        <td><input type="text" name="city" readonly value='<?php echo $city ?>'  class="form-control"></td>
                     </tr>
-                    <tr>
-                        <td>ZIPCODE:</td>
-                        <td><input type="text" name="zipcode" id="boxxe" readonly value='<?php echo $zipcode ?>'></td>
-                    </tr>
+<tr>
+    <td>ZIPCODE:</td>
+    <td>
+        <input type="text" name="zipcode" readonly value='<?php echo $zipcode; ?>' class="form-control" pattern="\d{5}" title="Please enter exactly 5 digits" maxlength="5">
+    </td>
+</tr>
+
                     <!-- Contact Details Section -->
                     <tr>
-                        <td colspan="2" class="a1-dark-gray a1-center"><strong>Contact Details</strong></td>
+                        <td colspan="2" class="a1-dark-gray a1-center" style="font-weight: bold; padding: 8px; background-color: #f1f1f1; border-radius: 5px;">Contact Details</td>
                     </tr>
+<tr>
+    <td>Mobile:</td>
+    <td>
+        <input 
+            type="text" 
+            name="phone" 
+            readonly 
+            maxlength="12" 
+            value='<?php echo $mobile; ?>' 
+            class="form-control" 
+            placeholder="###-########"
+            oninput="formatPhoneNumber(this)">
+    </td>
+</tr>
+
+
+
+
                     <tr>
-                        <td>MOBILE:</td>
-                        <td><input type="text" name="phone" id="boxxe" readonly maxlength="10" value='<?php echo $mobile ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>EMAIL:</td>
-                        <td><input type="email" name="email" id="boxxe" readonly required value='<?php echo $email ?>'></td>
+                        <td>Email:</td>
+                        <td><input type="email" name="email" readonly required value='<?php echo $email; ?>' class="form-control"></td>
                     </tr>
                     <!-- Membership Details Section -->
                     <tr>
-                        <td colspan="2" class="a1-dark-gray a1-center"><strong>Membership Details</strong></td>
+                        <td colspan="2" class="a1-dark-gray a1-center" style="font-weight: bold; padding: 8px; background-color: #f1f1f1; border-radius: 5px;">Membership Details</td>
                     </tr>
-                    <tr>
-                        <td>JOINING DATE:</td>
-                        <td><input type="text" name="jdate" id="boxxe" readonly value='<?php echo $jdate ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>COURSES:</td>
-                        <td><input type="text" id="boxxe" readonly value='<?php echo $courseName ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>PLAN NAME:</td>
-                        <td><input type="text" readonly id="boxxe" value='<?php echo $planname ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>PLAN AMOUNT:</td>
-                        <td><input type="text" readonly id="boxxe" value='<?php echo $pamount ?>'></td>
-                    </tr>
+<tr>
+    <td>Joining Date:</td>
+    <td>
+        <input type="date" name="jdate" readonly value='<?php echo $jdate; ?>' class="form-control uneditable" disabled>
+    </td>
+</tr>
+<tr>
+    <td>Plan Name:</td>
+    <td><input type="text" readonly value='<?php echo $planname; ?>' class="form-control uneditable" disabled></td>
+</tr>
+<tr>
+    <td>Plan Amount:</td>
+    <td><input type="text" readonly value='<?php echo $pamount; ?>' class="form-control uneditable" disabled></td>
+</tr>
+<tr>
+    <td>Paid Date:</td>
+    <td><input type="text" readonly value='<?php echo $paiddate; ?>' class="form-control uneditable" disabled></td>
+</tr>
+
+
                     <!--<tr>
-                        <td>PLAN VALIDITY:</td>
-                        <td><input type="text" readonly id="boxxe" value='<?php echo $pvalidity . ' Month' ?>'></td>
-                    </tr>-->
-                    <tr>
-                        <td>PLAN DESCRIPTION:</td>
-                        <td><input type="text" readonly id="boxxe" value='<?php echo $pdescription ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>PAID DATE:</td>
-                        <td><input type="text" readonly id="boxxe" value='<?php echo $paiddate ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>EXPIRED DATE:</td>
-                        <td><input type="text" readonly id="boxxe" value='<?php echo $expire ?>'></td>
-                    </tr>
-                    <!-- Health Metrics Section -->
-                    <tr>
-                        <td colspan="2" class="a1-dark-gray a1-center"><strong>Health Metrics</strong></td>
-                    </tr>
-                    <!--<tr>
-                        <td>CALORIE:</td>
-                        <td><input type="text" name="calorie" id="boxxe" readonly value='<?php echo $calorie ?>'></td>
-                    </tr>-->
-                    <tr>
-                        <td>HEIGHT:</td>
-                        <td><input type="text" name="height" readonly id="boxxe" value='<?php echo $height ?>'></td>
-                    </tr>
-                    <tr>
-                        <td>WEIGHT:</td>
-                        <td><input type="text" name="weight" readonly value='<?php echo $weight ?>' id="boxxe"></td>
-                    </tr>
-                    <!--<tr>
-                        <td>FAT:</td>
-                        <td><input type="text" name="fat" readonly id="boxxe" value='<?php echo $fat ?>'></td>
+                        <td>Expired Date:</td>
+                        <td><input type="text" readonly value='<?php echo $expire; ?>' class="form-control"></td>
                     </tr>-->
                     <!-- Additional Section -->
                     <tr>
-                        <td colspan="2" class="a1-dark-gray a1-center"><strong>Additional Details</strong></td>
+                        <td colspan="2" class="a1-dark-gray a1-center" style="font-weight: bold; padding: 8px; background-color: #f1f1f1; border-radius: 5px;">Additional Details</td>
                     </tr>
-                    <tr>
-                        <td>REMARKS:</td>
-                        <td>
-                            <textarea readonly name="remarks" style="resize:none; margin: 0px; width: 230px; height: 53px;"><?php echo $remarks ?></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>
-            <input class="a1-btn a1-blue" type="button" id="editButton" value="EDIT" onclick="toggleEdit()">
-            <input class="a1-btn a1-blue" type="submit" id="updateButton" value="UPDATE" style="display:none;">
-                            <a href="<?php echo (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'view_mem.php' : '../../dashboard/coach/view_mem.php'); ?>">
-                                <input class="a1-btn" value="BACK" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px;">
-                            </a>
-                        </td>
-                    </tr>
+<tr>
+    <td>Remarks:</td>
+    <td>
+        <textarea readonly name="remarks" class="form-control" style="resize: vertical;"><?php echo $remarks; ?></textarea>
+    </td>
+</tr>
+
+
                 </tbody>
             </table>
 
+            <!-- Buttons -->
+<div class="a1-center" style="margin-top: 20px;">
+    <input class="a1-btn a1-blue" type="button" id="editButton" value="Enter Edit Mode" onclick="toggleEdit()">
+    <input class="a1-btn a1-blue" type="submit" id="updateButton" value="UPDATE" style="display:none;">
+    <input class="a1-btn a1-blue" type="button" id="exitButton" value="Exit Edit Mode" onclick="toggleEdit()" style="display:none;">
+    <a href="<?php echo (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'view_mem.php' : '../../dashboard/coach/view_mem.php'); ?>">
+        <input class="a1-btn a1-blue" type="button" value="BACK">
+    </a>
+</div>
         </form>
     </div>
 </div>
-            </div>
-        </div>   
 
-        <?php include('footer.php'); ?>
+<script>
+    function toggleEdit() {
+        const isEditMode = document.getElementById("editButton").style.display === "none";
+        const modeIndicator = document.getElementById("modeIndicator");
+
+        // Toggle between edit and view mode
+        if (isEditMode) {
+            // Switch to View Mode
+            document.getElementById("editButton").style.display = "inline-block";
+            document.getElementById("updateButton").style.display = "none";
+            document.getElementById("exitButton").style.display = "none";
+            Array.from(document.querySelectorAll("#form1 input:not(.uneditable), #form1 textarea, #form1 select")).forEach((input) => {
+                input.setAttribute("readonly", "readonly");
+                input.classList.remove("edit-mode-field");
+                if (input.tagName === "SELECT" || input.type === "date" || input.type === "text") {
+                    input.setAttribute("disabled", "disabled");
+                }
+            });
+            modeIndicator.textContent = "Currently in View Mode";
+            modeIndicator.style.color = "#ff0000";
+        } else {
+            // Switch to Edit Mode
+            document.getElementById("editButton").style.display = "none";
+            document.getElementById("updateButton").style.display = "inline-block";
+            document.getElementById("exitButton").style.display = "inline-block";
+            Array.from(document.querySelectorAll("#form1 input:not(.uneditable), #form1 textarea, #form1 select")).forEach((input) => {
+                input.removeAttribute("readonly");
+                input.classList.add("edit-mode-field");
+                if (input.tagName === "SELECT" || input.type === "date" || input.type === "text") {
+                    input.removeAttribute("disabled");
+                }
+            });
+            modeIndicator.textContent = "Currently in Edit Mode";
+            modeIndicator.style.color = "#ff0000";
+        }
+    }
+
+    function enableAllFields() {
+        Array.from(document.querySelectorAll("#form1 input:not(.uneditable), #form1 textarea, #form1 select")).forEach((input) => {
+            input.removeAttribute("disabled");
+        });
+    }
+
+    function formatPhoneNumber(input) {
+        let value = input.value.replace(/\D/g, '');
+        if (value.length > 3) {
+            value = value.slice(0, 3) + '-' + value.slice(3);
+        }
+        input.value = value.slice(0, 12); // Ensure no more than 12 characters
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .edit-mode-field {
+        border: 2px solid #add8e6;
+        background-color: #e8f4ff;
+    }
+
+    .edit-mode-field:focus {
+        outline: 2px solid #0056b3;
+    }
+</style>
+
 <a class="btn-sm px-4 py-3 d-flex home-button" style="background-color:#2a2e32" 
    href="<?php echo (isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] ? 'view_mem.php' : '../../dashboard/coach/view_mem.php'); ?>">
     Return Back
 </a>
+            </div>
+        </div>   
 
-    </div>
+        <?php include('footer.php'); ?>
 
-</div>
 
 </body>
 
