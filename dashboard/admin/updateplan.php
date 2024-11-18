@@ -51,43 +51,145 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Handle selected members data
-        if (isset($_POST['selected_members_data']) && !empty($_POST['selected_members_data'])) {
-            // Clear existing members
-            $clearMembersQuery = "DELETE FROM event_members WHERE planid = '$planid'";
-            mysqli_query($con, $clearMembersQuery);
-
-            $selectedMembers = json_decode($_POST['selected_members_data'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                foreach ($selectedMembers as $member) {
-                    $userId = mysqli_real_escape_string($con, $member['userId']);
-                    // Insert updated members
-                    $insertQuery = "INSERT INTO event_members (planid, userid, joined_at) VALUES ('$planid', '$userId', NOW())";
-                    mysqli_query($con, $insertQuery);
-                }
-            } else {
-                throw new Exception("Invalid JSON in selected members data");
-            }
+// Handle selected members data
+if (isset($_POST['selected_members_data']) && !empty($_POST['selected_members_data'])) {
+    $selectedMembers = json_decode($_POST['selected_members_data'], true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        // Create array of selected user IDs
+        $selectedUserIds = array_map(function($member) {
+            return $member['userId'];
+        }, $selectedMembers);
+        
+        // Convert array to comma-separated string for SQL
+        $selectedUserIdsString = "'" . implode("','", array_map(function($id) use ($con) {
+            return mysqli_real_escape_string($con, $id);
+        }, $selectedUserIds)) . "'";
+        
+        // Delete entries for users who are no longer selected from event_members
+        $deleteMembersQuery = "DELETE FROM event_members 
+                              WHERE planid = '$planid' 
+                              AND userid NOT IN ($selectedUserIdsString)";
+        mysqli_query($con, $deleteMembersQuery);
+        
+        // Note: Skipping the deletion step for `enrolls_to` table
+        
+        // First, get existing event members entries
+        $existingEventMembersQuery = "SELECT userid FROM event_members WHERE planid = '$planid'";
+        $existingEventMembersResult = mysqli_query($con, $existingEventMembersQuery);
+        $existingEventMembers = [];
+        while ($row = mysqli_fetch_assoc($existingEventMembersResult)) {
+            $existingEventMembers[] = $row['userid'];
         }
 
-        // Handle selected staff data
-        if (isset($_POST['selected_staff_data']) && !empty($_POST['selected_staff_data'])) {
-            // Clear existing staff entries in event_staff
-            $clearStaffQuery = "DELETE FROM event_staff WHERE planid = '$planid'";
-            mysqli_query($con, $clearStaffQuery);
+        // Process each selected member
+        foreach ($selectedMembers as $member) {
+            $userId = mysqli_real_escape_string($con, $member['userId']);
+            
+            // Insert or update event_members only if not existing
+            if (!in_array($userId, $existingEventMembers)) {
+                $insertMemberQuery = "INSERT INTO event_members (planid, userid, joined_at) 
+                                    VALUES ('$planid', '$userId', NOW())
+                                    ON DUPLICATE KEY UPDATE joined_at = NOW()";
+                mysqli_query($con, $insertMemberQuery);
+            }
+            
+            // Insert or update enrolls_to
+            $insertEnrollQuery = "INSERT INTO enrolls_to 
+                                (planid, userid, paid_date, hasPaid, hasApproved) 
+                                VALUES ('$planid', '$userId', NOW(), 0, 0)
+                                ON DUPLICATE KEY UPDATE paid_date = COALESCE(paid_date, NOW())";
+            mysqli_query($con, $insertEnrollQuery);
+        }
+    } else {
+        throw new Exception("Invalid JSON in selected members data");
+    }
+}
 
-            $selectedStaff = json_decode($_POST['selected_staff_data'], true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                foreach ($selectedStaff as $staff) {
-                    $staffid = mysqli_real_escape_string($con, $staff['staffid']);
-                    // Insert updated staff members into event_staff
-                    $insertQuery = "INSERT INTO event_staff (planid, staffid, joined_at) VALUES ('$planid', '$staffid', NOW())";
-                    mysqli_query($con, $insertQuery);
-                }
+
+
+if (isset($_POST['selected_staff_data']) && !empty($_POST['selected_staff_data'])) {
+    $selectedStaff = json_decode($_POST['selected_staff_data'], true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        // Create array of selected staff IDs
+        $selectedStaffIds = array_map(function($staff) {
+            return $staff['staffid'];
+        }, $selectedStaff);
+        
+        $selectedStaffIdsString = "'" . implode("','", array_map(function($id) use ($con) {
+            return mysqli_real_escape_string($con, $id);
+        }, $selectedStaffIds)) . "'";
+        
+        // Delete entries for staff who are no longer selected
+        $deleteStaffQuery = "DELETE FROM event_staff 
+                            WHERE planid = '$planid' 
+                            AND staffid NOT IN ($selectedStaffIdsString)";
+        mysqli_query($con, $deleteStaffQuery);
+
+        // First, get existing event staff entries
+        $existingEventStaffQuery = "SELECT staffid FROM event_staff WHERE planid = '$planid'";
+        $existingEventStaffResult = mysqli_query($con, $existingEventStaffQuery);
+        $existingEventStaff = [];
+        while ($row = mysqli_fetch_assoc($existingEventStaffResult)) {
+            $existingEventStaff[] = $row['staffid'];
+        }
+
+        // Get existing timetable entries
+        $existingTimetableQuery = "SELECT tid, staffid, tname FROM sports_timetable WHERE planid = '$planid'";
+        $existingTimetableResult = mysqli_query($con, $existingTimetableQuery);
+        $existingTimetables = [];
+        while ($row = mysqli_fetch_assoc($existingTimetableResult)) {
+            $existingTimetables[$row['staffid']] = $row;
+        }
+
+        // Process each selected staff member
+        foreach ($selectedStaff as $staff) {
+            $staffid = mysqli_real_escape_string($con, $staff['staffid']);
+            
+            // Insert or update event_staff only if not existing
+            if (!in_array($staffid, $existingEventStaff)) {
+                $insertStaffQuery = "INSERT INTO event_staff (planid, staffid, joined_at) 
+                                    VALUES ('$planid', '$staffid', NOW())
+                                    ON DUPLICATE KEY UPDATE joined_at = NOW()";
+                mysqli_query($con, $insertStaffQuery);
+            }
+            
+            // Check if staff exists in sports_timetable
+            if (isset($existingTimetables[$staffid])) {
+                // Update existing timetable entry
+                $existingTid = $existingTimetables[$staffid]['tid'];
+                
+                $updateTimetableQuery = "UPDATE sports_timetable 
+                                       SET hasApproved = COALESCE(hasApproved, 0), tid = '$existingTid'
+                                       WHERE planid = '$planid' 
+                                       AND staffid = '$staffid' 
+                                       AND tid = '$existingTid'";
+                mysqli_query($con, $updateTimetableQuery);
             } else {
-                throw new Exception("Invalid JSON in selected staff data");
+                // Generate a random tid
+                $randomTid = rand(100000, 999999);
+                // Insert new timetable entry
+                $insertTimetableQuery = "INSERT INTO sports_timetable 
+                                       (planid, staffid, tid, hasApproved, tname) 
+                                       VALUES ('$planid', '$staffid', '$randomTid', 0, 'New Schedule')";
+                mysqli_query($con, $insertTimetableQuery);
             }
         }
+        
+        // Now handle removals
+        if (!empty($selectedStaffIdsString)) {
+            $updateRemovedQuery = "UPDATE sports_timetable 
+                                 SET hasApproved = 0 
+                                 WHERE planid = '$planid' 
+                                 AND staffid NOT IN ($selectedStaffIdsString)";
+            mysqli_query($con, $updateRemovedQuery);
+        }
+    } else {
+        throw new Exception("Invalid JSON in selected staff data");
+    }
+}
+
+
+
 
         // Handle image upload if provided
         if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {

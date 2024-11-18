@@ -249,7 +249,11 @@ echo "RM" . number_format($revenue, 2) . " (Unpaid: RM" . number_format($unpaid_
 <?php
 $staffid = $_SESSION['staffid']; // Get logged-in staff ID
 
-// Query to get all members and their approval status for events assigned to the logged-in coach
+// Initialize counts to 0
+$total_members = 0;
+$unapproved_members = 0;
+
+// Perform the query to get the actual counts
 $query = "SELECT 
     COUNT(DISTINCT u.userid) as total_members,
     SUM(CASE WHEN u.hasApproved = 'No' THEN 1 ELSE 0 END) as unapproved_members
@@ -263,6 +267,7 @@ WHERE s.staffid = '$staffid'";
 $result = mysqli_query($con, $query);
 $counts = mysqli_fetch_array($result);
 
+// Update counts with actual values from the query
 $total_members = $counts['total_members'] ?? 0;
 $unapproved_members = $counts['unapproved_members'] ?? 0;
 ?>
@@ -285,7 +290,7 @@ $unapproved_members = $counts['unapproved_members'] ?? 0;
         </div>
     </div>
 </a>
-	<a href="view_mem.php">
+<a href="view_mem.php">
     <div class="custom-tile greencolor" style="margin-top:10px;">
         <div class="num" style="display: flex; align-items: center; justify-content: center;">
             <i class="entypo-users" style="margin-right: 10px;"></i>
@@ -294,6 +299,7 @@ $unapproved_members = $counts['unapproved_members'] ?? 0;
     </div>
 </a>
 </div>
+
 
 
 

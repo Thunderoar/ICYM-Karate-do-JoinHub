@@ -125,7 +125,7 @@ $offset = ($page - 1) * $limit;
 if ($_SESSION['is_coach_logged_in']) {
     $coachId = $_SESSION['staffid'];
     
-    // Modified query to only show members from events where the coach is assigned
+    // Modified query to show all members (including not approved) from sports_timetable
     $query = "SELECT DISTINCT 
                 u.userid,
                 u.username,
@@ -137,14 +137,12 @@ if ($_SESSION['is_coach_logged_in']) {
                 u.dob,
                 p.planName AS event_name,
                 p.startDate AS event_date
-            FROM event_staff es
-            INNER JOIN plan p ON es.planid = p.planid
-            INNER JOIN event_members em ON p.planid = em.planid
-            INNER JOIN users u ON em.userid = u.userid
-            INNER JOIN enrolls_to e ON (u.userid = e.userid AND e.planid = p.planid)
-            WHERE es.staffid = ?
+            FROM sports_timetable st
+            INNER JOIN plan p ON st.planid = p.planid
+            INNER JOIN enrolls_to e ON p.planid = e.planid
+            INNER JOIN users u ON e.userid = u.userid
+            WHERE st.staffid = ?
             AND e.hasPaid = 'yes'
-            AND e.hasApproved = 'yes'
             ORDER BY u.joining_date
             LIMIT ? OFFSET ?";
             

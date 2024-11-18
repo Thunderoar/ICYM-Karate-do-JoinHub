@@ -98,7 +98,7 @@ if (!isset($_SESSION['staffid'])) {
 $staffid = $_SESSION['staffid'];
 
 // Modified query to get payment status for coach's assigned events
-$query = "SELECT 
+$query = "SELECT DISTINCT
             e.et_id,
             e.userid,
             e.planid,

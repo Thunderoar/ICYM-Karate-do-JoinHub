@@ -404,12 +404,12 @@ if (!$dates) {
                 <!-- logo -->
                 <?php require('../../element/loggedin-logo.html'); ?>
                 
-                <!-- logo collapse icon 
+                <!-- logo collapse icon -->
                 <div class="sidebar-collapse" onclick="collapseSidebar()">
                     <a href="#" class="sidebar-collapse-icon with-animation">
                         <i class="entypo-menu"></i>
                     </a>
-                </div>-->
+                </div>
             </header>
             <?php include('nav.php'); ?>
         </div>
@@ -713,104 +713,38 @@ container.appendChild(staffElement);
 
 </script>
 
-
-<?php
-// Start the session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$isAdmin = isset($_SESSION['is_admin_logged_in']) && $_SESSION['is_admin_logged_in'] === true;
-$isCoach = isset($_SESSION['is_coach_logged_in']) && $_SESSION['is_coach_logged_in'] === true;
-$returnPath = $isAdmin ? '../../dashboard/admin/view_plan.php' : ($isCoach ? '../../dashboard/coach/view_plan.php' : '../../dashboard/member/view_plan.php');
-
-$tid = mysqli_real_escape_string($con, $_GET['id']); 
-
-// Fetch plan details
-$sql = "SELECT p.* 
-        FROM plan p 
-        INNER JOIN sports_timetable st ON p.planid = st.planid 
-        WHERE st.tid = '$tid'";
-
-$res = mysqli_query($con, $sql);
-
-if ($res && mysqli_num_rows($res) > 0) {
-    $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-    $current_planid = $row['planid'];
-} else {
-    echo "<p>Plan not found or invalid timetable ID.</p>";
-    exit;
-}
-?>
-
 <div class="col-md-12" style="margin-top:50px;">
+
     <h3><b>Involved Members</b></h3>
-    <?php if ($isAdmin): ?>
+	<?php if ($isAdmin): ?>
     <div class="form-group">
         <label><b>Choose Eligible Member:</b></label>
-        <div class="input-group">
-            <select name="member_select" id="memberBox" class="form-control">
-                <option value="">--Please Select--</option>
-                <?php
-                // Query to fetch eligible members
-                $query = "SELECT DISTINCT u.userid, u.username, u.fullName, u.email 
-                          FROM users u
-                          INNER JOIN event_members em ON u.userid = em.userid
-                          INNER JOIN enrolls_to et ON u.userid = et.userid
-                          WHERE et.hasPaid = 'yes' AND et.hasApproved = 'yes' 
-                          AND em.planid = '$current_planid'
-                          AND et.planid = em.planid
-                          AND EXISTS (SELECT 1 FROM sports_timetable st WHERE st.tid = '$tid' AND st.planid = et.planid)";
+<div class="input-group">
+    <select name="member_select" id="memberBox" class="form-control">
+        <option value="">--Please Select--</option>
+        <?php
+        $query = "SELECT DISTINCT u.userid, u.fullName
+                  FROM users u
+                  INNER JOIN enrolls_to et ON u.userid = et.userid
+                  WHERE et.hasPaid = 'yes' AND et.hasApproved = 'yes'";
+        $result = mysqli_query($con, $query);
 
-                $result = mysqli_query($con, $query);
-
-                // For debugging: Check if the query executed
-                if (!$result) {
-                    die("Query failed: " . mysqli_error($con));
-                }
-
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<option value='" . htmlspecialchars($row['userid']) . "' data-username='" . htmlspecialchars($row['username']) . "' data-email='" . htmlspecialchars($row['email']) . "'>" 
-                             . htmlspecialchars($row['fullName']) 
-                             . "</option>";
-                    }
-                } else {
-                    echo "<option value=''>No eligible members found</option>";
-                }
-                ?>
-            </select>
-        </div>
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<option value='" . htmlspecialchars($row['userid']) . "'>" 
+                     . htmlspecialchars($row['fullName']) 
+                     . "</option>";
+            }
+        }
+        ?>
+    </select>
+    <div class="input-group-append">
+        <button type="button" class="btn btn-success" onclick="addEventMember()">Add Member</button>
     </div>
+</div>
 
-    <div class="form-group">
-        <label><b>Member Details:</b></label>
-        <div class="input-group" id="memberDetails"></div>
     </div>
-
-    <?php endif; ?>
-
-<script>
-document.getElementById('memberBox').addEventListener('change', function() {
-    var selectedOption = this.options[this.selectedIndex];
-    var userId = selectedOption.value;
-    var userName = selectedOption.getAttribute('data-username');
-    var userEmail = selectedOption.getAttribute('data-email');
-
-    if (userId) {
-        var details = `
-            <p><b>Username:</b> ${userName}</p>
-            <p><b>Email:</b> ${userEmail}</p>
-        `;
-        document.getElementById('memberDetails').innerHTML = details;
-    } else {
-        document.getElementById('memberDetails').innerHTML = '';
-    }
-});
-</script>
-
-
-
+	<?php endif; ?>
 
     <div class="form-group">
         <label><b>Selected Karate Members:</b></label>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 17, 2024 at 05:57 PM
+-- Generation Time: Nov 18, 2024 at 01:46 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -249,22 +249,15 @@ CREATE TABLE IF NOT EXISTS `enrolls_to` (
   `hasApproved` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `receiptIMG` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`et_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `enrolls_to`
 --
 
 INSERT INTO `enrolls_to` (`et_id`, `planid`, `userid`, `paid_date`, `expire`, `hasPaid`, `hasApproved`, `receiptIMG`) VALUES
-(141, 'XTWIOL', '1730087557', '2024-11-12 22:28:12', '9999-12-31', 'yes', 'yes', ''),
-(150, 'XTWIOL', '1730601491', '2024-11-12 22:13:22', '9999-12-31', 'yes', 'yes', ''),
-(215, 'XTWIOL', '1731601591', '2024-11-15 15:53:13', '9999-12-31', 'yes', 'no', ''),
-(250, 'VXZPMY', '1731601591', NULL, '2024-12-17 11:46:59', 'no', 'no', NULL),
-(251, 'XTWIOL', '1731838081', '2024-11-18 01:28:42', '9999-12-31', 'yes', 'yes', ''),
-(252, 'XTWIOL', '1731840424', '2024-11-17', '1970-01-01', 'no', NULL, NULL),
-(253, 'XTWIOL', '1731840510', '2024-11-17', '1970-01-01', 'no', NULL, NULL),
-(254, 'VXZPMY', '1731838081', NULL, NULL, 'no', 'no', ''),
-(255, 'FCEDGV', '1731838081', NULL, NULL, 'no', 'no', '');
+(255, 'FCEDGV', '1731838081', '2024-11-18 08:03:57', '9999-12-31', 'yes', 'yes', ''),
+(271, 'LSATQE', '1731601591', '2024-11-18 09:19:28', '9999-12-31', 'yes', 'yes', '');
 
 -- --------------------------------------------------------
 
@@ -281,18 +274,15 @@ CREATE TABLE IF NOT EXISTS `event_members` (
   PRIMARY KEY (`em_id`),
   KEY `planid` (`planid`),
   KEY `userid` (`userid`)
-) ENGINE=MyISAM AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_members`
 --
 
 INSERT INTO `event_members` (`em_id`, `planid`, `userid`, `joined_at`) VALUES
-(47, 'ZHXPSA', 1730087557, '2024-11-12 15:13:32'),
-(93, 'XTWIOL', 1731838081, '2024-11-17 17:28:42'),
-(97, 'VXZPMY', 1730601491, '2024-11-17 17:49:59'),
-(92, 'XTWIOL', 1730087557, '2024-11-17 17:25:47'),
-(70, 'ZHXPSA', 1730601491, '2024-11-13 07:25:55');
+(125, 'LSATQE', 1731601591, '2024-11-18 01:34:33'),
+(124, 'LSATQE', 1731838081, '2024-11-18 01:34:28');
 
 -- --------------------------------------------------------
 
@@ -307,20 +297,29 @@ CREATE TABLE IF NOT EXISTS `event_staff` (
   `staffid` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
   `joined_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`es_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_staff`
 --
 
 INSERT INTO `event_staff` (`es_id`, `planid`, `staffid`, `joined_at`) VALUES
-(32, 'VXZPMY', 'rashid', '2024-11-17 17:49:59'),
+(41, 'VXZPMY', 'rashid', '2024-11-18 00:04:48'),
 (16, 'ZHXPSA', 'rashid', '2024-11-12 15:13:32'),
-(30, 'XTWIOL', 'rashid', '2024-11-17 17:25:47'),
 (26, '60647328', 'rashid', '2024-11-17 17:08:40'),
 (27, '15505317', 'rashid', '2024-11-17 17:10:28'),
 (28, 'JFBROC', 'rashid', '2024-11-17 17:12:39'),
-(35, 'FCEDGV', 'cik_umaiyyah', '2024-11-17 17:56:09');
+(39, 'XTWIOL', 'rashid', '2024-11-18 00:03:36'),
+(35, 'FCEDGV', 'cik_umaiyyah', '2024-11-17 17:56:09'),
+(40, 'XTWIOL', 'cik_umaiyyah', '2024-11-18 00:03:36'),
+(68, 'XTWIOL', 'sensei_tamil', '2024-11-18 01:02:13'),
+(58, 'OEHFJY', 'rashid', '2024-11-18 00:33:32'),
+(66, 'GRWTPO', 'sensei_tamil', '2024-11-18 00:40:06'),
+(59, 'OEHFJY', 'rashid', '2024-11-18 00:33:40'),
+(63, 'GRWTPO', 'cik_umaiyyah', '2024-11-18 00:36:15'),
+(64, 'GRWTPO', 'rashid', '2024-11-18 00:37:44'),
+(69, 'LSATQE', 'cik_umaiyyah', '2024-11-18 01:14:49'),
+(70, 'AFKJVD', 'rashid', '2024-11-18 01:42:13');
 
 -- --------------------------------------------------------
 
@@ -552,6 +551,7 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('5', NULL, '1729499689', NULL, NULL, NULL, '2024-10-21 08:35:06'),
 ('515', NULL, '1729499673', NULL, NULL, NULL, '2024-10-21 08:34:41'),
 ('54a9f345-9bce-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'EHBPVK', 'uploads/672aab3bbd821_image_2.jpg', '2024-11-05 23:33:15'),
+('5579d953-a54e-11ef-ae1d-004e01ffe201', NULL, NULL, NULL, 'AFKJVD', 'uploads/673a9b752d341_karate_main.jpg', '2024-11-18 01:42:13'),
 ('5639b75c-a10b-11ef-be02-004e01ffe201', NULL, '1731425542', NULL, NULL, NULL, '2024-11-12 15:32:33'),
 ('57379856-a295-11ef-b782-004e01ffe201', NULL, '1731594745', NULL, NULL, NULL, '2024-11-14 14:32:56'),
 ('591e262b-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'CDZJSY', 'uploads/672ada3d264a8_event_1.jpg', '2024-11-06 02:53:49'),
@@ -615,6 +615,7 @@ INSERT INTO `images` (`imageid`, `adminid`, `userid`, `staffid`, `planid`, `imag
 ('f7c907a6-a161-11ef-be02-004e01ffe201', NULL, '1731462741', NULL, NULL, NULL, '2024-11-13 01:52:41'),
 ('f9b54ceb-8f8e-11ef-a5b9-004e01ffe201', NULL, '1729502959', NULL, NULL, NULL, '2024-10-21 09:29:30'),
 ('fa1250de-97f4-11ef-8372-004e01ffe201', NULL, NULL, NULL, 'FLERKI', 'uploads/672436157c3d6_image_11.jpg', '2024-11-01 01:59:49'),
+('faf0fe2d-a542-11ef-ae1d-004e01ffe201', NULL, NULL, NULL, 'OEHFJY', 'uploads/673a8868ca40d_image_5.jpg', '2024-11-18 00:20:56'),
 ('ff430ac1-9bea-11ef-a493-004e01ffe201', NULL, NULL, NULL, 'VXZPMY', 'uploads/672adb53dbe53_image_11.jpg', '2024-11-06 02:58:27'),
 ('ffb8592d-a14d-11ef-be02-004e01ffe201', NULL, '1731454171', NULL, NULL, NULL, '2024-11-12 23:29:44');
 
@@ -715,12 +716,11 @@ CREATE TABLE IF NOT EXISTS `plan` (
 --
 
 INSERT INTO `plan` (`planid`, `tid`, `planName`, `description`, `planType`, `startDate`, `endDate`, `duration`, `validity`, `amount`, `active`) VALUES
-('FCEDGV', '15505317', 'Event Paling Terbaru', 'Event Paling Terbaru', 'Event', '2024-12-20', '2024-12-25', 5, 'Lifetime', 123, 'yes'),
-('JFBROC', '111338306', 'Event Paling Latest', 'Event Paling Latest', 'Event', '2024-12-18', '2024-12-20', 2, 'Lifetime', 123, 'yes'),
+('AFKJVD', '755354652', 'Karate Championship ', '#### Key Highlights:\r\n- Special Guest Appearance: Renowned Karate Master Sensei Hiroshi Tanaka \r\n- Live Demonstrations: Showcases by Black Belt Champions\r\n- Interactive Workshops: For beginners and en', 'Event', '2024-11-23', '2024-11-23', 0, 'Lifetime', 0, 'yes'),
 ('LOXGHP', '874489422', 'gambar 3', 'gambar 3', 'Event', '2024-10-14', '2024-10-16', 2, 'Lifetime', 123, 'no'),
+('LSATQE', '261332979', 'Kumite (Sparring) Ma', 'Competitors engage in one-on-one bouts, scored based on clean, controlled strikes, kicks, and blocks. Matches are categorized by weight and rank.', 'Event', '2024-12-20', '2024-12-28', 8, 'Lifetime', 100, 'yes'),
 ('RCOIWL', '972417063', 'Mengaktifkan Pasukan', 'Ini adalah untuk mengaktifkan pasukan nombor 1', 'Event', '2024-12-20', '2024-12-25', 5, 'Lifetime', 100, 'no'),
 ('VNWQGL', '32727319', 'Percubaan 1', 'Percubaan 1', 'Event', '2024-10-10', '2024-10-14', 4, 'Lifetime', 123, 'no'),
-('VXZPMY', '451453399', 'Gambar 2', 'Gambar 22', 'Event', '2024-09-03', '2024-09-09', 7, 'Lifetime', 123, 'yes'),
 ('XTWIOL', '123', 'Karate Activities', 'This includes all karate activity plan', 'Core', '2024-11-15', '2024-11-28', 16, '', 20, 'yes');
 
 -- --------------------------------------------------------
@@ -750,13 +750,12 @@ CREATE TABLE IF NOT EXISTS `plan_pages` (
 --
 
 INSERT INTO `plan_pages` (`page_id`, `planid`, `page_title`, `page_content`, `meta_description`, `slug`, `created_at`, `updated_at`, `published`) VALUES
-('page_673a23849cb0b6.93152035', 'FCEDGV', 'Event Paling Terbaru', 'Event Paling Terbaru', 'Event Paling Terbaru', 'vent-aling-erbaru', '2024-11-17 09:10:28', '2024-11-17 17:10:28', 1),
-('page_673a2407589012.67536376', 'JFBROC', 'Event Paling Latest', 'Event Paling Latest', 'Event Paling Latest', 'vent-aling-atest', '2024-11-17 09:12:39', '2024-11-17 17:12:39', 1),
 ('page_67383d2b9bea80.41427445', 'RCOIWL', 'Mengaktifkan Pasukan Nombor 1', 'Ini adalah untuk mengaktifkan pasukan nombor 1', 'Ini adalah untuk mengaktifkan pasukan nombor 1', 'engaktifkan-asukan-ombor-1', '2024-11-15 22:35:23', '2024-11-16 06:35:23', 1),
 ('page_672440785b00f5.08825658', 'MTDQCH', 'hellos', 'hellos', 'hellos', 'hellos', '2024-11-01 02:44:08', '2024-11-01 02:44:08', 1),
 ('page_6725ad49a3a4f6.40544225', 'THSMAF', 'et', 'et', 'et', 'et', '2024-11-02 04:40:41', '2024-11-02 04:40:41', 1),
+('page_673a9b752d5580.60095661', 'AFKJVD', 'Karate Championship Extravaganza', '#### Key Highlights:\r\n- Special Guest Appearance: Renowned Karate Master Sensei Hiroshi Tanaka \r\n- Live Demonstrations: Showcases by Black Belt Champions\r\n- Interactive Workshops: For beginners and enthusiasts, covering basic techniques and self-defense\r\n- Merchandise Stalls: Karate gear, apparel, and souvenirs\r\n\r\n#### Participant Requirements:\r\n- Age Groups: Categories for children (5-12 years), teenagers (13-17 years), and adults (18+ years)\r\n- Belt Categories: White to Black belt divisions\r\n- Registration Fee: MYR 50 for children, MYR 70 for teenagers, and MYR 100 for adults\r\n- Registration Deadline: 15th November 2024\r\n\r\n#### Additional Information:\r\n- Website: www.melaka-karate-championships.com\r\n- Social Media: Follow us on Instagram, Facebook, and Twitter for updates', '#### Key Highlights:\r\n- Special Guest Appearance: Renowned Karate Master Sensei Hiroshi Tanaka \r\n- Live Demonstrations: Showcases by Black Belt Champi', 'arate-hampionship-xtravaganza', '2024-11-17 17:42:13', '2024-11-18 01:42:13', 1),
 ('page_672adaeb01b011.33593391', 'VNWQGL', 'Percubaan 1', 'Percubaan 1', 'Percubaan 1', 'ercubaan-1', '2024-11-05 18:56:43', '2024-11-06 02:56:43', 1),
-('page_672adb53dc0743.17552309', 'VXZPMY', 'Gambar 2', 'Gambar 2', 'Gambar 2', 'ambar-2', '2024-11-05 18:58:27', '2024-11-06 02:58:27', 1),
+('page_673a950994d247.63714475', 'LSATQE', 'Kumite (Sparring) Matches', 'Competitors engage in one-on-one bouts, scored based on clean, controlled strikes, kicks, and blocks. Matches are categorized by weight and rank.', 'Competitors engage in one-on-one bouts, scored based on clean, controlled strikes, kicks, and blocks. Matches are categorized by weight and rank.', 'umite-parring-atches', '2024-11-17 17:14:49', '2024-11-18 01:14:49', 1),
 ('page_672addd0a50314.91648404', 'LOXGHP', 'gambar 3', 'gambar 3', 'gambar 3', 'gambar-3', '2024-11-05 19:09:04', '2024-11-06 03:09:04', 1),
 ('page_672f3a8fcc53f8.62831523', 'ZHXPSA', 'pintu', 'pintu', 'pintu', 'pintu', '2024-11-09 02:33:51', '2024-11-09 10:33:51', 1),
 ('page_6726cf1974f279.76136256', 'JIFKPO', 'WOW', 'WOW', 'WOW', '', '2024-11-02 17:17:13', '2024-11-03 01:17:13', 1);
@@ -835,14 +834,16 @@ CREATE TABLE IF NOT EXISTS `sports_timetable` (
 --
 
 INSERT INTO `sports_timetable` (`tid`, `planid`, `staffid`, `tname`, `hasApproved`) VALUES
-('111338306', 'JFBROC', 'rashid', 'Event Paling Latest', '0'),
-('15505317', 'FCEDGV', 'rashid', 'Event Paling Terbaru', '0'),
+('181961', 'XTWIOL', 'rashid', 'New Schedule', '0'),
+('232273', 'XTWIOL', 'sensei_tamil', 'New Schedule', '0'),
+('261332979', 'LSATQE', 'cik_umaiyyah', 'Kumite (Sparring) Matches', '0'),
 ('32727319', 'VNWQGL', 'rashid', 'Percubaan 1', '0'),
 ('443967826', 'ZHXPSA', 'rashid', 'pintu', '0'),
 ('48a96c46-8d18-11ef-a94c-004e01ffe201', 'BJEFSY', 'Rashid', 'aaaa', 'yes'),
+('755354652', 'AFKJVD', 'rashid', 'Karate Championship Extravaganza', '0'),
 ('7b00f52c-8d18-11ef-a94c-004e01ffe201', 'BJEFSY', 'rashid', 'test', 'yes'),
-('847758526', 'XTWIOL', '1', 'Default Timetable Name', 'no'),
-('851246383', 'VXZPMY', '1', 'Default Timetable Name', 'no'),
+('807351', 'XTWIOL', 'cik_umaiyyah', 'New Schedule', '0'),
+('847758526', 'XTWIOL', '1', 'Default Timetable Name', '0'),
 ('874489422', 'LOXGHP', 'rashid', 'gambar 3', '0'),
 ('972417063', 'RCOIWL', 'rashid', 'Mengaktifkan Pasukan Nombor 1', '0'),
 ('9cfff539-90fd-11ef-954f-004e01ffe201', 'CAFXVW', 'rashid', 'test', 'yes'),
@@ -934,7 +935,6 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('day_672aaa8847ec29.07070788', '934889673', 4, NULL),
 ('day_672aaa8847d8d7.19964684', '934889673', 3, NULL),
 ('day_672aaa8847c189.45420558', '934889673', 2, NULL),
-('day_673a2407585cf0.08856654', '111338306', 3, NULL),
 ('day_672adaeb014db8.82811995', '32727319', 4, NULL),
 ('day_672adaeb013dd9.32448563', '32727319', 3, NULL),
 ('day_672adaeb012ce6.48905042', '32727319', 2, NULL),
@@ -958,7 +958,7 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('day_672aab3bbd5a35.67476964', '844415098', 14, NULL),
 ('day_6726cf1974d8d4.38236568', '92618308', 1, 'WOW'),
 ('day_6726cf28a099c1.41472425', '473138343', 1, 'WOW'),
-('day_673a2407585345.51458461', '111338306', 2, NULL),
+('day_673a9b752d11e0.07549777', '755354652', 1, NULL),
 ('724dc784-a489-11ef-ae1d-004e01ffe201', '847758526', 13, ''),
 ('724dbe6f-a489-11ef-ae1d-004e01ffe201', '847758526', 12, ''),
 ('day_672addd0a4c6d2.50293593', '874489422', 3, NULL),
@@ -985,9 +985,9 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('day_672addd0a4a046.71617153', '874489422', 1, NULL),
 ('day_672addd0a4b574.68473845', '874489422', 2, NULL),
 ('day_672adaeb015fb5.39506782', '32727319', 5, NULL),
-('day_673a24075847f0.55543665', '111338306', 1, NULL),
-('day_673a23849c8048.69835630', '15505317', 6, NULL),
-('day_673a23849c7601.67760721', '15505317', 5, NULL),
+('day_673a950994bb53.90655488', '261332979', 9, NULL),
+('day_673a8868c9fec2.06240680', '187072972', 6, NULL),
+('day_673a8868c9d861.10931654', '187072972', 5, NULL),
 ('day_672f3a8fcc0156.01923688', '443967826', 5, NULL),
 ('day_672f3a8fcbf508.17281470', '443967826', 4, NULL),
 ('day_672f3a8fcbe8e0.51007404', '443967826', 3, NULL),
@@ -1004,17 +1004,18 @@ INSERT INTO `timetable_days` (`day_id`, `tid`, `day_number`, `activities`) VALUE
 ('day_67383d2b9bad84.17695059', '972417063', 3, NULL),
 ('day_67383d2b9b9c64.39819121', '972417063', 2, NULL),
 ('day_67383d2b9b6c97.75093135', '972417063', 1, NULL),
-('d96aa46a-a488-11ef-ae1d-004e01ffe201', '851246383', 4, NULL),
-('d8e547fd-a488-11ef-ae1d-004e01ffe201', '851246383', 1, NULL),
-('d90671d8-a488-11ef-ae1d-004e01ffe201', '851246383', 2, NULL),
-('day_673a23849c6c35.73245354', '15505317', 4, NULL),
-('d93a0842-a488-11ef-ae1d-004e01ffe201', '851246383', 3, NULL),
-('d9a17f6d-a488-11ef-ae1d-004e01ffe201', '851246383', 5, NULL),
-('d9d64a9c-a488-11ef-ae1d-004e01ffe201', '851246383', 6, NULL),
-('e2b42aff-a488-11ef-ae1d-004e01ffe201', '851246383', 7, NULL),
-('day_673a23849c61e0.18036025', '15505317', 3, NULL),
-('day_673a23849c5557.68735187', '15505317', 2, NULL),
-('day_673a23849c4149.73123763', '15505317', 1, NULL);
+('day_673a9509949360.36895443', '261332979', 7, NULL),
+('day_673a9509948464.80446894', '261332979', 6, NULL),
+('day_673a95099476e2.44943878', '261332979', 5, NULL),
+('day_673a8868c9b916.72734572', '187072972', 4, NULL),
+('day_673a9509946a56.27937998', '261332979', 4, NULL),
+('day_673a9509945db0.57439950', '261332979', 3, NULL),
+('day_673a9509945006.22964291', '261332979', 2, NULL),
+('day_673a9509944122.51765622', '261332979', 1, NULL),
+('day_673a8868c99333.90709381', '187072972', 3, NULL),
+('day_673a8868c97298.02730084', '187072972', 2, NULL),
+('day_673a8868c94b63.66747076', '187072972', 1, NULL),
+('day_673a950994a824.09099671', '261332979', 8, NULL);
 
 -- --------------------------------------------------------
 
