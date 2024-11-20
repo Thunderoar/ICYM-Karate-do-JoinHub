@@ -4,10 +4,11 @@ page_protect();
 
 if (isset($_POST['userid'])) {
     $userid = $_POST['userid'];
-    
-    // Update query to approve the user
-    $query = "UPDATE users SET hasApproved='Yes' WHERE userid='$userid'";
-    
+    $isReapproved = isset($_POST['isReapproved']) ? 1 : 0;
+
+    // Update query to approve or reapprove the user
+    $query = "UPDATE users SET hasApproved='Yes', hasReapproved='$isReapproved' WHERE userid='$userid'";
+
     if (mysqli_query($con, $query)) {
         echo "<script>alert('Member approved successfully');</script>";
         echo "<meta http-equiv='refresh' content='0; url=view_mem.php'>";

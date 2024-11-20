@@ -127,7 +127,7 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 // Modified query for pagination
-$query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, u.hasApproved, u.dob
+$query  = "SELECT DISTINCT u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date, u.hasApproved, u.hasReapproved, u.dob
            FROM users u
            LEFT JOIN enrolls_to e ON u.userid = e.userid
            ORDER BY u.joining_date 
@@ -143,47 +143,54 @@ if (mysqli_num_rows($result) != 0) {
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $uid = $row['userid'];
 
-echo "<tr><td>".$sno."</td>";
-echo "<td>" . htmlspecialchars($row['userid'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['username'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['mobile'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['email'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['gender'] ?? '') . "</td>";
-echo "<td>" . htmlspecialchars($row['joining_date'] ?? '') ."</td>";
-echo "<td>" . htmlspecialchars($row['hasApproved'] ?? '') . "</td>";
+        // Check if the user has any disapproval records
+        $disapprovalQuery = "SELECT reason FROM disapproval_reasons WHERE userid = '$uid' ORDER BY created_at DESC LIMIT 1";
+        $disapprovalResult = mysqli_query($con, $disapprovalQuery);
+        $disapprovalRow = mysqli_fetch_assoc($disapprovalResult);
+        $disapprovalReason = $disapprovalRow['reason'] ?? null;
 
+        echo "<tr><td>".$sno."</td>";
+        echo "<td>" . htmlspecialchars($row['userid'] ?? '') . "</td>";
+        echo "<td>" . htmlspecialchars($row['username'] ?? '') . "</td>";
+        echo "<td>" . htmlspecialchars($row['mobile'] ?? '') . "</td>";
+        echo "<td>" . htmlspecialchars($row['email'] ?? '') . "</td>";
+        echo "<td>" . htmlspecialchars($row['gender'] ?? '') . "</td>";
+        echo "<td>" . htmlspecialchars($row['joining_date'] ?? '') ."</td>";
+        echo "<td>" . htmlspecialchars($row['hasApproved'] ?? '') . "</td>";
 
         // Action buttons
         echo "<td>
         <div class='btn-group' role='group'>
-		<form action='viewall_detail.php' method='post'>
-                        <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                        <input type='submit' class='a1-btn a1-green btn' value='More Info'/>
-                    </form>
-            <form action='read_member.php' method='post' style='display:inline-block;'>
-                <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
-            </form>
-            <form action='del_member.php' method='post' onsubmit='return ConfirmDelete()' style='display:inline-block;'>
-                <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
-                <input type='submit' class='a1-btn a1-orange btn' value='Delete'/>
-            </form>";
-			
+        <form action='viewall_detail.php' method='post'>
+            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+            <input type='submit' class='a1-btn a1-green btn' value='More Info'/>
+        </form>
+        <form action='read_member.php' method='post' style='display:inline-block;'>
+            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+            <input type='submit' class='a1-btn a1-blue btn' value='View History'/>
+        </form>
+        <form action='del_member.php' method='post' onsubmit='return ConfirmDelete()' style='display:inline-block;'>
+            <input type='hidden' name='name' value='" . htmlspecialchars($uid) . "'/>
+            <input type='submit' class='a1-btn a1-orange btn' value='Delete'/>
+        </form>";
 
-        // Show Approve button if not approved yet
-        if ($row['hasApproved'] == 'Not Yet' || $row['hasApproved'] == 'No') {
+        // Show Approve or Reapprove button based on disapproval status
+        if ($disapprovalReason && !$row['hasReapproved']) {
+            echo "<form action='approve_member.php' method='post' style='display:inline-block;'>
+                <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
+                <input type='hidden' name='isReapproved' value='1'/>
+                <input type='submit' class='a1-btn a1-yellow btn' value='Reapprove'/>
+            </form>";
+            echo "<div class='disapproval-reason'><strong>Reason for Disapproval:</strong> " . htmlspecialchars($disapprovalReason) . "</div>";
+        } elseif (!$disapprovalReason) {
             echo "<form action='approve_member.php' method='post' style='display:inline-block;'>
                 <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
                 <input type='submit' class='a1-btn a1-yellow btn' value='Approve'/>
             </form>";
         }
 
-        // Show Disapprove button if already approved
         if ($row['hasApproved'] == 'Yes') {
-            echo "<form action='disapprove_member.php' method='post' style='display:inline-block;'>
-                <input type='hidden' name='userid' value='" . htmlspecialchars($uid) . "'/>
-                <input type='submit' class='a1-btn a1-red btn' value='Disapprove'/>
-            </form>";
+            echo "<button class='a1-btn a1-red btn' onclick=\"disapproveMember('$uid')\">Disapprove</button>";
         }
 
         echo "</div></td></tr>";
@@ -193,6 +200,9 @@ echo "<td>" . htmlspecialchars($row['hasApproved'] ?? '') . "</td>";
     echo "<tr><td colspan='9'>No records found</td></tr>";
 }
 ?>
+
+
+
     </tbody>
 </table>
 
@@ -243,6 +253,33 @@ $total_pages = ceil($total_members / $limit);
        return true;
     } else {
         return false;
+    }
+}
+
+function disapproveMember(userid) {
+    const reason = prompt("Please provide a reason for disapproval:");
+    if (reason && reason.trim() !== "") {
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "disapprove_member.php";
+
+        const userIdInput = document.createElement("input");
+        userIdInput.type = "hidden";
+        userIdInput.name = "userid";
+        userIdInput.value = userid;
+
+        const reasonInput = document.createElement("input");
+        reasonInput.type = "hidden";
+        reasonInput.name = "reason";
+        reasonInput.value = reason;
+
+        form.appendChild(userIdInput);
+        form.appendChild(reasonInput);
+        document.body.appendChild(form);
+
+        form.submit();
+    } else {
+        alert("Disapproval reason is required.");
     }
 }
 
