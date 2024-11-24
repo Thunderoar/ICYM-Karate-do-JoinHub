@@ -18,6 +18,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
             if($result2){
                $planValue=mysqli_fetch_array($result2,MYSQLI_ASSOC);
                $planName=$planValue['planName'];
+			   $amount=$planValue['amount'];
             }
         }
     }
@@ -136,6 +137,25 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
                                 <td height="35"><input type="text" name="curPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td>
                                 <td height="0"><input type="hidden" name="plan" id="boxx" value="<?php echo $planid; ?>" readonly></td>
                             </tr>
+							               <td height="35">FEE:</td>
+<td height="35">
+    <input type="text" name="curFee" id="boxx" class="bold-input" value="RM <?php echo $amount; ?>" readonly>
+</td>
+										<tr>
+               <td height="35"><b>Pay to below account:<b></td>
+<label></label>
+
+             </tr>		
+			<tr>
+               <td height="35"><b>Bank Islam:</b> 01929301928391</td>
+<label></label>
+
+             </tr>	
+			<tr>
+               <td height="35"></td>
+<label></label>
+
+             </tr>	
                             <tr>
                                 <!-- File input for payment receipt with preview -->
                                 <td height="35">Upload Receipt:</td>
@@ -150,18 +170,20 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
                                 </td>
                             </tr>
                         </table>
+											<tr>
+    <td height="35" style="display: flex; align-items: center; justify-content: flex-start;">
+        <!-- Reverted to previous button styles -->
+        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add Payment" style="margin-right: 10px;">
+        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset" style="margin-right: 10px;" onclick="resetPreview();">
+        <!-- New 'Return' button -->
+        <a href="payments.php" class="a1-btn a1-blue" style="text-decoration: none;">Return</a>
+    </td>
+</tr>
                     </td>
+
                 </tr>
-                <tr>
-                    <td height="35">&nbsp;</td>
-                    <td height="35" class="text-center">
-                        <!-- Reverted to previous button styles -->
-                        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add Payment" style="margin-right: 10px;">
-                        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset" style="margin-right: 10px;" onclick="resetPreview();">
-                        <!-- New 'Return' button -->
-                        <a href="payments.php" class="a1-btn a1-blue" style="text-decoration: none;">Return</a>
-                    </td>
-                </tr>
+
+
             </table>
         </form>
     </div>

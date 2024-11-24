@@ -16,6 +16,7 @@ if (isset($_POST['submit'])) {
     $dob = $_POST['dob'];
     $joining_date = $_POST['joining_date'];
     $email = $_POST['email'];
+    $no_ic = $_POST['no_ic'];
 
     // Address fields
     $street_name = $_POST['street_name'];
@@ -31,7 +32,7 @@ if (isset($_POST['submit'])) {
     $remarks = $_POST['remarks'];
 
     // Update user details
-    $query = "UPDATE users SET username='$usrname', gender='$gender', fullName='$fulname', courseName='$course', mobile='$mobile', matrixNumber='$matrix', no_ic='$ic', dob='$dob', joining_date='$joining_date', email='$email' WHERE userid='$userid'";
+    $query = "UPDATE users SET username='$usrname', gender='$gender', fullName='$fulname', courseName='$course', mobile='$mobile', matrixNumber='$matrix', no_ic='$no_ic', dob='$dob', joining_date='$joining_date', email='$email' WHERE userid='$userid'";
     mysqli_query($con, $query);
 
     // Check if address exists, if not, insert new address
@@ -322,7 +323,38 @@ $con->close();
             color: #555;
         }
         .error { color: red; }
-        .valid { color: green; 		
+        .valid { color: green;}
+		
+/* Common style for all input fields and dropdown menus */
+.input-field, .dropdown-menu {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+.input-field:focus, .dropdown-menu:focus {
+    background-color: #ddd;
+    outline: none;
+}
+/* Common style for all input fields and dropdown menus */
+.input-field-email {
+    width: 60%!important;
+    padding: 10px!important;
+    margin: 10px 0 22px 0!important;
+    display: inline-block!important;
+    border: none!important;
+    background: #f1f1f1!important;
+}
+
+.input-field-email:focus {
+    background-color: #ddd!important;
+    outline: none!important;
+}
+
+
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -403,14 +435,6 @@ $con->close();
 
 
 
-<!-- Include your custom CSS styles -->
-<style>
-  .form-group input[type="email"]{
-    width: 60%; /* Adjust the width to be the same for all input types */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    padding: 8px; /* Add some padding for better appearance */
-  }
-</style>
 
 <h4>User Information:</h4>
 <!-- User Information Section -->
@@ -422,17 +446,62 @@ $con->close();
     <label for="full_name">Full Name:</label>
     <input type="text" name="full_name" value="<?php echo htmlspecialchars($user_data['fullName'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="25" required pattern="[a-zA-Z\s]{1,25}" title="Only letters and spaces are allowed, up to 25 characters.">
 </div>
-<div class="form-group">
+<div style="margin-bottom: 10px;">
     <label for="gender">Gender:</label>
-    <input type="text" name="gender" value="<?php echo htmlspecialchars($user_data['gender'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="10" required pattern="[a-zA-Z]{1,10}" title="Only letters are allowed, up to 10 characters.">
+    <select id="gender" name="gender" class="dropdown-menu" required>
+        <option value="">--Please Select--</option>
+        <option value="Male" <?php echo (isset($user_data['gender']) && $user_data['gender'] === 'Male') ? 'selected' : ''; ?>>Male</option>
+        <option value="Female" <?php echo (isset($user_data['gender']) && $user_data['gender'] === 'Female') ? 'selected' : ''; ?>>Female</option>
+    </select>
 </div>
+
 <div class="form-group">
-    <label for="mobile">Mobile:</label>
-    <input type="text" name="mobile" value="<?php echo htmlspecialchars($user_data['mobile'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="15" required pattern="\d{10,15}" title="Only digits are allowed, between 10 to 15 characters.">
+    <label for="mobile">Phone Number</label>
+    <input 
+        type="text" 
+        class="form-control" 
+        name="mobile" 
+        id="mobile" 
+        placeholder="###-########" 
+        maxlength="12"
+        autocomplete="off"
+		value="<?php echo htmlspecialchars($user_data['mobile'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+        required>
 </div>
+<script>
+    const phoneInput = document.getElementById('mobile');
+    
+    phoneInput.addEventListener('input', function(e) {
+        // Remove all non-digits
+        let value = e.target.value.replace(/\D/g, '');
+        
+        // Format the number
+        if (value.length > 0) {
+            if (value.length <= 3) {
+                value = value;
+            } else {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            }
+        }
+        
+        // Update input value
+        e.target.value = value;
+        
+        // Validation (optional)
+        const isComplete = value.replace(/-/g, '').length === 11;
+        e.target.style.borderColor = isComplete ? 'green' : '';
+    });
+
+    // Prevent non-numeric input (optional)
+    phoneInput.addEventListener('keypress', function(e) {
+        if (!/^\d$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+            e.preventDefault();
+        }
+    });
+</script>
 <div class="form-group">
     <label for="email">Email:</label>
-    <input type="email" name="email" value="<?php echo htmlspecialchars($user_data['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="50" required pattern=".{1,50}" title="Up to 50 characters.">
+    <input class="input-field-email" type="email" name="email" value="<?php echo htmlspecialchars($user_data['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="50" required pattern=".{1,50}" title="Up to 50 characters.">
 </div>
 <div class="form-group">
     <label for="dob">Date of Birth:</label>
@@ -440,8 +509,12 @@ $con->close();
 </div>
 <div class="form-group">
     <label for="joining_date">Joining Date:</label>
-    <input type="date" name="joining_date" value="<?php echo htmlspecialchars($user_data['joining_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
+    <input type="date" 
+           name="joining_date" 
+           value="<?php echo htmlspecialchars($user_data['joining_date'] ?? date('Y-m-d'), ENT_QUOTES, 'UTF-8'); ?>" 
+           required>
 </div>
+
 <div class="form-group">
     <label for="matrixNumber">Matrix Number:</label>
     <input type="text" name="matrixNumber" value="<?php echo htmlspecialchars($user_data['matrixNumber'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="25" required pattern="[a-zA-Z0-9]{1,25}" title="Only alphanumeric characters are allowed, up to 25 characters.">
@@ -451,9 +524,42 @@ $con->close();
     <input type="text" name="courseName" value="<?php echo htmlspecialchars($user_data['courseName'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="50" required pattern="[a-zA-Z\s]{1,50}" title="Only letters and spaces are allowed, up to 50 characters.">
 </div>
 <div class="form-group">
-    <label for="no_ic">IC Number:</label>
-    <input type="text" name="no_ic" value="<?php echo htmlspecialchars($user_data['no_ic'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="12" required pattern="\d{12}" title="Only digits are allowed, exactly 12 characters.">
+  <label for="no_ic">IC Number</label>
+  <input 
+    type="text" 
+    class="form-control" 
+    name="no_ic" 
+    id="no_ic" 
+    placeholder="######-##-####" 
+    autocomplete="off" 
+    maxlength="14"
+	value="<?php echo htmlspecialchars($user_data['no_ic'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+    required>
 </div>
+<script>
+  const icInput = document.getElementById('no_ic');
+  
+  icInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    
+    if (value.length > 0) {
+      // Format with hyphens
+      if (value.length <= 6) {
+        value = value;
+      } else if (value.length <= 8) {
+        value = value.slice(0, 6) + '-' + value.slice(6);
+      } else {
+        value = value.slice(0, 6) + '-' + value.slice(6, 8) + '-' + value.slice(8, 12);
+      }
+    }
+    
+    e.target.value = value;
+    
+    // Validation
+    const isComplete = value.replace(/-/g, '').length === 12;
+    e.target.style.borderColor = isComplete ? 'green' : 'red';
+  });
+</script>
 <div class="form-group">
     <label for="street_name">Street Name:</label>
     <input type="text" name="street_name" value="<?php echo htmlspecialchars($address_data['streetName'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" maxlength="50" required>

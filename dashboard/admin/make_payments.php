@@ -148,7 +148,7 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
 </td>
 
 
-             </tr>
+             </tr>			 
 			                             <tr>
                                 <!-- File input for payment receipt with preview -->
                                 <td height="35">Upload Receipt:</td>
@@ -179,11 +179,15 @@ if (isset($_POST['userID']) && isset($_POST['planID'])) {
            </table></td>
 		   
          </tr>
-		  <tr>
-               <td height="35">&nbsp;</td>
-               <td height="35">&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="ADD PAYMENT" >
-                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
-             </tr>
+											<tr>
+    <td height="35" style="display: flex; align-items: center; justify-content: flex-start;">
+        <!-- Reverted to previous button styles -->
+        <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Add Payment" style="margin-right: 10px;">
+        <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset" style="margin-right: 10px;" onclick="resetPreview();">
+        <!-- New 'Return' button -->
+        <a href="payments.php" class="a1-btn a1-blue" style="text-decoration: none;">Return</a>
+    </td>
+</tr>
          </table>
        </form>
     </div>

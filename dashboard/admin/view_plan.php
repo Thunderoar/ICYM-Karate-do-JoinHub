@@ -96,7 +96,84 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.description-container {
+    position: relative;
+    scroll-margin-top: 20px; /* Adds some space when scrolling */
+}
+.short-description {
+    word-wrap: break-word;
+}
+.full-description {
+    word-wrap: break-word;
+}
+.read-more-btn {
+    color: #0d6efd;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+.read-more-btn:hover {
+    text-decoration: underline;
+}
+/* Add smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
 </style>
+
+<script>
+function toggleDescription(btn) {
+    const container = btn.parentElement;
+    const shortDesc = container.querySelector('.short-description');
+    const fullDesc = container.querySelector('.full-description');
+    
+    if (fullDesc.style.display === 'none') {
+        shortDesc.style.display = 'none';
+        fullDesc.style.display = 'block';
+        btn.textContent = 'Read Less';
+        
+        // Scroll into view with a slight delay to ensure content is expanded
+        setTimeout(() => {
+            container.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest'
+            });
+        }, 100);
+    } else {
+        shortDesc.style.display = 'block';
+        fullDesc.style.display = 'none';
+        btn.textContent = 'Read More';
+    }
+}
+// Add focus handling for the container
+document.addEventListener('DOMContentLoaded', function() {
+    const descriptions = document.querySelectorAll('.description-container');
+    
+    descriptions.forEach(container => {
+        container.addEventListener('click', function(e) {
+            // Only scroll if it's not the button being clicked
+            if (!e.target.classList.contains('read-more-btn')) {
+                this.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest'
+                });
+            }
+        });
+
+        // Handle keyboard focus
+        container.setAttribute('tabindex', '0'); // Make it focusable
+        container.addEventListener('focus', function() {
+            this.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest'
+            });
+        });
+    });
+});
+</script>
 </head>
      <body class="page-body  page-fade" onload="collapseSidebar()">
 
@@ -307,7 +384,17 @@ $sno = 1;
                 echo "<td>" . $sno . "</td>";
                 echo "<td>" . $row['planid'] . "</td>";
                 echo "<td>" . $row['planName'] . "</td>";
-                echo "<td width='380'>" . $row['description'] . "</td>";
+echo "<td width='380'>";
+echo "<div class='description-container'>";
+    echo "<div class='short-description'>" . substr($row['description'], 0, 100) . 
+         (strlen($row['description']) > 100 ? "..." : "") . "</div>";
+    
+    if(strlen($row['description']) > 100) {
+        echo "<div class='full-description' style='display:none'>" . $row['description'] . "</div>";
+        echo "<button class='read-more-btn' onclick='toggleDescription(this)'>Read More</button>";
+    }
+echo "</div>";
+echo "</td>";
                 echo "<td>" . $row['planType'] . "</td>";
                 echo "<td>" . date('Y-m-d', strtotime($row['startDate'])) . "</td>";
                 echo "<td>" . date('Y-m-d', strtotime($row['endDate'])) . "</td>";

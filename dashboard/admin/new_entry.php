@@ -293,6 +293,42 @@ table tr td label {
               <label for="u_name">Username</label>
               <input type="text" class="form-control" name="u_name" id="u_name" placeholder="" autocomplete="off" required>
             </div>
+<div class="form-group">
+  <label for="no_ic">IC Number</label>
+  <input 
+    type="text" 
+    class="form-control" 
+    name="no_ic" 
+    id="no_ic" 
+    placeholder="######-##-####" 
+    autocomplete="off" 
+    maxlength="14"
+    required>
+</div>
+<script>
+  const icInput = document.getElementById('no_ic');
+  
+  icInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    
+    if (value.length > 0) {
+      // Format with hyphens
+      if (value.length <= 6) {
+        value = value;
+      } else if (value.length <= 8) {
+        value = value.slice(0, 6) + '-' + value.slice(6);
+      } else {
+        value = value.slice(0, 6) + '-' + value.slice(6, 8) + '-' + value.slice(8, 12);
+      }
+    }
+    
+    e.target.value = value;
+    
+    // Validation
+    const isComplete = value.replace(/-/g, '').length === 12;
+    e.target.style.borderColor = isComplete ? 'green' : 'red';
+  });
+</script>
     <div style="margin-bottom: 10px;">
       <label>Gender:</label>
       <select name="gender" required style="width: 100%;">
@@ -306,19 +342,19 @@ table tr td label {
       <input type="date" name="dob" required style="width: 100%;">
     </div>
 <div class="form-group">
-    <label for="phone_no">Phone Number</label>
+    <label for="mobile">Phone Number</label>
     <input 
         type="text" 
         class="form-control" 
-        name="phone_no" 
-        id="phone_no" 
+        name="mobile" 
+        id="mobile" 
         placeholder="###-########" 
         maxlength="12"
         autocomplete="off" 
         required>
 </div>
 <script>
-    const phoneInput = document.getElementById('phone_no');
+    const phoneInput = document.getElementById('mobile');
     
     phoneInput.addEventListener('input', function(e) {
         // Remove all non-digits
@@ -348,7 +384,8 @@ table tr td label {
         }
     });
 </script>
-  
+    <input type="hidden" name="h_id" value="<?php echo 'H' . mt_rand(1, 1000000000); ?>" required/>
+    <input type="hidden" name="a_id" value="<?php echo 'A' . mt_rand(1, 1000000000); ?>" required/>
     <div style="margin-bottom: 10px;">
       <label>Email ID:</label>
       <input type="email" name="email" placeholder="example@gmail.com" required style="width: 100%;">
@@ -409,7 +446,6 @@ table tr td label {
     </div>
   </div>
 </fieldset>
-
 <fieldset style="margin-bottom: 20px; padding: 20px; border-radius: 8px; border: 1px solid #ccc;">
   <legend style="font-size: 20px; color: #333; font-weight: bold;">Membership Details</legend>
   <div>

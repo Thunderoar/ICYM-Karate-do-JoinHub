@@ -77,26 +77,18 @@ function createPlanDirectory($con, $slug) {
         $image_data = mysqli_fetch_assoc($image_result);
         $plan_image = $image_data['image_path'] ?? 'default_plan.jpg';
 
-        // Generate schedule HTML
-        $schedule_html = '<section class="content-section"><h2>Schedule</h2>';
-        if (!empty($timetable_days)) {
-            $schedule_html .= '<div class="schedule-grid">';
-            foreach ($timetable_days as $day_number => $activities) {
-                $day_name = date("l", strtotime("Sunday +{$day_number} days"));
-                $schedule_html .= sprintf(
-                    '<div class="schedule-day">
-                        <h3>%s</h3>
-                        <div class="activities">%s</div>
-                    </div>',
-                    htmlspecialchars($day_name),
-                    nl2br(htmlspecialchars($activities))
-                );
-            }
-            $schedule_html .= '</div>';
-        } else {
-            $schedule_html .= '<p>Schedule will be updated soon.</p>';
-        }
-        $schedule_html .= '</section>';
+$schedule_html = '
+<section class="content-section" id="schedule-section">
+    <h2>Schedule</h2>
+    <div class="schedule-controls">
+        <select id="dayFilter" class="schedule-filter">
+            <option value="all">All Days</option>
+            <option value="weekday">Weekdays</option>
+            <option value="weekend">Weekends</option>
+        </select>
+    </div>
+    
+    <div class="schedule-grid">';
 
         // Directory and file setup with proper permissions
         $base_dir = "../../plans/";
@@ -128,7 +120,7 @@ function createPlanDirectory($con, $slug) {
             }
 
             // Enhanced HTML template with better styling and security
-            $index_content = '<!DOCTYPE html><html lang="en"><head>
+$index_content = '<!DOCTYPE html><html lang="en"><head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -146,13 +138,16 @@ function createPlanDirectory($con, $slug) {
                     }
                     body { 
                         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
-                        max-width: 1200px; 
-                        margin: 0 auto; 
-                        padding: 20px;
+                        margin: 0; 
                         line-height: 1.6;
                         color: var(--text-color);
                     }
-                    header { 
+                    .content-wrapper {
+                        max-width: 1200px;
+                        margin: 0 auto;
+                        padding: 20px;
+                    }
+                    header.plan-header { 
                         background: var(--primary-color);
                         color: white;
                         padding: 2rem;
@@ -215,35 +210,162 @@ function createPlanDirectory($con, $slug) {
                         flex: 1 1 200px;
                     }
                     @media (max-width: 768px) {
-                        body { padding: 10px; }
+                        .content-wrapper { padding: 10px; }
                         .meta-info { flex-direction: column; gap: 1rem; }
                     }
+
+    .schedule-controls {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    
+    .schedule-filter {
+        padding: 8px 12px;
+        border: 1px solid var(--accent-color);
+        border-radius: 4px;
+        background: white;
+        color: var(--primary-color);
+        cursor: pointer;
+    }
+    
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .schedule-day {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+    
+    .schedule-day:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .schedule-day-header {
+        background: var(--primary-color);
+        color: white;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .schedule-day-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    
+    .day-indicator {
+        background: rgba(255,255,255,0.2);
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+    }
+    
+    .activities {
+        padding: 20px;
+        min-height: 100px;
+        white-space: pre-line;
+        line-height: 1.6;
+    }
+    
+    .schedule-footer {
+        padding: 10px 20px;
+        border-top: 1px solid #eee;
+        color: var(--secondary-color);
+        font-size: 0.9rem;
+    }
+    
+    .time-indicator {
+        display: inline-block;
+        padding: 4px 8px;
+        background: var(--light-gray);
+        border-radius: 12px;
+    }
+    
+    .schedule-placeholder {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 40px;
+        background: var(--light-gray);
+        border-radius: 8px;
+        color: var(--secondary-color);
+    }
+    
+    @media (max-width: 768px) {
+        .schedule-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .schedule-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
                 </style>
+				<script>
+document.getElementById("dayFilter").addEventListener("change", function() {
+    const filter = this.value;
+    const days = document.querySelectorAll(".schedule-day");
+    
+    days.forEach(day => {
+        if (filter === "all") {
+            day.style.display = "block";
+        } else {
+            day.style.display = day.dataset.dayType === filter ? "block" : "none";
+        }
+    });
+});
+
+// Initialize tooltips
+document.querySelectorAll(".schedule-day").forEach(day => {
+    day.addEventListener("mouseover", function() {
+        this.style.transform = "translateY(-2px)";
+    });
+    
+    day.addEventListener("mouseout", function() {
+        this.style.transform = "translateY(0)";
+    });
+});
+</script>
                 </head>
                 <body>
-                <header>
-                    <h1>' . htmlspecialchars($plan_data['planName']) . '</h1>
-                    <div class="meta-info">
-                        <div>Published: ' . date('F j, Y', strtotime($plan_data['created_at'])) . '</div>
-                        <div>Type: ' . htmlspecialchars($plan_data['planType']) . '</div>
-                        <div>Duration: ' . htmlspecialchars($plan_data['duration']) . '</div>
-                        <div>Price: $' . htmlspecialchars($plan_data['amount']) . '</div>
-                    </div>
-                </header>
+                <?php include "../header.php"; ?>
+                
+                <div class="content-wrapper">
+                    <header class="plan-header">
+                        <h1>' . htmlspecialchars($plan_data['planName']) . '</h1>
+                        <div class="meta-info">
+                            <div style="background-color:black;">Published: ' . date('F j, Y', strtotime($plan_data['created_at'])) . '</div>
+                            <div style="background-color:black;">Type: ' . htmlspecialchars($plan_data['planType']) . '</div>
+                            <div style="background-color:black;">Duration: ' . htmlspecialchars($plan_data['duration']) . '</div>
+                            <div style="background-color:black;">Price: $' . htmlspecialchars($plan_data['amount']) . '</div>
+                        </div>
+                    </header>
 
-                <main>
-                    <section class="content-section">
-                        <h2>Overview</h2>
-                        ' . nl2br(htmlspecialchars($plan_data['description'])) . '
-                    </section>
+                    <main>
+                        <section class="content-section">
+                            <h2>Overview</h2>
+                            ' . nl2br(htmlspecialchars($plan_data['description'])) . '
+                        </section>
 
-                    ' . $schedule_html;
+                        ' . $schedule_html;
 
             // Add staff section if available
             if (!empty($staff_info)) {
                 $index_content .= '<section class="content-section">
-                    <h2>Training Staff</h2>
-                    <div class="staff-section">';
+                        <h2>Training Staff</h2>
+                        <div class="staff-section">';
                 foreach ($staff_info as $staff) {
                     $index_content .= sprintf(
                         '<div class="staff-card">
@@ -270,10 +392,11 @@ function createPlanDirectory($con, $slug) {
             }
 
             $index_content .= '<section class="img-container">
-                    <img src="../../images/' . htmlspecialchars($plan_image) . '" 
-                         alt="' . htmlspecialchars($plan_data['planName']) . ' Highlight">
-                </section>
-                </main>
+                        <img src="../../images/' . htmlspecialchars($plan_image) . '" 
+                             alt="' . htmlspecialchars($plan_data['planName']) . ' Highlight">
+                    </section>
+                    </main>
+                </div>
                 </body></html>';
 
             // Write files with proper permissions

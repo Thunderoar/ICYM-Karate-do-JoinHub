@@ -516,11 +516,22 @@ if ($res && mysqli_num_rows($res) > 0) {
 
 
             <div class="col-md-6">
-                <div class="form-group">
-                    <label><b>Description:</b></label>
-                    <textarea name="desc" id="planDesc" class="form-control" placeholder="Enter plan description" 
-                        rows="3" <?php echo !$isAdmin ? 'readonly' : ''; ?>><?php echo $row['description']; ?></textarea>
-                </div>
+<div class="form-group">
+    <label><b>Description:</b></label>
+    <textarea name="desc" id="planDesc" class="form-control" placeholder="Enter plan description" 
+        rows="3" <?php echo !$isAdmin ? 'readonly' : ''; ?>
+        oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'"
+        style="overflow: hidden; resize: none;"><?php echo $row['description']; ?></textarea>
+</div>
+
+<script>
+// Auto-expand on page load for existing content
+window.addEventListener('load', function() {
+    const textarea = document.getElementById('planDesc');
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+});
+</script>
 
                 <div class="form-group">
                     <label><b>Start Date:</b></label>
